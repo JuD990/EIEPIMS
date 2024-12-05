@@ -1,0 +1,78 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-naO23KSx.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.jsx": {
+    "file": "assets/app-BIjIbJVW.js",
+    "name": "app",
+    "src": "resources/js/app.jsx",
+    "isEntry": true,
+    "css": [
+      "assets/app-V7uRtMlT.css"
+    ],
+    "assets": [
+      "assets/unc-logo-C_mdOA3h.png",
+      "assets/system-logo-BN8Z50kr.png",
+      "assets/user-X3AHuVxY.png",
+      "assets/eye-icon-DqRqbKCu.png",
+      "assets/eye-off-icon-CGbrSpjY.png",
+      "assets/dropdown-logo-login-DF9shRbF.png",
+      "assets/class-icon-CQqsP8p3.png",
+      "assets/report-icon-DpSSSZkM.png",
+      "assets/student-management-P0bOj9VA.png",
+      "assets/dashboard-icon-Cv6xPyf_.png",
+      "assets/user-user-DRLxWFDg.png",
+      "assets/student-no-D0_Nr_8k.png"
+    ]
+  },
+  "resources/js/assets/class-icon.png": {
+    "file": "assets/class-icon-CQqsP8p3.png",
+    "src": "resources/js/assets/class-icon.png"
+  },
+  "resources/js/assets/dashboard-icon.png": {
+    "file": "assets/dashboard-icon-Cv6xPyf_.png",
+    "src": "resources/js/assets/dashboard-icon.png"
+  },
+  "resources/js/assets/dropdown-logo-login.png": {
+    "file": "assets/dropdown-logo-login-DF9shRbF.png",
+    "src": "resources/js/assets/dropdown-logo-login.png"
+  },
+  "resources/js/assets/eye-icon.png": {
+    "file": "assets/eye-icon-DqRqbKCu.png",
+    "src": "resources/js/assets/eye-icon.png"
+  },
+  "resources/js/assets/eye-off-icon.png": {
+    "file": "assets/eye-off-icon-CGbrSpjY.png",
+    "src": "resources/js/assets/eye-off-icon.png"
+  },
+  "resources/js/assets/report-icon.png": {
+    "file": "assets/report-icon-DpSSSZkM.png",
+    "src": "resources/js/assets/report-icon.png"
+  },
+  "resources/js/assets/student-management.png": {
+    "file": "assets/student-management-P0bOj9VA.png",
+    "src": "resources/js/assets/student-management.png"
+  },
+  "resources/js/assets/student-no.png": {
+    "file": "assets/student-no-D0_Nr_8k.png",
+    "src": "resources/js/assets/student-no.png"
+  },
+  "resources/js/assets/system-logo.png": {
+    "file": "assets/system-logo-BN8Z50kr.png",
+    "src": "resources/js/assets/system-logo.png"
+  },
+  "resources/js/assets/unc-logo.png": {
+    "file": "assets/unc-logo-C_mdOA3h.png",
+    "src": "resources/js/assets/unc-logo.png"
+  },
+  "resources/js/assets/user-user.png": {
+    "file": "assets/user-user-DRLxWFDg.png",
+    "src": "resources/js/assets/user-user.png"
+  },
+  "resources/js/assets/user.png": {
+    "file": "assets/user-X3AHuVxY.png",
+    "src": "resources/js/assets/user.png"
+  }
+}

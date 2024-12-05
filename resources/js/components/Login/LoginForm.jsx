@@ -7,6 +7,7 @@ import userIcon from "@assets/user.png";
 import eyeIcon from "@assets/eye-icon.png";
 import eyeOffIcon from "@assets/eye-off-icon.png";
 import dropdownLogo from "@assets/dropdown-logo-login.png";
+import loginBGimage from "@assets/login-bg-image.png";
 import apiService from "../../../services/apiServices";
 
 const LoginForm = () => {
@@ -118,12 +119,21 @@ const handleLogin = async (event) => {
 
 
   return (
-    <div className="login-container">
+    <div
+    className="login-container"
+    style={{
+      backgroundImage: `url(${loginBGimage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+    }}
+    >
       <div className="logos">
         <img className="unc-logo" src={uncLogo} alt="UNC Logo" />
         <img className="system-logo" src={systemLogo} alt="System Logo" />
       </div>
-      <h1 className="main-title">EIE Program Implementation Management System</h1>
+      <h1 className="main-title">
+      <span className="eie" title="English Immersive Environment">EIE</span> Program Implementation Management System
+      </h1>
       <h2 className="subtitle">Please enter your credentials</h2>
       <form className="login-form" onSubmit={handleLogin}>
         {error && <div className="error-message">{error}</div>}

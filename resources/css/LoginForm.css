@@ -4,9 +4,6 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-image: url('http://127.0.0.1:5173/resources/js/assets/login-bg-image.png');
-    background-size: cover;
-    background-position: center;
 }
   
 .logos {
@@ -32,6 +29,15 @@
     text-align: center;
     font-weight: 600;
     font-family: 'Inter';
+    margin-left: 60px;
+}
+
+
+.eie {
+    font-weight: bold; /* Emphasize "EIE" */
+    color: #007bff; /* Optional: Change the text color */
+    text-decoration: underline; /* Optional: Add an underline for emphasis */
+    cursor: help; /* Show a help cursor on hover */
 }
   
 .subtitle {
@@ -40,7 +46,7 @@
     color: #383838;
     margin-top: 20px;
     margin-bottom: 15px;
-    margin-right: 10px;
+    margin-left: 60px;
     text-align: left;
     font-weight: 800;
 }
@@ -52,26 +58,26 @@
 }
   
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 13px;
 }
   
 .form-label {
-    font-family: 'Poppins SemiBold';
+    font-family: 'Poppins';
     font-size: 15px;
     color: #383838;
     margin-right: 3px;
     font-weight: bolder;
+    white-space: nowrap;
 }
   
 .dropdown-container {
     display: flex;
     align-items: center;
     position: relative;
-    margin-left: 3px;
 }
 
 .dropdown {
-    width: 379px;
+    width: 400px;
     height: 50px;
     padding: 10px;
     font-family: 'Montserrat Regular';
@@ -82,8 +88,7 @@
     -moz-appearance: none;
     border: 1px solid #ccc;
     background-color: #fff;
-    padding-right: 50px;
-    margin-left: 8px;
+    margin-left: 16px
 }
 
 .dropdown-logo {
@@ -100,29 +105,29 @@
 .email-input-container {
     display: flex;
     align-items: center;
-    margin-left: 18px;
+    margin-left: 20px;
 }
   
 .email-input {
-    width: 235px;
+    width: 220px;
     height: 50px;
     padding: 10px;
     font-family: 'Montserrat Regular';
     font-size: 18px;
     border-radius: 10px;
-    margin-left: 11px;
+    margin-left: 16px;
     border: 1px solid #ccc;
 }
   
 .email-domain {
-    width: 140px;
+    width: 150px;
     height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #FFFFFF;
     border-radius: 10px;
-    margin-left: 5px;
+    margin-left: 10px;
     border: 1px solid #ccc;
 }
   
@@ -133,7 +138,7 @@
 }
 
 .email-domain span {
-    margin-left: 20px;
+    margin-left: 18px;
 }
 
 .password-input-container {
@@ -149,7 +154,7 @@
 }
 
 .password-input {
-    width: 380px;
+    width: 374px;
     height: 50px;
     padding: 10px 40px 10px 10px;
     font-family: 'Montserrat Regular';
@@ -173,7 +178,6 @@
     width: 20px;
     height: 20px;
     z-index: 1;
-    margin-left: -50px;
 }
 
 .forgot-password-container {
