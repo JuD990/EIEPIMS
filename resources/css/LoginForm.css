@@ -1,0 +1,204 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-image: url('http://127.0.0.1:5173/resources/js/assets/login-bg-image.png');
+    background-size: cover;
+    background-position: center;
+}
+  
+.logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.unc-logo {
+    width: 130px;
+    margin: 0 10px;
+}
+
+.system-logo {
+    width: 100px;
+    margin: 0 10px;
+}
+
+.main-title {
+    font-size: 30px;
+    color: #0187F1;
+    text-align: center;
+    font-weight: 600;
+    font-family: 'Inter';
+}
+  
+.subtitle {
+    font-family: 'Poppins';
+    font-size: 15px;
+    color: #383838;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    margin-right: 10px;
+    text-align: left;
+    font-weight: 800;
+}
+  
+.login-form {
+    display: flex;
+    flex-direction: column;
+    width: 460px;
+}
+  
+.form-group {
+    margin-bottom: 15px;
+}
+  
+.form-label {
+    font-family: 'Poppins SemiBold';
+    font-size: 15px;
+    color: #383838;
+    margin-right: 3px;
+    font-weight: bolder;
+}
+  
+.dropdown-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-left: 3px;
+}
+
+.dropdown {
+    width: 379px;
+    height: 50px;
+    padding: 10px;
+    font-family: 'Montserrat Regular';
+    font-size: 16px;
+    border-radius: 10px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding-right: 50px;
+    margin-left: 8px;
+}
+
+.dropdown-logo {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    width: 55px;
+    height: 25px;
+}
+
+
+.email-input-container {
+    display: flex;
+    align-items: center;
+    margin-left: 18px;
+}
+  
+.email-input {
+    width: 235px;
+    height: 50px;
+    padding: 10px;
+    font-family: 'Montserrat Regular';
+    font-size: 18px;
+    border-radius: 10px;
+    margin-left: 11px;
+    border: 1px solid #ccc;
+}
+  
+.email-domain {
+    width: 140px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    margin-left: 5px;
+    border: 1px solid #ccc;
+}
+  
+.email-domain img {
+    margin-left: 1px;
+    width: 30px;
+    height: 30px;
+}
+
+.email-domain span {
+    margin-left: 20px;
+}
+
+.password-input-container {
+    display: flex;
+    align-items: center;
+
+}
+
+.password-input-wrapper {
+    position: relative;
+    flex-grow: 1;
+    margin-left: 5px;
+}
+
+.password-input {
+    width: 380px;
+    height: 50px;
+    padding: 10px 40px 10px 10px;
+    font-family: 'Montserrat Regular';
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    transition: border 0.3s ease;
+}
+
+.password-input:focus {
+    border: 2px solid #007bff;
+    outline: none;
+}
+
+.toggle-password-icon {
+    position: absolute;
+    right: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    z-index: 1;
+    margin-left: -50px;
+}
+
+.forgot-password-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.forgot-password {
+    font-family: 'Poppins Regular';
+    font-size: 18px;
+    color: #0187F1;
+    text-decoration: underline;
+}
+
+.login-button {
+    width: 110px;
+    height: 45px;
+    background-color: #0187F1;
+    border-radius: 32px;
+    color: #FFF3F0;
+    font-family: 'Baloo Thambi Regular';
+    font-size: 18px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+}
