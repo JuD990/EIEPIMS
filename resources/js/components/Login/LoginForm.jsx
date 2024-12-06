@@ -100,6 +100,9 @@ const handleLogin = async (event) => {
         case 401:
           setError("Invalid credentials, please try again.");
           break;
+        case 404:
+          setError("User not found");
+          break;
         case 405:
           setError("Method not allowed. Please check your request method.");
           break;

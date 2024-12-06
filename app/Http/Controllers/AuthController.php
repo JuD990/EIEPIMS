@@ -24,7 +24,7 @@ class AuthController extends Controller
             $request->validate([
                 'email' => 'required|email',
                 'password' => 'required',
-                'user_type' => 'required|string|in:students,college_pocs,lead_pocs,eie_heads,esl_primes,esl_champions',
+                'user_type' => 'required|string|in:students,college_pocs,lead_pocs,eie_heads,esl_prime,esl_champion',
             ]);
 
             // Retrieve input data

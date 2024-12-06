@@ -22,6 +22,7 @@ const EPGFScorecard = () => {
       <StudentManagementDropdown/>
       <br />
       <StudentManagementTable />
+      <br />
     </div>
   );
 };

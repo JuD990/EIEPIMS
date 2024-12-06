@@ -209,7 +209,7 @@ const StudentManagementTable = () => {
           left: '50%',
           transform: 'translate(-50%, -50%)',
           width: '600px',
-          height: '800px',
+          height: '880px',
           backgroundColor: '#FFFFFF',
           borderRadius: '5px',
           border: '1px solid #333333',

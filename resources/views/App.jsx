@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import React from 'react';
 import LoginForm from "../js/components/Login/LoginForm";
 import EslChampionDashboard from "../js/components/esl_champion/EslChampionDashboard";
-import EslPrimeDashboard from "../js/components/esl_prime/EslPrimeDashboard";
+import EslPrimeDashboard from "../js/components/esl_prime/EslPrimeDashboard/EslPrimeDashboard";
 import StudentDashboard from "../js/components/student/StudentDashboard";
 import CollegePocDashboard from "../js/components/college_poc/CollegePocDashboard/CollegePocDashboard";
 import CollegePocImplementingSubject from "../js/components/college_poc/CollegePocClassManagement/CollegePocClassManagement";

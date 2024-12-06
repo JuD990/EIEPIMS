@@ -6438,3 +6438,15 @@ Did you mean one of these?
 #38 /home/lnrmnfng/Development/EIEPIMS/artisan(13): Illuminate\\Foundation\\Application->handleCommand()
 #39 {main}
 "} 
+[2024-12-06 12:30:36] local.DEBUG: Login attempt: Email - student@unc.edu.ph User Type - students  
+[2024-12-06 12:30:46] local.DEBUG: Login attempt: Email - collegepoc@unc.edu.ph User Type - college_pocs  
+[2024-12-06 12:41:21] local.ERROR: Login Error: The selected user type is invalid.  
+[2024-12-06 12:42:09] local.ERROR: Login Error: The selected user type is invalid.  
+[2024-12-06 12:44:44] local.DEBUG: Login attempt: Email - eslprime@unc.edu.ph User Type - esl_primes  
+[2024-12-06 12:44:44] local.WARNING: Login failed: User not found for email: eslprime@unc.edu.ph and user type: esl_primes  
+[2024-12-06 12:47:17] local.ERROR: Login Error: The user type field is required.  
+[2024-12-06 12:51:19] local.DEBUG: Login attempt: Email - eslprime@unc.edu.ph User Type - esl_primes  
+[2024-12-06 12:51:19] local.WARNING: Login failed: User not found for email: eslprime@unc.edu.ph and user type: esl_primes  
+[2024-12-06 12:52:07] local.DEBUG: Login attempt: Email - eslprime@unc.edu.ph User Type - esl_primes  
+[2024-12-06 12:52:07] local.WARNING: Login failed: User not found for email: eslprime@unc.edu.ph and user type: esl_primes  
+[2024-12-06 12:56:32] local.DEBUG: Login attempt: Email - eslprime@unc.edu.ph User Type - esl_prime  
