@@ -19,7 +19,7 @@ class CreateEIEHeads extends Migration
             $table->string('lastname', 50);
             $table->string('password');
             $table->string('email', 50)->unique();
-            $table->string('department', 50);
+            $table->string('department', 20);
             $table->string('role')->default('EIE Head');
             $table->timestamps();
         });

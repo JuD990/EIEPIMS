@@ -19,7 +19,7 @@ class CreateCollegePOCs extends Migration
             $table->string('lastname', 50);
             $table->string('password');
             $table->string('email', 50)->unique();
-            $table->string('department', 50);
+            $table->string('department', 20);
             $table->string('role')->default('College POC');
             $table->timestamps(); // created_at and updated_at
         });

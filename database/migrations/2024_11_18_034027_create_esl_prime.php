@@ -18,7 +18,7 @@ class CreateESLPrime extends Migration
             $table->string('middlename', 50)->nullable();
             $table->string('lastname', 50);
             $table->string('password');
-            $table->string('email', 50)->unique();
+            $table->string('email', 20)->unique();
             $table->string('role')->default('ESL Prime');
             $table->timestamps(); // created_at and updated_at
         });
