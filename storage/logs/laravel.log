@@ -6450,3 +6450,5 @@ Did you mean one of these?
 [2024-12-06 12:52:07] local.DEBUG: Login attempt: Email - eslprime@unc.edu.ph User Type - esl_primes  
 [2024-12-06 12:52:07] local.WARNING: Login failed: User not found for email: eslprime@unc.edu.ph and user type: esl_primes  
 [2024-12-06 12:56:32] local.DEBUG: Login attempt: Email - eslprime@unc.edu.ph User Type - esl_prime  
+[2024-12-07 16:55:54] local.DEBUG: Login attempt: Email - eslprime@unc.edu.ph User Type - esl_prime  
+[2024-12-07 18:53:11] local.DEBUG: Login attempt: Email - eslprime@unc.edu.ph User Type - esl_prime  
