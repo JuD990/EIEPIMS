@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./sidebarDashboard.css";
 import logo from "@assets/system-logo.png";
@@ -6,18 +6,42 @@ import eiemanagementicon from "@assets/eie-management-icon.png";
 import reporticon from "@assets/report-icon.png";
 import dashboardiconwhite from "@assets/dashboard-icon.png";
 import eiediagnosticicon from "@assets/eie-diagnostic-icon.png";
+import accountIcon from "@assets/account-icon.png";
+import certificationIcon from "@assets/certification-icon.png";
+import monthlyChampsIcon from "@assets/monthly-champs-icon.png";
+import epgfVersionIcon from "@assets/epgf-version-icon.png"
 
 const SidebarDashboard = () => {
   const navigate = useNavigate();
 
+  const handleDashboardClick = () => {
+    navigate('/esl-prime-dashboard');
+  };
   const handleEieDiagnosticsClick = () => {
     navigate('/esl-prime-eie-diagnostics');
   };
   const handleEieReportingClick = () => {
     navigate('/esl-prime-eie-reporting');
   };
-  const handleEieManagementClick = () => {
-    navigate('/esl-prime-eie-management');
+  const handleEpgfVersioningClick = () => {
+    navigate('/esl-epgf-versioning');
+  };
+  const handleEslCertificationClick = () => {
+    navigate('/esl-certification');
+  };
+  const handleEslMonthlyChampsClick = () => {
+    navigate('/esl-monthly-champions');
+  };
+  const handleEslAccountsClick = () => {
+    navigate('/esl-prime-account-management');
+  };
+  
+  // State to control the visibility of additional buttons
+  const [showExtraButtons, setShowExtraButtons] = useState(false);
+
+    // Handler for the button click
+  const handleEieManagementButtons = () => {
+    setShowExtraButtons((prev) => !prev); // Toggle the state
   };
 
   return (
@@ -28,7 +52,7 @@ const SidebarDashboard = () => {
       </div>
 
       <div className="esl-prime-pages">
-      <button className="esl-dashboard-sidebar-button">
+      <button className="esl-dashboard-sidebar-button" onClick={handleDashboardClick}>
         <img src={dashboardiconwhite} alt="Dashboard icon" className="esl-dashboard-icon" />
         <p>Dashboard</p>
       </button>
@@ -43,10 +67,32 @@ const SidebarDashboard = () => {
         <p>EIE Diagnostics</p>
       </button>
 
-      <button className="esl-eie-management-sidebar-button" onClick={handleEieManagementClick}>
+      <button className="esl-eie-management-sidebar-button" onClick={handleEieManagementButtons}>
         <img src={eiemanagementicon} alt="EIE Management icon" className="student-icon" />
         <p>EIE Management</p>
       </button>
+
+            {/* Conditionally render the extra buttons */}
+      {showExtraButtons && (
+        <div className="extra-buttons-container">
+          <button className="epgf-rubric-button" onClick={handleEpgfVersioningClick}>
+            <img src={epgfVersionIcon} alt="" />
+            <p>EPGF Rubric</p>
+          </button>
+          <button className="monthly-champions-button" onClick={handleEslMonthlyChampsClick}>
+            <img src={monthlyChampsIcon} alt="" />
+            <p>Monthly Champions</p>
+          </button>
+          <button className="certification-button" onClick={handleEslCertificationClick}>
+            <img src={certificationIcon} alt="" />
+            <p>Certification</p>
+          </button>
+          <button className="accounts-button" onClick={handleEslAccountsClick}>
+            <img src={accountIcon} alt="" />
+            <p>Accounts</p>
+          </button>
+        </div>
+      )}
 
       </div>
     </div>

@@ -37,14 +37,16 @@
 
 /* Sidebar Buttons */
 .esl-prime-pages {
-  font-family: "Poppins";
   display: flex;
-  flex-direction: column; /* Stack buttons vertically */
+  flex-direction: column;
   gap: 5px;
   width: 100%;
 }
 
-button {
+.esl-eie-management-sidebar-button, 
+.esl-eie-diagnostic-sidebar-button, 
+.esl-eie-reporting-sidebar-button, 
+.esl-dashboard-sidebar-button {
   height: 80px;
   border: none;
   padding: 10px 15px; /* Add padding for better spacing */
@@ -56,26 +58,129 @@ button {
   text-align: left; /* Align text to the left */
   width: 100%; /* Make button take full width */
 }
-
-button:hover {
+.esl-eie-management-sidebar-button:hover, 
+.esl-eie-diagnostic-sidebar-button:hover, 
+.esl-eie-reporting-sidebar-button:hover, 
+.esl-dashboard-sidebar-button:hover {
   background-color: #0187F1; /* Highlight color on hover */
   border-radius: 8px; /* Rounded corners */
-  color: white;
 }
-button:hover p{
+.esl-eie-management-sidebar-button:hover p, 
+.esl-eie-diagnostic-sidebar-button:hover p, 
+.esl-eie-reporting-sidebar-button:hover p, 
+.esl-dashboard-sidebar-button:hover p{
   color: white;
 }
 
-button img {
+.esl-eie-management-sidebar-button img {
+  width: 60px; /* Adjust icon size */
+  height: 60px; /* Keep icons square */
+  margin-right: 10px; /* Space between icon and title */
+  margin-left: 1px;
+} 
+.esl-eie-diagnostic-sidebar-button img {
+  width: 50px; /* Adjust icon size */
+  height: 50px; /* Keep icons square */
+  margin-right: 15px; /* Space between icon and title */
+  margin-left: 8px;
+}
+.esl-eie-reporting-sidebar-button img{
   width: 40px; /* Adjust icon size */
   height: 40px; /* Keep icons square */
   margin-right: 15px; /* Space between icon and title */
-  margin-left: 15px;
+  margin-left: 17px;
 }
-
-button p {
+.esl-dashboard-sidebar-button img{
+  width: 50px; /* Adjust icon size */
+  height: 70px; /* Keep icons square */
+  margin-right: 15px; /* Space between icon and title */
+  margin-left: 10px;
+}
+.esl-eie-management-sidebar-button p, 
+.esl-eie-diagnostic-sidebar-button p, 
+.esl-eie-reporting-sidebar-button p, 
+.esl-dashboard-sidebar-button p{
   margin: 0; /* Remove default margin from <p> */
   font-size: 20px; /* Adjust font size */
   font-weight: 500; /* Adjust font weight */
   color: black; /* Set text color */
+  font-family: 'Poppins';
+}
+.extra-buttons-container {
+  margin-top: 10px; /* Adjust as needed */
+  display: flex;
+  flex-direction: column; /* Stacks buttons vertically */
+}
+
+.epgf-rubric-button,
+.monthly-champions-button,
+.certification-button,
+.accounts-button {
+  margin: 0; /* Removes external spacing since gap is used */
+  padding: 10px; /* Adjust for better appearance */
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  padding: 15px;
+  margin-top: 10px;
+}
+
+.epgf-rubric-button:hover,
+.monthly-champions-button:hover,
+.certification-button:hover,
+.accounts-button:hover {
+  background-color: #0187F1; /* Highlight color on hover */
+  border-radius: 8px; /* Rounded corners */
+}
+.epgf-rubric-button:hover p,
+.monthly-champions-button:hover p,
+.certification-button:hover p,
+.accounts-button:hover p{
+  color: white;
+}
+.monthly-champions-button img{
+  margin-left: 32px;
+  width: 70px;
+  height: 70px;
+}
+
+.epgf-rubric-button img{
+  margin-left: 40px;
+}
+.certification-button img{
+  margin-left: 35px;
+  margin-top: -18px;
+}
+.accounts-button img{
+  margin-left: 40px;
+  margin-top: -20px;
+}
+.certification-button img,
+.accounts-button img{
+  width: 95px;
+  height: 95px;
+}
+.epgf-rubric-button p, 
+.monthly-champions-button p, 
+.certification-button p,
+.accounts-button p{
+  text-align: left;
+  font-family: 'Poppins';
+  font-size: 18px;
+}
+.epgf-rubric-button p{
+  margin-top: 15px;
+  margin-left: 30px;
+}
+.monthly-champions-button p{
+  padding-top: 10px;
+  margin-left: 21px;
+}
+.certification-button p{
+  margin-right: 20px;
+  margin-left: 20px;
+}
+.accounts-button p{
+  margin-right: 40px;
+  margin-left: 20px;
 }
