@@ -2,6 +2,8 @@ import React from "react";
 import ESLSidebar from '../../sidebar/esl-sidebar';
 import UserInfo from '../../user_info/User-info';
 import EPGFrubricVersionDropdown from "./dropdown-button/epgf-rubric-version-dropdown";
+import Table from "./table/epgf-rubric-table";
+import UploadCSVButton from "./buttons/upload-csv-button";
 const eslPrimeEPGFRubricVersion = () => {
 return(
     <div>
@@ -15,6 +17,12 @@ return(
         </div>
       </div>
       <EPGFrubricVersionDropdown />
+      <br />
+      <Table />
+      <div style={{ position: 'relative', width: '100%' }}>
+        <UploadCSVButton label="Upload CSV" rightSpacing="50px" />
+      </div>
+      <br /><br /><br /><br />
     </div>
     );
 };
