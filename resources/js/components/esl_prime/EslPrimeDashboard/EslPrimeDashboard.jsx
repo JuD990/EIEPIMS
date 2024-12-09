@@ -1,11 +1,11 @@
 import React from 'react';
-import SidebarDashboard from '../sidebar/sidebarDashboard';
-import UserInfo from "../user_info/User-info";
+import ESLSidebar from '../sidebar/esl-sidebar';
+import UserInfo from '../user_info/User-info';
 import "./EslPrimeDashboard.css"
 const EslPrimeDashboard = () => {
   return (
     <div>
-      <SidebarDashboard />
+      <ESLSidebar />
       <UserInfo />
       <div className="dashboard-container">
         <div className="dashboard-content">

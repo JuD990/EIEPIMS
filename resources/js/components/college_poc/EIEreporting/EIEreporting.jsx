@@ -1,12 +1,12 @@
 import React from 'react';
 import "./EIEreporting.css"
-import SidebarEIEreporting from "./sidebar/sidebarEIEreporting";
-import UserInfo from "../user_info/User-info";
+import CollegePOCsidebar from "../sidebar/college-poc-sidebar";
+import UserInfo from "../user_info/User-info"
 
 const EIEreporting = () => {
   return (
     <div>
-      <SidebarEIEreporting />
+      <CollegePOCsidebar />
       <UserInfo />
       <br /><br /><br /><br /><br />
       <div className="eie-reporting-page-title">

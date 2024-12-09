@@ -1,0 +1,108 @@
+/* Sidebar container */
+.college-poc-dashboard-sidebar {
+  background-color: #f3f3f3;
+  width: 300px;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-right: 3px solid #e0e0e0;
+  position: fixed;
+  z-index: 10;
+}
+
+/* Logo and Title section */
+.college-poc-dashboard-logo-title {
+  display: flex;
+  align-items: center; /* Vertically center the logo and title */
+  gap: 10px; /* Add spacing between the logo and title */
+  margin-bottom: 60px; /* Space between logo/title and buttons */
+}
+
+.logo {
+  width: 60px;
+  height: 60px;
+  margin-right: 25px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.title {
+  color: #383838;
+  font-family: "Poppins";
+  font-size: 32px;
+  font-weight: 800;
+  margin: 0;
+}
+
+/* Sidebar Buttons */
+.college-poc-pages {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+.college-poc-student-management-sidebar-button, 
+.college-poc-eie-reporting-sidebar-button, 
+.college-poc-class-management-sidebar-button, 
+.college-poc-dashboard-sidebar-button{
+  height: 80px;
+  border: none;
+  padding: 10px 15px; /* Add padding for better spacing */
+  display: flex;
+  flex-direction: row; /* Align icon and title horizontally */
+  align-items: center; /* Vertically center the icon and title */
+  justify-content: flex-start; /* Align items to the left */
+  cursor: pointer;
+  text-align: left; /* Align text to the left */
+  width: 100%; /* Make button take full width */
+}
+.college-poc-student-management-sidebar-button:hover, 
+.college-poc-eie-reporting-sidebar-button:hover, 
+.college-poc-class-management-sidebar-button:hover, 
+.college-poc-dashboard-sidebar-button:hover{
+  background-color: #0187F1; /* Highlight color on hover */
+  border-radius: 8px; /* Rounded corners */
+}
+.college-poc-student-management-sidebar-button:hover p, 
+.college-poc-eie-reporting-sidebar-button:hover p, 
+.college-poc-class-management-sidebar-button:hover p, 
+.college-poc-dashboard-sidebar-button:hover p{
+  color: white;
+}
+
+.college-poc-student-management-sidebar-button img {
+  width: 60px; /* Adjust icon size */
+  height: 90px; /* Keep icons square */
+  margin-right: 15px; /* Space between icon and title */
+  margin-left: 5px;
+} 
+.college-poc-eie-reporting-sidebar-button img {
+  width: 50px; /* Adjust icon size */
+  height: 50px; /* Keep icons square */
+  margin-right: 15px; /* Space between icon and title */
+  margin-left: 8px;
+}
+.college-poc-class-management-sidebar-button img{
+  width: 50px; /* Adjust icon size */
+  height: 80px; /* Keep icons square */
+  margin-right: 18px; /* Space between icon and title */
+  margin-left: 5px;
+}
+.college-poc-dashboard-sidebar-button img{
+  width: 50px; /* Adjust icon size */
+  height: 70px; /* Keep icons square */
+  margin-right: 18px; /* Space between icon and title */
+  margin-left: 5px;
+}
+.college-poc-student-management-sidebar-button p, 
+.college-poc-eie-reporting-sidebar-button p, 
+.college-poc-class-management-sidebar-button p, 
+.college-poc-dashboard-sidebar-button p{
+  margin: 0; /* Remove default margin from <p> */
+  font-size: 20px; /* Adjust font size */
+  font-weight: 500; /* Adjust font weight */
+  color: black; /* Set text color */
+  font-family: 'Poppins';
+}

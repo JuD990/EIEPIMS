@@ -1,12 +1,12 @@
 import React from "react";
-import SidebarDashboard from '../../sidebar/sidebarDashboard';
-import UserInfo from "../../user_info/User-info";
+import Sidebar from '../../sidebar/esl-sidebar';
+import UserInfo from '../../user_info/User-info';
 import "./esl-prime-account-management.css"
 
 const eslPrimeAccountManagement = () => {
 return(
     <div>
-      <SidebarDashboard />
+      <Sidebar />
       <UserInfo />
       <div className="dashboard-container">
         <div className="dashboard-content">

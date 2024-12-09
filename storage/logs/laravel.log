@@ -6456,3 +6456,12 @@ Did you mean one of these?
 [2024-12-08 09:28:49] local.WARNING: Login failed: User not found for email: eslprime@unc.edu.ph and user type: students  
 [2024-12-08 09:28:55] local.DEBUG: Login attempt: Email - eslprime@unc.edu.ph User Type - esl_prime  
 [2024-12-08 10:56:20] local.DEBUG: Login attempt: Email - eslprime@unc.edu.ph User Type - esl_prime  
+[2024-12-09 08:18:22] local.ERROR: Login Error: SQLSTATE[HY000] [1049] Unknown database 'eiepims' (Connection: mysql, SQL: select * from `esl_prime` where `email` = eslprime@unc.edu.ph limit 1)  
+[2024-12-09 08:19:32] local.ERROR: Login Error: SQLSTATE[HY000] [1049] Unknown database 'eiepims' (Connection: mysql, SQL: select * from `esl_prime` where `email` = eslprime@unc.edu.ph limit 1)  
+[2024-12-09 08:19:47] local.ERROR: Login Error: SQLSTATE[HY000] [1049] Unknown database 'eiepims' (Connection: mysql, SQL: select * from `esl_prime` where `email` = eslprime@unc.edu.ph limit 1)  
+[2024-12-09 08:26:56] local.DEBUG: Login attempt: Email - eslprime@unc.edu.ph User Type - esl_prime  
+[2024-12-09 08:55:23] local.DEBUG: Login attempt: Email - collegepoc@unc.edu.ph User Type - college_pocs  
+[2024-12-09 09:18:05] local.DEBUG: Login attempt: Email - eslprime@unc.edu.ph User Type - esl_prime  
+[2024-12-09 11:13:39] local.DEBUG: Login attempt: Email - collegepoc@unc.edu.ph User Type - students  
+[2024-12-09 11:13:39] local.WARNING: Login failed: User not found for email: collegepoc@unc.edu.ph and user type: students  
+[2024-12-09 11:13:42] local.DEBUG: Login attempt: Email - collegepoc@unc.edu.ph User Type - college_pocs  

@@ -1,7 +1,7 @@
 import React from "react";
+import CollegePOCsidebar from "../sidebar/college-poc-sidebar";
 import UserInfo from "../user_info/User-info"
 import ImplementingSubjects from "./implementing-subjects/implementing-subject";
-import SidebarImplementingSubjects from "./sidebar/sidebar-Imp-Sub"
 import "./CollegePocClassManagement.css"
 import DashboardDropdown from "./dropdown-button/dashboard-dropdown";
 
@@ -10,7 +10,7 @@ const CollegePocImplementingSubjects = () => {
 
   return (
     <div>
-      <SidebarImplementingSubjects />
+      <CollegePOCsidebar />
       <UserInfo />
       <br /><br /><br /><br /><br />
       <div className="implementing-subject-page-title">

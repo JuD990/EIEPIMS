@@ -1,10 +1,10 @@
  import React from "react";
- import SidebarDashboard from '../../sidebar/sidebarDashboard';
- import UserInfo from "../../user_info/User-info";
+ import ESLSidebar from '../../sidebar/esl-sidebar';
+ import UserInfo from '../../user_info/User-info';
 const eslCertification = () => {
 return(
     <div>
-      <SidebarDashboard />
+      <ESLSidebar />
       <UserInfo />
       <div className="dashboard-container">
         <div className="dashboard-content">

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./sidebarDashboard.css";
+import "./esl-sidebar.css";
 import logo from "@assets/system-logo.png";
 import eiemanagementicon from "@assets/eie-management-icon.png";
 import reporticon from "@assets/report-icon.png";
@@ -11,7 +11,7 @@ import certificationIcon from "@assets/certification-icon.png";
 import monthlyChampsIcon from "@assets/monthly-champs-icon.png";
 import epgfVersionIcon from "@assets/epgf-version-icon.png"
 
-const SidebarDashboard = () => {
+const ESLSidebar = () => {
   const navigate = useNavigate();
 
   const handleDashboardClick = () => {
@@ -99,4 +99,4 @@ const SidebarDashboard = () => {
   );
 };
 
-export default SidebarDashboard;
+export default ESLSidebar;

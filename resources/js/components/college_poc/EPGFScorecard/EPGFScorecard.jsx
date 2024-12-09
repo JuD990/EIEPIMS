@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import UserInfo from "../user_info/User-info"
 import "./EPGFScorecard.css"
-import SidebarEPGFScorecard from "./sidebar/sidebarEPGFScorecard"
+import CollegePOCsidebar from "../sidebar/college-poc-sidebar";
+import UserInfo from "../user_info/User-info"
 import { FaChevronLeft } from 'react-icons/fa';
 import Table from "./table/scorecard-table";
 import Button from './buttons/submit-button';
@@ -22,7 +22,7 @@ const EPGFScorecard = () => {
   return (
     <div>
       <UserInfo />
-      <SidebarEPGFScorecard />
+      <CollegePOCsidebar />
       
       <br /><br />
       <Link to="/class-management" style={{ textDecoration: 'none' }}>

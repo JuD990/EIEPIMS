@@ -1,11 +1,11 @@
 import React from "react";
-import SidebarDashboard from '../sidebar/sidebarDashboard';
+import Sidebar from '../sidebar/esl-sidebar';
 import UserInfo from "../user_info/User-info";
 import "./esl-prime-eie-diagnostic.css"
 const eslPrimeDiagnostics = () => {
 return(
     <div>
-        <SidebarDashboard/>
+        <Sidebar/>
         <UserInfo/>
       <div className="dashboard-container">
         <div className="dashboard-content">
