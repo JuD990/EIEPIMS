@@ -80,13 +80,13 @@ const handleLogin = async (event) => {
           navigate("/lead-eie-poc-dashboard");
           break;
         case "Head EIE POC":
-          navigate("/head-eie-poc-dashboard");
+          navigate("/eie-head-poc-dashboard");
           break;
         case "ESL Prime":
-          navigate("/esl-prime-dashboard");
+          navigate("/esl-dashboard");
           break;
         case "ESL Champion":
-          navigate("/esl-champion-dashboard");
+          navigate("/esl-dashboard");
           break;
         default:
           navigate("/");

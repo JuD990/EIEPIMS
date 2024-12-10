@@ -1,0 +1,118 @@
+/* Sidebar container */
+.eie-head-dashboard-sidebar{
+  background-color: #f3f3f3;
+  width: 320px;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-right: 3px solid #e0e0e0;
+  position: fixed;
+  z-index: 10;
+}
+
+/* Logo and Title section */
+.eie-head-dashboard-logo-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 80px;
+}
+
+.logo {
+  width: 60px;
+  height: 60px;
+  margin-right: 25px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.title {
+  color: #383838;
+  font-family: "Poppins";
+  font-size: 32px;
+  font-weight: 800;
+  margin: 0;
+}
+
+/* Sidebar Buttons */
+.eie-head--pages {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.eie-head-student-management-sidebar-button, 
+.eie-head-eie-reporting-sidebar-button, 
+.eie-head-implementing-subject-sidebar-button,
+.eie-head-master-class-list-sidebar-button,
+.eie-head-dashboard-sidebar-button{
+  height: 80px;
+  border: none;
+  padding: 10px 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  margin-bottom: 15px;
+}
+.eie-head-student-management-sidebar-button:hover, 
+.eie-head-eie-reporting-sidebar-button:hover, 
+.eie-head-implementing-subject-sidebar-button:hover,
+.eie-head-master-class-list-sidebar-button:hover,
+.eie-head-dashboard-sidebar-button:hover{
+  background-color: #0187F1;
+  border-radius: 8px;
+}
+.eie-head-student-management-sidebar-button:hover p, 
+.eie-head-eie-reporting-sidebar-button:hover p, 
+.eie-head-implementing-subject-sidebar-button:hover p,
+.eie-head-master-class-list-sidebar-button:hover p,
+.eie-head-dashboard-sidebar-button:hover p{
+  color: white;
+}
+
+.eie-head-student-management-sidebar-button img {
+  width: 60px;
+  height: 90px;
+  margin-right: 15px;
+  margin-left: 5px;
+} 
+.eie-head-eie-reporting-sidebar-button img {
+  width: 50px;
+  height: 50px;
+  margin-right: 15px;
+  margin-left: 8px;
+}
+.eie-head-implementing-subject-sidebar-button img{
+  width: 50px;
+  height: 80px;
+  margin-right: 20px;
+  margin-left: 5px;
+}
+.eie-head-master-class-list-sidebar-button img{
+  width: 60px;
+  height: 55px;
+  margin-right: 18px;
+  margin-left: -2px;
+}
+.eie-head-dashboard-sidebar-button img{
+  width: 50px;
+  height: 70px;
+  margin-right: 20px;
+  margin-left: 5px;
+}
+.eie-head-student-management-sidebar-button p, 
+.eie-head-eie-reporting-sidebar-button p, 
+.eie-head-implementing-subject-sidebar-button p,
+.eie-head-master-class-list-sidebar-button p,
+.eie-head-dashboard-sidebar-button p{
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  color: black;
+  font-family: 'Poppins';
+}

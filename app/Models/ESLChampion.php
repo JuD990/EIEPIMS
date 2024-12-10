@@ -13,7 +13,7 @@ class ESLChampion extends Authenticatable
     use HasApiTokens;
     use HasFactory;
 
-    protected $table = 'esl_champions';
+    protected $table = 'esl_champion';
     protected $primaryKey = 'id';
 
     protected $fillable = [

@@ -2,11 +2,15 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import React from 'react';
 import LoginForm from "../js/components/Login/LoginForm";
 {/* ESL Champ Imports*/}
-import EslChampionDashboard from "../js/components/esl_champion/EslChampionDashboard";
+import EslChampionDashboard from "../js/components/esl_champion/EslChampionDashboard/EslChampionDashboard";
 {/* Student Imports*/}
 import StudentDashboard from "../js/components/student/StudentDashboard";
 {/* Head POC Imports*/}
-import HeadEiePocDashboard from "../js/components/head_eie_poc/HeadEiePocDashboard";
+import HeadEiePocDashboard from "../js/components/head_eie_poc/eie-head-dashboard/HeadEiePocDashboard";
+import EIEHeadReporting from "../js/components/head_eie_poc/eie-head-eie-reporting/eie-head-eie-reporting";
+import MasterClassList from "../js/components/head_eie_poc/master-class-list/master-class-list"
+import ImplementingSubjects from "../js/components/head_eie_poc/implementing-subjects/implementing-subjects";
+import EIEHeadStudentManagement from "../js/components/head_eie_poc/eie-head-student-management/eie-head-student-management"
 {/* Lead POC Imports*/}
 import LeadEiePocDashboard from "../js/components/lead_eie_poc/LeadEiePocDashboard";
 {/* College POC Imports*/}
@@ -40,20 +44,25 @@ const App = () => {
         <Route path="/epgf-scorecard" element={<PrivateRoute><EPGFScorecard /></PrivateRoute>} />
         <Route path="/college-poc-eie-reporting" element={<PrivateRoute><CollegePocEieReporting /></PrivateRoute>} />
         <Route path="/college-poc-student-management" element={<PrivateRoute><CollegePocStudentManagement /></PrivateRoute>} />
-        {/* ESL Champ */}
-        <Route path="/esl-champion-dashboard" element={<PrivateRoute><EslChampionDashboard /></PrivateRoute>} />
-        {/* ESL Prime */}
-        <Route path="/esl-prime-dashboard" element={<PrivateRoute><EslPrimeDashboard /></PrivateRoute>} />
-        <Route path="/esl-prime-eie-reporting" element={<PrivateRoute><EslPrimeEieReporting /></PrivateRoute>} />
-        <Route path="/esl-prime-eie-diagnostics" element={<PrivateRoute><EslPrimeDiagnostics /></PrivateRoute>} />
-        {/* ESL Prime EIE Management*/}
+
+        {/* ESL */}
+        <Route path="/esl-dashboard" element={<PrivateRoute><EslChampionDashboard /></PrivateRoute>} />
+        <Route path="/esl-dashboard" element={<PrivateRoute><EslPrimeDashboard /></PrivateRoute>} />
+        <Route path="/esl-eie-reporting" element={<PrivateRoute><EslPrimeEieReporting /></PrivateRoute>} />
+        <Route path="/esl-eie-diagnostics" element={<PrivateRoute><EslPrimeDiagnostics /></PrivateRoute>} />
+
+        {/* ESL EIE Management*/}
         <Route path="/esl-epgf-versioning" element={<PrivateRoute><ElPrimeEPGFRubricVersion /></PrivateRoute>} />
         <Route path="/esl-certification" element={<PrivateRoute><EslCertification /></PrivateRoute>} />
         <Route path="/esl-monthly-champions" element={<PrivateRoute><EslMonthlyChampions /></PrivateRoute>} />
-        <Route path="/esl-prime-account-management" element={<PrivateRoute><EslPrimeAccountManagement /></PrivateRoute>} />
+        <Route path="/esl-account-management" element={<PrivateRoute><EslPrimeAccountManagement /></PrivateRoute>} />
 
         {/* EIE Head */}
-        <Route path="/head-eie-poc-dashboard" element={<PrivateRoute><HeadEiePocDashboard /></PrivateRoute>} />
+        <Route path="/eie-head-poc-dashboard" element={<PrivateRoute><HeadEiePocDashboard /></PrivateRoute>} />
+        <Route path="/eie-head-reporting" element={<PrivateRoute><EIEHeadReporting /></PrivateRoute>} />
+        <Route path="/eie-head-student-management" element={<PrivateRoute><EIEHeadStudentManagement /></PrivateRoute>} />
+        <Route path="/eie-head-master-class-list" element={<PrivateRoute><MasterClassList /></PrivateRoute>} />
+        <Route path="/implementing-subjects" element={<PrivateRoute><ImplementingSubjects /></PrivateRoute>} />
         {/* Lead POC */}
         <Route path="/lead-eie-poc-dashboard" element={<PrivateRoute><LeadEiePocDashboard /></PrivateRoute>} />
       </Routes>

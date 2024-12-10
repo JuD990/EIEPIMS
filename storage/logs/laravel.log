@@ -6467,3 +6467,14 @@ Did you mean one of these?
 [2024-12-09 11:13:42] local.DEBUG: Login attempt: Email - collegepoc@unc.edu.ph User Type - college_pocs  
 [2024-12-09 14:41:57] local.DEBUG: Login attempt: Email - eslprime@unc.edu.ph User Type - esl_prime  
 [2024-12-09 15:11:08] local.DEBUG: Login attempt: Email - collegepoc@unc.edu.ph User Type - college_pocs  
+[2024-12-10 06:22:40] local.DEBUG: Login attempt: Email - eslprime@unc.edu.ph User Type - esl_prime  
+[2024-12-10 06:28:56] local.DEBUG: Login attempt: Email - collegepoc@unc.edu.ph User Type - college_pocs  
+[2024-12-10 10:07:39] local.DEBUG: Login attempt: Email - eieheadpoc@unc.edu.ph User Type - eie_heads  
+[2024-12-10 10:07:39] local.WARNING: Login failed: User not found for email: eieheadpoc@unc.edu.ph and user type: eie_heads  
+[2024-12-10 10:07:43] local.DEBUG: Login attempt: Email - eiehead@unc.edu.ph User Type - eie_heads  
+[2024-12-10 11:11:53] local.DEBUG: Login attempt: Email - eiehead@unc.edu.ph User Type - eie_heads  
+[2024-12-10 15:57:11] local.ERROR: Login Error: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'eiepims.esl_champions' doesn't exist (Connection: mysql, SQL: select * from `esl_champions` where `email` = eslchampion@unc.edu.ph limit 1)  
+[2024-12-10 15:59:02] local.ERROR: Login Error: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'eiepims.esl_champions' doesn't exist (Connection: mysql, SQL: select * from `esl_champions` where `email` = eslchampion@unc.edu.ph limit 1)  
+[2024-12-10 16:01:20] local.DEBUG: Login attempt: Email - eslchampion@unc.edu.ph User Type - esl_champion  
+[2024-12-10 16:08:40] local.DEBUG: Login attempt: Email - eslchampion@unc.edu.ph User Type - esl_champion  
+[2024-12-10 16:09:42] local.DEBUG: Login attempt: Email - eslchampion@unc.edu.ph User Type - esl_champion  

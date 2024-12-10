@@ -1,0 +1,29 @@
+/* User Management Buttons Styles */
+.class-list-buttons-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+  }
+  
+  .class-list-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+  }
+  
+  .class-list-upload-csv-button {
+    border: 2px solid #0187f1;
+    color: #0187f1;
+    background-color: transparent;
+    padding: 15px 10px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-right: 20px;
+  }
+  .class-list-upload-csv-button label{
+    margin: 0;
+  }
+  

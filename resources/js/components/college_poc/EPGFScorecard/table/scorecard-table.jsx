@@ -24,8 +24,7 @@ const TableComponent = () => {
             style={{
               width: '120px',
               padding: '4px',
-              borderRadius: '4px',
-              border: '1px solid #ddd',
+              backgroundColor: 'transparent',
             }}
           >
             <option value="Reading">Reading</option>
