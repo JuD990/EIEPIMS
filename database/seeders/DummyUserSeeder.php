@@ -10,15 +10,13 @@ class DummyUserSeeder extends Seeder
 {
     public function run()
     {
-        // Dummy data for each role
-
-        // Student Role
+        // ================= Student Role =================
         $students = [
             [
                 'student_id' => 'STU001',
-                'firstname' => 'John',
-                'middlename' => 'Doe',
-                'lastname' => 'Student',
+                'firstname' => 'Christine Joy',
+                'middlename' => '',
+                'lastname' => 'Cleofe',
                 'password' => Hash::make('password123'),
                 'email' => 'student@unc.edu.ph',
                 'department' => 'Engineering',
@@ -30,28 +28,83 @@ class DummyUserSeeder extends Seeder
             ],
         ];
 
-        // College POC Role
+        DB::table('students')->insert($students);
+
+        // ================= Implementing Subjects =================
+        $implementing_subject_id = DB::table('implementing_subjects')->insertGetId([
+            'course_title' => 'Object Oriented Programming',
+            'code' => 'OOP101',
+            'course_code' => 'CS123',
+            'description' => 'Introduction to OOP concepts',
+            'semester' => '1st',
+            'year_level' => 2,
+            'assigned_poc' => 'Dennis Ignacio',
+            'employee_id' => 1001,
+            'email' => 'collegepoc@unc.edu.ph',
+            'program' => 'BSCS',
+            'department' => 'Computer Science',
+            'epgf_average' => 88.50,
+            'completion_rate' => 90.00,
+            'proficiency_level' => 'Advanced',
+            'student_list_id' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // ================= College POC Role =================
         $college_pocs = [
             [
-                'firstname' => 'Jane',
-                'middlename' => 'Marie',
-                'lastname' => 'College',
+                'employee_id' => 1001,
+                'firstname' => 'Dennis',
+                'middlename' => '',
+                'lastname' => 'Ignacio',
                 'password' => Hash::make('password123'),
                 'email' => 'collegepoc@unc.edu.ph',
                 'department' => 'Computer Science',
+                'program' => 'BSCS',
+                'implementing_subject_id' => $implementing_subject_id,
                 'role' => 'College POC',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
         ];
 
-        // EIE Head Role
+        DB::table('college_pocs')->insert($college_pocs);
+
+        // ================= Student List =================
+        $student_lists = [
+            [
+                'student_list_id' => 1,
+                'student_id' => 'STU001',
+                'firstname' => 'John',
+                'middlename' => 'A.',
+                'lastname' => 'Doe',
+                'status' => 'Active',
+                'email' => 'john.doe@student.unc.edu.ph',
+                'department' => 'Computer Science',
+                'program' => 'BSCS',
+                'year_level' => 2,
+                'gender' => 'Male',
+                'classification' => 'Regular',
+                'pronunciation_average' => 85.00,
+                'grammar_average' => 88.00,
+                'fluency_average' => 87.50,
+                'pgf_average' => 86.83,
+                'proficiency_level' => 'Intermediate',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ];
+
+        DB::table('student_lists')->insert($student_lists);
+
+        // ================= EIE Head Role =================
         $eie_heads = [
             [
                 'employee_id' => 'EIEHEAD001',
-                'firstname' => 'Michael',
-                'middlename' => 'Alan',
-                'lastname' => 'EIEHead',
+                'firstname' => 'Agnes',
+                'middlename' => '',
+                'lastname' => 'Reyes',
                 'password' => Hash::make('password123'),
                 'email' => 'eiehead@unc.edu.ph',
                 'department' => 'Administration',
@@ -61,13 +114,15 @@ class DummyUserSeeder extends Seeder
             ],
         ];
 
-        // ESL Prime Role
-        $esl_prime = [
+        DB::table('eie_heads')->insert($eie_heads);
+
+        // ================= ESL Prime Role =================
+        $esl_primes = [
             [
                 'employee_id' => 'ESLPRIME001',
-                'firstname' => 'Sarah',
-                'middlename' => 'Lynn',
-                'lastname' => 'Prime',
+                'firstname' => 'Chin',
+                'middlename' => '',
+                'lastname' => 'Borela',
                 'password' => Hash::make('password123'),
                 'email' => 'eslprime@unc.edu.ph',
                 'role' => 'ESL Prime',
@@ -76,13 +131,15 @@ class DummyUserSeeder extends Seeder
             ],
         ];
 
-        // ESL Champion Role
+        DB::table('esl_prime')->insert($esl_prime);
+
+        // ================= ESL Champion Role =================
         $esl_champion = [
             [
                 'employee_id' => 'ESLCHAMP001',
-                'firstname' => 'David',
-                'middlename' => 'Carter',
-                'lastname' => 'Champion',
+                'firstname' => 'Mia',
+                'middlename' => '',
+                'lastname' => 'Tajim',
                 'password' => Hash::make('password123'),
                 'email' => 'eslchampion@unc.edu.ph',
                 'role' => 'ESL Champion',
@@ -91,13 +148,15 @@ class DummyUserSeeder extends Seeder
             ],
         ];
 
-        // Lead POC Role
+        DB::table('esl_champion')->insert($esl_champion);
+
+        // ================= Lead POC Role =================
         $lead_pocs = [
             [
                 'employee_id' => 'LEADPOC001',
-                'firstname' => 'Emily',
-                'middlename' => 'Grace',
-                'lastname' => 'LeadPOC',
+                'firstname' => 'June',
+                'middlename' => '',
+                'lastname' => 'Danila',
                 'password' => Hash::make('password123'),
                 'email' => 'leadpoc@unc.edu.ph',
                 'department' => 'Science',
@@ -107,12 +166,6 @@ class DummyUserSeeder extends Seeder
             ],
         ];
 
-        // Insert dummy users into the respective tables
-        DB::table('students')->insert($students);
-        DB::table('college_pocs')->insert($college_pocs);
-        DB::table('eie_heads')->insert($eie_heads);
-        DB::table('esl_champion')->insert($esl_champion);
-        DB::table('esl_prime')->insert($esl_prime);
         DB::table('lead_pocs')->insert($lead_pocs);
     }
 }

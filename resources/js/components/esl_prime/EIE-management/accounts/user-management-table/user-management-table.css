@@ -54,6 +54,7 @@
     color: #0187F1;
     background-color: transparent;
     margin-left: 10px; /* Adjust margin if necessary */
+    white-space: nowrap;
   }
   
   .edit-button {

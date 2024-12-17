@@ -521,6 +521,7 @@ class ComposerStaticInit7e8c3c14ff33b199b4a0838993eb8423
         'App\\Models\\EIEHead' => __DIR__ . '/../..' . '/app/Models/EIEHead.php',
         'App\\Models\\ESLChampion' => __DIR__ . '/../..' . '/app/Models/ESLChampion.php',
         'App\\Models\\ESLPrime' => __DIR__ . '/../..' . '/app/Models/ESLPrime.php',
+        'App\\Models\\ImplementingSubject' => __DIR__ . '/../..' . '/app/Models/ImplementingSubject.php',
         'App\\Models\\LeadPOC' => __DIR__ . '/../..' . '/app/Models/LeadPOC.php',
         'App\\Models\\Student' => __DIR__ . '/../..' . '/app/Models/Student.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',

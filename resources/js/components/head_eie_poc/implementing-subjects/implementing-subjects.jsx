@@ -3,8 +3,13 @@ import EIEHeadSidebar from '../sidebar/eie-head-sidebar';
 import UserInfo from '../user_info/User-info';
 import ImplementingSubjectDropdown from "./dropdown-button/implementing-subjects-dropdown";
 import ImplementingSubjectsTable from "./implementing-subjects-table/implementing-subjects-table";
-const EIEHeadStudentManagement = () => {
+import UploadImplementingSubjectsButton from "./upload-implementing-subjects/upload-button";
 
+const EIEHeadStudentManagement = () => {
+  const handleFileUpload = (file) => {
+    console.log("Uploaded file:", file);
+    // Add functionality to process the CSV file
+  };
     return(
         <div>
         <EIEHeadSidebar/>
@@ -18,7 +23,7 @@ const EIEHeadStudentManagement = () => {
         </div>
         <br />
         <ImplementingSubjectDropdown/>
-        <br />
+        <UploadImplementingSubjectsButton onFileUpload={handleFileUpload} />
         <ImplementingSubjectsTable/>
         <br />
       </div>

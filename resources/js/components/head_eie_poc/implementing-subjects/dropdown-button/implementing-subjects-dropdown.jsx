@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import "./implementing-subjects-dropdown.css";
 import { FaChevronDown } from "react-icons/fa";
-import Papa from "papaparse";
-import UploadIcon from "@assets/Upload.png";
 
 const ImplementingSubjectDropdown = () => {
   const [isProgramOpen, setIsProgramOpen] = useState(false);
@@ -18,22 +16,6 @@ const ImplementingSubjectDropdown = () => {
   const yearLevels = ["1st Year", "2nd Year", "3rd Year", "4th Year"];
   const semesters = ["1st Semester", "2nd Semester"];
 
-  const [csvData, setCsvData] = useState([]);
-
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      Papa.parse(file, {
-        complete: (result) => {
-          setCsvData(result.data);
-          alert("CSV File Parsed Successfully");
-        },
-        header: true,
-        skipEmptyLines: true,
-      });
-    }
-  };
-
   return (
     <div
       className="eie-head-dropdown-container"
@@ -41,7 +23,6 @@ const ImplementingSubjectDropdown = () => {
         display: "flex",
         gap: "20px",
         alignItems: "center",
-        width: "100%",
       }}
     >
       {/* Program Dropdown */}
@@ -123,46 +104,6 @@ const ImplementingSubjectDropdown = () => {
             ))}
           </div>
         )}
-      </div>
-
-      {/* Upload Subjects Button */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end", // Push the button to the right
-          alignItems: "center", // Align the button vertically with dropdowns
-          flexShrink: 0, // Prevent the button from shrinking
-        }}
-      >
-        <input
-          type="file"
-          id="csv-upload"
-          accept=".csv"
-          style={{ display: "none" }}
-          onChange={handleFileUpload}
-        />
-
-        <label
-          htmlFor="csv-upload"
-          style={{
-            display: "flex",
-            backgroundColor: "#0187F1",
-            color: "#FFFFFF",
-            fontFamily: "Poppins, sans-serif",
-            fontWeight: "600",
-            padding: "10px 20px",
-            borderRadius: "8px",
-            cursor: "pointer",
-            whiteSpace: "nowrap",
-            fontSize: "16px",
-            marginLeft: "670px",
-            marginTop: "10px",
-            alignItems: "center",
-          }}
-        >
-          <img src={UploadIcon} alt="Upload" style={{ marginRight: "10px" }} />
-          Upload Subjects
-        </label>
       </div>
     </div>
   );

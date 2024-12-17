@@ -13,6 +13,7 @@ return array(
     'App\\Models\\EIEHead' => $baseDir . '/app/Models/EIEHead.php',
     'App\\Models\\ESLChampion' => $baseDir . '/app/Models/ESLChampion.php',
     'App\\Models\\ESLPrime' => $baseDir . '/app/Models/ESLPrime.php',
+    'App\\Models\\ImplementingSubject' => $baseDir . '/app/Models/ImplementingSubject.php',
     'App\\Models\\LeadPOC' => $baseDir . '/app/Models/LeadPOC.php',
     'App\\Models\\Student' => $baseDir . '/app/Models/Student.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',

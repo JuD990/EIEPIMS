@@ -6478,3 +6478,236 @@ Did you mean one of these?
 [2024-12-10 16:01:20] local.DEBUG: Login attempt: Email - eslchampion@unc.edu.ph User Type - esl_champion  
 [2024-12-10 16:08:40] local.DEBUG: Login attempt: Email - eslchampion@unc.edu.ph User Type - esl_champion  
 [2024-12-10 16:09:42] local.DEBUG: Login attempt: Email - eslchampion@unc.edu.ph User Type - esl_champion  
+[2024-12-16 14:51:44] local.DEBUG: Login attempt: Email - eiehead@unc.edu.ph User Type - students  
+[2024-12-16 14:51:44] local.WARNING: Login failed: User not found for email: eiehead@unc.edu.ph and user type: students  
+[2024-12-16 14:52:03] local.DEBUG: Login attempt: Email - eiehead@unc.edu.ph User Type - eie_heads  
+[2024-12-16 14:56:53] local.DEBUG: Login attempt: Email - collegepoc@unc.edu.ph User Type - college_pocs  
+[2024-12-16 14:57:22] local.DEBUG: Login attempt: Email - eslprime@unc.edu.ph User Type - esl_prime  
+[2024-12-17 12:24:55] local.ERROR: Cannot redeclare class CreateCollegePOCsTable (previously declared in /home/jude-adolfo/EIEPIMS/database/migrations/2024_11_18_034027_create_college_pocs.php:7) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare class CreateCollegePOCsTable (previously declared in /home/jude-adolfo/EIEPIMS/database/migrations/2024_11_18_034027_create_college_pocs.php:7) at /home/jude-adolfo/EIEPIMS/database/migrations/2024_11_18_034027_create_college_pocs.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2024-12-17 12:35:13] local.ERROR: Cannot redeclare class CreateCollegePOCsTable (previously declared in /home/jude-adolfo/EIEPIMS/database/migrations/2024_11_18_034027_create_college_pocs.php:7) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare class CreateCollegePOCsTable (previously declared in /home/jude-adolfo/EIEPIMS/database/migrations/2024_11_18_034027_create_college_pocs.php:7) at /home/jude-adolfo/EIEPIMS/database/migrations/2024_11_18_034027_create_college_pocs.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2024-12-17 12:37:20] local.ERROR: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'eiepims.cache' doesn't exist (Connection: mysql, SQL: delete from `cache`) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 42S02): SQLSTATE[42S02]: Base table or view not found: 1146 Table 'eiepims.cache' doesn't exist (Connection: mysql, SQL: delete from `cache`) at /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php:825)
+[stacktrace]
+#0 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback()
+#1 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(584): Illuminate\\Database\\Connection->run()
+#2 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(548): Illuminate\\Database\\Connection->affectingStatement()
+#3 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(4066): Illuminate\\Database\\Connection->delete()
+#4 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/DatabaseStore.php(421): Illuminate\\Database\\Query\\Builder->delete()
+#5 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/Repository.php(791): Illuminate\\Cache\\DatabaseStore->flush()
+#6 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/Console/ClearCommand.php(69): Illuminate\\Cache\\Repository->__call()
+#7 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Cache\\Console\\ClearCommand->handle()
+#8 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/Util.php(43): Illuminate\\Container\\BoundMethod::{closure:Illuminate\\Container\\BoundMethod::call():35}()
+#9 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(95): Illuminate\\Container\\Util::unwrapIfClosure()
+#10 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#11 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\\Container\\BoundMethod::call()
+#12 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Console/Command.php(213): Illuminate\\Container\\Container->call()
+#13 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Command/Command.php(279): Illuminate\\Console\\Command->execute()
+#14 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Console/Command.php(182): Symfony\\Component\\Console\\Command\\Command->run()
+#15 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(1094): Illuminate\\Console\\Command->run()
+#16 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(342): Symfony\\Component\\Console\\Application->doRunCommand()
+#17 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(193): Symfony\\Component\\Console\\Application->doRun()
+#18 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(197): Symfony\\Component\\Console\\Application->run()
+#19 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1205): Illuminate\\Foundation\\Console\\Kernel->handle()
+#20 /home/jude-adolfo/EIEPIMS/artisan(13): Illuminate\\Foundation\\Application->handleCommand()
+#21 {main}
+
+[previous exception] [object] (PDOException(code: 42S02): SQLSTATE[42S02]: Base table or view not found: 1146 Table 'eiepims.cache' doesn't exist at /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php:592)
+[stacktrace]
+#0 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(592): PDO->prepare()
+#1 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(812): Illuminate\\Database\\Connection->{closure:Illuminate\\Database\\Connection::affectingStatement():584}()
+#2 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback()
+#3 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(584): Illuminate\\Database\\Connection->run()
+#4 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(548): Illuminate\\Database\\Connection->affectingStatement()
+#5 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(4066): Illuminate\\Database\\Connection->delete()
+#6 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/DatabaseStore.php(421): Illuminate\\Database\\Query\\Builder->delete()
+#7 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/Repository.php(791): Illuminate\\Cache\\DatabaseStore->flush()
+#8 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/Console/ClearCommand.php(69): Illuminate\\Cache\\Repository->__call()
+#9 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Cache\\Console\\ClearCommand->handle()
+#10 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/Util.php(43): Illuminate\\Container\\BoundMethod::{closure:Illuminate\\Container\\BoundMethod::call():35}()
+#11 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(95): Illuminate\\Container\\Util::unwrapIfClosure()
+#12 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#13 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\\Container\\BoundMethod::call()
+#14 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Console/Command.php(213): Illuminate\\Container\\Container->call()
+#15 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Command/Command.php(279): Illuminate\\Console\\Command->execute()
+#16 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Console/Command.php(182): Symfony\\Component\\Console\\Command\\Command->run()
+#17 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(1094): Illuminate\\Console\\Command->run()
+#18 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(342): Symfony\\Component\\Console\\Application->doRunCommand()
+#19 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(193): Symfony\\Component\\Console\\Application->doRun()
+#20 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(197): Symfony\\Component\\Console\\Application->run()
+#21 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1205): Illuminate\\Foundation\\Console\\Kernel->handle()
+#22 /home/jude-adolfo/EIEPIMS/artisan(13): Illuminate\\Foundation\\Application->handleCommand()
+#23 {main}
+"} 
+[2024-12-17 12:38:13] local.ERROR: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'eiepims.cache' doesn't exist (Connection: mysql, SQL: delete from `cache`) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 42S02): SQLSTATE[42S02]: Base table or view not found: 1146 Table 'eiepims.cache' doesn't exist (Connection: mysql, SQL: delete from `cache`) at /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php:825)
+[stacktrace]
+#0 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback()
+#1 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(584): Illuminate\\Database\\Connection->run()
+#2 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(548): Illuminate\\Database\\Connection->affectingStatement()
+#3 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(4066): Illuminate\\Database\\Connection->delete()
+#4 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/DatabaseStore.php(421): Illuminate\\Database\\Query\\Builder->delete()
+#5 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/Repository.php(791): Illuminate\\Cache\\DatabaseStore->flush()
+#6 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/Console/ClearCommand.php(69): Illuminate\\Cache\\Repository->__call()
+#7 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Cache\\Console\\ClearCommand->handle()
+#8 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/Util.php(43): Illuminate\\Container\\BoundMethod::{closure:Illuminate\\Container\\BoundMethod::call():35}()
+#9 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(95): Illuminate\\Container\\Util::unwrapIfClosure()
+#10 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#11 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\\Container\\BoundMethod::call()
+#12 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Console/Command.php(213): Illuminate\\Container\\Container->call()
+#13 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Command/Command.php(279): Illuminate\\Console\\Command->execute()
+#14 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Console/Command.php(182): Symfony\\Component\\Console\\Command\\Command->run()
+#15 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(1094): Illuminate\\Console\\Command->run()
+#16 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(342): Symfony\\Component\\Console\\Application->doRunCommand()
+#17 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(193): Symfony\\Component\\Console\\Application->doRun()
+#18 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(197): Symfony\\Component\\Console\\Application->run()
+#19 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1205): Illuminate\\Foundation\\Console\\Kernel->handle()
+#20 /home/jude-adolfo/EIEPIMS/artisan(13): Illuminate\\Foundation\\Application->handleCommand()
+#21 {main}
+
+[previous exception] [object] (PDOException(code: 42S02): SQLSTATE[42S02]: Base table or view not found: 1146 Table 'eiepims.cache' doesn't exist at /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php:592)
+[stacktrace]
+#0 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(592): PDO->prepare()
+#1 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(812): Illuminate\\Database\\Connection->{closure:Illuminate\\Database\\Connection::affectingStatement():584}()
+#2 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback()
+#3 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(584): Illuminate\\Database\\Connection->run()
+#4 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(548): Illuminate\\Database\\Connection->affectingStatement()
+#5 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(4066): Illuminate\\Database\\Connection->delete()
+#6 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/DatabaseStore.php(421): Illuminate\\Database\\Query\\Builder->delete()
+#7 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/Repository.php(791): Illuminate\\Cache\\DatabaseStore->flush()
+#8 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/Console/ClearCommand.php(69): Illuminate\\Cache\\Repository->__call()
+#9 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Cache\\Console\\ClearCommand->handle()
+#10 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/Util.php(43): Illuminate\\Container\\BoundMethod::{closure:Illuminate\\Container\\BoundMethod::call():35}()
+#11 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(95): Illuminate\\Container\\Util::unwrapIfClosure()
+#12 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#13 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\\Container\\BoundMethod::call()
+#14 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Console/Command.php(213): Illuminate\\Container\\Container->call()
+#15 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Command/Command.php(279): Illuminate\\Console\\Command->execute()
+#16 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Console/Command.php(182): Symfony\\Component\\Console\\Command\\Command->run()
+#17 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(1094): Illuminate\\Console\\Command->run()
+#18 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(342): Symfony\\Component\\Console\\Application->doRunCommand()
+#19 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(193): Symfony\\Component\\Console\\Application->doRun()
+#20 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(197): Symfony\\Component\\Console\\Application->run()
+#21 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1205): Illuminate\\Foundation\\Console\\Kernel->handle()
+#22 /home/jude-adolfo/EIEPIMS/artisan(13): Illuminate\\Foundation\\Application->handleCommand()
+#23 {main}
+"} 
+[2024-12-17 12:38:33] local.ERROR: Cannot redeclare class CreateCollegePOCsTable (previously declared in /home/jude-adolfo/EIEPIMS/database/migrations/2024_11_18_034027_create_college_pocs.php:7) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare class CreateCollegePOCsTable (previously declared in /home/jude-adolfo/EIEPIMS/database/migrations/2024_11_18_034027_create_college_pocs.php:7) at /home/jude-adolfo/EIEPIMS/database/migrations/2024_11_18_034027_create_college_pocs.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2024-12-17 12:39:04] local.ERROR: Cannot redeclare class CreateCollegePOCsTable (previously declared in /home/jude-adolfo/EIEPIMS/database/migrations/2024_11_18_034027_create_college_pocs.php:7) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare class CreateCollegePOCsTable (previously declared in /home/jude-adolfo/EIEPIMS/database/migrations/2024_11_18_034027_create_college_pocs.php:7) at /home/jude-adolfo/EIEPIMS/database/migrations/2024_11_18_034027_create_college_pocs.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2024-12-17 12:39:24] local.ERROR: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'eiepims.cache' doesn't exist (Connection: mysql, SQL: delete from `cache`) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 42S02): SQLSTATE[42S02]: Base table or view not found: 1146 Table 'eiepims.cache' doesn't exist (Connection: mysql, SQL: delete from `cache`) at /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php:825)
+[stacktrace]
+#0 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback()
+#1 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(584): Illuminate\\Database\\Connection->run()
+#2 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(548): Illuminate\\Database\\Connection->affectingStatement()
+#3 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(4066): Illuminate\\Database\\Connection->delete()
+#4 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/DatabaseStore.php(421): Illuminate\\Database\\Query\\Builder->delete()
+#5 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/Repository.php(791): Illuminate\\Cache\\DatabaseStore->flush()
+#6 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/Console/ClearCommand.php(69): Illuminate\\Cache\\Repository->__call()
+#7 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Cache\\Console\\ClearCommand->handle()
+#8 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/Util.php(43): Illuminate\\Container\\BoundMethod::{closure:Illuminate\\Container\\BoundMethod::call():35}()
+#9 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(95): Illuminate\\Container\\Util::unwrapIfClosure()
+#10 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#11 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\\Container\\BoundMethod::call()
+#12 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Console/Command.php(213): Illuminate\\Container\\Container->call()
+#13 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Command/Command.php(279): Illuminate\\Console\\Command->execute()
+#14 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Console/Command.php(182): Symfony\\Component\\Console\\Command\\Command->run()
+#15 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(1094): Illuminate\\Console\\Command->run()
+#16 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(342): Symfony\\Component\\Console\\Application->doRunCommand()
+#17 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(193): Symfony\\Component\\Console\\Application->doRun()
+#18 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(197): Symfony\\Component\\Console\\Application->run()
+#19 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1205): Illuminate\\Foundation\\Console\\Kernel->handle()
+#20 /home/jude-adolfo/EIEPIMS/artisan(13): Illuminate\\Foundation\\Application->handleCommand()
+#21 {main}
+
+[previous exception] [object] (PDOException(code: 42S02): SQLSTATE[42S02]: Base table or view not found: 1146 Table 'eiepims.cache' doesn't exist at /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php:592)
+[stacktrace]
+#0 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(592): PDO->prepare()
+#1 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(812): Illuminate\\Database\\Connection->{closure:Illuminate\\Database\\Connection::affectingStatement():584}()
+#2 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback()
+#3 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(584): Illuminate\\Database\\Connection->run()
+#4 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(548): Illuminate\\Database\\Connection->affectingStatement()
+#5 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(4066): Illuminate\\Database\\Connection->delete()
+#6 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/DatabaseStore.php(421): Illuminate\\Database\\Query\\Builder->delete()
+#7 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/Repository.php(791): Illuminate\\Cache\\DatabaseStore->flush()
+#8 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/Console/ClearCommand.php(69): Illuminate\\Cache\\Repository->__call()
+#9 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Cache\\Console\\ClearCommand->handle()
+#10 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/Util.php(43): Illuminate\\Container\\BoundMethod::{closure:Illuminate\\Container\\BoundMethod::call():35}()
+#11 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(95): Illuminate\\Container\\Util::unwrapIfClosure()
+#12 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#13 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\\Container\\BoundMethod::call()
+#14 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Console/Command.php(213): Illuminate\\Container\\Container->call()
+#15 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Command/Command.php(279): Illuminate\\Console\\Command->execute()
+#16 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Console/Command.php(182): Symfony\\Component\\Console\\Command\\Command->run()
+#17 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(1094): Illuminate\\Console\\Command->run()
+#18 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(342): Symfony\\Component\\Console\\Application->doRunCommand()
+#19 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(193): Symfony\\Component\\Console\\Application->doRun()
+#20 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(197): Symfony\\Component\\Console\\Application->run()
+#21 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1205): Illuminate\\Foundation\\Console\\Kernel->handle()
+#22 /home/jude-adolfo/EIEPIMS/artisan(13): Illuminate\\Foundation\\Application->handleCommand()
+#23 {main}
+"} 
+[2024-12-17 12:41:54] local.ERROR: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'eiepims.cache' doesn't exist (Connection: mysql, SQL: delete from `cache`) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 42S02): SQLSTATE[42S02]: Base table or view not found: 1146 Table 'eiepims.cache' doesn't exist (Connection: mysql, SQL: delete from `cache`) at /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php:825)
+[stacktrace]
+#0 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback()
+#1 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(584): Illuminate\\Database\\Connection->run()
+#2 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(548): Illuminate\\Database\\Connection->affectingStatement()
+#3 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(4066): Illuminate\\Database\\Connection->delete()
+#4 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/DatabaseStore.php(421): Illuminate\\Database\\Query\\Builder->delete()
+#5 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/Repository.php(791): Illuminate\\Cache\\DatabaseStore->flush()
+#6 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/Console/ClearCommand.php(69): Illuminate\\Cache\\Repository->__call()
+#7 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Cache\\Console\\ClearCommand->handle()
+#8 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/Util.php(43): Illuminate\\Container\\BoundMethod::{closure:Illuminate\\Container\\BoundMethod::call():35}()
+#9 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(95): Illuminate\\Container\\Util::unwrapIfClosure()
+#10 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#11 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\\Container\\BoundMethod::call()
+#12 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Console/Command.php(213): Illuminate\\Container\\Container->call()
+#13 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Command/Command.php(279): Illuminate\\Console\\Command->execute()
+#14 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Console/Command.php(182): Symfony\\Component\\Console\\Command\\Command->run()
+#15 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(1094): Illuminate\\Console\\Command->run()
+#16 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(342): Symfony\\Component\\Console\\Application->doRunCommand()
+#17 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(193): Symfony\\Component\\Console\\Application->doRun()
+#18 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(197): Symfony\\Component\\Console\\Application->run()
+#19 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1205): Illuminate\\Foundation\\Console\\Kernel->handle()
+#20 /home/jude-adolfo/EIEPIMS/artisan(13): Illuminate\\Foundation\\Application->handleCommand()
+#21 {main}
+
+[previous exception] [object] (PDOException(code: 42S02): SQLSTATE[42S02]: Base table or view not found: 1146 Table 'eiepims.cache' doesn't exist at /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php:592)
+[stacktrace]
+#0 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(592): PDO->prepare()
+#1 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(812): Illuminate\\Database\\Connection->{closure:Illuminate\\Database\\Connection::affectingStatement():584}()
+#2 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback()
+#3 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(584): Illuminate\\Database\\Connection->run()
+#4 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Connection.php(548): Illuminate\\Database\\Connection->affectingStatement()
+#5 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(4066): Illuminate\\Database\\Connection->delete()
+#6 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/DatabaseStore.php(421): Illuminate\\Database\\Query\\Builder->delete()
+#7 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/Repository.php(791): Illuminate\\Cache\\DatabaseStore->flush()
+#8 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Cache/Console/ClearCommand.php(69): Illuminate\\Cache\\Repository->__call()
+#9 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Cache\\Console\\ClearCommand->handle()
+#10 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/Util.php(43): Illuminate\\Container\\BoundMethod::{closure:Illuminate\\Container\\BoundMethod::call():35}()
+#11 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(95): Illuminate\\Container\\Util::unwrapIfClosure()
+#12 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#13 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\\Container\\BoundMethod::call()
+#14 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Console/Command.php(213): Illuminate\\Container\\Container->call()
+#15 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Command/Command.php(279): Illuminate\\Console\\Command->execute()
+#16 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Console/Command.php(182): Symfony\\Component\\Console\\Command\\Command->run()
+#17 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(1094): Illuminate\\Console\\Command->run()
+#18 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(342): Symfony\\Component\\Console\\Application->doRunCommand()
+#19 /home/jude-adolfo/EIEPIMS/vendor/symfony/console/Application.php(193): Symfony\\Component\\Console\\Application->doRun()
+#20 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(197): Symfony\\Component\\Console\\Application->run()
+#21 /home/jude-adolfo/EIEPIMS/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1205): Illuminate\\Foundation\\Console\\Kernel->handle()
+#22 /home/jude-adolfo/EIEPIMS/artisan(13): Illuminate\\Foundation\\Application->handleCommand()
+#23 {main}
+"} 
+[2024-12-17 12:42:17] local.ERROR: Cannot redeclare class CreateCollegePOCsTable (previously declared in /home/jude-adolfo/EIEPIMS/database/migrations/2024_11_18_034027_create_college_pocs.php:7) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare class CreateCollegePOCsTable (previously declared in /home/jude-adolfo/EIEPIMS/database/migrations/2024_11_18_034027_create_college_pocs.php:7) at /home/jude-adolfo/EIEPIMS/database/migrations/2024_11_18_034027_create_college_pocs.php:7)
+[stacktrace]
+#0 {main}
+"} 

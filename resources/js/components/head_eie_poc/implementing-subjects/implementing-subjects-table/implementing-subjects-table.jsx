@@ -15,7 +15,9 @@ const ImplementingSubjectsTable = () => {
     department: '',
     program: '',
     assignedPOC: '',
-    employeeID: '',
+    firstName: '',
+    middleName: '',
+    lastName: '',
     email: '',
   });
 
@@ -29,7 +31,10 @@ const ImplementingSubjectsTable = () => {
       { Header: "Semester", accessor: "semester" },
       { Header: "Department", accessor: "department" },
       { Header: "Program", accessor: "program" },
-      { Header: "Assigned POC", accessor: "assignedPOC" },
+      { Header: "Assigned POC", accessor: "assignedPOC", Cell: ({ row }) => {
+        const assignedPOC = row.original;
+        return `${assignedPOC.firstName} ${assignedPOC.lastName}`;
+      }},      
       { Header: "Employee ID", accessor: "employeeID" },
       { Header: "Email", accessor: "email" },
       {
@@ -66,7 +71,9 @@ const ImplementingSubjectsTable = () => {
         semester: "1st Semester",
         department: "Computer Science",
         program: "BSIT",
-        assignedPOC: "John Doe",
+        firstName: "John",
+        middleName: "Tiny",
+        lastName: "Doe",
         employeeID: "12345",
         email: "john.doe@example.com",
       },
@@ -78,7 +85,9 @@ const ImplementingSubjectsTable = () => {
         semester: "2nd Semester",
         department: "Computer Science",
         program: "BSCS",
-        assignedPOC: "Jane Smith",
+        firstName: "Jane",
+        middleName: "Middle",
+        lastName: "Smith",
         employeeID: "67890",
         email: "jane.smith@example.com",
       },
@@ -89,21 +98,24 @@ const ImplementingSubjectsTable = () => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data });
 
-  const handleUpdate = (rowData) => {
-    setFormData({
-      courseTitle: rowData.courseTitle,
-      code: rowData.code,
-      courseCode: rowData.courseCode,
-      description: rowData.description,
-      semester: rowData.semester,
-      department: rowData.department,
-      program: rowData.program,
-      assignedPOC: rowData.assignedPOC,
-      employeeID: rowData.employeeID,
-      email: rowData.email,
-    });
-    setShowModal(true);
-  };
+    const handleUpdate = (rowData) => {
+      setFormData({
+        firstName: rowData.firstName,
+        middleName: rowData.middleName,
+        lastName: rowData.lastName,
+        courseTitle: rowData.courseTitle,
+        code: rowData.code,
+        courseCode: rowData.courseCode,
+        description: rowData.description,
+        semester: rowData.semester,
+        department: rowData.department,
+        program: rowData.program,
+        assignedPOC: `${rowData.firstName} ${rowData.lastName}`,
+        employeeID: rowData.employeeID,
+        email: rowData.email,
+      });
+      setShowModal(true);
+    };    
 
   const handleClassList = () => {
     // Trigger file input when Class List button is clicked
@@ -183,7 +195,7 @@ const ImplementingSubjectsTable = () => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "600px",
-            height: "900px",
+            height: "800px",
             backgroundColor: "#FFFFFF",
             borderRadius: "5px",
             border: "1px solid #333333",
@@ -367,34 +379,72 @@ const ImplementingSubjectsTable = () => {
                 }}
               />
             </div>
-            <div style={{ marginBottom: "20px" }}>
+
+
+    <div style={{ marginBottom: "20px" }}>
+      <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
+        Re-Assign POC:
+      </label>
+      <div style={{ marginTop: "10px", marginLeft: "25px" }}>
+        <label style={{ display: "block", fontSize: "16px", color: "#383838" }}>
+          First Name:
+        </label>
+        <input
+          type="text"
+          name="firstName"
+          value={formData.firstName}
+          onChange={handleInputChange}
+          style={{
+            width: "100%",
+            padding: "10px",
+            borderRadius: "5px",
+            border: "1px solid #333333",
+          }}
+        />
+      </div>
+
+      <div style={{ marginTop: "10px", marginLeft: "25px" }}>
+        <label style={{ display: "block", fontSize: "16px", color: "#383838" }}>
+          Middle Name:
+        </label>
+        <input
+          type="text"
+          name="middleName"
+          value={formData.middleName}
+          onChange={handleInputChange}
+          style={{
+            width: "100%",
+            padding: "10px",
+            borderRadius: "5px",
+            border: "1px solid #333333",
+          }}
+        />
+      </div>
+
+      <div style={{ marginTop: "10px", marginLeft: "25px" }}>
+        <label style={{ display: "block", fontSize: "16px", color: "#383838" }}>
+          Last Name:
+        </label>
+        <input
+          type="text"
+          name="lastName"
+          value={formData.lastName}
+          onChange={handleInputChange}
+          style={{
+            width: "100%",
+            padding: "10px",
+            borderRadius: "5px",
+            border: "1px solid #333333",
+          }}
+        />
+      </div>
+    </div>
+
+            <div style={{ marginBottom: "20px",  marginLeft: "25px"}}>
               <label
                 style={{
                   display: "block",
-                  fontSize: "20px",
-                  color: "#383838",
-                }}
-              >
-                Assigned POC:
-              </label>
-              <input
-                type="text"
-                name="code"
-                value={formData.assignedPOC}
-                onChange={handleInputChange}
-                style={{
-                  width: "100%",
-                  padding: "10px",
-                  borderRadius: "5px",
-                  border: "1px solid #333333",
-                }}
-              />
-            </div>
-            <div style={{ marginBottom: "20px" }}>
-              <label
-                style={{
-                  display: "block",
-                  fontSize: "20px",
+                  fontSize: "16px",
                   color: "#383838",
                 }}
               >
@@ -413,11 +463,11 @@ const ImplementingSubjectsTable = () => {
                 }}
               />
             </div>
-            <div style={{ marginBottom: "20px" }}>
+            <div style={{ marginBottom: "20px", marginLeft: "25px" }}>
               <label
                 style={{
                   display: "block",
-                  fontSize: "20px",
+                  fontSize: "16px",
                   color: "#383838",
                 }}
               >

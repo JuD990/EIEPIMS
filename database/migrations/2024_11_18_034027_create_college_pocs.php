@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCollegePOCs extends Migration
+class CreateCollegePOCsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,23 @@ class CreateCollegePOCs extends Migration
     {
         Schema::create('college_pocs', function (Blueprint $table) {
             $table->id();
-            $table->integer('employee_id')->nullable()->change();
-            $table->string('firstname', 50);
-            $table->string('middlename', 50)->nullable();
-            $table->string('lastname', 50);
-            $table->string('password');
-            $table->string('email', 50)->unique();
-            $table->string('department', 20);
-            $table->string('role')->default('College POC');
-            $table->timestamps(); // created_at and updated_at
+            $table->unsignedBigInteger('employee_id')->nullable();
+            $table->string('firstname', 100);
+            $table->string('middlename', 100)->nullable();
+            $table->string('lastname', 100);
+            $table->string('email', 100)->unique();
+            $table->string('department', 100);
+            $table->string('program', 100);
+            $table->unsignedBigInteger('implementing_subject_id'); // Foreign key to implementing_subjects table
+            $table->string('assigned_poc', 200); // Combination of firstname and lastname
+            $table->timestamps();
+        });
+
+        // Foreign key constraints
+        Schema::table('college_pocs', function (Blueprint $table) {
+            $table->foreign('implementing_subject_id')->references('id')->on('implementing_subjects')->onDelete('cascade');
         });
     }
-    
 
     /**
      * Reverse the migrations.
@@ -33,4 +38,4 @@ class CreateCollegePOCs extends Migration
     {
         Schema::dropIfExists('college_pocs');
     }
-};
+}

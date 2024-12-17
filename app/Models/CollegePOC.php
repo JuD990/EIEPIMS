@@ -21,11 +21,23 @@ class CollegePOC extends Authenticatable
         'firstname',
         'middlename',
         'lastname',
-        'password',
-        'department',
         'email',
-        'role',
+        'department',
+        'program',
+        'implementing_subject_id',
+        'assigned_poc',
     ];
+
+    // Define relationships
+    public function implementingSubject()
+    {
+        return $this->belongsTo(ImplementingSubject::class, 'implementing_subject_id');
+    }
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'employee_id');
+    }
 
     public function setPasswordAttribute($value)
     {
