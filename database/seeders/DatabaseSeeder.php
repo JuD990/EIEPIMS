@@ -10,5 +10,6 @@ class DatabaseSeeder extends Seeder
     {
         // Call other seeders here
         $this->call(DummyUserSeeder::class);
+        $this->call(OtherUsers::class);
     }
 }

@@ -8,31 +8,28 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 
-class Student extends Authenticatable
+class LeadPOCs extends Authenticatable
 {
     use HasApiTokens;
     use HasFactory;
 
-    protected $table = 'students';
+    protected $table = 'lead_pocs';
     protected $primaryKey = 'id';
 
-    // Mass-assignable attributes
     protected $fillable = [
-        'student_id', 
-        'firstname', 
-        'middlename', 
-        'lastname', 
-        'password', 
-        'email', 
-        'department', 
-        'year_level', 
-        'program', 
-        'role'
+        'employee_id',
+        'firstname',
+        'middlename',
+        'lastname',
+        'password',
+        'email',
+        'department',
+        'role',
     ];
 
-    // Password mutator to hash the password before saving
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
     }
+
 }

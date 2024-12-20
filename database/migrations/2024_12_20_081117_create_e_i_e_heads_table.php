@@ -4,12 +4,12 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEIEHeads extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('eie_heads', function (Blueprint $table) {
             $table->id();
@@ -24,7 +24,6 @@ class CreateEIEHeads extends Migration
             $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.

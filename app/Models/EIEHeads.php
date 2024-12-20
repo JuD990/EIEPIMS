@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 
-class LeadPOC extends Authenticatable
+class EIEHeads extends Authenticatable
 {
     use HasApiTokens;
     use HasFactory;
 
-    protected $table = 'lead_pocs';
+    protected $table = 'eie_heads';
     protected $primaryKey = 'id';
 
     protected $fillable = [
@@ -21,9 +21,9 @@ class LeadPOC extends Authenticatable
         'firstname',
         'middlename',
         'lastname',
-        'password',
         'email',
         'department',
+        'password',
         'role',
     ];
 
@@ -31,5 +31,4 @@ class LeadPOC extends Authenticatable
     {
         $this->attributes['password'] = Hash::make($value);
     }
-
 }

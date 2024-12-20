@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 
-class ESLPrime extends Authenticatable
+class CollegePOCs extends Authenticatable
 {
     use HasApiTokens;
     use HasFactory;
     
-    protected $table = 'esl_prime';
+    protected $table = 'college_pocs';
     protected $primaryKey = 'id';
 
     protected $fillable = [
@@ -21,14 +21,22 @@ class ESLPrime extends Authenticatable
         'firstname',
         'middlename',
         'lastname',
-        'password',
         'email',
+        'department',
+        'program',
+        'password',
         'role',
     ];
 
+    // Hash password automatically before saving
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
     }
 
+    // Define the relationship with ImplementingSubject
+    public function implementingSubjects()
+    {
+        return $this->hasMany(ImplementingSubject::class, 'employee_id');
+    }
 }

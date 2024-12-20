@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useTable } from "react-table";
+import axios from "axios";
 import Papa from "papaparse";
 import "./implementing-subjects-table.css";
+import sampleData from './sample-data.js';
 
 const ImplementingSubjectsTable = () => {
   const [csvData, setCsvData] = useState([]);
@@ -21,7 +23,6 @@ const ImplementingSubjectsTable = () => {
     email: '',
   });
 
-  // Define columns and data (as in the previous example)
   const columns = React.useMemo(
     () => [
       { Header: "Course Title", accessor: "courseTitle" },
@@ -34,7 +35,7 @@ const ImplementingSubjectsTable = () => {
       { Header: "Assigned POC", accessor: "assignedPOC", Cell: ({ row }) => {
         const assignedPOC = row.original;
         return `${assignedPOC.firstName} ${assignedPOC.lastName}`;
-      }},      
+      }},
       { Header: "Employee ID", accessor: "employeeID" },
       { Header: "Email", accessor: "email" },
       {
@@ -61,64 +62,31 @@ const ImplementingSubjectsTable = () => {
     []
   );
 
-  const data = React.useMemo(
-    () => [
-      {
-        courseTitle: "Introduction to Programming",
-        code: "CS101",
-        courseCode: "101",
-        description: "Basic programming principles",
-        semester: "1st Semester",
-        department: "Computer Science",
-        program: "BSIT",
-        firstName: "John",
-        middleName: "Tiny",
-        lastName: "Doe",
-        employeeID: "12345",
-        email: "john.doe@example.com",
-      },
-      {
-        courseTitle: "Database Management",
-        code: "CS202",
-        courseCode: "202",
-        description: "Relational databases and SQL",
-        semester: "2nd Semester",
-        department: "Computer Science",
-        program: "BSCS",
-        firstName: "Jane",
-        middleName: "Middle",
-        lastName: "Smith",
-        employeeID: "67890",
-        email: "jane.smith@example.com",
-      },
-    ],
-    []
-  );
+  const data = React.useMemo(() => sampleData, []);
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data });
 
-    const handleUpdate = (rowData) => {
-      setFormData({
-        firstName: rowData.firstName,
-        middleName: rowData.middleName,
-        lastName: rowData.lastName,
-        courseTitle: rowData.courseTitle,
-        code: rowData.code,
-        courseCode: rowData.courseCode,
-        description: rowData.description,
-        semester: rowData.semester,
-        department: rowData.department,
-        program: rowData.program,
-        assignedPOC: `${rowData.firstName} ${rowData.lastName}`,
-        employeeID: rowData.employeeID,
-        email: rowData.email,
-      });
-      setShowModal(true);
-    };    
+  const handleUpdate = (rowData) => {
+    setFormData({
+      firstName: rowData.firstName,
+      middleName: rowData.middleName,
+      lastName: rowData.lastName,
+      courseTitle: rowData.courseTitle,
+      code: rowData.code,
+      courseCode: rowData.courseCode,
+      description: rowData.description,
+      semester: rowData.semester,
+      department: rowData.department,
+      program: rowData.program,
+      assignedPOC: `${rowData.firstName} ${rowData.lastName}`,
+      employeeID: rowData.employeeID,
+      email: rowData.email,
+    });
+    setShowModal(true);
+  };
 
   const handleClassList = () => {
-    // Trigger file input when Class List button is clicked
     document.getElementById("csv-upload").click();
   };
 
@@ -127,12 +95,11 @@ const ImplementingSubjectsTable = () => {
     if (file) {
       Papa.parse(file, {
         complete: (result) => {
-          // Handle the parsed CSV data
           setCsvData(result.data);
           alert("CSV File Parsed Successfully");
         },
-        header: true, // Optional: Treat first row as header
-        skipEmptyLines: true, // Optional: Skip empty lines in CSV
+        header: true,
+        skipEmptyLines: true,
       });
     }
   };
@@ -150,6 +117,50 @@ const ImplementingSubjectsTable = () => {
     alert("Updated Successfully");
     setShowModal(false);
   };
+
+  // Handle clicks outside the modal or dropdown to close the modal
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (
+        modalRef.current && !modalRef.current.contains(e.target) &&
+        dropdownRef.current && !dropdownRef.current.contains(e.target) &&
+        dropdownButtonRef.current && !dropdownButtonRef.current.contains(e.target)
+      ) {
+        setShowModal(false);  // Close modal if click is outside
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
+    // Fetch College POCs from the backend
+    const fetchCollegePOCs = async () => {
+      try {
+        const response = await axios.get("/api/college-pocs");  // API endpoint
+        setCollegePOCs(response.data);
+      } catch (error) {
+        console.error("Error fetching College POCs:", error);
+      }
+    };
+
+    const [isOpen, setIsOpen] = useState(false);
+    const modalRef = useRef(null);
+    const dropdownRef = useRef(null);
+    const dropdownButtonRef = useRef(null);
+  
+    const toggleDropdown = (e) => {
+      e.stopPropagation();
+      setIsOpen(!isOpen);
+    };
+
+    useEffect(() => {
+      if (isOpen) {
+        fetchCollegePOCs();  // Fetch data when dropdown is opened
+      }
+    }, [isOpen]);
 
   return (
     <div style={{ margin: "20px" }}>
@@ -187,7 +198,7 @@ const ImplementingSubjectsTable = () => {
         onChange={handleFileUpload}
       />
 
-      {showModal && (
+{showModal && (
         <div
           style={{
             position: "fixed",
@@ -381,112 +392,14 @@ const ImplementingSubjectsTable = () => {
             </div>
 
 
-    <div style={{ marginBottom: "20px" }}>
+           
       <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
         Re-Assign POC:
       </label>
-      <div style={{ marginTop: "10px", marginLeft: "25px" }}>
-        <label style={{ display: "block", fontSize: "16px", color: "#383838" }}>
-          First Name:
-        </label>
-        <input
-          type="text"
-          name="firstName"
-          value={formData.firstName}
-          onChange={handleInputChange}
-          style={{
-            width: "100%",
-            padding: "10px",
-            borderRadius: "5px",
-            border: "1px solid #333333",
-          }}
-        />
-      </div>
 
-      <div style={{ marginTop: "10px", marginLeft: "25px" }}>
-        <label style={{ display: "block", fontSize: "16px", color: "#383838" }}>
-          Middle Name:
-        </label>
-        <input
-          type="text"
-          name="middleName"
-          value={formData.middleName}
-          onChange={handleInputChange}
-          style={{
-            width: "100%",
-            padding: "10px",
-            borderRadius: "5px",
-            border: "1px solid #333333",
-          }}
-        />
-      </div>
+       {/*Dropdown*/}
 
-      <div style={{ marginTop: "10px", marginLeft: "25px" }}>
-        <label style={{ display: "block", fontSize: "16px", color: "#383838" }}>
-          Last Name:
-        </label>
-        <input
-          type="text"
-          name="lastName"
-          value={formData.lastName}
-          onChange={handleInputChange}
-          style={{
-            width: "100%",
-            padding: "10px",
-            borderRadius: "5px",
-            border: "1px solid #333333",
-          }}
-        />
-      </div>
-    </div>
-
-            <div style={{ marginBottom: "20px",  marginLeft: "25px"}}>
-              <label
-                style={{
-                  display: "block",
-                  fontSize: "16px",
-                  color: "#383838",
-                }}
-              >
-                Employee ID:
-              </label>
-              <input
-                type="text"
-                name="code"
-                value={formData.employeeID}
-                onChange={handleInputChange}
-                style={{
-                  width: "100%",
-                  padding: "10px",
-                  borderRadius: "5px",
-                  border: "1px solid #333333",
-                }}
-              />
-            </div>
-            <div style={{ marginBottom: "20px", marginLeft: "25px" }}>
-              <label
-                style={{
-                  display: "block",
-                  fontSize: "16px",
-                  color: "#383838",
-                }}
-              >
-                Email:
-              </label>
-              <input
-                type="text"
-                name="code"
-                value={formData.email}
-                onChange={handleInputChange}
-                style={{
-                  width: "100%",
-                  padding: "10px",
-                  borderRadius: "5px",
-                  border: "1px solid #333333",
-                }}
-              />
-            </div>
-            <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+    <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
               <button
                 type="button"
                 onClick={() => setShowModal(false)}

@@ -9,37 +9,32 @@ class ImplementingSubject extends Model
 {
     use HasFactory;
 
-    // Define the table associated with the model
     protected $table = 'implementing_subjects';
 
-    // Define fillable attributes to allow mass assignment
     protected $fillable = [
-        'implementing_subject_id',
-        'course_title',
-        'code',
         'course_code',
+        'course_title',
         'description',
         'semester',
         'year_level',
-        'assigned_poc',
-        'employee_id',
-        'email',
         'program',
         'department',
+        'employee_id',
+        'assigned_poc',
         'epgf_average',
         'completion_rate',
         'proficiency_level',
-        'class_list_id',
     ];
 
-    // Define relationships
-    public function employee()
+    // Relationship with ImplementingSubjectClassList
+    public function implementingSubjectClassLists()
     {
-        return $this->belongsTo(Employee::class, 'employee_id');
+        return $this->hasMany(ImplementingSubjectClassList::class);
     }
 
-    public function classList()
+    // Relationship with Employee (College POC)
+    public function employee()
     {
-        return $this->belongsTo(ClassList::class, 'class_list_id');
+        return $this->belongsTo(CollegePOCs::class, 'employee_id');
     }
 }

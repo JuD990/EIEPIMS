@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Student;
-use App\Models\CollegePOC;
-use App\Models\LeadPOC;
-use App\Models\EIEHead;
-use App\Models\ESLPrime;
-use App\Models\ESLChampion;
+use App\Models\Students;
+use App\Models\CollegePOCs;
+use App\Models\LeadPOCs;
+use App\Models\EIEHeads;
+use App\Models\ESLadmins;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 
@@ -68,17 +67,17 @@ class AuthController extends Controller
     {
         switch ($userType) {
             case 'students':
-                return Student::where('email', $email)->first();
+                return Students::where('email', $email)->first();
             case 'college_pocs':
-                return CollegePOC::where('email', $email)->first();
+                return CollegePOCs::where('email', $email)->first();
             case 'lead_pocs':
-                return LeadPOC::where('email', $email)->first();
+                return LeadPOCs::where('email', $email)->first();
             case 'eie_heads':
-                return EIEHead::where('email', $email)->first();
+                return EIEHeads::where('email', $email)->first();
             case 'esl_prime':
-                return ESLPrime::where('email', $email)->first();
+                return ESLadmins::where('email', $email)->first();
             case 'esl_champion':
-                return ESLChampion::where('email', $email)->first();
+                return ESLadmins::where('email', $email)->first();
             default:
                 return null;
         }
