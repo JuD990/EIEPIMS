@@ -1,0 +1,6 @@
+course_code,course_title,description,semester,year_level,program,department,employee_id,assigned_poc
+CS101,Introduction to Computer Science,Learn the basics of computer science,First Semester,1,BS Computer Science,Engineering,1001,John Doe
+MATH101,Calculus I,Introduction to calculus concepts,First Semester,1,BS Mathematics,Science,1002,Jane Smith
+ENG101,English Composition,Fundamentals of writing and communication,Second Semester,2,BA English,Arts,1003,Emily Johnson
+BIO101,Introduction to Biology,Study of basic biological principles,First Semester,2,BS Biology,Science,1004,Michael Brown
+CHEM101,General Chemistry,Introduction to the principles of chemistry,Second Semester,1,BS Chemistry,Science,1005,Susan Lee

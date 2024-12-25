@@ -22,9 +22,9 @@ return new class extends Migration
             $table->string('department', 50);
             $table->unsignedBigInteger('employee_id'); // Foreign key to employees table
             $table->string('assigned_poc', 200); // Firstname + Lastname of College POC
-            $table->decimal('epgf_average', 5, 2)->default(0.00);
-            $table->decimal('completion_rate', 5, 2)->default(0.00);
-            $table->string('proficiency_level', 50);
+            $table->decimal('epgf_average', 5, 2)->nullable();
+            $table->decimal('completion_rate', 5, 2)->nullable();
+            $table->string('proficiency_level', 50)->nullable();            
             $table->timestamps();
 
             // Foreign key constraint

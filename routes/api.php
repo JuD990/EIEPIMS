@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ImplementingSubjectController;
 
 Route::post('/login', [AuthController::class, 'login']);
-Route::get('/college-pocs', [CollegePOCController::class, 'index']);
+Route::post('/upload-subjects', [ImplementingSubjectController::class, 'upload']);

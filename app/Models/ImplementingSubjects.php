@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ImplementingSubject extends Model
+class ImplementingSubjects extends Model
 {
     use HasFactory;
 
@@ -26,7 +26,10 @@ class ImplementingSubject extends Model
         'proficiency_level',
     ];
 
-    // Relationship with ImplementingSubjectClassList
+    // If the fields 'epgf_average', 'completion_rate', and 'proficiency_level' have default values in your database,
+    // there is no need to explicitly set them in the model unless they are missing in the import data.
+    
+    // Relationship with ImplementingSubjectClassList (1 to many)
     public function implementingSubjectClassLists()
     {
         return $this->hasMany(ImplementingSubjectClassList::class);

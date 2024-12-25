@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 
-class ESLChampion extends Authenticatable
+class ESLadmins extends Authenticatable
 {
     use HasApiTokens;
     use HasFactory;
