@@ -9,23 +9,34 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('class_lists', function (Blueprint $table) {
             $table->id();
-            $table->string('class_list_id')->unique();
-            $table->string('student_id')->unique();
-            $table->string('firstname', 100);
-            $table->string('middlename', 100)->nullable();
-            $table->string('lastname', 100);
-            $table->string('email', 100)->unique();
-            $table->string('program', 50);
-            $table->string('department', 50);
-            $table->string('year_level', 10);
-            $table->string('gender', 10);
+            $table->string('student_id');
+            $table->string('firstname');
+            $table->string('middlename')->nullable();
+            $table->string('lastname');
+            $table->string('email')->unique();
+            $table->string('program');
+            $table->string('department');
+            $table->string('year_level');
+            $table->string('gender');
+            $table->string('status');
+            $table->string('classification');
+            $table->string('reason_for_shift_or_drop', 255)->nullable();
+            $table->decimal('pronunciation', 5, 2)->nullable();
+            $table->decimal('grammar', 5, 2)->nullable();
+            $table->decimal('fluency', 5, 2)->nullable();
+            $table->decimal('epgf_average', 5, 2)->nullable();
+            $table->decimal('completion_rate', 5, 2)->nullable();
+            $table->string('proficiency_level', 50)->nullable();
+            $table->string('course_code');
             $table->timestamps();
+    
+            $table->unique(['student_id', 'course_code']);
         });
-    }
+    }    
 
     /**
      * Reverse the migrations.

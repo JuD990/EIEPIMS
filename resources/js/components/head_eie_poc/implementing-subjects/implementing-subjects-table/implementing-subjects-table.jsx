@@ -1,42 +1,113 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useTable } from "react-table";
 import axios from "axios";
-import Papa from "papaparse";
 import "./implementing-subjects-table.css";
-import sampleData from './sample-data.js';
 
 const ImplementingSubjectsTable = () => {
-  const [csvData, setCsvData] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [isLoadingPocs, setIsLoadingPocs] = useState(true);
   const [formData, setFormData] = useState({
-    courseTitle: '',
-    code: '',
-    courseCode: '',
-    description: '',
-    semester: '',
-    department: '',
-    program: '',
-    assignedPOC: '',
-    firstName: '',
-    middleName: '',
-    lastName: '',
-    email: '',
+    courseTitle: "",
+    code: "",
+    courseCode: "",
+    description: "",
+    semester: "",
+    department: "",
+    program: "",
+    assignedPoc: "",
   });
+
+  const [pocs, setPocs] = useState([]);
+  const [csvErrors, setCsvErrors] = useState([]);
+
+  // Fetch data from the Laravel API
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("/api/implementing-subjects");
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setError("Failed to fetch data. Please try again later.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Fetch POCs from the API
+  useEffect(() => {
+    const fetchPocs = async () => {
+      try {
+        const response = await axios.get("/api/pocs");
+        setPocs(response.data);
+      } catch (error) {
+        console.error("Error fetching POCs:", error);
+        setError("Failed to fetch POCs. Please try again later.");
+      } finally {
+        setIsLoadingPocs(false);
+      }
+    };
+
+    fetchPocs();
+  }, []);
+
+  // Polling to refresh data
+  useEffect(() => {
+    fetchData();
+    const intervalId = setInterval(fetchData, 5000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  // Handle form data input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  // Update form data when row is clicked
+  const handleUpdate = (values) => {
+    setFormData({
+      courseTitle: values.course_title,
+      code: values.code,
+      courseCode: values.course_code,
+      description: values.description,
+      semester: values.semester,
+      department: values.department,
+      program: values.program,
+      assignedPoc: values.assigned_poc || "",
+    });
+    setShowUpdateModal(true); // Open the Update modal
+  };
+
+  // Handle form submission
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.put(`/api/implementing-subjects/${formData.courseCode}`, formData);
+      console.log("Form submitted successfully:", response.data);
+      setShowUpdateModal(false); // Close the modal after submission
+      fetchData();
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
+  };
 
   const columns = React.useMemo(
     () => [
-      { Header: "Course Title", accessor: "courseTitle" },
+      { Header: "Course Title", accessor: "course_title" },
       { Header: "Code", accessor: "code" },
-      { Header: "Course Code", accessor: "courseCode" },
+      { Header: "Course Code", accessor: "course_code" },
       { Header: "Description", accessor: "description" },
       { Header: "Semester", accessor: "semester" },
       { Header: "Department", accessor: "department" },
       { Header: "Program", accessor: "program" },
-      { Header: "Assigned POC", accessor: "assignedPOC", Cell: ({ row }) => {
-        const assignedPOC = row.original;
-        return `${assignedPOC.firstName} ${assignedPOC.lastName}`;
-      }},
-      { Header: "Employee ID", accessor: "employeeID" },
+      { Header: "Employee ID", accessor: "employee_id" },
+      { Header: "Assigned POC", accessor: "assigned_poc" },
       { Header: "Email", accessor: "email" },
       {
         Header: "Actions",
@@ -49,12 +120,6 @@ const ImplementingSubjectsTable = () => {
             >
               Update
             </button>
-            <button
-              className="action-button"
-              onClick={() => handleClassList(row.values)}
-            >
-              Class List
-            </button>
           </div>
         ),
       },
@@ -62,143 +127,71 @@ const ImplementingSubjectsTable = () => {
     []
   );
 
-  const data = React.useMemo(() => sampleData, []);
-
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data });
 
-  const handleUpdate = (rowData) => {
-    setFormData({
-      firstName: rowData.firstName,
-      middleName: rowData.middleName,
-      lastName: rowData.lastName,
-      courseTitle: rowData.courseTitle,
-      code: rowData.code,
-      courseCode: rowData.courseCode,
-      description: rowData.description,
-      semester: rowData.semester,
-      department: rowData.department,
-      program: rowData.program,
-      assignedPOC: `${rowData.firstName} ${rowData.lastName}`,
-      employeeID: rowData.employeeID,
-      email: rowData.email,
-    });
-    setShowModal(true);
-  };
-
-  const handleClassList = () => {
-    document.getElementById("csv-upload").click();
-  };
-
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      Papa.parse(file, {
-        complete: (result) => {
-          setCsvData(result.data);
-          alert("CSV File Parsed Successfully");
-        },
-        header: true,
-        skipEmptyLines: true,
-      });
-    }
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    alert("Updated Successfully");
-    setShowModal(false);
-  };
-
-  // Handle clicks outside the modal or dropdown to close the modal
-  useEffect(() => {
-    const handleOutsideClick = (e) => {
-      if (
-        modalRef.current && !modalRef.current.contains(e.target) &&
-        dropdownRef.current && !dropdownRef.current.contains(e.target) &&
-        dropdownButtonRef.current && !dropdownButtonRef.current.contains(e.target)
-      ) {
-        setShowModal(false);  // Close modal if click is outside
-      }
-    };
-
-    document.addEventListener("mousedown", handleOutsideClick);
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
-  }, []);
-
-    // Fetch College POCs from the backend
-    const fetchCollegePOCs = async () => {
-      try {
-        const response = await axios.get("/api/college-pocs");  // API endpoint
-        setCollegePOCs(response.data);
-      } catch (error) {
-        console.error("Error fetching College POCs:", error);
-      }
-    };
-
-    const [isOpen, setIsOpen] = useState(false);
-    const modalRef = useRef(null);
-    const dropdownRef = useRef(null);
-    const dropdownButtonRef = useRef(null);
-  
-    const toggleDropdown = (e) => {
-      e.stopPropagation();
-      setIsOpen(!isOpen);
-    };
-
-    useEffect(() => {
-      if (isOpen) {
-        fetchCollegePOCs();  // Fetch data when dropdown is opened
-      }
-    }, [isOpen]);
-
   return (
     <div style={{ margin: "20px" }}>
-      <div className="table-wrapper">
-        <table {...getTableProps()} className="data-table">
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>{column.render("Header")}</th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+      {isLoading ? (
+        <p>Loading data...</p>
+      ) : error ? (
+        <p style={{ color: "red" }}>{error}</p>
+      ) : (
+        <div className="table-wrapper">
+          <table {...getTableProps()} className="data-table">
+            <thead className="sticky-header">
+              {headerGroups.map((headerGroup) => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <th
+                      {...column.getHeaderProps()}
+                      className={
+                        column.id === "course_title" ? "sticky-column" : ""
+                      }
+                    >
+                      {column.render("Header")}
+                    </th>
                   ))}
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {rows.map((row) => {
+                prepareRow(row);
+                return (
+                  <tr {...row.getRowProps()}>
+                    {row.cells.map((cell) => (
+                      <td
+                        {...cell.getCellProps()}
+                        className={
+                          cell.column.id === "course_title" ? "sticky-column" : ""
+                        }
+                      >
+                        {cell.render("Cell")}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+      
+      {/* Show CSV upload errors */}
+      {csvErrors.length > 0 && (
+        <div style={{ color: "red", marginTop: "20px" }}>
+          <h4>CSV Validation Errors:</h4>
+          <ul>
+            {csvErrors.map((error, index) => (
+              <li key={index}>{error}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
-      <input
-        type="file"
-        id="csv-upload"
-        accept=".csv"
-        style={{ display: "none" }}
-        onChange={handleFileUpload}
-      />
-
-{showModal && (
+                  {/* Modal */}
+                  {showUpdateModal && (
         <div
           style={{
             position: "fixed",
@@ -391,27 +384,67 @@ const ImplementingSubjectsTable = () => {
               />
             </div>
 
+            <div style={{ marginBottom: "20px" }}>
+              <label
+                htmlFor="assignedPoc"
+                style={{
+                  display: "block",
+                  fontSize: "18px",
+                  color: "#383838",
+                  marginBottom: "8px",
+                  fontWeight: "600",
+                }}
+              >
+                Re-Assign POC:
+              </label>
+              <select
+                id="assignedPoc"
+                name="assignedPoc"
+                value={formData.assignedPoc}
+                onChange={handleInputChange}
+                style={{
+                  width: "100%",
+                  padding: "12px 14px",
+                  borderRadius: "8px",
+                  border: "1px solid #ccc",
+                  backgroundColor: "#f9f9f9",
+                  fontSize: "16px",
+                  fontFamily: "Arial, sans-serif",
+                  outline: "none",
+                  boxSizing: "border-box",
+                  transition: "border-color 0.2s",
+                }}
+                aria-label="Select Point of Contact"
+              >
+                <option value="">Select POC</option>
+                {pocs.length > 0 ? (
+                  pocs.map((poc) => (
+                    <option key={poc.id} value={poc.email}>
+                      {poc.firstname} {poc.lastname} ({poc.email})
+                    </option>
+                  ))
+                ) : (
+                  <option value="" disabled>
+                    No POCs available
+                  </option>
+                )}
+              </select>
+            </div>
 
-           
-      <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-        Re-Assign POC:
-      </label>
-
-       {/*Dropdown*/}
-
-    <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+            {/* Action Buttons */}
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
               <button
                 type="button"
-                onClick={() => setShowModal(false)}
+                onClick={() => setShowUpdateModal(false)}
                 style={{
-                  width: "100px",
-                  height: "40px",
+                  padding: "10px 20px",
                   backgroundColor: "#DE0051",
-                  color: "#FFFFFF",
-                  borderRadius: "12px",
+                  color: "white",
                   border: "none",
+                  borderRadius: "5px",
                   cursor: "pointer",
-                  fontSize: "16px",
+                  fontSize: "18px",
+                  fontFamily: "Poppins",
                 }}
               >
                 Cancel
@@ -419,14 +452,14 @@ const ImplementingSubjectsTable = () => {
               <button
                 type="submit"
                 style={{
-                  width: "100px",
-                  height: "40px",
-                  backgroundColor: "#0187F1",
-                  color: "#FFFFFF",
-                  borderRadius: "12px",
+                  padding: "10px 20px",
+                  backgroundColor: "#0187f1",
+                  color: "white",
                   border: "none",
+                  borderRadius: "5px",
                   cursor: "pointer",
-                  fontSize: "16px",
+                  fontSize: "18px",
+                  fontFamily: "Poppins",
                 }}
               >
                 Update

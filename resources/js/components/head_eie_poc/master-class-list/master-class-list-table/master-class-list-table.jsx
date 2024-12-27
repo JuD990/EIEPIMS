@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTable } from "react-table";
-import studentData from "./sample-data"; // Adjust the path as necessary
 
 const MasterClassListTable = () => {
-  const data = React.useMemo(() => studentData, []);
+  const [data, setData] = useState([]); // State to hold the table data
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -15,45 +14,80 @@ const MasterClassListTable = () => {
     reason: ''
   });
 
+  // Fetch data from the backend
+  useEffect(() => {
+    fetch('/api/master-class-list')
+      .then((response) => response.json())
+      .then((data) => setData(data))
+      .catch((error) => console.error('Error fetching data:', error));
+  }, []);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleStatusChange = (e) => {
     const { value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData({
+      ...formData,
       status: value,
-      reason: value === 'Enrolled' ? '' : prevData.reason // Disable the reason if 'Enrolled'
-    }));
+      reason: value === "Enrolled" ? "" : formData.reason,
+    });
   };
 
   const handleUpdateClick = (row) => {
+    // Populate form data with selected row values
+    const rowData = row.original; // Access the original row data
     setFormData({
-      firstName: row.original.firstName || '',
-      middleName: row.original.middleName || '',
-      lastName: row.original.lastName || '',
-      classification: row.original.classification || '',
-      yearLevel: row.original.yearLevel || '',
-      status: row.original.status || '',
-      reason: row.original.reason || ''
+      firstName: rowData.firstname || '',
+      middleName: rowData.middlename || '',
+      lastName: rowData.lastname || '',
+      classification: rowData.classification || '',
+      yearLevel: rowData.year_level || '',
+      status: rowData.status || '',
+      reason: rowData.reason_for_shift_or_drop || '',
     });
     setShowModal(true);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    fetch(`/api/update-student/${formData.studentId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Failed to update data");
+        return response.json();
+      })
+      .then((updatedData) => {
+        // Update the table data with the updated row
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.master_class_list_id === updatedData.master_class_list_id
+              ? updatedData
+              : item
+          )
+        );
+        setShowModal(false);
+      })
+      .catch((error) => console.error("Error updating data:", error));
   };
 
   const columns = React.useMemo(
     () => [
       {
         Header: "No.",
-        accessor: "no",
+        accessor: "master_class_list_id",
       },
       {
         Header: "Full Name",
-        accessor: "fullName",
+        accessor: (row) =>
+          `${row.firstname} ${row.middlename ? row.middlename + '.' : ''} ${
+            row.lastname
+          }`,
       },
       {
         Header: "Status",
@@ -61,27 +95,31 @@ const MasterClassListTable = () => {
         Cell: ({ cell }) => {
           const status = cell.value;
           let statusStyle = {};
-          
+
           if (status === "Dropped") {
-            statusStyle = { color: '#EA0000', fontWeight: 'bold' };
+            statusStyle = { color: "#EA0000", fontWeight: "bold" };
           } else if (status === "Shifted") {
-            statusStyle = { color: '#18A0FB', fontWeight: 'bold' };
+            statusStyle = { color: "#18A0FB", fontWeight: "bold" };
           }
-  
-          return (
-            <div style={statusStyle}>
-              {status}
-            </div>
-          );
+
+          return <div style={statusStyle}>{status}</div>;
         },
       },
       {
-        Header: "Student ID",
-        accessor: "studentId",
+        Header: () => (
+          <div style={{ whiteSpace: "nowrap", width: "100%" }}>Student ID</div>
+        ),
+        accessor: "student_id",
       },
       {
-        Header: "Year Level",
-        accessor: "yearLevel",
+        Header: "Email",
+        accessor: "email",
+      },
+      {
+        Header: () => (
+          <div style={{ whiteSpace: "nowrap", width: "100%" }}>Year Level</div>
+        ),
+        accessor: "year_level",
       },
       {
         Header: "Classification",
@@ -92,28 +130,12 @@ const MasterClassListTable = () => {
         accessor: "gender",
       },
       {
-        Header: "Reason for Shift/Drop",
-        accessor: "reason",
-      },
-      {
-        Header: "Candidate for Graduating",
-        accessor: "candidateForGraduating",
-        Cell: ({ value, row, column, updateData }) => (
-          <select
-            value={value}
-            onChange={(e) => {
-              const newValue = e.target.value;
-              updateData(row.index, column.id, newValue);
-            }}
-            style={{
-              width: '70px',
-              padding: '10px',
-              backgroundColor: 'transparent',
-            }}
-          >
-            <option value="No">No</option>
-            <option value="Yes">Yes</option>
-          </select>
+        Header: () => (
+          <div style={{ whiteSpace: "nowrap" }}>Reason for Shift/Drop</div>
+        ),
+        accessor: "reason_for_shift_or_drop",
+        Cell: ({ value }) => (
+          <span>{value ? `- ${value}` : ""}</span> // Prepend '-' if there is content
         ),
       },
       {
@@ -122,16 +144,16 @@ const MasterClassListTable = () => {
         Cell: ({ row }) => (
           <button
             style={{
-              width: '88px',
-              height: '35px',
-              borderRadius: '12px',
-              backgroundColor: '#0187F1',
-              color: '#FFFFFF',
-              fontSize: '15px',
-              fontFamily: 'Poppins',
-              fontWeight: '600', // SemiBold
-              border: 'none',
-              cursor: 'pointer',
+              width: "88px",
+              height: "35px",
+              borderRadius: "12px",
+              backgroundColor: "#0187F1",
+              color: "#FFFFFF",
+              fontSize: "15px",
+              fontFamily: "Poppins",
+              fontWeight: "600", // SemiBold
+              border: "none",
+              cursor: "pointer",
             }}
             onClick={() => handleUpdateClick(row)}
           >
@@ -148,42 +170,52 @@ const MasterClassListTable = () => {
 
   return (
     <>
+      {/* Table */}
       <div
         style={{
-          overflowY: 'auto',
-          height: '500px',
-          marginLeft: '350px',
-          marginRight: '35px',
-          border: '1px solid #ddd',
-          boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
-          position: 'relative', // To keep the table positioned properly
+          overflowY: "auto",
+          height: "500px",
+          marginLeft: "350px",
+          marginRight: "35px",
+          border: "1px solid #ddd",
+          boxShadow:
+            "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+          position: "relative",
         }}
       >
         <table
           {...getTableProps()}
           style={{
-            width: '100%',
-            borderCollapse: 'collapse',
-            borderSpacing: '0',
-            zIndex: 0, // Ensure table stays below modal
+            width: "100%",
+            borderCollapse: "collapse",
+            borderSpacing: "0",
+            zIndex: 0,
           }}
         >
           <thead>
-            {headerGroups.map((headerGroup, headerGroupIndex) => (
-              <tr {...headerGroup.getHeaderGroupProps()} style={{ position: 'sticky', top: 0, background: '#F4F7FC', zIndex: 1 }}>
-                {headerGroup.headers.map((column, index) => (
+            {headerGroups.map((headerGroup) => (
+              <tr
+                {...headerGroup.getHeaderGroupProps()}
+                style={{
+                  position: "sticky",
+                  top: 0,
+                  background: "#F4F7FC",
+                  zIndex: 1,
+                }}
+              >
+                {headerGroup.headers.map((column) => (
                   <th
                     {...column.getHeaderProps()}
                     style={{
-                      padding: '25px 25px',
-                      textAlign: 'center',
-                      borderBottom: 'none',
-                      fontFamily: 'Poppins',
-                      fontWeight: '500',
-                      position: 'sticky',
+                      padding: "25px 45px",
+                      textAlign: "center",
+                      borderBottom: "none",
+                      fontFamily: "Poppins",
+                      fontWeight: "500",
+                      position: "sticky",
                       top: 0,
-                      backgroundColor: '#F4F7FC',
-                      zIndex: 2, // Ensures the header cells stay on top of the body
+                      backgroundColor: "#F4F7FC",
+                      zIndex: 2,
                     }}
                   >
                     {column.render("Header")}
@@ -193,24 +225,27 @@ const MasterClassListTable = () => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {rows.map((row, rowIndex) => {
+            {rows.map((row) => {
               prepareRow(row);
               return (
                 <tr {...row.getRowProps()}>
-                  {row.cells.map((cell, cellIndex) => (
+                  {row.cells.map((cell) => (
                     <td
                       {...cell.getCellProps()}
                       style={{
-                        padding: '15px 20px',
-                        borderBottom: '1px solid #ddd',
-                        borderLeft: '1px solid #ddd',
-                        whiteSpace: 'nowrap',
-                        textAlign: 'center',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        maxWidth: '450px',
-                        fontFamily: 'Poppins',
-                        fontWeight: '500',
+                        padding: "15px 20px",
+                        borderBottom: "1px solid #ddd",
+                        borderLeft: "1px solid #ddd",
+                        whiteSpace: "nowrap",
+                        textAlign:
+                          cell.column.id === "reason_for_shift_or_drop"
+                            ? "left"
+                            : "center",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        maxWidth: "100%",
+                        fontFamily: "Poppins",
+                        fontWeight: "500",
                       }}
                     >
                       {cell.render("Cell")}
@@ -223,82 +258,132 @@ const MasterClassListTable = () => {
         </table>
       </div>
 
+      {/* Modal */}
       {showModal && (
-        <div style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '600px',
-          height: '880px',
-          backgroundColor: '#FFFFFF',
-          borderRadius: '5px',
-          border: '1px solid #333333',
-          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-          zIndex: 1000,
-          padding: '20px',
-          overflowY: 'auto',
-          fontFamily: 'Poppins',
-        }}>
-          <h2 style={{
-            fontSize: '32px',
-            fontFamily: 'Epilogue, sans-serif',
-            fontWeight: '800',
-            color: '#333333',
-            marginBottom: '20px',
-          }}>
+        <div
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "600px",
+            height: "880px",
+            backgroundColor: "#FFFFFF",
+            borderRadius: "5px",
+            border: "1px solid #333333",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+            zIndex: 1000,
+            padding: "20px",
+            overflowY: "auto",
+            fontFamily: "Poppins",
+          }}
+        >
+          <h2
+            style={{
+              fontSize: "32px",
+              fontFamily: "Epilogue, sans-serif",
+              fontWeight: "800",
+              color: "#333333",
+              marginBottom: "20px",
+            }}
+          >
             Update Credentials
           </h2>
-          <form>
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '20px', color: '#383838' }}>First Name:</label>
+          <form onSubmit={handleSubmit}>
+            <div style={{ marginBottom: "20px" }}>
+              <label
+                style={{ display: "block", fontSize: "20px", color: "#383838" }}
+              >
+                First Name:
+              </label>
               <input
                 type="text"
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleInputChange}
-                style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #333333' }}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  borderRadius: "5px",
+                  border: "1px solid #333333",
+                }}
               />
             </div>
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '20px', color: '#383838' }}>Middle Name:</label>
+            <div style={{ marginBottom: "20px" }}>
+              <label
+                style={{ display: "block", fontSize: "20px", color: "#383838" }}
+              >
+                Middle Name:
+              </label>
               <input
                 type="text"
                 name="middleName"
                 value={formData.middleName}
                 onChange={handleInputChange}
-                style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #333333' }}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  borderRadius: "5px",
+                  border: "1px solid #333333",
+                }}
               />
             </div>
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '20px', color: '#383838' }}>Last Name:</label>
+            <div style={{ marginBottom: "20px" }}>
+              <label
+                style={{ display: "block", fontSize: "20px", color: "#383838" }}
+              >
+                Last Name:
+              </label>
               <input
                 type="text"
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleInputChange}
-                style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #333333' }}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  borderRadius: "5px",
+                  border: "1px solid #333333",
+                }}
               />
             </div>
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '20px', color: '#383838' }}>Classification:</label>
+            <div style={{ marginBottom: "20px" }}>
+              <label
+                style={{ display: "block", fontSize: "20px", color: "#383838" }}
+              >
+                Classification:
+              </label>
               <select
                 name="classification"
                 value={formData.classification}
                 onChange={handleInputChange}
-                style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #333333' }}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  borderRadius: "5px",
+                  border: "1px solid #333333",
+                }}
               >
                 <option value="Re-Enrollee">Re-Enrollee</option>
                 <option value="Transferee">Transferee</option>
               </select>
             </div>
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '20px', color: '#383838' }}>Year Level:</label>
+            <div style={{ marginBottom: "20px" }}>
+              <label
+                style={{ display: "block", fontSize: "20px", color: "#383838" }}
+              >
+                Year Level:
+              </label>
               <select
                 name="yearLevel"
                 value={formData.yearLevel}
                 onChange={handleInputChange}
-                style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #333333' }}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  borderRadius: "5px",
+                  border: "1px solid #333333",
+                }}
               >
                 <option value="1st Year">1st Year</option>
                 <option value="2nd Year">2nd Year</option>
@@ -306,46 +391,61 @@ const MasterClassListTable = () => {
                 <option value="4th Year">4th Year</option>
               </select>
             </div>
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '20px', color: '#383838' }}>Status:</label>
+            <div style={{ marginBottom: "20px" }}>
+              <label
+                style={{ display: "block", fontSize: "20px", color: "#383838" }}
+              >
+                Status:
+              </label>
               <select
                 name="status"
                 value={formData.status}
                 onChange={handleStatusChange}
-                style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #333333' }}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  borderRadius: "5px",
+                  border: "1px solid #333333",
+                }}
               >
                 <option value="Enrolled">Enrolled</option>
                 <option value="Dropped">Dropped</option>
                 <option value="Shifted">Shifted</option>
               </select>
             </div>
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '20px', color: '#383838' }}>Reason for Shift/Drop:</label>
+            <div style={{ marginBottom: "20px" }}>
+              <label
+                style={{ display: "block", fontSize: "20px", color: "#383838" }}
+              >
+                Reason for Shift/Drop:
+              </label>
               <textarea
                 name="reason"
                 value={formData.reason}
                 onChange={handleInputChange}
-                disabled={formData.status === "Enrolled"} // Disable if status is Enrolled
                 style={{
-                  width: '100%',
-                  padding: '10px',
-                  borderRadius: '5px',
-                  border: '1px solid #333333',
-                  minHeight: '80px',
+                  width: "100%",
+                  height: "100px",
+                  padding: "10px",
+                  borderRadius: "5px",
+                  border: "1px solid #333333",
                 }}
+                disabled={formData.status === "Enrolled"}
               />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <button
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+            <button
                 type="button"
                 onClick={() => setShowModal(false)}
                 style={{
-                  padding: '10px 20px',
-                  backgroundColor: '#F44336',
+                  width: '100px',
+                  height: '40px',
+                  backgroundColor: '#DE0051',
+                  color: '#FFFFFF',
+                  borderRadius: '12px',
                   border: 'none',
-                  color: '#fff',
-                  borderRadius: '5px',
-                  fontWeight: '600',
+                  cursor: 'pointer',
+                  fontSize: '16px',
                 }}
               >
                 Cancel
@@ -353,16 +453,17 @@ const MasterClassListTable = () => {
               <button
                 type="submit"
                 style={{
-                  marginLeft: '10px',
-                  padding: '10px 20px',
-                  backgroundColor: '#4CAF50',
+                  width: '100px',
+                  height: '40px',
+                  backgroundColor: '#0187F1',
+                  color: '#FFFFFF',
+                  borderRadius: '12px',
                   border: 'none',
-                  color: '#fff',
-                  borderRadius: '5px',
-                  fontWeight: '600',
+                  cursor: 'pointer',
+                  fontSize: '16px',
                 }}
               >
-                Update
+                Submit
               </button>
             </div>
           </form>

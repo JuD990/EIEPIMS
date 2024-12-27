@@ -26,4 +26,12 @@
   .class-list-upload-csv-button label{
     margin: 0;
   }
+
+  .class-list-buttons-container p{
+    margin-top: 10px;
+    margin-right: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+  }
   

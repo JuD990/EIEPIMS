@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import "./master-class-list-dropdown.css";
 import { FaChevronDown } from "react-icons/fa";
-import Papa from "papaparse";
-import UploadIcon from "@assets/Upload.png"
 
 const MasterClassListDropdown = () => {
   const [isProgramOpen, setIsProgramOpen] = useState(false);

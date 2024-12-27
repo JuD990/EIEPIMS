@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTable } from "react-table";
-import studentData from "./sample-data"; // Adjust the path as necessary
 
 const StudentManagementTable = () => {
-  const data = React.useMemo(() => studentData, []);
+  const [students, setStudents] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -14,6 +13,19 @@ const StudentManagementTable = () => {
     status: '',
     reason: ''
   });
+
+  useEffect(() => {
+    fetch("http://localhost:8000/api/class-list")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => setStudents(data))
+      .catch((error) => console.error("Error fetching data:", error.message));
+  }, []);
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -28,19 +40,19 @@ const StudentManagementTable = () => {
     setFormData((prevData) => ({
       ...prevData,
       status: value,
-      reason: value === 'Enrolled' ? '' : prevData.reason // Disable the reason if 'Enrolled'
+      reason: value === 'Active' ? '' : prevData.reason
     }));
   };
 
   const handleUpdateClick = (row) => {
     setFormData({
-      firstName: row.original.firstName || '',
-      middleName: row.original.middleName || '',
-      lastName: row.original.lastName || '',
+      firstName: row.original.firstname || '',
+      middleName: row.original.middlename || '',
+      lastName: row.original.lastname || '',
       classification: row.original.classification || '',
-      yearLevel: row.original.yearLevel || '',
+      yearLevel: row.original.year_level || '',
       status: row.original.status || '',
-      reason: row.original.reason || ''
+      reason: row.original.reason_for_shift_or_drop || ''
     });
     setShowModal(true);
   };
@@ -49,11 +61,11 @@ const StudentManagementTable = () => {
     () => [
       {
         Header: "No.",
-        accessor: "no",
+        accessor: "id",
       },
       {
         Header: "Full Name",
-        accessor: "fullName",
+        accessor: (row) => `${row.firstname} ${row.middlename ? row.middlename + '.' : ''} ${row.lastname}`,
       },
       {
         Header: "Status",
@@ -77,11 +89,11 @@ const StudentManagementTable = () => {
       },
       {
         Header: "Student ID",
-        accessor: "studentId",
+        accessor: "student_id",
       },
       {
         Header: "Year Level",
-        accessor: "yearLevel",
+        accessor: "year_level",
       },
       {
         Header: "Classification",
@@ -92,8 +104,13 @@ const StudentManagementTable = () => {
         accessor: "gender",
       },
       {
-        Header: "Reason for Shift/Drop",
-        accessor: "reason",
+        Header: () => (
+          <div style={{ whiteSpace: "nowrap" }}>Reason for Shift/Drop</div>
+        ),
+        accessor: "reason_for_shift_or_drop",
+        Cell: ({ value }) => (
+          <span>{value ? `- ${value}` : ""}</span> // Prepend '-' if there is content
+        ),
       },
       {
         Header: "Actions",
@@ -123,7 +140,7 @@ const StudentManagementTable = () => {
   );
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data });
+    useTable({ columns, data: students });
 
   return (
     <>
@@ -131,11 +148,11 @@ const StudentManagementTable = () => {
         style={{
           overflowY: 'auto',
           height: '500px',
-          marginLeft: '320px',
+          marginLeft: '350px',
           marginRight: '35px',
           border: '1px solid #ddd',
           boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
-          position: 'relative', // To keep the table positioned properly
+          position: 'relative',
         }}
       >
         <table
@@ -144,7 +161,7 @@ const StudentManagementTable = () => {
             width: '100%',
             borderCollapse: 'collapse',
             borderSpacing: '0',
-            zIndex: 0, // Ensure table stays below modal
+            zIndex: 0,
           }}
         >
           <thead>
@@ -162,7 +179,7 @@ const StudentManagementTable = () => {
                       position: 'sticky',
                       top: 0,
                       backgroundColor: '#F4F7FC',
-                      zIndex: 2, // Ensures the header cells stay on top of the body
+                      zIndex: 2,
                     }}
                   >
                     {column.render("Header")}
@@ -293,7 +310,7 @@ const StudentManagementTable = () => {
                 onChange={handleStatusChange}
                 style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #333333' }}
               >
-                <option value="Enrolled">Enrolled</option>
+                <option value="Active">Active</option>
                 <option value="Dropped">Dropped</option>
                 <option value="Shifted">Shifted</option>
               </select>
@@ -304,8 +321,8 @@ const StudentManagementTable = () => {
                 name="reason"
                 value={formData.reason}
                 onChange={handleInputChange}
-                placeholder="reason for shift/dropping"
-                disabled={formData.status === 'Enrolled'}
+                placeholder="Reason for shift/dropping"
+                disabled={formData.status === 'Active'}  // Disable if status is Active
                 style={{ width: '100%', height: '100px', padding: '10px', borderRadius: '5px', border: '1px solid #333333' }}
               />
             </div>

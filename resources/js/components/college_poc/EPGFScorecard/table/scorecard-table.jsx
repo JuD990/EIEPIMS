@@ -58,8 +58,7 @@ const TableComponent = () => {
         Header: 'Comment',
         accessor: 'comment',
         Cell: ({ value, row, column, updateData }) => (
-          <input
-            type="text"
+          <textarea
             value={value}
             onChange={(e) => {
               const newValue = e.target.value;
@@ -67,13 +66,15 @@ const TableComponent = () => {
             }}
             style={{
               width: '400px',
+              height: '40px',
               padding: '4px',
               borderRadius: '4px',
               border: '1px solid #ddd',
+              resize: 'vertical',
             }}
           />
         ),
-      },
+      },      
     ],
     []
   );
@@ -139,32 +140,39 @@ const TableComponent = () => {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map(row => {
+          {rows.map((row) => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
-                {row.cells.map((cell, index) => (
+                {row.cells.map((cell) => (
                   <td
                     {...cell.getCellProps()}
                     style={{
-                      padding: '15px 20px',
-                      borderBottom: '1px solid #ddd',
-                      borderLeft: '1px solid #ddd',
-                      whiteSpace: 'nowrap',
-                      textAlign: 'left',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      maxWidth: '100%',
-                      position: index < 2 ? 'sticky' : 'auto',
-                      left: index < 2 ? `${index * 50}px` : 'auto',
-                      backgroundColor: index < 5 ? '#fff' : 'transparent',
-                      fontFamily: 'Poppins',
-                      fontWeight: '500',
-                      borderRight: index === 4 ? '2px solid #6B6D76' : 'none',
+                      padding: "15px 20px",
+                      borderBottom: "1px solid #ddd",
+                      borderLeft: "1px solid #ddd",
+                      whiteSpace: "nowrap",
+                      textAlign: [
+                        "consistency", 
+                        "clarity", 
+                        "articulation", 
+                        "intonationAndStress", 
+                        "accuracy", 
+                        "clarityOfThought", 
+                        "syntax", 
+                        "qualityOfResponse", 
+                        "detailOfResponse"
+                      ].includes(cell.column.id)
+                        ? "left"  // Align left for the listed columns
+                        : "center", // Default to center for others
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      maxWidth: "100%",
+                      fontFamily: "Poppins",
+                      fontWeight: "500",
                     }}
-                    title={cell.value}
                   >
-                    {cell.render('Cell')}
+                    {cell.render("Cell")}
                   </td>
                 ))}
               </tr>

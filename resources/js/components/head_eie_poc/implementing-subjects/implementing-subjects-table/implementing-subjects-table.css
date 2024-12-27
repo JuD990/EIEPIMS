@@ -2,12 +2,12 @@
 .table-wrapper {
     max-width: 100%;
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: auto;
     border: 1px solid #ddd;
     border-radius: 5px;
     margin-left: 330px;
     white-space: nowrap;
-    height: 500px;
+    height: 600px;
     box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 8px 0px, rgba(0, 0, 0, 0.19) 0px 6px 20px 0px;
   }
   
@@ -57,4 +57,30 @@
   .action-button:hover {
     background-color: #016db6;
   }
-  
+
+  /* Sticky Header Styling */
+  .sticky-header {
+    background-color: #F4F7FC; /* Background color for the entire header */
+    position: sticky; /* Ensure it stays at the top */
+    top: 0; /* Sticky position relative to the top of the container */
+    z-index: 10; /* Keep the header above other elements */
+  }
+
+  /* Header Cell Styling */
+  .sticky-header th {
+    background-color: #F4F7FC; /* Ensure cells inherit header background */
+    color: #333; /* Header text color */
+    font-size: 18px; /* Font size for header text */
+    padding: 40px 25px; /* Cell padding */
+    border: 1px solid #ddd; /* Cell border */
+    text-align: center; /* Align text in the center */
+  }
+
+  /* Sticky Column Styling */
+  .sticky-column {
+    position: sticky; /* Sticky for columns */
+    left: 0; /* Stick to the left */
+    background-color: #fff; /* Column background color */
+    z-index: 5; /* Keep column under the header */
+    border-right: 2px solid #ddd; /* Add a border for distinction */
+  }

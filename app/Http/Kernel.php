@@ -43,6 +43,8 @@ class Kernel extends HttpKernel
 
         // Convert empty strings into null.
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+
+        \App\Http\Middleware\CorsMiddleware::class,
     ];
 
     /**

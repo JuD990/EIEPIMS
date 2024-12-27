@@ -15,6 +15,7 @@ class implementing_subject_class_list extends Model
     // Define the fillable fields (optional but helps protect against mass-assignment vulnerabilities)
     protected $fillable = [
         'implementing_subject_id',
+        //'employee_id',
         'class_list_id',
         'course_code',
     ];

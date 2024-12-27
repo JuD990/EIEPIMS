@@ -12,23 +12,13 @@ class ImplementingSubjects extends Model
     protected $table = 'implementing_subjects';
 
     protected $fillable = [
-        'course_code',
-        'course_title',
-        'description',
-        'semester',
-        'year_level',
-        'program',
-        'department',
-        'employee_id',
-        'assigned_poc',
-        'epgf_average',
-        'completion_rate',
-        'proficiency_level',
+        'course_code', 'code', 'course_title', 'description', 
+        'semester', 'year_level', 'program', 
+        'department', 'employee_id', 'assigned_poc', 'email',
+        'epgf_average', 'completion_rate', 'proficiency_level',
     ];
-
-    // If the fields 'epgf_average', 'completion_rate', and 'proficiency_level' have default values in your database,
-    // there is no need to explicitly set them in the model unless they are missing in the import data.
     
+
     // Relationship with ImplementingSubjectClassList (1 to many)
     public function implementingSubjectClassLists()
     {

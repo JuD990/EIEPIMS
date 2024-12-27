@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class ImplementingSubjectController extends Controller
 {
+    public function index()
+    {
+        $subjects = ImplementingSubjects::all();
+        return response()->json($subjects);
+    }
     public function upload(Request $request)
     {
         Log::info('File upload attempt:', ['files' => $request->files]);
@@ -31,9 +36,9 @@ class ImplementingSubjectController extends Controller
 
                 // Expected CSV columns (excluding the removed ones)
                 $expectedColumns = [
-                    'course_code', 'course_title', 'description', 
+                    'course_code', 'code', 'course_title', 'description', 
                     'semester', 'year_level', 'program', 
-                    'department', 'employee_id', 'assigned_poc'
+                    'department', 'employee_id', 'assigned_poc', 'email'
                 ];
 
                 // Validate the CSV header
@@ -46,15 +51,17 @@ class ImplementingSubjectController extends Controller
                 while (($row = fgetcsv($handle)) !== false) {
                     ImplementingSubjects::create([
                         'course_code'  => $row[0],
-                        'course_title' => $row[1],
-                        'description'  => $row[2],
-                        'semester'     => $row[3],
-                        'year_level'   => $row[4],
-                        'program'      => $row[5],
-                        'department'   => $row[6],
-                        'employee_id'  => $row[7],
-                        'assigned_poc' => $row[8],
-                    ]);
+                        'code'         => $row[1],
+                        'course_title' => $row[2],
+                        'description'  => $row[3],
+                        'semester'     => $row[4],
+                        'year_level'   => $row[5],
+                        'program'      => $row[6],
+                        'department'   => $row[7],
+                        'employee_id'  => $row[8],
+                        'assigned_poc' => $row[9],
+                        'email'        => $row[10],
+                    ]);                    
                 }
 
                 fclose($handle);
@@ -68,4 +75,24 @@ class ImplementingSubjectController extends Controller
             return response()->json(['message' => 'No file uploaded.'], 400);
         }
     }
+        // Get class data based on employee_id
+        public function getClassData($employee_id)
+        {
+            Log::info('Employee ID: ' . $employee_id);
+            // Query for all subjects associated with the given employee_id
+            $classData = ImplementingSubjects::where('employee_id', $employee_id)->get();
+        
+            if ($classData->isNotEmpty()) {
+                return response()->json([
+                    'success' => true,
+                    'classData' => $classData
+                ]);
+            }
+        
+            return response()->json([
+                'success' => false,
+                'message' => 'No Classes Available'
+            ]);
+        }
+        
 }

@@ -1,43 +1,49 @@
 import React, { useState } from 'react';
-import Papa from 'papaparse';
+import axios from 'axios';
 import './upload-csv-class-list.css';
 
 const UploadClassListButton = () => {
+    const [isCsvUploaded, setIsCsvUploaded] = useState(false);
 
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      Papa.parse(file, {
-        complete: (result) => {
-          setCsvData(result.data);  // Store CSV data
-          setIsCsvUploaded(true);
-          alert('CSV File Parsed Successfully');
-        },
-        header: true, // Treat first row as header
-        skipEmptyLines: true, // Skip empty lines
-      });
-    }
-  };
+    const handleFileUpload = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('file', file);
 
-  return (
-    <div className="class-list-buttons-container">
-      <div className="class-list-buttons">
-        {/* Upload CSV Button */}
-        <div className='class-list-upload-csv-button'>
-          <input
-            type="file"
-            id="csv-upload"
-            accept=".csv"
-            style={{ display: 'none' }}
-            onChange={handleFileUpload}
-          />
-          <label htmlFor="csv-upload">
-            Upload CSV
-          </label>
+            try {
+                const response = await axios.post('http://localhost:8000/api/import-master-class-list', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                alert(response.data.message);
+                setIsCsvUploaded(true);
+            } catch (error) {
+                alert('Error uploading file: ' + error.response.data.message);
+            }
+        }
+    };
+
+    return (
+        <div className="class-list-buttons-container">
+            <div className="class-list-buttons">
+                <div className="class-list-upload-csv-button">
+                    <input
+                        type="file"
+                        id="csv-upload"
+                        accept=".csv"
+                        style={{ display: 'none' }}
+                        onChange={handleFileUpload}
+                    />
+                    <label htmlFor="csv-upload">
+                        Upload CSV
+                    </label>
+                </div>
+            </div>
+            {isCsvUploaded && <p>CSV file uploaded and processed successfully!</p>}
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default UploadClassListButton;

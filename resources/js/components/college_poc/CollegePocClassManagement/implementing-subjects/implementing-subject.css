@@ -8,15 +8,12 @@
     align-items: center; /* Center subjects horizontally */
     padding: 20px; /* Add some padding around the container */
     margin-top: 50px; /* Add space from the top */
-    margin-left: 250px;
+    margin-left: 150px;
+    width: 100%; /* Make subjects take up the full width of the container */
+    max-width: 2000px; /* Optional: Limit the maximum width */
+    gap: 40px;
 }
 
-/* Individual subject containers */
-.subject-1 {
-    width: 100%; /* Make subjects take up the full width of the container */
-    max-width: 900px; /* Optional: Limit the maximum width */
-    margin: 15px 0; /* Add vertical spacing between subjects */
-}
 
 /* Combined card styling */
 .combined-card {
@@ -27,8 +24,6 @@
     display: flex; /* Flexbox for content alignment inside */
     justify-content: flex-start; /* Align content to the left side */
     align-items: center; /* Vertically center-align children */
-    height: 200px; /* Adjusted height */
-    width: 900px; /* Adjusted width */
 }
 
 /* Interior card (blue part) aligned to the left */
@@ -42,8 +37,6 @@
 /* Content area inside the white card (centered) */
 .combined-card .content {
     background-color: white; /* White background for content area */
-    width: 100%; /* Content area takes 70% of the width */
-    height: 100%; /* Height of the content area */
     display: flex; /* Use flexbox for horizontal layout */
     justify-content: center;
     align-items: center;
@@ -52,11 +45,7 @@
 
 /* Implementing subject content in a row */
 .implementing-subject-1 {
-    display: flex; /* Flexbox for row layout */
-    align-items: center; /* Vertically align items in the center */
-    justify-content: space-between; /* Space out the content */
-    width: 100%; /* Make sure the content stretches across the width */
-    padding: 10px; /* Optional: Adds padding inside the flex container */
+    width: 950px;
 }
 
 /* Optional: Add styles for the image if necessary */
@@ -69,32 +58,31 @@
 .subject-info {
     display: flex; /* Flexbox layout for row alignment */
     align-items: center; /* Vertically center-align the items */
-    justify-content: flex-start; /* Align items to the left */
-    padding-left: 5px; /* Adds space to the left inside the element */
     text-decoration: none;  /* Removes the underline */
     color: inherit;         /* Inherits the color from the parent element */
+    
 }
 
 .subject-info-1 {
     display: flex; /* Flexbox layout for row alignment */
     align-items: center; /* Vertically center-align the items */
     justify-content: flex-start; /* Align items to the left */
-    padding-left: 350px; /* Adds space to the left inside the element */
+    padding-left: 150px; /* Adds space to the left inside the element */
 }
 
 /* Subject name styling with proper spacing */
-.subject-name {
-    flex: 1; /* Ensures the subject-name takes up space in the flex container */
-    margin: 0 15px; /* Horizontal space between subject name and others */
-    padding: 0; /* Remove padding */
+.course-title{
+    margin: 10px 15px; /* Horizontal space between subject name and others */
     text-align: left; /* Align text to the left */
-    font-size: 32px; /* Adjust font size for subject name */
+    margin-left: 32px;
+    font-size: 25px; /* Adjust font size for subject name */
     font-family: "Epilogue";
     color: #383838;
+    white-space: nowrap;
 }
 
 /* Subject code styling */
-.subject-code {
+.course-code {
     margin: 0 15px; /* Horizontal space between subject code and others */
     padding: 0; /* Remove padding */
     text-align: left; /* Align text to the left */
@@ -123,12 +111,13 @@
     height: auto; /* Maintain aspect ratio */
     margin-bottom: 15px;
     margin-right: 10px; /* Space between the icon and the number */
+    
 }
 
 /* Class performance section styling */
 .class-performance {
     width: 100%; /* Full width */
-    margin-top: 25px; /* Space before class performance */
+    margin-top: 45px; /* Space before class performance */
 }
 
 .eie-averages {
@@ -151,4 +140,11 @@
 .pgf-average p:first-child, .completion-rate p:first-child, .proficiency-level p:first-child {
     font-weight: bold; /* Make the metric (e.g., PGF Average) bold */
     font-size: 20px; /* Adjust text size */
+}
+
+.no-class-available{
+    margin-top: 50px;
+    text-align: center;
+    font-size: 24px;
+    font-family: 'Poppins';
 }

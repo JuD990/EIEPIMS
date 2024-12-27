@@ -14,7 +14,7 @@ const CollegePocImplementingSubjects = () => {
       <UserInfo />
       <br /><br /><br /><br /><br />
       <div className="implementing-subject-page-title">
-        <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800 }}>Implementing Subjects</h1>
+        <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800 }}>Class Management</h1>
       </div>
       <DashboardDropdown/>
       <ImplementingSubjects />

@@ -63,10 +63,16 @@ const handleLogin = async (event) => {
     // Handle successful login
     if (response.status === 200) {
       console.log("Login Successful: ", response.data);
-      const { token } = response.data;
+      const { token, employee_id } = response.data;  // Destructure token and employee_id
 
-      // Store token
+      if (!employee_id) {
+        setError("Employee ID not found in the response.");
+        return;
+      }
+
+      // Store token and employee_id in localStorage
       localStorage.setItem("authToken", token);
+      localStorage.setItem("employee_id", employee_id);  // Store employeeId
 
       // Navigate based on user type
       switch (userType) {
@@ -119,6 +125,7 @@ const handleLogin = async (event) => {
     }
   }
 };
+
 
 
   return (

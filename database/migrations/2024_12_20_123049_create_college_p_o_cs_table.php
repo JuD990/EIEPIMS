@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('college_pocs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('employee_id')->nullable();
+            $table->string('employee_id')->unique();
             $table->string('firstname', 100);
             $table->string('middlename', 100)->nullable();
             $table->string('lastname', 100);

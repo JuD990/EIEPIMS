@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Papa from 'papaparse';
 import './user-management-buttons.css';
 
 const UserManagementButtons = () => {
@@ -13,15 +12,23 @@ const UserManagementButtons = () => {
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      Papa.parse(file, {
-        complete: (result) => {
-          setCsvData(result.data);  // Store CSV data
-          setIsCsvUploaded(true);
-          alert('CSV File Parsed Successfully');
-        },
-        header: true, // Treat first row as header
-        skipEmptyLines: true, // Skip empty lines
-      });
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const text = event.target.result;
+        const rows = text.split('\n').filter(row => row.trim() !== ''); // Split rows and remove empty lines
+        const headers = rows[0].split(','); // Assume first row contains headers
+        const data = rows.slice(1).map(row => {
+          const values = row.split(',');
+          return headers.reduce((acc, header, index) => {
+            acc[header.trim()] = values[index].trim();
+            return acc;
+          }, {});
+        });
+        setCsvData(data);
+        setIsCsvUploaded(true);
+        alert('CSV File Parsed Successfully');
+      };
+      reader.readAsText(file);
     }
   };
 

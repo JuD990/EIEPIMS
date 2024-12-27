@@ -7,9 +7,13 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'App\\Http\\Controllers\\AuthController' => $baseDir . '/app/Http/Controllers/AuthController.php',
+    'App\\Http\\Controllers\\ClassListController' => $baseDir . '/app/Http/Controllers/ClassListController.php',
+    'App\\Http\\Controllers\\CollegePOCController' => $baseDir . '/app/Http/Controllers/CollegePOCController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
     'App\\Http\\Controllers\\ImplementingSubjectController' => $baseDir . '/app/Http/Controllers/ImplementingSubjectController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
+    'App\\Http\\Middleware\\CorsMiddleware' => $baseDir . '/app/Http/Middleware/CorsMiddleware.php',
+    'App\\Imports\\ClassListImport' => $baseDir . '/app/Imports/ClassListImport.php',
     'App\\Imports\\ImplementingSubjectsImport' => $baseDir . '/app/Imports/ImplementingSubjectsImport.php',
     'App\\Models\\ClassLists' => $baseDir . '/app/Models/ClassLists.php',
     'App\\Models\\CollegePOCs' => $baseDir . '/app/Models/CollegePOCs.php',

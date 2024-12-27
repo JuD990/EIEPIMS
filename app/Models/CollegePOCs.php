@@ -37,6 +37,6 @@ class CollegePOCs extends Authenticatable
     // Define the relationship with ImplementingSubject
     public function implementingSubjects()
     {
-        return $this->hasMany(ImplementingSubject::class, 'employee_id');
+        return $this->hasMany(ImplementingSubjects::class, 'employee_id');
     }
 }

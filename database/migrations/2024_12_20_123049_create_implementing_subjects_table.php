@@ -14,14 +14,16 @@ return new class extends Migration
         Schema::create('implementing_subjects', function (Blueprint $table) {
             $table->id();
             $table->string('course_code', 50);
+            $table->string('code', 10);
             $table->string('course_title', 100);
             $table->string('description', 255);
             $table->string('semester', 20);
             $table->string('year_level', 10);
             $table->string('program', 50);
             $table->string('department', 50);
-            $table->unsignedBigInteger('employee_id'); // Foreign key to employees table
-            $table->string('assigned_poc', 200); // Firstname + Lastname of College POC
+            $table->unsignedBigInteger('employee_id');
+            $table->string('assigned_poc', 200);
+            $table->string('email', 50)->nullable();
             $table->decimal('epgf_average', 5, 2)->nullable();
             $table->decimal('completion_rate', 5, 2)->nullable();
             $table->string('proficiency_level', 50)->nullable();            

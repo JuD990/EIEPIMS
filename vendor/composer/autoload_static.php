@@ -566,9 +566,13 @@ class ComposerStaticInit7e8c3c14ff33b199b4a0838993eb8423
 
     public static $classMap = array (
         'App\\Http\\Controllers\\AuthController' => __DIR__ . '/../..' . '/app/Http/Controllers/AuthController.php',
+        'App\\Http\\Controllers\\ClassListController' => __DIR__ . '/../..' . '/app/Http/Controllers/ClassListController.php',
+        'App\\Http\\Controllers\\CollegePOCController' => __DIR__ . '/../..' . '/app/Http/Controllers/CollegePOCController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\ImplementingSubjectController' => __DIR__ . '/../..' . '/app/Http/Controllers/ImplementingSubjectController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
+        'App\\Http\\Middleware\\CorsMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/CorsMiddleware.php',
+        'App\\Imports\\ClassListImport' => __DIR__ . '/../..' . '/app/Imports/ClassListImport.php',
         'App\\Imports\\ImplementingSubjectsImport' => __DIR__ . '/../..' . '/app/Imports/ImplementingSubjectsImport.php',
         'App\\Models\\ClassLists' => __DIR__ . '/../..' . '/app/Models/ClassLists.php',
         'App\\Models\\CollegePOCs' => __DIR__ . '/../..' . '/app/Models/CollegePOCs.php',

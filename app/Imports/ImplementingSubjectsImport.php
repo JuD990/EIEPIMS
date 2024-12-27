@@ -16,8 +16,9 @@ class ImplementingSubjectsImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         // Import the necessary fields and set default values for excluded fields
-        return new ImplementingSubjects([ // Correct model usage
-            'course_code' => $row['course_code'], 
+        return new ImplementingSubjects([
+            'course_code' => $row['course_code'],
+            'code' => $row['code'],
             'course_title' => $row['course_title'],
             'description' => $row['description'],
             'semester' => $row['semester'],
@@ -26,11 +27,7 @@ class ImplementingSubjectsImport implements ToModel, WithHeadingRow
             'department' => $row['department'],
             'employee_id' => $row['employee_id'],
             'assigned_poc' => $row['assigned_poc'],
-            
-            // Default values for excluded fields
-            'epgf_average' => 0.00,  // Default value
-            'completion_rate' => 0.00, // Default value
-            'proficiency_level' => 'N/A', // Default value (can be adjusted based on your requirement)
+            'email' => $row['email'],
         ]);
     }
 }
