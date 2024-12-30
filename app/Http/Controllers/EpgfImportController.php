@@ -23,10 +23,4 @@ class EpgfImportController extends Controller
         Excel::import(new EpgfFluencyImport, $request->file('file'));
         return redirect()->back()->with('success', 'EpgfFluency Imported Successfully!');
     }
-
-    public function importRubric(Request $request)
-    {
-        Excel::import(new EpgfRubricImport, $request->file('file'));
-        return redirect()->back()->with('success', 'EpgfRubric Imported Successfully!');
-    }
 }

@@ -13,7 +13,6 @@ const ImplementingSubjectsTable = () => {
     courseTitle: "",
     code: "",
     courseCode: "",
-    description: "",
     semester: "",
     department: "",
     program: "",
@@ -75,7 +74,6 @@ const ImplementingSubjectsTable = () => {
       courseTitle: values.course_title,
       code: values.code,
       courseCode: values.course_code,
-      description: values.description,
       semester: values.semester,
       department: values.department,
       program: values.program,
@@ -102,7 +100,6 @@ const ImplementingSubjectsTable = () => {
       { Header: "Course Title", accessor: "course_title" },
       { Header: "Code", accessor: "code" },
       { Header: "Course Code", accessor: "course_code" },
-      { Header: "Description", accessor: "description" },
       { Header: "Semester", accessor: "semester" },
       { Header: "Department", accessor: "department" },
       { Header: "Program", accessor: "program" },
@@ -282,29 +279,6 @@ const ImplementingSubjectsTable = () => {
                 type="text"
                 name="code"
                 value={formData.courseCode}
-                onChange={handleInputChange}
-                style={{
-                  width: "100%",
-                  padding: "10px",
-                  borderRadius: "5px",
-                  border: "1px solid #333333",
-                }}
-              />
-            </div>
-            <div style={{ marginBottom: "20px" }}>
-              <label
-                style={{
-                  display: "block",
-                  fontSize: "20px",
-                  color: "#383838",
-                }}
-              >
-                Description:
-              </label>
-              <input
-                type="text"
-                name="code"
-                value={formData.description}
                 onChange={handleInputChange}
                 style={{
                   width: "100%",

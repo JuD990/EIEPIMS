@@ -12,7 +12,7 @@ class ImplementingSubjects extends Model
     protected $table = 'implementing_subjects';
 
     protected $fillable = [
-        'course_code', 'code', 'course_title', 'description', 
+        'course_code', 'code', 'course_title',
         'semester', 'year_level', 'program', 
         'department', 'employee_id', 'assigned_poc', 'email',
         'epgf_average', 'completion_rate', 'proficiency_level',

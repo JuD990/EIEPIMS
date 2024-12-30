@@ -36,7 +36,7 @@ class ImplementingSubjectController extends Controller
 
                 // Expected CSV columns (excluding the removed ones)
                 $expectedColumns = [
-                    'course_code', 'code', 'course_title', 'description', 
+                    'course_code', 'code', 'course_title', 
                     'semester', 'year_level', 'program', 
                     'department', 'employee_id', 'assigned_poc', 'email'
                 ];
@@ -53,14 +53,13 @@ class ImplementingSubjectController extends Controller
                         'course_code'  => $row[0],
                         'code'         => $row[1],
                         'course_title' => $row[2],
-                        'description'  => $row[3],
-                        'semester'     => $row[4],
-                        'year_level'   => $row[5],
-                        'program'      => $row[6],
-                        'department'   => $row[7],
-                        'employee_id'  => $row[8],
-                        'assigned_poc' => $row[9],
-                        'email'        => $row[10],
+                        'semester'     => $row[3],
+                        'year_level'   => $row[4],
+                        'program'      => $row[5],
+                        'department'   => $row[6],
+                        'employee_id'  => $row[7],
+                        'assigned_poc' => $row[8],
+                        'email'        => $row[9],
                     ]);                    
                 }
 

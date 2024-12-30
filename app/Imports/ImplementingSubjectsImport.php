@@ -20,7 +20,6 @@ class ImplementingSubjectsImport implements ToModel, WithHeadingRow
             'course_code' => $row['course_code'],
             'code' => $row['code'],
             'course_title' => $row['course_title'],
-            'description' => $row['description'],
             'semester' => $row['semester'],
             'year_level' => $row['year_level'],
             'program' => $row['program'],

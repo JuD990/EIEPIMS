@@ -66,21 +66,25 @@ const ImplementingSubjects = () => {
     ) : userClasses.length > 0 ? (
       userClasses.map((userClass) => (
         <Link
-        to={`/epgf-scorecard?course_code=${userClass.course_code}`} // Pass as query param
-        className="subject-info"
-        key={userClass.id}
+          to={`/epgf-scorecard?course_code=${userClass.course_code}`}
+          className="subject-info"
+          key={userClass.id}
         >
         <div className="subject-1">
         <div className="combined-card">
         <div className="interior-card"></div>
-        <div className="content">
+        <div className="">
         <div className="implementing-subject-1">
         <div className="subject-info">
         <p className="course-title">{userClass.course_title}</p>
-        <p className="course-code">{userClass.course_code}</p>
-        <div className="student-number">
-        <img src={studentnoicon} alt="Student Number" />
-        <p>{activeStudentCounts[userClass.course_code] || 0}</p>
+
+        <div className="subject-info">
+          <p className="course-code">{userClass.course_code}</p>
+          <div className="student-number">
+          <img src={studentnoicon} alt="Student Number" />
+          <p>{activeStudentCounts[userClass.course_code] || 0}</p>
+        </div>
+
         </div>
         </div>
         </div>
