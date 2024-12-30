@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import EIEHeadSidebar from '../sidebar/eie-head-sidebar';
-import UserInfo from '../user_info/User-info';
+import UserInfo from '@user-info/User-info';
 import ImplementingSubjectDropdown from "./dropdown-button/implementing-subjects-dropdown";
 import ImplementingSubjectsTable from "./implementing-subjects-table/implementing-subjects-table";
 import UploadingButton from "./upload-implementing-subjects/upload-button";

@@ -1,6 +1,6 @@
 import React from 'react';
 import EIEHeadSidebar from '../sidebar/eie-head-sidebar';
-import UserInfo from '../user_info/User-info';
+import UserInfo from '@user-info/User-info';
 import './HeadEiePocDashboard.css'
 
 const HeadEiePocDashboard = () => {

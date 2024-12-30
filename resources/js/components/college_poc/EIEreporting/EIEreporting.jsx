@@ -1,7 +1,7 @@
 import React from 'react';
 import "./EIEreporting.css"
 import CollegePOCsidebar from "../sidebar/college-poc-sidebar";
-import UserInfo from "../user_info/User-info"
+import UserInfo from '@user-info/User-info';
 
 const EIEreporting = () => {
   return (

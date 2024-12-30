@@ -13,6 +13,7 @@ export default defineConfig({
         alias: {
             '@assets': path.resolve(__dirname, 'resources/js/assets'),
             '@services': path.resolve(__dirname, 'resources/services'),
+            '@user-info': path.resolve(__dirname, 'resources/js/components/user_info'),
         },
     },
 });

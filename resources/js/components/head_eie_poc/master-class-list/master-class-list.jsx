@@ -1,6 +1,6 @@
 import React from "react";
 import EIEHeadSidebar from '../sidebar/eie-head-sidebar';
-import UserInfo from '../user_info/User-info';
+import UserInfo from '@user-info/User-info';
 import MasterClassListDropdown from "./dropdown-button/master-class-list-dropdown";
 import MasterClassListTable from "./master-class-list-table/master-class-list-table"
 import UploadClassListButton from "./upload-csv-class-list/upload-csv-class-list";

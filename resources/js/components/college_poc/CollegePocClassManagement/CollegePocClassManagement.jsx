@@ -1,13 +1,11 @@
 import React from "react";
 import CollegePOCsidebar from "../sidebar/college-poc-sidebar";
-import UserInfo from "../user_info/User-info"
+import UserInfo from '@user-info/User-info';
 import ImplementingSubjects from "./implementing-subjects/implementing-subject";
 import "./CollegePocClassManagement.css"
 import DashboardDropdown from "./dropdown-button/dashboard-dropdown";
 
 const CollegePocImplementingSubjects = () => {
-
-
   return (
     <div>
       <CollegePOCsidebar />

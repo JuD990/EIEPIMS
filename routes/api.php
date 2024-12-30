@@ -5,6 +5,20 @@ use App\Http\Controllers\ImplementingSubjectController;
 use App\Http\Controllers\CollegePOCController;
 use App\Http\Controllers\ClassListController;
 use App\Http\Controllers\MasterClassListController;
+use App\Http\Controllers\EpgfScoreCardController;
+use App\Http\Controllers\EpgfImportController;
+
+Route::post('/import-pronunciation', [ImportController::class, 'importPronunciation'])->name('import.pronunciation');
+Route::post('/import-grammar', [ImportController::class, 'importGrammar'])->name('import.grammar');
+Route::post('/import-fluency', [ImportController::class, 'importFluency'])->name('import.fluency');
+Route::post('/import-rubric', [ImportController::class, 'importRubric'])->name('import.rubric');
+
+
+Route::get('/epgf-scorecard', [EpgfScoreCardController::class, 'getCourseDetails']);
+Route::get('/epgf-scorecard/students', [EpgfScoreCardController::class, 'getActiveStudents']);
+Route::get('/active-students', [EpgfScoreCardController::class, 'getActiveStudents']);
+
+Route::get('filter-students', [ClassListController::class, 'filterStudentsByCourseAndEmployee']);
 
 Route::get('/implementing-subject/{employee_id}', [ImplementingSubjectController::class, 'getClassData']);
 

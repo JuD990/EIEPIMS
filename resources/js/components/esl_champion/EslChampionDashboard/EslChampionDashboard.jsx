@@ -1,7 +1,7 @@
 import React from 'react';
 import ESLSidebar from '../sidebar/esl-sidebar';
-import UserInfo from '../user_info/User-info';
-import "./EslPrimeDashboard.css"
+import UserInfo from '@user-info/User-info.jsx';
+import "./EslPrimeDashboard.css";
 const EslPrimeDashboard = () => {
   return (
     <div>

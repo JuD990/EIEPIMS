@@ -1,7 +1,7 @@
 import React from 'react';
 import "./StudentManagement.css"
 import Sidebar from '../sidebar/college-poc-sidebar';
-import UserInfo from '../../college_poc/user_info/User-info';
+import UserInfo from '@user-info/User-info';
 import ExportButton from './buttons/export-button';
 import StudentManagementDropdown from './dropdown-button/student-management-dropdown';
 import StudentManagementTable from './student-management-table/student-management-table';

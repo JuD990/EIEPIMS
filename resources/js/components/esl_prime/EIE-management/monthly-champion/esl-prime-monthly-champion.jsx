@@ -1,6 +1,6 @@
 import React from "react";
 import ESLSidebar from '../../sidebar/esl-sidebar';
-import UserInfo from '../../user_info/User-info';
+import UserInfo from '@user-info/User-info';
 
 const eslMonthlyChampions = () => {
 return(

@@ -7,12 +7,14 @@
     display: flex;
     align-items: center;
     gap: 35px;
+    font-family: 'Poppins';
   }
   
   .subject-name-container {
     display: flex;
     align-items: center;
     gap: 25px;
+
   }
   
   .back-icon {

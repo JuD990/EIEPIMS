@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('department');
             $table->string('year_level');
             $table->string('gender');
-            $table->string('status');
+            $table->string('status')->default('Active');
             $table->string('classification');
             $table->string('reason_for_shift_or_drop', 255)->nullable();
             $table->decimal('pronunciation', 5, 2)->nullable();

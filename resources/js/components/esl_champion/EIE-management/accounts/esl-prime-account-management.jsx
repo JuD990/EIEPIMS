@@ -1,7 +1,7 @@
 import React from "react";
 import Sidebar from '../../sidebar/esl-sidebar';
-import UserInfo from '../../user_info/User-info';
-import "./esl-prime-account-management.css"
+import UserInfo from '@user-info/User-info';
+import "./esl-prime-account-management.css";
 import UserManagementDropdown from "./dropdown-button/esl-prime-account-management-dropdown";
 import UserManagementTable from "./user-management-table/user-management-table";
 import UserManagementButtons from "./user-management-buttons/user-management-button";

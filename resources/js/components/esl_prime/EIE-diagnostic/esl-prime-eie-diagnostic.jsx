@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from '../sidebar/esl-sidebar';
-import UserInfo from "../user_info/User-info";
+import UserInfo from '@user-info/User-info';
 import "./esl-prime-eie-diagnostic.css"
 const eslPrimeDiagnostics = () => {
 return(

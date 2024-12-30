@@ -1,6 +1,6 @@
 import React from "react";
 import ESLSidebar from '../../sidebar/esl-sidebar';
-import UserInfo from '../../user_info/User-info';
+import UserInfo from '@user-info/User-info';
 import EPGFrubricVersionDropdown from "./dropdown-button/epgf-rubric-version-dropdown";
 import Table from "./table/epgf-rubric-table";
 import UploadCSVButton from "./buttons/upload-csv-button";

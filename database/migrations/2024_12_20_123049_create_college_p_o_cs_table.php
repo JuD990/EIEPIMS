@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('program', 100);
             $table->string('department', 100);
+            $table->string('role')->default('College POC');
             $table->timestamps();
         });
     }

@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ImplementingSubjects;
-use App\Models\ClassLists;
 use Illuminate\Support\Facades\Log;
 
 class ClassController extends Controller
@@ -17,31 +15,35 @@ class ClassController extends Controller
         try {
             // Ensure the user is authenticated
             if (!$request->user()) {
+                // Invalidate the token and logout
+                auth()->logout();
                 return response()->json(['error' => 'Unauthenticated'], 401);
             }
-    
-            \Log::info('API Request for classes', ['user' => $request->user()]);
-    
+
+            Log::info('API Request for classes', ['user' => $request->user()]);
+
             $employeeId = $request->user()->id;
-        
+
             // Fetch implementing subjects for this employee
             $implementingSubjects = ImplementingSubjects::where('employee_id', $employeeId)->get();
-        
-            // Check if there are no subjects found
+
             if ($implementingSubjects->isEmpty()) {
                 return response()->json(['message' => 'No Class Available'], 404);
             }
-    
-        
+
+            // Log the course_code for each class (if needed)
+            foreach ($implementingSubjects as $subject) {
+                Log::info('Course Code:', ['course_code' => $subject->course_code]);
+            }
+
             // Return the data as JSON
-            return response()->json($classes);
-        
+            return response()->json($implementingSubjects);
+
         } catch (\Exception $e) {
             // Log the error for debugging
-            \Log::error('Error fetching classes: ' . $e->getMessage());
-        
-            // Return an error message if something goes wrong
+            Log::error('Error fetching classes: ' . $e->getMessage());
             return response()->json(['error' => 'Internal Server Error'], 500);
         }
     }
 }
+
