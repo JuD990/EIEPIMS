@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('epgf_grammars', function (Blueprint $table) {
             $table->id('epgf_grammar_id');
-            $table->string('version');
             $table->string('grammar');
-            $table->text('descriptor')->nullable();
+            $table->text('descriptor');
             $table->integer('rating');
             $table->timestamps();
         });

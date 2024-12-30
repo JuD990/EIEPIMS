@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('epgf_fluencies', function (Blueprint $table) {
             $table->id('epgf_fluency_id');
-            $table->string('version');
             $table->string('fluency');
-            $table->text('descriptor')->nullable();
+            $table->text('descriptor');
             $table->integer('rating');
             $table->timestamps();
         });

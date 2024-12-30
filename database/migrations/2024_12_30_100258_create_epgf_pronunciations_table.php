@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('epgf_pronunciations', function (Blueprint $table) {
             $table->id('epgf_pronunciation_id');
-            $table->string('version');
             $table->string('pronunciation');
-            $table->text('descriptor')->nullable();
+            $table->text('descriptor');
             $table->integer('rating');
             $table->timestamps();
         });
