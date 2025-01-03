@@ -9,7 +9,20 @@ class EpgfPronunciation extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'epgf_pronunciation_id';
+    public $timestamps = false;
 
-    protected $fillable = ['version', 'pronunciation', 'descriptor', 'rating'];
+    // Specify the table if it's not the plural of the model name
+    protected $table = 'epgf_pronunciations';
+
+    // Define the primary key if it's not the default 'id'
+    protected $primaryKey = 'id';
+
+    // Define the fillable attributes
+    protected $fillable = [
+        'epgf_pronunciation_id',
+        'pronunciation',
+        'descriptor',
+        'rating'
+    ];
+
 }

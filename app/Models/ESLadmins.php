@@ -14,7 +14,7 @@ class ESLadmins extends Authenticatable
     use HasFactory;
 
     protected $table = 'esl_admins';
-    protected $primaryKey = 'esl_id';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'employee_id',

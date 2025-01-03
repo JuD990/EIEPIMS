@@ -9,7 +9,19 @@ class EpgfGrammar extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'epgf_grammar_id';
+    public $timestamps = false;
 
-    protected $fillable = ['version', 'grammar', 'descriptor', 'rating'];
+    // Specify the table if it's not the plural of the model name
+    protected $table = 'epgf_grammars';
+
+    // Define the primary key if it's not the default 'id'
+    protected $primaryKey = 'id';
+
+    // Define the fillable attributes
+    protected $fillable = [
+        'epgf_grammar_id',
+        'grammar',
+        'descriptor',
+        'rating'
+    ];
 }

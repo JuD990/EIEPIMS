@@ -12,13 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('epgf_pronunciations', function (Blueprint $table) {
-            $table->id('epgf_pronunciation_id');
-            $table->string('pronunciation');
-            $table->text('descriptor');
-            $table->integer('rating');
-            $table->timestamps();
+            $table->bigIncrements('id');
+            $table->integer('epgf_pronunciation_id')->nullable();
+            $table->string('pronunciation')->nullable();
+            $table->text('descriptor')->nullable();
+            $table->decimal('rating', 5, 2)->nullable();
         });
     }
+
 
     /**
      * Reverse the migrations.

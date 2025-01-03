@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('epgf_fluencies', function (Blueprint $table) {
-            $table->id('epgf_fluency_id');
-            $table->string('fluency');
-            $table->text('descriptor');
-            $table->integer('rating');
-            $table->timestamps();
+            $table->bigIncrements('id');
+            $table->integer('epgf_fluency_id')->nullable();
+            $table->string('fluency')->nullable();
+            $table->text('descriptor')->nullable();
+            $table->decimal('rating', 5, 2)->nullable();
         });
     }
 

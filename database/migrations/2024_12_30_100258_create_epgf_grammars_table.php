@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('epgf_grammars', function (Blueprint $table) {
-            $table->id('epgf_grammar_id');
-            $table->string('grammar');
-            $table->text('descriptor');
-            $table->integer('rating');
-            $table->timestamps();
+            $table->bigIncrements('id');
+            $table->integer('epgf_grammar_id')->nullable();
+            $table->string('grammar')->nullable();
+            $table->text('descriptor')->nullable();
+            $table->decimal('rating', 5, 2)->nullable();
         });
     }
 

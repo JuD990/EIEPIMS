@@ -14,7 +14,7 @@ class CollegePOCs extends Authenticatable
     use HasFactory;
     
     protected $table = 'college_pocs';
-    protected $primaryKey = 'college_poc_id';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'employee_id',

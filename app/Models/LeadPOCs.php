@@ -14,7 +14,7 @@ class LeadPOCs extends Authenticatable
     use HasFactory;
 
     protected $table = 'lead_pocs';
-    protected $primaryKey = 'lead_poc_id';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'employee_id',

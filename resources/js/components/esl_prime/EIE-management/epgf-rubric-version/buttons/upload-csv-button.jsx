@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 const UploadCSVButton = ({ label, rightSpacing, onFileUpload, className }) => {
   const fileInputRef = React.useRef(null);
@@ -53,17 +52,5 @@ const buttonStyles = (rightSpacing) => ({
   outline: 'none',
   boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
 });
-
-UploadCSVButton.propTypes = {
-  label: PropTypes.string.isRequired,
-  rightSpacing: PropTypes.string,
-  onFileUpload: PropTypes.func.isRequired,
-  className: PropTypes.string, // Allows for additional class customization
-};
-
-UploadCSVButton.defaultProps = {
-  rightSpacing: '20px', // Default right spacing
-  className: '', // Default empty class
-};
 
 export default UploadCSVButton;

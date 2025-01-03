@@ -14,7 +14,7 @@ class EIEHeads extends Authenticatable
     use HasFactory;
 
     protected $table = 'eie_heads';
-    protected $primaryKey = 'eie_head_id';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'employee_id',
