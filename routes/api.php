@@ -9,6 +9,10 @@ use App\Http\Controllers\EpgfScoreCardController;
 use App\Http\Controllers\EpgfRubricController;
 
 Route::post('/import', [EpgfRubricController::class, 'import']);
+Route::get('/rubric-versions', [EpgfRubricController::class, 'getRubricVersions']);
+Route::post('/set-default', [EpgfRubricController::class, 'setDefault']);
+Route::post('/get-rubric-details', [EpgfRubricController::class, 'getRubricDetails']);
+Route::get('/active-pronunciation-id', [EpgfRubricController::class, 'getActivePronunciationId']);
 
 // EpgfScoreCard routes
 Route::get('/epgf-scorecard', [EpgfScoreCardController::class, 'getCourseDetails']);

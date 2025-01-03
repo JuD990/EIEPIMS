@@ -49,7 +49,7 @@ class ClassListController extends Controller
     public function getClassList()
     {
         try {
-            $students = ClassLists::select('id', 'student_id', 'firstname', 'middlename', 'lastname', 'status', 'year_level', 'classification', 'gender', 'reason_for_shift_or_drop')
+            $students = ClassLists::select('class_lists_id', 'student_id', 'firstname', 'middlename', 'lastname', 'status', 'year_level', 'classification', 'gender', 'reason_for_shift_or_drop')
                 ->get();
     
             return response()->json($students, 200);

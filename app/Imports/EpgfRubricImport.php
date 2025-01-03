@@ -60,7 +60,7 @@ class EpgfRubricImport implements ToModel, WithHeadingRow
                     'epgf_pronunciation_id' => $row['epgf_pronunciation_id'],
                     'epgf_grammar_id' => $row['epgf_grammar_id'],
                     'epgf_fluency_id' => $row['epgf_fluency_id'],
-                    'status' => 'active', // Mark the latest rubric as active
+                    'status' => 'inactive', // Mark the latest rubric as inactive
                     'version' => 'v' . ($importCount + 1) . '.0', // Auto-increment version based on current rubric count
                 ]);
 

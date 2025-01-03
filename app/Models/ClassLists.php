@@ -9,7 +9,7 @@ class ClassLists extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'class_list_id';
+    protected $primaryKey = 'class_lists_id';
 
     // Define the table associated with the model (optional if it follows Laravel's convention)
     protected $table = 'class_lists';

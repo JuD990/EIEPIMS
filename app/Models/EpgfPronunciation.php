@@ -11,13 +11,10 @@ class EpgfPronunciation extends Model
 
     public $timestamps = false;
 
-    // Specify the table if it's not the plural of the model name
     protected $table = 'epgf_pronunciations';
 
-    // Define the primary key if it's not the default 'id'
     protected $primaryKey = 'id';
 
-    // Define the fillable attributes
     protected $fillable = [
         'epgf_pronunciation_id',
         'pronunciation',
@@ -25,4 +22,9 @@ class EpgfPronunciation extends Model
         'rating'
     ];
 
+    // Relationship to EpgfRubric
+    public function rubrics()
+    {
+        return $this->hasMany(EpgfRubric::class, 'epgf_pronunciation_id');
+    }
 }

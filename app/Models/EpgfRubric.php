@@ -9,13 +9,10 @@ class EpgfRubric extends Model
 {
     use HasFactory;
 
-    // Specify the table if it's not the plural of the model name
     protected $table = 'epgf_rubrics';
 
-    // In the EpgfRubric model
     protected $primaryKey = 'epgf_rubric_id';
 
-    // Define the fillable attributes
     protected $fillable = [
         'epgf_pronunciation_id',
         'epgf_grammar_id',
@@ -23,4 +20,10 @@ class EpgfRubric extends Model
         'version',
         'status'
     ];
+
+    // Relationship to EpgfPronunciation
+    public function pronunciation()
+    {
+        return $this->belongsTo(EpgfPronunciation::class, 'epgf_pronunciation_id');
+    }
 }
