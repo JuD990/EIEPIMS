@@ -51,7 +51,7 @@ const EPGFScorecard = () => {
     <br /><br />
     </Link>
     <div className="epgf-scorecard-page-title">
-    <h1 style={{ fontFamily: 'Poppins', fontWeight: 600 }}>Student EIE PGF Scorecard</h1>
+    <h1 style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '28px' }}>Student EIE PGF Scorecard</h1>
     </div>
 
     <div className='input-container'>
@@ -76,13 +76,13 @@ const EPGFScorecard = () => {
     <Table course_code={course_code} />
     <br /><br />
     <div style={{ position: 'relative', width: '100%' }}>
-    <Button label="Submit" rightSpacing="35px" />
-    </div>
-    <div style={{ position: 'relative', width: '100%' }}>
-    <ExportButton label="Export" rightSpacing="200px" />
-    </div>
-    <div className="border-box">
-    <p><b>4/50 </b>Evaluated</p>
+      <Button label="Submit" />
+      </div>
+      <div style={{ position: 'relative', width: '100%' }}>
+      <ExportButton label="Export" rightSpacing="200px" />
+      </div>
+      <div className="border-box">
+      <p><b>4/50 </b>Evaluated</p>
     </div>
     <br />
     <ClassAverageSummary />

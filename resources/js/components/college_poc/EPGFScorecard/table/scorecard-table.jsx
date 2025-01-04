@@ -5,41 +5,206 @@ import axios from 'axios';
 const TableComponent = ({ course_code }) => {
   const [students, setStudents] = useState([]); // State to store students
   const [loading, setLoading] = useState(true); // Loading state
-  const [pronunciationId, setPronunciationId] = useState(null);
-  const [pronunciations, setPronunciations] = useState([]);
+  const [version, setVersion] = useState(null); // State to store the extracted version number
+  const [consistencyOptions, setConsistencyOptions] = useState([]);
+  const [clarityOptions, setClarityOptions] = useState([]);
+  const [articulationOptions, setArticulationOptions] = useState([]);
+  const [intonationAndStressOptions, setIntonationAndStressOptions] = useState([]);
+  const [accuracyOptions, setAccuracyOptions] = useState([]);
+  const [clarityofthoughtOptions, setClarityOfThoughtOptions] = useState([]);
 
-  // Fetch the active pronunciation ID from the backend
+
   useEffect(() => {
-    const fetchActivePronunciation = async () => {
-      try {
-        const response = await axios.get('/active-pronunciation-id');
-        setPronunciationId(response.data.pronunciation_id);
-      } catch (error) {
-        console.error('Error fetching active pronunciation ID:', error);
+    const fetchConsistencyOptions = async () => {
+      if (version) {
+        try {
+          const response = await axios.get(`/api/consistency/${version}`);
+          if (response.status === 200 && Array.isArray(response.data)) {
+            const filteredConsistency = response.data.map(item => ({
+              id: item.id,
+              pronunciation: item.pronunciation,
+              rating: item.rating,
+              descriptor: item.descriptor,
+            }));
+            setConsistencyOptions(filteredConsistency);
+          } else {
+            console.error("No pronunciations found in the response");
+          }
+        } catch (error) {
+          console.error("Error fetching consistency options:", error);
+        }
       }
     };
 
-    fetchActivePronunciation();
-  }, []);
+    fetchConsistencyOptions();
+  }, [version]);
 
-  // Fetch the pronunciations based on the active pronunciation ID
   useEffect(() => {
-    if (pronunciationId) {
-      const fetchPronunciations = async () => {
+    const fetchClarityOptions = async () => {
+      if (version) {
         try {
-          const response = await axios.get(`/api/pronunciations/${pronunciationId}`);
-          setPronunciations(response.data);
+          const response = await axios.get(`/api/clarity/${version}`);
+          console.log("API Response:", response); // Log the response data to see its structure
+
+          if (response.status === 200 && Array.isArray(response.data)) {
+            const filteredClarity = response.data.map(item => ({
+              id: item.id,
+              pronunciation: item.pronunciation,
+              rating: item.rating,
+              descriptor: item.descriptor,
+            }));
+            setClarityOptions(filteredClarity);
+          } else {
+            console.error("No clarity options found or response data is not an array");
+          }
         } catch (error) {
-          console.error('Error fetching pronunciations:', error);
+          console.error("Error fetching clarity options:", error);
         }
-      };
+      }
+    };
 
-      fetchPronunciations();
-    }
-  }, [pronunciationId]);
+    fetchClarityOptions();
+  }, [version]);
 
+  useEffect(() => {
+    const fetchArticulationOptions = async () => {
+      if (version) {
+        try {
+          const response = await axios.get(`/api/articulation/${version}`);
+          console.log("API Response:", response); // Log the response data to see its structure
 
-  // Log course_code to verify it's passed correctly
+          if (response.status === 200 && Array.isArray(response.data)) {
+            const filteredArticulation = response.data.map(item => ({
+              id: item.id,
+              pronunciation: item.pronunciation,
+              rating: item.rating,
+              descriptor: item.descriptor,
+            }));
+            setArticulationOptions(filteredArticulation);
+          } else {
+            console.error("No articulation options found or response data is not an array");
+          }
+        } catch (error) {
+          console.error("Error fetching articulation options:", error);
+        }
+      }
+    };
+
+    fetchArticulationOptions();
+  }, [version]);
+
+  useEffect(() => {
+    const fetchIntonationAndStressOptions = async () => {
+      if (version) {
+        try {
+          const response = await axios.get(`/api/intonationStress/${version}`);
+          console.log("API Response:", response);  // Check the API response
+          if (response.status === 200 && Array.isArray(response.data)) {
+            const filteredIntonationAndStress = response.data.map(item => ({
+              id: item.id,
+              pronunciation: item.pronunciation,
+              rating: item.rating,
+              descriptor: item.descriptor,
+            }));
+            setIntonationAndStressOptions(filteredIntonationAndStress);
+            console.log("Updated Options:", filteredIntonationAndStress);  // Verify the options
+          } else {
+            console.error("No Intonation and Stress options found or response data is not an array");
+          }
+        } catch (error) {
+          console.error("Error fetching Intonation and Stress options:", error);
+        }
+      }
+    };
+
+    fetchIntonationAndStressOptions();
+  }, [version]);
+
+  useEffect(() => {
+    const fetchAccuracyOptions = async () => {
+      if (version) {
+        try {
+          const response = await axios.get(`/api/accuracy/${version}`);
+          console.log("API Response:", response);  // Check the API response
+          if (response.status === 200 && Array.isArray(response.data)) {
+            const filteredAccuracy = response.data.map(item => ({
+              id: item.id,
+              pronunciation: item.pronunciation,
+              rating: item.rating,
+              descriptor: item.descriptor,
+            }));
+            setAccuracyOptions(filteredAccuracy);
+            console.log("Updated Options:", filteredAccuracy);  // Verify the options
+          } else {
+            console.error("No Intonation and Stress options found or response data is not an array");
+          }
+        } catch (error) {
+          console.error("Error fetching Intonation and Stress options:", error);
+        }
+      }
+    };
+
+    fetchAccuracyOptions();
+  }, [version]);
+
+  useEffect(() => {
+    const fetchClarityOfThoughtOptions = async () => {
+      if (version) {
+        try {
+          const response = await axios.get(`/api/clarityOfThought/${version}`);
+          console.log("API Response:", response);  // Check the API response
+          if (response.status === 200 && Array.isArray(response.data)) {
+            const filteredClarityOfThought = response.data.map(item => ({
+              id: item.id,
+              pronunciation: item.pronunciation,
+              rating: item.rating,
+              descriptor: item.descriptor,
+            }));
+            setClarityOfThoughtOptions(filteredClarityOfThought);
+            console.log("Updated Options:", filteredClarityOfThought);  // Verify the options
+          } else {
+            console.error("No Intonation and Stress options found or response data is not an array");
+          }
+        } catch (error) {
+          console.error("Error fetching Intonation and Stress options:", error);
+        }
+      }
+    };
+
+    fetchClarityOfThoughtOptions();
+  }, [version]);
+
+  useEffect(() => {
+    const fetchVersion = async () => {
+      try {
+        const response = await axios.get('/api/rubric/active-version');
+        const versionString = response.data.version;
+
+        if (!versionString) {
+          console.error("No version found in the response", response.data);
+          return;
+        }
+
+        console.log("Fetched version string:", versionString);
+
+        // Extract the major version using regex
+        const versionMatch = versionString.match(/^v(\d+)/);
+        if (versionMatch) {
+          const majorVersion = versionMatch[1]; // The major version will be in the first capture group
+          setVersion(majorVersion);  // Set the major version to state
+          console.log("Extracted major version:", majorVersion);
+        } else {
+          console.error("Version string doesn't match the expected format:", versionString);
+        }
+      } catch (error) {
+        console.error("Error fetching version:", error);
+      }
+    };
+
+    fetchVersion();
+  }, []); // Run this effect only once when the component mounts
+
+  // Fetch students and filter based on course_code
   useEffect(() => {
     console.log("Course Code received in Table:", course_code);
     if (course_code) {
@@ -61,244 +226,482 @@ const TableComponent = ({ course_code }) => {
   }, [course_code]);
 
   // Define columns for the table
-  const columns = React.useMemo(
-    () => [
-      { Header: 'No.', accessor: 'no' },
-      { Header: 'Full Name', accessor: 'fullName' },
-      { Header: 'Year Level', accessor: 'yearLevel' },
-      { Header: 'PGF Average', accessor: 'pgfAverage' },
-      { Header: 'Proficiency', accessor: 'proficiency' },
-      {
-        Header: 'Type',
-        accessor: 'type',
-        Cell: ({ value, row, column, updateData }) => (
-          <select
-          value={value}
-          onChange={(e) => {
-            const newValue = e.target.value;
-            updateData(row.index, column.id, newValue);
-          }}
-          style={{
-            width: '100px',
-            padding: '4px',
-            backgroundColor: 'transparent',
-          }}
-          >
-          <option value="Reading">Reading</option>
-          <option value="Writing">Writing</option>
-          <option value="Listening">Listening</option>
-          </select>
-        ),
-      },
-      {
-        Header: 'Consistency', accessor: 'consistency',
+  const columns = useMemo(() => [
+    { Header: 'No.', accessor: 'no' },
+    { Header: 'Full Name', accessor: 'fullName' },
+    { Header: 'Year Level', accessor: 'yearLevel' },
+    { Header: 'PGF Average', accessor: 'pgfAverage' },
+    { Header: 'Proficiency', accessor: 'proficiency' },
+    {
+      Header: 'Type',
+      accessor: 'type',
+      Cell: ({ value, row, column, updateData }) => (
+        <select
+        value={value}
+        onChange={(e) => {
+          const newValue = e.target.value;
+          updateData(row.index, column.id, newValue);
+        }}
+        style={{ width: '100px', padding: '4px', backgroundColor: 'transparent' }}
+        >
+        <option value="Reading">Reading</option>
+        <option value="Writing">Writing</option>
+        <option value="Listening">Listening</option>
+        </select>
+      ),
+    },
+    {
+      Header: 'Consistency',
+      accessor: 'consistency',
+      Cell: ({ value, row, column }) => {
+        // Ensure value is a number for comparison
+        const selectedOption = consistencyOptions?.find(option => option.id === Number(value));
+        const rating = selectedOption?.rating || '0.00';
 
-        Cell: ({ value, row, column, updateData }) => (
+        return (
+          <div>
           <select
-          value={value}
+          value={value || ''} // Fallback to empty string if value is undefined
           onChange={(e) => {
-            const newValue = e.target.value;
+            const selectedOption = consistencyOptions.find(option => option.id === Number(e.target.value));
+            const newValue = selectedOption ? selectedOption.id : value;
+            console.log('Selected Option:', selectedOption); // Debug log
+            updateData(row.index, column.id, newValue); // Update table data
+          }}
+          style={{
+            padding: '4px',
+            backgroundColor: 'transparent',
+            width: '150px',
+          }}
+          >
+          {consistencyOptions.length === 0 ? (
+            <option disabled>Loading options...</option>
+          ) : (
+            consistencyOptions.map(option => {
+              const splitDescriptor = option.descriptor.split('.');
+              const formattedDescriptor = splitDescriptor.join(' \n'); // Use a space followed by a newline
+
+              return (
+                <option
+                key={option.id}
+                value={option.id}
+                style={{
+                  fontSize: '12px',
+                  whiteSpace: 'pre-line', // Ensure newlines are respected inside the option
+                }}
+                >
+                {formattedDescriptor}
+                </option>
+              );
+            })
+          )}
+          </select>
+          <span
+          style={{
+            fontSize: '12px',
+            marginTop: '4px',
+            display: 'block',
+            textAlign: 'left',
+          }}
+          >
+          Rating: {rating}
+          </span>
+          </div>
+        );
+      },
+    },
+    {
+      Header: '',
+      accessor: 'scoreConsistency',
+      Cell: ({ row }) => {
+        const selectedOption = consistencyOptions?.find(option => option.id === row.original.consistency);
+        return parseFloat((selectedOption?.rating || '0.00').replace(',', '.'));
+        console.log('Consistency Score:', rating); // Debug log
+      },
+    },
+    {
+      Header: 'Clarity',
+      accessor: 'clarity',
+      Cell: ({ value, row, column }) => {
+        // Ensure value is a number for comparison
+        const selectedOption = clarityOptions?.find(option => option.id === Number(value));
+        const rating = selectedOption?.rating || '0.00';
+
+        return (
+          <div>
+          <select
+          value={value || ''} // Fallback to empty string if value is undefined
+          onChange={(e) => {
+            const selectedOption = clarityOptions.find(option => option.id === Number(e.target.value));
+            const newValue = selectedOption ? selectedOption.id : value;
+            console.log('Selected Option:', selectedOption); // Debug log
+            updateData(row.index, column.id, newValue); // Update table data
+          }}
+          style={{
+            padding: '4px',
+            backgroundColor: 'transparent',
+            width: '150px',
+          }}
+          >
+          {clarityOptions.length === 0 ? (
+            <option disabled>Loading options...</option>
+          ) : (
+            clarityOptions.map(option => {
+              const splitDescriptor = option.descriptor.split('.');
+              const formattedDescriptor = splitDescriptor.join(' \n'); // Use a space followed by a newline
+
+              return (
+                <option
+                key={option.id}
+                value={option.id}
+                style={{
+                  fontSize: '12px',
+                  whiteSpace: 'pre-line', // Ensure newlines are respected inside the option
+                }}
+                >
+                {formattedDescriptor}
+                </option>
+              );
+            })
+          )}
+          </select>
+          <span
+          style={{
+            fontSize: '12px',
+            marginTop: '4px',
+            display: 'block',
+            textAlign: 'left',
+          }}
+          >
+          Rating: {rating}
+          </span>
+          </div>
+        );
+      },
+    },
+    {
+      Header: '',
+      accessor: 'scoreClarity',
+      Cell: ({ row }) => {
+        const selectedOption = clarityOptions?.find(option => option.id === row.original.clarity);
+        return parseFloat((selectedOption?.rating || '0.00').replace(',', '.'));
+        console.log('Clarity Score:', rating); // Debug log
+      },
+    },
+    { Header: 'Articulation', accessor: 'articulation',
+      Cell: ({ value, row, column }) => {
+        // Ensure value is a number for comparison
+        const selectedOption = articulationOptions?.find(option => option.id === Number(value));
+        const rating = selectedOption?.rating || '0.00';
+
+        return (
+          <div>
+          <select
+          value={value || ''}
+          onChange={(e) => {
+            const selectedOption = articulationOptions.find(option => option.id === Number(e.target.value));
+            const newValue = selectedOption ? selectedOption.id : value;
+            console.log('Selected Option:', selectedOption);
             updateData(row.index, column.id, newValue);
           }}
           style={{
             padding: '4px',
             backgroundColor: 'transparent',
+            width: '150px',
           }}
           >
-          <option value="1">Sample 1</option>
-          <option value="2">Sample 2</option>
-          <option value="3">Sample 3</option>
+          {articulationOptions.length === 0 ? (
+            <option disabled>Loading options...</option>
+          ) : (
+            articulationOptions.map(option => {
+              const splitDescriptor = option.descriptor.split('.');
+              const formattedDescriptor = splitDescriptor.join(' \n');
+
+              return (
+                <option
+                key={option.id}
+                value={option.id}
+                style={{
+                  fontSize: '12px',
+                  whiteSpace: 'pre-line',
+                }}
+                >
+                {formattedDescriptor}
+                </option>
+              );
+            })
+          )}
           </select>
-        ),
+          <span
+          style={{
+            fontSize: '12px',
+            marginTop: '4px',
+            display: 'block',
+            textAlign: 'left',
+          }}
+          >
+          Rating: {rating}
+          </span>
+          </div>
+        );
       },
-      { Header: '', accessor: 'scoreConsistency', },
-      { Header: 'Clarity', accessor: 'clarity',
-        Cell: ({ value, row, column, updateData }) => (
+    },
+    {
+      Header: '',
+      accessor: 'scoreArticulation',
+      Cell: ({ row }) => {
+        const selectedOption = articulationOptions?.find(option => option.id === row.original.articulation);
+        return parseFloat((selectedOption?.rating || '0.00').replace(',', '.'));
+        console.log('Articulation Score:', rating); // Debug log
+      },
+    },
+    {
+      Header: 'Intonation and Stress', accessor: 'intonationAndStress',
+      Cell: ({ value, row, column }) => {
+        // Ensure value is a number for comparison
+        const selectedOption = intonationAndStressOptions?.find(option => option.id === Number(value));
+        const rating = selectedOption?.rating || '0.00';
+
+        return (
+          <div>
           <select
-          value={value}
+          value={value || ''}
           onChange={(e) => {
-            const newValue = e.target.value;
-            updateData(row.index, column.id, newValue);
+            const selectedOption = intonationAndStressOptions.find(option => option.id === Number(e.target.value));
+            const newValue = selectedOption ? selectedOption.id : value;
+            console.log('Selected Option:', selectedOption); // Debug log
+            updateData(row.index, column.id, newValue); // Update table data
           }}
           style={{
             padding: '4px',
             backgroundColor: 'transparent',
+            width: '150px',
           }}
           >
-          <option value="1">Sample 1</option>
-          <option value="2">Sample 2</option>
-          <option value="3">Sample 3</option>
+          {intonationAndStressOptions.length === 0 ? (
+            <option disabled>Loading options...</option>
+          ) : (
+            intonationAndStressOptions.map(option => {
+              const splitDescriptor = option.descriptor.split('.');
+              const formattedDescriptor = splitDescriptor.join(' \n');
+
+              return (
+                <option
+                key={option.id}
+                value={option.id}
+                style={{
+                  fontSize: '12px',
+                  whiteSpace: 'pre-line',
+                }}
+                >
+                {formattedDescriptor}
+                </option>
+              );
+            })
+          )}
           </select>
-        ),
+          <span
+          style={{
+            fontSize: '12px',
+            marginTop: '4px',
+            display: 'block',
+            textAlign: 'left',
+          }}
+          >
+          Rating: {rating}
+          </span>
+          </div>
+        );
       },
-      { Header: '', accessor: 'scoreClarity' },
-      { Header: 'Articulation', accessor: 'articulation',
-        Cell: ({ value, row, column, updateData }) => (
+
+    },
+    {
+      Header: '',
+      accessor: 'scoreIntonationStress',
+      Cell: ({ row }) => {
+        const selectedOption = articulationOptions?.find(option => option.id === row.original.intonationAndStress);
+        return parseFloat((selectedOption?.rating || '0.00').replace(',', '.'));
+        onsole.log('IntonationStress Score:', rating); // Debug log
+      },
+    },
+    {
+      Header: 'Rating',
+      accessor: 'pronunciationRating',
+      Cell: ({ row }) => {
+        // Extract the decimal values first
+        const consistencyRating = parseFloat(row.values.scoreConsistency) || 0;
+        const clarityRating = parseFloat(row.values.scoreClarity) || 0;
+        const articulationRating = parseFloat(row.values.scoreArticulation) || 0;
+        const intonationStressRating = parseFloat(row.values.scoreIntonationStress) || 0;
+
+        // Log the extracted decimal values to debug
+        console.log('Consistency:', consistencyRating);
+        console.log('Clarity:', clarityRating);
+        console.log('Articulation:', articulationRating);
+        console.log('Intonation Stress:', intonationStressRating);
+
+        // Compute the average of the ratings
+        const totalRating = consistencyRating + clarityRating + articulationRating + intonationStressRating;
+        const average = (totalRating / 4).toFixed(2);  // 4 is the number of categories (you can adjust this if necessary)
+
+  // Log the calculated average for debugging
+  console.log('Calculated Average:', average);
+
+  // Return the computed average
+  return average;
+      }
+    },
+
+    { Header: 'Accuracy', accessor: 'accuracy',
+      Cell: ({ value, row, column }) => {
+        // Ensure value is a number for comparison
+        const selectedOption = accuracyOptions?.find(option => option.id === Number(value));
+        const rating = selectedOption?.rating || '0.00';
+
+        return (
+          <div>
           <select
-          value={value}
+          value={value || ''}
           onChange={(e) => {
-            const newValue = e.target.value;
-            updateData(row.index, column.id, newValue);
+            const selectedOption = accuracyOptions.find(option => option.id === Number(e.target.value));
+            const newValue = selectedOption ? selectedOption.id : value;
+            console.log('Selected Option:', selectedOption); // Debug log
+            updateData(row.index, column.id, newValue); // Update table data
           }}
           style={{
             padding: '4px',
             backgroundColor: 'transparent',
+            width: '150px',
           }}
           >
-          <option value="1">Sample 1</option>
-          <option value="2">Sample 2</option>
-          <option value="3">Sample 3</option>
+          {accuracyOptions.length === 0 ? (
+            <option disabled>Loading options...</option>
+          ) : (
+            accuracyOptions.map(option => {
+              const splitDescriptor = option.descriptor.split('.');
+              const formattedDescriptor = splitDescriptor.join(' \n');
+
+              return (
+                <option
+                key={option.id}
+                value={option.id}
+                style={{
+                  fontSize: '12px',
+                  whiteSpace: 'pre-line',
+                }}
+                >
+                {formattedDescriptor}
+                </option>
+              );
+            })
+          )}
           </select>
-        ),
+          <span
+          style={{
+            fontSize: '12px',
+            marginTop: '4px',
+            display: 'block',
+            textAlign: 'left',
+          }}
+          >
+          Rating: {rating}
+          </span>
+          </div>
+        );
       },
-      { Header: '', accessor: 'scoreArticulation' },
-      { Header: 'Intonation & Stress', accessor: 'intonationAndStress',
-        Cell: ({ value, row, column, updateData }) => (
+    },
+    { Header: '', accessor: 'scoreAccuracy',
+      Cell: ({ row }) => {
+        const selectedOption = accuracyOptions?.find(option => option.id === row.original.accuracy);
+        return selectedOption?.rating || '0.00';
+      },
+    },
+    { Header: 'Clarity of Thought', accessor: 'clarityofthought',
+      Cell: ({ value, row, column }) => {
+        // Ensure value is a number for comparison
+        const selectedOption = clarityofthoughtOptions?.find(option => option.id === Number(value));
+        const rating = selectedOption?.rating || '0.00';
+
+        return (
+          <div>
           <select
-          value={value}
+          value={value || ''}
           onChange={(e) => {
-            const newValue = e.target.value;
-            updateData(row.index, column.id, newValue);
+            const selectedOption = clarityofthoughtOptions.find(option => option.id === Number(e.target.value));
+            const newValue = selectedOption ? selectedOption.id : value;
+            console.log('Selected Option:', selectedOption); // Debug log
+            updateData(row.index, column.id, newValue); // Update table data
           }}
           style={{
             padding: '4px',
             backgroundColor: 'transparent',
+            width: '150px',
           }}
           >
-          <option value="1">Sample 1</option>
-          <option value="2">Sample 2</option>
-          <option value="3">Sample 3</option>
+          {clarityofthoughtOptions.length === 0 ? (
+            <option disabled>Loading options...</option>
+          ) : (
+            clarityofthoughtOptions.map(option => {
+              const splitDescriptor = option.descriptor.split('.');
+              const formattedDescriptor = splitDescriptor.join(' \n');
+
+              return (
+                <option
+                key={option.id}
+                value={option.id}
+                style={{
+                  fontSize: '12px',
+                  whiteSpace: 'pre-line',
+                }}
+                >
+                {formattedDescriptor}
+                </option>
+              );
+            })
+          )}
           </select>
-        ),
-      },
-      { Header: '', accessor: 'scoreIntonation&Stress' },
-      { Header: 'Rating', accessor: 'pronunciationRating' },
-      { Header: 'Accuracy', accessor: 'accuracy',
-        Cell: ({ value, row, column, updateData }) => (
-          <select
-          value={value}
-          onChange={(e) => {
-            const newValue = e.target.value;
-            updateData(row.index, column.id, newValue);
-          }}
+          <span
           style={{
-            padding: '4px',
-            backgroundColor: 'transparent',
+            fontSize: '12px',
+            marginTop: '4px',
+            display: 'block',
+            textAlign: 'left',
           }}
           >
-          <option value="1">Sample 1</option>
-          <option value="2">Sample 2</option>
-          <option value="3">Sample 3</option>
-          </select>
-        ),
+          Rating: {rating}
+          </span>
+          </div>
+        );
       },
-      { Header: '', accessor: 'scoreAccuracy' },
-      { Header: 'Clarity of Thought', accessor: 'clarityOfThought',
-        Cell: ({ value, row, column, updateData }) => (
-          <select
-          value={value}
-          onChange={(e) => {
-            const newValue = e.target.value;
-            updateData(row.index, column.id, newValue);
-          }}
-          style={{
-            padding: '4px',
-            backgroundColor: 'transparent',
-          }}
-          >
-          <option value="1">Sample 1</option>
-          <option value="2">Sample 2</option>
-          <option value="3">Sample 3</option>
-          </select>
-        ),
+    },
+    { Header: '', accessor: 'scoreClarityOfThought',
+      Cell: ({ row }) => {
+        const selectedOption = clarityofthoughtOptions?.find(option => option.id === row.original.clarityofthought);
+        return selectedOption?.rating || '0.00';
       },
-      { Header: '', accessor: 'scoreClarityOfThought' },
-      { Header: 'Syntax', accessor: 'syntax',
-        Cell: ({ value, row, column, updateData }) => (
-          <select
-          value={value}
-          onChange={(e) => {
-            const newValue = e.target.value;
-            updateData(row.index, column.id, newValue);
-          }}
-          style={{
-            padding: '4px',
-            backgroundColor: 'transparent',
-          }}
-          >
-          <option value="1">Sample 1</option>
-          <option value="2">Sample 2</option>
-          <option value="3">Sample 3</option>
-          </select>
-        ),
-      },
-      { Header: '', accessor: 'scoreSyntax' },
-      { Header: 'Rating', accessor: 'grammarRating', },
-      { Header: 'Quality of Response', accessor: 'qualityOfResponse',
-        Cell: ({ value, row, column, updateData }) => (
-          <select
-          value={value}
-          onChange={(e) => {
-            const newValue = e.target.value;
-            updateData(row.index, column.id, newValue);
-          }}
-          style={{
-            padding: '4px',
-            backgroundColor: 'transparent',
-          }}
-          >
-          <option value="1">Sample 1</option>
-          <option value="2">Sample 2</option>
-          <option value="3">Sample 3</option>
-          </select>
-        ),
-      },
-      { Header: '', accessor: 'scoreQualityOfResponse' },
-      { Header: 'Detail of Response', accessor: 'detailOfResponse',
-        Cell: ({ value, row, column, updateData }) => (
-          <select
-          value={value}
-          onChange={(e) => {
-            const newValue = e.target.value;
-            updateData(row.index, column.id, newValue);
-          }}
-          style={{
-            padding: '4px',
-            backgroundColor: 'transparent',
-          }}
-          >
-          <option value="1">Sample 1</option>
-          <option value="2">Sample 2</option>
-          <option value="3">Sample 3</option>
-          </select>
-        ),
-      },
-      { Header: '', accessor: 'scoreDetailOfResponse' },
-      { Header: 'Rating', accessor: 'fluencyRating' },
-      {
-        Header: 'Comment',
-        accessor: 'comment',
-        Cell: ({ value, row, column, updateData }) => (
-          <textarea
-          value={value}
-          onChange={(e) => {
-            const newValue = e.target.value;
-            updateData(row.index, column.id, newValue);
-          }}
-          style={{
-            width: '400px',
-            height: '40px',
-            padding: '4px',
-            borderRadius: '4px',
-            border: '1px solid #ddd',
-            resize: 'vertical',
-          }}
-          />
-        ),
-      },
-    ],
-    []
-  );
+    },
+    {
+      Header: 'Comment',
+      accessor: 'comment',
+      Cell: ({ value, row, column, updateData }) => (
+        <textarea
+        value={value}
+        onChange={(e) => {
+          const newValue = e.target.value;
+          updateData(row.index, column.id, newValue);
+        }}
+        style={{
+          width: '400px',
+          height: '40px',
+          padding: '4px',
+          borderRadius: '4px',
+          border: '1px solid #ddd',
+          resize: 'vertical',
+        }}
+        />
+      ),
+    },
+  ], [consistencyOptions, clarityOptions, articulationOptions, intonationAndStressOptions, accuracyOptions]);
 
   // Format student data for table (adding index and full name)
   const tableData = students.map((student, index) => ({
@@ -309,53 +712,50 @@ const TableComponent = ({ course_code }) => {
     proficiency: student.proficiency_level,
     type: student.type,
     consistency: student.consistency,
-    scoreConsistency: student.score_consistency, // Add the score for consistency
+    scoreConsistency: student.score_consistency,
     clarity: student.clarity,
-    scoreClarity: student.score_clarity, // Add the score for clarity
+    scoreClarity: student.score_clarity,
     articulation: student.articulation,
-    scoreArticulation: student.score_articulation, // Add the score for articulation
+    scoreArticulation: student.score_articulation,
     intonationAndStress: student.intonation_and_stress,
-    scoreIntonationAndStress: student.score_intonation_and_stress, // Add the score for intonation and stress
+    scoreIntonationAndStress: student.score_intonation_and_stress,
     pronunciationRating: student.pronunciation_rating,
     accuracy: student.accuracy,
-    scoreAccuracy: student.score_accuracy, // Add the score for accuracy
+    scoreAccuracy: student.score_accuracy,
     clarityOfThought: student.clarity_of_thought,
-    scoreClarityOfThought: student.score_clarity_of_thought, // Add the score for clarity of thought
+    scoreClarityOfThought: student.score_clarity_of_thought,
     syntax: student.syntax,
-    scoreSyntax: student.score_syntax, // Add the score for syntax
+    scoreSyntax: student.score_syntax,
     qualityOfResponse: student.quality_of_response,
-    scoreQualityOfResponse: student.score_quality_of_response, // Add the score for quality of response
+    scoreQualityOfResponse: student.score_quality_of_response,
     detailOfResponse: student.detail_of_response,
-    scoreDetailOfResponse: student.score_detail_of_response, // Add the score for detail of response
+    scoreDetailOfResponse: student.score_detail_of_response,
     fluencyRating: student.fluency_rating,
-    scoreFluencyRating: student.score_fluency_rating, // Add the score for fluency rating
+    scoreFluencyRating: student.score_fluency_rating,
     comment: student.comment,
   }));
 
+  const updateData = (rowIndex, columnId, newValue) => {
+    console.log('Updating data:', { rowIndex, columnId, newValue });
+    setStudents((prevStudents) => {
+      const updatedStudents = [...prevStudents];
+      updatedStudents[rowIndex][columnId] = newValue;
+      console.log('Updated Students:', updatedStudents);
+      return updatedStudents;
+    });
+  };
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
     columns,
     data: tableData,
+    updateData,
   });
-
-  // Function to update the cell data
-  const updateData = (rowIndex, columnId, newValue) => {
-    const updatedData = [...tableData];
-    updatedData[rowIndex][columnId] = newValue;
-    // Update state with new data
-    setStudents(updatedData);
-    console.log('Updated data:', updatedData);
-  };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div
     style={{
       overflowX: 'auto',
-      height: '500px',
+      overflowY: 'auto', // Ensure both horizontal and vertical scroll are enabled
+      height: '500px', // Define height for vertical scrolling
       marginLeft: '320px',
       marginRight: '40px',
       border: '1px solid #ddd',
@@ -368,7 +768,6 @@ const TableComponent = ({ course_code }) => {
     style={{
       maxWidth: '100%',
       borderCollapse: 'collapse',
-      borderSpacing: '0',
     }}
     >
     <thead>
@@ -385,9 +784,10 @@ const TableComponent = ({ course_code }) => {
           borderBottom: 'none',
           fontFamily: 'Poppins',
           fontWeight: '500',
-          position: index < 2 ? 'sticky' : 'static', // Make first two columns sticky
-          left: index < 2 ? `${index * 50}px` : 'auto', // Adjust position for the first two columns
-          zIndex: index < 2 ? 3 : 'auto', // Ensure the sticky columns stay on top
+          position: 'sticky',
+          top: 0,
+          left: index < 2 ? `${index * 64}px` : 'auto',
+          zIndex: index < 2 ? 3 : 2,
         }}
         >
         {column.render('Header')}
@@ -397,7 +797,7 @@ const TableComponent = ({ course_code }) => {
     ))}
     </thead>
     <tbody {...getTableBodyProps()}>
-    {rows.map((row) => {
+    {rows.map(row => {
       prepareRow(row);
       return (
         <tr {...row.getRowProps()}>
@@ -409,31 +809,28 @@ const TableComponent = ({ course_code }) => {
             borderBottom: '1px solid #ddd',
             borderLeft: '1px solid #ddd',
             whiteSpace: 'nowrap',
-            textAlign: [
-              'consistency',
-              'clarity',
-              'articulation',
-              'intonationAndStress',
-              'accuracy',
-              'clarityOfThought',
-              'syntax',
-              'qualityOfResponse',
-              'detailOfResponse',
-            ].includes(cell.column.id)
-            ? 'left' // Align left for the listed columns
-            : 'center', // Default to center for others
+            textAlign: 'left',
             overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            maxWidth: '100%',
             fontFamily: 'Poppins',
             fontWeight: '500',
-            position: index < 2 ? 'sticky' : 'static', // Sticky for the first two columns
-            left: index < 2 ? `${index * 50}px` : 'auto', // Adjust position for first two columns
-            zIndex: index < 2 ? 2 : 'auto', // Ensure sticky columns stay on top
+            position: index < 2 ? 'sticky' : 'static', // Sticky for the first 2 columns
+            left: index < 2 ? `${index * 64}px` : 'auto', // Align sticky columns
+            zIndex: index < 2 ? 1 : 'auto',
             background: 'white',
           }}
           >
-          {cell.render('Cell')}
+          {typeof cell.value === 'string' ? (
+            String(cell.value)
+            .split('.') // Split the string by the period
+            .map((part, i, arr) => (
+              <span key={i}>
+              {part.trim()}
+              {i < arr.length - 1 && <br />} {/* Insert a line break except for the last part */}
+              </span>
+            ))
+          ) : (
+            cell.render('Cell')
+          )}
           </td>
         ))}
         </tr>

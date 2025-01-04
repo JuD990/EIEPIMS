@@ -12,7 +12,13 @@ Route::post('/import', [EpgfRubricController::class, 'import']);
 Route::get('/rubric-versions', [EpgfRubricController::class, 'getRubricVersions']);
 Route::post('/set-default', [EpgfRubricController::class, 'setDefault']);
 Route::post('/get-rubric-details', [EpgfRubricController::class, 'getRubricDetails']);
-Route::get('/active-pronunciation-id', [EpgfRubricController::class, 'getActivePronunciationId']);
+Route::get('/rubric/active-version', [EpgfRubricController::class, 'getActiveVersion']);
+Route::get('/consistency/{majorVersion}', [EpgfRubricController::class, 'getConsistency']);
+Route::get('/clarity/{majorVersion}', [EpgfRubricController::class, 'getClarity']);
+Route::get('/articulation/{majorVersion}', [EpgfRubricController::class, 'getArticulation']);
+Route::get('/intonationStress/{majorVersion}', [EpgfRubricController::class, 'getIntonationStress']);
+Route::get('/accuracy/{majorVersion}', [EpgfRubricController::class, 'getAccuracy']);
+Route::get('/clarityOfThought/{majorVersion}', [EpgfRubricController::class, 'getClarityOfThought']);
 
 // EpgfScoreCard routes
 Route::get('/epgf-scorecard', [EpgfScoreCardController::class, 'getCourseDetails']);

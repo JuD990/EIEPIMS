@@ -90,24 +90,130 @@ class EpgfRubricController extends Controller
             return response()->json(['error' => 'Server error'], 500);
         }
     }
-
-    public function getActivePronunciationId()
+    public function getActiveVersion()
     {
         try {
-            // Fetch the active rubric
-            $activeRubric = EpgfRubric::where('status', 'active')->first();
+            $rubric = EpgfRubric::where('status', 'active')->first();
 
-            // If an active rubric is found, get the pronunciation ID
-            $pronunciationId = $activeRubric ? $activeRubric->epgf_pronunciation_id : null;
+            if ($rubric && isset($rubric->version)) {
+                $version = $rubric->version; // Assuming version is stored as 'v1.0' or similar
 
-            // Return the pronunciation ID as JSON response
-            return response()->json([
-                'pronunciation_id' => $pronunciationId
-            ], 200);
+                return response()->json([
+                    'version' => $version, // Return the version directly
+                ]);
+            } else {
+                return response()->json([
+                    'error' => 'No active version found',
+                ], 404);
+            }
         } catch (\Exception $e) {
-            \Log::error('Error fetching active rubric: ' . $e->getMessage());
-            return response()->json(['error' => 'Server error'], 500);
+            return response()->json([
+                'error' => 'Error fetching version: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function getConsistency($majorVersion)
+    {
+        try {
+            $consistency= EpgfPronunciation::where('epgf_pronunciation_id', $majorVersion)
+            ->where('pronunciation', 'Consistency')
+            ->get();
+
+            if ($consistency->isEmpty()) {
+                return response()->json(['message' => 'No Consistency found'], 404);
+            }
+
+            return response()->json($consistency, 200);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching Consistency: ' . $e->getMessage());
+            return response()->json(['error' => 'Internal Server Error'], 500);
+        }
+    }
+    public function getClarity($majorVersion)
+    {
+        try {
+            $clarity = EpgfPronunciation::where('epgf_pronunciation_id', $majorVersion)
+            ->where('pronunciation', 'Clarity')
+            ->get();
+
+            if ($clarity->isEmpty()) {
+                return response()->json(['message' => 'No Clarity found'], 404);
+            }
+
+            return response()->json($clarity, 200);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching Clarity: ' . $e->getMessage());
+            return response()->json(['error' => 'Internal Server Error'], 500);
+        }
+    }
+    public function getArticulation($majorVersion)
+    {
+        try {
+            $articulation = EpgfPronunciation::where('epgf_pronunciation_id', $majorVersion)
+            ->where('pronunciation', 'Articulation')
+            ->get();
+
+            if ($articulation->isEmpty()) {
+                return response()->json(['message' => 'No Articulation found'], 404);
+            }
+
+            return response()->json($articulation, 200);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching Articulation: ' . $e->getMessage());
+            return response()->json(['error' => 'Internal Server Error'], 500);
         }
     }
 
+    public function getIntonationStress($majorVersion)
+    {
+        try {
+            $intonationStress = EpgfPronunciation::where('epgf_pronunciation_id', $majorVersion)
+            ->where('pronunciation', 'Intonation and Stress')
+            ->get();
+
+            if ($intonationStress->isEmpty()) {
+                return response()->json(['message' => 'No Intonation and Stress found'], 404);
+            }
+
+            return response()->json($intonationStress, 200);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching Intonation and Stress: ' . $e->getMessage());
+            return response()->json(['error' => 'Internal Server Error'], 500);
+        }
+    }
+
+    public function getAccuracy($majorVersion)
+    {
+        try {
+            $accuracy = EpgfGrammar::where('epgf_grammar_id', $majorVersion)
+            ->where('grammar', 'Accuracy')
+            ->get();
+
+            if ($accuracy->isEmpty()) {
+                return response()->json(['message' => 'No Accuracy found'], 404);
+            }
+
+            return response()->json($accuracy, 200);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching Accuracy: ' . $e->getMessage());
+            return response()->json(['error' => 'Internal Server Error'], 500);
+        }
+    }
+    public function getClarityOfThought($majorVersion)
+    {
+        try {
+            $clarityOfThought = EpgfGrammar::where('epgf_grammar_id', $majorVersion)
+            ->where('grammar', 'Clarity Of Thought')
+            ->get();
+
+            if ($clarityOfThought->isEmpty()) {
+                return response()->json(['message' => 'No Clarity Of Thought found'], 404);
+            }
+
+            return response()->json($clarityOfThought, 200);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching Clarity Of Thought: ' . $e->getMessage());
+            return response()->json(['error' => 'Internal Server Error'], 500);
+        }
+    }
 }

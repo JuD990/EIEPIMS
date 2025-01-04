@@ -1,10 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-const SubmitButton = ({ label, rightSpacing = '20px', onClick = () => {} }) => {
+const SubmitButton = () => {
+  const label = "Submit";
+  const rightSpacing = '20px';
+  const onClick = () => { console.log("Button clicked"); };
+
   return (
     <button style={{ ...styles.button, right: rightSpacing }} onClick={onClick}>
-      {label}
+    {label}
     </button>
   );
 };
@@ -24,13 +27,8 @@ const styles = {
     border: 'none',
     cursor: 'pointer',
     outline: 'none',
+    marginRight: '20px',
   },
-};
-
-SubmitButton.propTypes = {
-  label: PropTypes.string.isRequired,
-  rightSpacing: PropTypes.string,
-  onClick: PropTypes.func,
 };
 
 export default SubmitButton;
