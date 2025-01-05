@@ -8,17 +8,27 @@ use App\Http\Controllers\MasterClassListController;
 use App\Http\Controllers\EpgfScoreCardController;
 use App\Http\Controllers\EpgfRubricController;
 
+//EPGF Setup
 Route::post('/import', [EpgfRubricController::class, 'import']);
 Route::get('/rubric-versions', [EpgfRubricController::class, 'getRubricVersions']);
 Route::post('/set-default', [EpgfRubricController::class, 'setDefault']);
 Route::post('/get-rubric-details', [EpgfRubricController::class, 'getRubricDetails']);
 Route::get('/rubric/active-version', [EpgfRubricController::class, 'getActiveVersion']);
+
+//Pronunciation
 Route::get('/consistency/{majorVersion}', [EpgfRubricController::class, 'getConsistency']);
 Route::get('/clarity/{majorVersion}', [EpgfRubricController::class, 'getClarity']);
 Route::get('/articulation/{majorVersion}', [EpgfRubricController::class, 'getArticulation']);
 Route::get('/intonationStress/{majorVersion}', [EpgfRubricController::class, 'getIntonationStress']);
+
+//Grammar
 Route::get('/accuracy/{majorVersion}', [EpgfRubricController::class, 'getAccuracy']);
 Route::get('/clarityOfThought/{majorVersion}', [EpgfRubricController::class, 'getClarityOfThought']);
+Route::get('/syntax/{majorVersion}', [EpgfRubricController::class, 'getSyntax']);
+
+//Fluency
+Route::get('/qualityOfResponse/{majorVersion}', [EpgfRubricController::class, 'getQualityOfResponse']);
+Route::get('/detailOfResponse/{majorVersion}', [EpgfRubricController::class, 'getDetailOfResponse']);
 
 // EpgfScoreCard routes
 Route::get('/epgf-scorecard', [EpgfScoreCardController::class, 'getCourseDetails']);

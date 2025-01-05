@@ -216,4 +216,58 @@ class EpgfRubricController extends Controller
             return response()->json(['error' => 'Internal Server Error'], 500);
         }
     }
+
+    public function getSyntax($majorVersion)
+    {
+        try {
+            $syntax = EpgfGrammar::where('epgf_grammar_id', $majorVersion)
+            ->where('grammar', 'Syntax')
+            ->get();
+
+            if ($syntax->isEmpty()) {
+                return response()->json(['message' => 'No Syntax found'], 404);
+            }
+
+            return response()->json($syntax, 200);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching Syntax: ' . $e->getMessage());
+            return response()->json(['error' => 'Internal Server Error'], 500);
+        }
+    }
+
+    public function getQualityOfResponse($majorVersion)
+    {
+        try {
+            $qualityOfResponse = EpgfFluency::where('epgf_fluency_id', $majorVersion)
+            ->where('fluency', 'Quality Of Response')
+            ->get();
+
+            if ($qualityOfResponse->isEmpty()) {
+                return response()->json(['message' => 'No Quality Of Response found'], 404);
+            }
+
+            return response()->json($qualityOfResponse, 200);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching Quality Of Response: ' . $e->getMessage());
+            return response()->json(['error' => 'Internal Server Error'], 500);
+        }
+    }
+
+    public function getDetailOfResponse($majorVersion)
+    {
+        try {
+            $detailOfResponse = EpgfFluency::where('epgf_fluency_id', $majorVersion)
+            ->where('fluency', 'Detail Of Response')
+            ->get();
+
+            if ($detailOfResponse->isEmpty()) {
+                return response()->json(['message' => 'No Detail Of Response found'], 404);
+            }
+
+            return response()->json($detailOfResponse, 200);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching Detail Of Response: ' . $e->getMessage());
+            return response()->json(['error' => 'Internal Server Error'], 500);
+        }
+    }
 }

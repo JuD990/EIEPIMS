@@ -1,0 +1,44 @@
+/* Container Styles */
+.epgf-scorecard-table-container {
+    overflow-x: auto;
+    overflow-y: auto;
+    height: 500px;
+    margin-left: 320px;
+    margin-right: 20px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    max-width: 100%;
+}
+
+/* Table Styles */
+.epgf-scorecard-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Header Styles */
+.epgf-scorecard-table th {
+    background-color: #f4f7fc;
+    color: #383838;
+    padding: 25px 25px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+/* Body Cell Styles */
+.epgf-scorecard-table td {
+    padding: 10px 10px;
+    border-bottom: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    text-align: left;
+    white-space: nowrap;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    background: #fff;
+}

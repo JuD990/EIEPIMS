@@ -4,7 +4,7 @@ import "./EPGFScorecard.css";
 import CollegePOCsidebar from "../sidebar/college-poc-sidebar";
 import UserInfo from '@user-info/User-info';
 import { FaChevronLeft } from 'react-icons/fa';
-import Table from "./table/scorecard-table";
+import Table from "./table/scorecard-table-2";
 import Button from './buttons/submit-button';
 import ExportButton from './buttons/export-button';
 import ClassAverageSummary from './class-average-summary/class-average-summary';
@@ -13,7 +13,7 @@ import axios from 'axios';
 const EPGFScorecard = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const course_code = params.get('course_code'); // Get course_code from query parameter
+  const course_code = params.get('course_code');
 
   const [courseTitle, setCourseTitle] = useState(''); // State to store the course_title
 
@@ -79,7 +79,7 @@ const EPGFScorecard = () => {
       <Button label="Submit" />
       </div>
       <div style={{ position: 'relative', width: '100%' }}>
-      <ExportButton label="Export" rightSpacing="200px" />
+      <ExportButton label="Export" rightSpacing="180px" />
       </div>
       <div className="border-box">
       <p><b>4/50 </b>Evaluated</p>
