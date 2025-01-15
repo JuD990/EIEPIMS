@@ -19,14 +19,15 @@ import CollegePocImplementingSubject from "../js/components/college_poc/CollegeP
 import EPGFScorecard from "../js/components/college_poc/EPGFScorecard/EPGFScorecard";
 import CollegePocEieReporting from "../js/components/college_poc/EIEreporting/EIEreporting"
 import CollegePocStudentManagement from "../js/components/college_poc/StudentManagement/StudentManagement"
-{/* ESL Prime Imports*/}
+{/* ESL Imports*/}
 import EslPrimeEieReporting from "../js/components/esl_prime/EIE-reporting/esl-prime-eie-reporting";
 import ElPrimeEPGFRubricVersion from "../js/components/esl_prime/EIE-management/epgf-rubric-version/esl-prime-epgf-rubric-versioning";
 import EslCertification from "../js/components/esl_prime/EIE-management/certification/esl-prime-certification";
 import EslMonthlyChampions from "../js/components/esl_prime/EIE-management/monthly-champion/esl-prime-monthly-champion";
-import EslPrimeDiagnostics from "../js/components/esl_prime/EIE-diagnostic/esl-prime-eie-diagnostic";
 import EslPrimeAccountManagement from "../js/components/esl_prime/EIE-management/accounts/esl-prime-account-management";
 import EslPrimeDashboard from "../js/components/esl_prime/EslPrimeDashboard/EslPrimeDashboard";
+import EslInterviewScorecard from "../js/components/esl_prime/EIE-diagnostic/esl-interview-scorecard/esl-interview-scorecard";
+import EslDiagnosticReports from "../js/components/esl_prime/EIE-diagnostic/eie-diagnostic-reports/eie-diagnostic-reports";
 
 // PrivateRoute Import
 import PrivateRoute from "../js/components/routes/PrivateRoute";
@@ -49,7 +50,10 @@ const App = () => {
         <Route path="/esl-dashboard" element={<PrivateRoute><EslChampionDashboard /></PrivateRoute>} />
         <Route path="/esl-dashboard" element={<PrivateRoute><EslPrimeDashboard /></PrivateRoute>} />
         <Route path="/esl-eie-reporting" element={<PrivateRoute><EslPrimeEieReporting /></PrivateRoute>} />
-        <Route path="/esl-eie-diagnostics" element={<PrivateRoute><EslPrimeDiagnostics /></PrivateRoute>} />
+
+        {/* ESL Diagnostcs*/}
+        <Route path="/esl-diagnostic-reports" element={<PrivateRoute><EslDiagnosticReports /></PrivateRoute>} />
+        <Route path="/esl-interview-scorecard" element={<PrivateRoute><EslInterviewScorecard /></PrivateRoute>} />
 
         {/* ESL EIE Management*/}
         <Route path="/esl-epgf-versioning" element={<PrivateRoute><ElPrimeEPGFRubricVersion /></PrivateRoute>} />

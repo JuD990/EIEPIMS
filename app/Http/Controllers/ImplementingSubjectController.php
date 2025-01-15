@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\ImplementingSubjects;
+use App\Models\ClassLists;
+use App\Models\CollegePOCs;
+use App\Models\LeadPOCs;
+use App\Models\EIEHeads;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
@@ -36,9 +40,9 @@ class ImplementingSubjectController extends Controller
 
                 // Expected CSV columns (excluding the removed ones)
                 $expectedColumns = [
-                    'course_code', 'code', 'course_title', 
-                    'semester', 'year_level', 'program', 
-                    'department', 'employee_id', 'assigned_poc', 'email'
+                    'course_code', 'code', 'course_title',
+                    'semester', 'year_level', 'program',
+                    'department', 'employee_id', 'assigned_poc', 'email', 'enrolled_students',
                 ];
 
                 // Validate the CSV header
@@ -50,17 +54,18 @@ class ImplementingSubjectController extends Controller
                 // Read each row and insert into the database
                 while (($row = fgetcsv($handle)) !== false) {
                     ImplementingSubjects::create([
-                        'course_code'  => $row[0],
-                        'code'         => $row[1],
-                        'course_title' => $row[2],
-                        'semester'     => $row[3],
-                        'year_level'   => $row[4],
-                        'program'      => $row[5],
-                        'department'   => $row[6],
-                        'employee_id'  => $row[7],
-                        'assigned_poc' => $row[8],
-                        'email'        => $row[9],
-                    ]);                    
+                        'course_code'       => $row[0],
+                        'code'              => $row[1],
+                        'course_title'      => $row[2],
+                        'semester'          => $row[3],
+                        'year_level'        => $row[4],
+                        'program'           => $row[5],
+                        'department'        => $row[6],
+                        'employee_id'       => $row[7],
+                        'assigned_poc'      => $row[8],
+                        'email'             => $row[9],
+                        'enrolled_students' => $row[10],
+                    ]);
                 }
 
                 fclose($handle);
@@ -80,18 +85,211 @@ class ImplementingSubjectController extends Controller
             Log::info('Employee ID: ' . $employee_id);
             // Query for all subjects associated with the given employee_id
             $classData = ImplementingSubjects::where('employee_id', $employee_id)->get();
-        
+
             if ($classData->isNotEmpty()) {
                 return response()->json([
                     'success' => true,
                     'classData' => $classData
                 ]);
             }
-        
+
             return response()->json([
                 'success' => false,
                 'message' => 'No Classes Available'
             ]);
         }
-        
+
+        public function getEmployeeDepartment($userType, $employeeId)
+        {
+            // Map user types to their respective models
+            $userTypeModelMap = [
+                'College POC' => CollegePOCs::class,
+                'Lead EIE POC' => LeadPOCs::class,
+                'Head EIE POC' => EIEHeads::class,
+            ];
+
+            // Validate user type
+            if (!isset($userTypeModelMap[$userType])) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid user type.',
+                ], 400);
+            }
+
+            // Get the model based on user type
+            $model = $userTypeModelMap[$userType];
+
+            if (!$model) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User type not supported yet.',
+                ], 400);
+            }
+
+            // Query the employee from the respective model
+            $employee = $model::find($employeeId);
+
+            if ($employee && $employee->department) {
+                return response()->json([
+                    'success' => true,
+                    'department' => $employee->department,
+                ]);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Department not found for the given employee ID.',
+            ], 404);
+        }
+
+        public function getProgramsForDepartment($department)
+        {
+            // Fetch the programs for the specified department
+            $programs = ImplementingSubjects::where('department', $department)
+            ->whereIn('semester', ['1st Semester', '2nd Semester'])
+            ->get();
+
+            // Categorize the programs by semester and year level
+            $programsBySemester = [
+                '1st Semester' => [
+                    '1st Year' => $programs->filter(fn($program) => $program->semester === '1st Semester' && $program->year_level === '1st Year'),
+                    '2nd Year' => $programs->filter(fn($program) => $program->semester === '1st Semester' && $program->year_level === '2nd Year'),
+                    '3rd Year' => $programs->filter(fn($program) => $program->semester === '1st Semester' && $program->year_level === '3rd Year'),
+                    '4th Year' => $programs->filter(fn($program) => $program->semester === '1st Semester' && $program->year_level === '4th Year'),
+                ],
+                '2nd Semester' => [
+                    '1st Year' => $programs->filter(fn($program) => $program->semester === '2nd Semester' && $program->year_level === '1st Year'),
+                    '2nd Year' => $programs->filter(fn($program) => $program->semester === '2nd Semester' && $program->year_level === '2nd Year'),
+                    '3rd Year' => $programs->filter(fn($program) => $program->semester === '2nd Semester' && $program->year_level === '3rd Year'),
+                    '4th Year' => $programs->filter(fn($program) => $program->semester === '2nd Semester' && $program->year_level === '4th Year'),
+                ],
+            ];
+
+            // Combine all programs into a single collection for each semester
+            $flattenedPrograms = [
+                '1st Semester' => $programsBySemester['1st Semester']['1st Year']
+                ->merge($programsBySemester['1st Semester']['2nd Year'])
+                ->merge($programsBySemester['1st Semester']['3rd Year'])
+                ->merge($programsBySemester['1st Semester']['4th Year']),
+                '2nd Semester' => $programsBySemester['2nd Semester']['1st Year']
+                ->merge($programsBySemester['2nd Semester']['2nd Year'])
+                ->merge($programsBySemester['2nd Semester']['3rd Year'])
+                ->merge($programsBySemester['2nd Semester']['4th Year']),
+            ];
+
+            // Return a response only if there are programs to return
+            if ($flattenedPrograms['1st Semester']->isEmpty() && $flattenedPrograms['2nd Semester']->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No programs found for the department in the selected semesters.',
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'programs' => $flattenedPrograms
+            ]);
+        }
+
+        public function getProgramsWithEnrollmentCountFirstSemester($department)
+        {
+            try {
+                // Fetch programs for the 2nd Semester only
+                $programs = ImplementingSubjects::where('department', $department)
+                ->where('semester', '1st Semester') // Filter only for the 2nd Semester
+                ->get();
+
+                if ($programs->isEmpty()) {
+                    return response()->json(['success' => false, 'message' => 'No programs found for this department in the 2nd Semester.']);
+                }
+
+                // Initialize enrollment count structure
+                $enrollmentCount = [];
+
+                foreach ($programs as $program) {
+                    $programKey = $program->program;
+                    $yearLevel = $program->year_level;
+
+                    // Initialize program and year level in the enrollment count array
+                    if (!isset($enrollmentCount[$yearLevel][$programKey])) {
+                        $enrollmentCount[$yearLevel][$programKey] = [
+                            'total_enrolled' => 0,
+                            'course_titles' => []
+                        ];
+                    }
+
+                    // Add enrolled_students to the total count
+                    $enrollmentCount[$yearLevel][$programKey]['total_enrolled'] += $program->enrolled_students;
+
+                    // Add course title for the program
+                    if (!in_array($program->course_title, $enrollmentCount[$yearLevel][$programKey]['course_titles'])) {
+                        $enrollmentCount[$yearLevel][$programKey]['course_titles'][] = $program->course_title;
+                    }
+                }
+
+                Log::info('Programs Response: ', ['programs' => $programs]);
+
+                return response()->json([
+                    'success' => true,
+                    'programs' => $programs,
+                    'enrollmentCount' => $enrollmentCount
+                ]);
+            } catch (Exception $e) {
+                // Log the error message
+                Log::error('Error fetching programs: ' . $e->getMessage());
+                return response()->json(['success' => false, 'message' => 'Error fetching programs.']);
+            }
+        }
+
+        public function getProgramsWithEnrollmentCountSecondSemester($department)
+        {
+            try {
+                // Fetch programs for the 2nd Semester only
+                $programs = ImplementingSubjects::where('department', $department)
+                ->where('semester', '2nd Semester') // Filter only for the 2nd Semester
+                ->get();
+
+                if ($programs->isEmpty()) {
+                    return response()->json(['success' => false, 'message' => 'No programs found for this department in the 2nd Semester.']);
+                }
+
+                // Initialize enrollment count structure
+                $enrollmentCount = [];
+
+                foreach ($programs as $program) {
+                    $programKey = $program->program;
+                    $yearLevel = $program->year_level;
+
+                    // Initialize program and year level in the enrollment count array
+                    if (!isset($enrollmentCount[$yearLevel][$programKey])) {
+                        $enrollmentCount[$yearLevel][$programKey] = [
+                            'total_enrolled' => 0,
+                            'course_titles' => []
+                        ];
+                    }
+
+                    // Add enrolled_students to the total count
+                    $enrollmentCount[$yearLevel][$programKey]['total_enrolled'] += $program->enrolled_students;
+
+                    // Add course title for the program
+                    if (!in_array($program->course_title, $enrollmentCount[$yearLevel][$programKey]['course_titles'])) {
+                        $enrollmentCount[$yearLevel][$programKey]['course_titles'][] = $program->course_title;
+                    }
+                }
+
+                Log::info('Programs Response: ', ['programs' => $programs]);
+
+                return response()->json([
+                    'success' => true,
+                    'programs' => $programs,
+                    'enrollmentCount' => $enrollmentCount
+                ]);
+            } catch (Exception $e) {
+                // Log the error message
+                Log::error('Error fetching programs: ' . $e->getMessage());
+                return response()->json(['success' => false, 'message' => 'Error fetching programs.']);
+            }
+        }
+
+
 }

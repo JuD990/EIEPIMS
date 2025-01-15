@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('lastname', 100);
             $table->string('email', 100)->unique();
             $table->string('password');
-            $table->string('program', 100);
             $table->string('department', 100);
             $table->string('role')->default('College POC');
             $table->timestamps();

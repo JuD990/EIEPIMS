@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './TableComponent.css';
+import SubmitButton from '../buttons/submit-button';
 
-const TableComponent = ({ course_code }) => {
+const TableComponent = ({ course_code, taskTitle, department }) => {
   const [version, setVersion] = useState(null);
   const [students, setStudents] = useState([]); // State to store students
   const [loading, setLoading] = useState(true); // Loading state
@@ -15,8 +16,22 @@ const TableComponent = ({ course_code }) => {
   const [syntaxOptions, setSyntaxOptions] = useState([]);
   const [qualityOfResponseOptions, setQualityOfResponseOptions] = useState([]);
   const [detailOfResponseOptions, setDetailOfResponseOptions] = useState([]);
+  const [submittedRows, setSubmittedRows] = useState({});
 
-  // Fetch students based on `course_code`
+  useEffect(() => {
+    const savedStates = localStorage.getItem('submittedRows');
+    if (savedStates) {
+      setSubmittedRows(JSON.parse(savedStates));
+    }
+  }, []);
+
+  // Save button states to localStorage when they change
+  useEffect(() => {
+    localStorage.setItem('submittedRows', JSON.stringify(submittedRows));
+  }, [submittedRows]);
+
+  // Fetch students based on `course_code`, "Active" status and department
+  // fetch class list by "Active" status and department
   useEffect(() => {
     if (course_code) {
       axios
@@ -230,7 +245,7 @@ const TableComponent = ({ course_code }) => {
     const fetchQualityOfResponseOptions = async () => {
       if (version) {
         try {
-          const response = await axios.get(`/api/detailOfResponse/${version}`);
+          const response = await axios.get(`/api/qualityOfResponse/${version}`);
           console.log("API Response:", response);  // Check the API response
           if (response.status === 200 && Array.isArray(response.data)) {
             const filteredQualityOfResponse = response.data.map(item => ({
@@ -291,9 +306,7 @@ const TableComponent = ({ course_code }) => {
           console.error("No version found in the response", response.data);
           return;
         }
-
         console.log("Fetched version string:", versionString);
-
         // Extract the major version using regex
         const versionMatch = versionString.match(/^v(\d+)/);
         if (versionMatch) {
@@ -340,6 +353,7 @@ const TableComponent = ({ course_code }) => {
     '',
     'Fluency',
     'Comment',
+    'Actions',
   ];
 
   const updateData = (rowIndex, columnId, newValue) => {
@@ -347,6 +361,8 @@ const TableComponent = ({ course_code }) => {
     updatedStudents[rowIndex][columnId] = newValue;
     setStudents(updatedStudents);
   };
+  const active_students = students.length;
+
 
   if (loading) {
     return <div>Loading...</div>;
@@ -442,7 +458,6 @@ const TableComponent = ({ course_code }) => {
       const grammarAverage = (accuracyRating + clarityofthoughtRating + syntaxRating) / 3;
 
       {/* Fluency */}
-
       const qualityOfResponseSelectedOption = qualityOfResponseOptions?.find(option => option.id === student.quality_of_response);
       const detailOfResponseSelectedOption = detailOfResponseOptions?.find(option => option.id === student.detail_of_response);
 
@@ -454,28 +469,167 @@ const TableComponent = ({ course_code }) => {
       const epgfAverage = (pronunciationAverage + grammarAverage + fluencyAverage) / 3;
 
       const epgfProficiencyLevels = [
-        { threshold: 0.0, level: 'Beginning' },
-        { threshold: 0.5, level: 'Low Acquisition' },
-        { threshold: 0.75, level: 'High Acquisition' },
-        { threshold: 1.0, level: 'Emerging' },
-        { threshold: 1.25, level: 'Low Developing' },
-        { threshold: 1.5, level: 'High Developing' },
-        { threshold: 1.75, level: 'Low Proficient' },
-        { threshold: 2.0, level: 'Proficient' },
-        { threshold: 2.25, level: 'High Proficient' },
-        { threshold: 2.5, level: 'Advanced' },
-        { threshold: 3.0, level: 'High Advanced' },
-        { threshold: 4.0, level: 'Native/Bilingual' },
+        { threshold: 0.0, level: 'Beginning', color: '#E23F44' },
+        { threshold: 0.5, level: 'Low Acquisition', color: '#E23F44' },
+        { threshold: 0.75, level: 'High Acquisition', color: '#E23F44' },
+        { threshold: 1.0, level: 'Emerging', color: '#FFCD56' },
+        { threshold: 1.25, level: 'Low Developing', color: '#FFCD56' },
+        { threshold: 1.5, level: 'High Developing', color: '#FFCD56' },
+        { threshold: 1.75, level: 'Low Proficient', color: '#FFCD56' },
+        { threshold: 2.0, level: 'Proficient', color: 'green' },
+        { threshold: 2.25, level: 'High Proficient', color: 'green' },
+        { threshold: 2.5, level: 'Advanced', color: 'green' },
+        { threshold: 3.0, level: 'High Advanced', color: '#00008B' },
+        { threshold: 4.0, level: 'Native/Bilingual', color: '#00008B' },
       ];
-
 
       const getProficiencyLevel = (average) => {
         const matchedLevel = epgfProficiencyLevels.find(
           (entry) => average <= entry.threshold
         );
-        return matchedLevel ? matchedLevel.level : 'Unknown';
+        return matchedLevel
+        ? { level: matchedLevel.level, color: matchedLevel.color }
+        : { level: 'Unknown', backgroundColor: 'black' };
       };
 
+      const handleRowSubmit = async (rowIndex) => {
+        const student = students[rowIndex];
+
+        // Check if taskTitle is empty
+        if (!taskTitle.trim()) {
+          alert('Please input a Task Title before submitting.');
+          return;
+        }
+
+        // Validate the 'type' field (should be Reading, Writing, or Listening)
+        const validTypes = ['Reading', 'Writing', 'Listening'];
+        if (!validTypes.includes(student.type)) {
+          alert('Please check the Type field. It should be one of "Reading", "Writing", or "Listening".');
+          return;
+        }
+
+        // Retrieve the student's attribute IDs (for example, consistency, clarity, etc.)
+        const consistencyId = student.consistency;
+        const clarityId = student.clarity;
+        const articulationId = student.articulation;
+        const intonationAndStressId = student.intonation_and_stress;
+        const accuracyId = student.accuracy;
+        const clarityOfThoughtId = student.clarity_of_thought;
+        const syntaxId = student.syntax;
+        const qualityOfResponseId = student.quality_of_response;
+        const detailOfResponseId = student.detail_of_response;
+
+        const selectedConsistency = consistencyLookup[consistencyId];
+        const selectedClarity = clarityLookup[clarityId];
+        const selectedArticulation = articulationLookup[articulationId];
+        const selectedIntonationAndStress = intonationAndStressLookup[intonationAndStressId];
+        const selectedAccuracy = accuracyLookup[accuracyId];
+        const selectedQualityOfResponse = qualityOfResponseLookup[qualityOfResponseId];
+        const selectedDetailOfResponse = detailOfResponseLookup[detailOfResponseId];
+        const selectedClarityOfThought = clarityofthoughtLookup[clarityOfThoughtId];
+        const selectedSyntax = syntaxLookup[syntaxId];
+
+        // Gather all relevant data for the row
+              const studentData = {
+                  fullName: `${student.firstname} ${student.lastname}`,
+                  epgf_average: epgfAverage.toFixed(2),
+                  proficiency_level: getProficiencyLevel(epgfAverage).level,
+                  type: student.type,
+
+                  // Pronunciation
+                  consistency_descriptor: selectedConsistency ? selectedConsistency.descriptor : 'N/A',
+                  consistency_rating: selectedConsistency ? selectedConsistency.rating : '0.00',
+                  clarity_descriptor: selectedClarity ? selectedClarity.descriptor : 'N/A',
+                  clarity_rating: selectedClarity ? selectedClarity.rating : '0.00',
+                  articulation_descriptor: selectedArticulation ? selectedArticulation.descriptor : 'N/A',
+                  articulation_rating: selectedArticulation ? selectedArticulation.rating : '0.00',
+                  intonation_and_stress_descriptor: selectedIntonationAndStress ? selectedIntonationAndStress.descriptor : 'N/A',
+                  intonation_and_stress_rating: selectedIntonationAndStress ? selectedIntonationAndStress.rating : '0.00',
+                  pronunciation_average: fluencyAverage.toFixed(2),
+
+                  // Grammar
+                  accuracy_descriptor: selectedAccuracy ? selectedAccuracy.descriptor : 'N/A',
+                  accuracy_rating: selectedAccuracy ? selectedAccuracy.rating : '0.00',
+                  clarity_of_thought_descriptor: selectedClarityOfThought ? selectedClarityOfThought.descriptor : 'N/A',
+                  clarity_of_thought_rating: selectedClarityOfThought ? selectedClarityOfThought.rating : '0.00',
+                  syntax_descriptor: selectedSyntax ? selectedSyntax.descriptor : 'N/A',
+                  syntax_rating: selectedSyntax ? selectedSyntax.rating : '0.00',
+                  grammar_average: fluencyAverage.toFixed(2),
+
+                  // Fluency
+                  quality_of_response_descriptor: selectedQualityOfResponse ? selectedQualityOfResponse.descriptor : 'N/A',
+                  quality_of_response_rating: selectedQualityOfResponse ? selectedQualityOfResponse.rating : '0.00',
+                  detail_of_response_descriptor: selectedDetailOfResponse ? selectedDetailOfResponse.descriptor : 'N/A',
+                  detail_of_response_rating: selectedDetailOfResponse ? selectedDetailOfResponse.rating : '0.00',
+                  fluency_average: fluencyAverage.toFixed(2),
+
+                  comment: student.comment,
+                  course_code: course_code,
+                  task_title: taskTitle,
+                  epgf_rubric_id: version,
+                  student_id: `${student.student_id}`,
+                  department: `${student.department}`,
+                  program: `${student.program}`,
+                  active_students: active_students,
+        };
+
+        // Helper function to check for '0.00' or 'N/A'
+        const isInvalidData = (data) => {
+          return data === '0.00' || data === 'N/A';
+        };
+
+        // Create an array of keys to exclude from the validation check
+        const excludedKeys = [
+          'epgf_average',
+          'proficiency_level',
+          'comment',
+          'course_code',
+          'epgf_rubric_id',
+          'student_id',
+          'department',
+          'program',
+          'active_students',
+        ];
+
+        // Check if any of the relevant fields (not in the excluded list) have '0.00' or 'N/A'
+        for (const [key, value] of Object.entries(studentData)) {
+          if (!excludedKeys.includes(key) && isInvalidData(value)) {
+            alert(`Please check the value for ${key} before submitting.`);
+            return;  // Exit the function if invalid data is found
+          }
+        }
+
+        console.log('Sending data:', studentData);  // Log the data being sent
+        try {
+          const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+          const response = await fetch('/api/eie-scorecard-class-reports', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'X-CSRF-TOKEN': csrfToken,
+            },
+            body: JSON.stringify(studentData),
+          });
+
+          const text = await response.text(); // Get the raw response text
+          console.log('Raw response:', text);  // Log raw response for debugging
+
+          if (response.ok) {
+            try {
+              const result = JSON.parse(text); // Attempt to parse the response
+              console.log('Server response:', result);
+            } catch (parseError) {
+              console.error('Failed to parse JSON:', parseError);  // Handle JSON parsing errors
+            }
+          } else {
+            console.error('Failed to store data. Response status:', response.status);  // Log response status
+            console.error('Response body:', text);  // Log response body for further investigation
+          }
+        } catch (error) {
+          console.error('Error during fetch:', error);  // Log any network or other errors
+        }
+      };
 
       return (
         <tr key={rowIndex}>
@@ -485,13 +639,30 @@ const TableComponent = ({ course_code }) => {
 
         {/* PGF Average */}
         <td>
-        <div style={{ textAlign: 'center' }}> {epgfAverage.toFixed(2)} </div>
+        <div style={{ textAlign: 'center', fontWeight: '600' }}> {epgfAverage.toFixed(2)} </div>
         </td>
 
-        {/* Proficiency */}
+        {/* Proficiency Level */}
         <td>
-        <div style={{ textAlign: 'center' }}>{getProficiencyLevel(epgfAverage)}</div>
+        {(() => {
+          const { level, color } = getProficiencyLevel(epgfAverage);
+          return (
+            <div
+            style={{
+              textAlign: 'center',
+              fontWeight: '600',
+              backgroundColor: color,
+              color: 'white',
+              padding: '5px',
+              borderRadius: '5px',
+            }}
+            >
+            {level}
+            </div>
+          );
+        })()}
         </td>
+
 
         <td>
         <select
@@ -509,39 +680,58 @@ const TableComponent = ({ course_code }) => {
         <select
         value={student.consistency || ''}
         onChange={(e) => {
-          const selectedOption = consistencyLookup[Number(e.target.value)];
-          const newValue = selectedOption ? selectedOption.id : student.consistency;
-          updateData(rowIndex, 'consistency', newValue);
+          const selectedId = Number(e.target.value);
+          const selectedOption = consistencyLookup[selectedId];
+
+          if (selectedOption) {
+            // Update consistency state
+            updateData(rowIndex, 'consistency', selectedId); // Store the ID, not the descriptor string
+
+            // Now update the displayed rating directly below the select
+            updateData(rowIndex, 'rating', selectedOption.rating); // Assuming you want to update the rating as well
+          }
         }}
-        style={{ padding: '4px', backgroundColor: 'transparent', width: '350px', }}
+        style={{
+          padding: '4px',
+          backgroundColor: 'transparent',
+          width: '350px',
+        }}
         >
-        {consistencyOptions.length === 0 ? (
-          <option disabled>Loading options...</option>
-        ) : (
-          consistencyOptions.map(option => (
-            <option key={option.id} value={option.id} style={{ fontSize: '12px', whiteSpace: 'pre-line',  }}>
-            {option.descriptor.split('.').join(' \n')}
-            </option>
-          ))
-        )}
+        {consistencyOptions.map(option => (
+          <option
+          key={option.id}
+          value={option.id}
+          style={{ fontSize: '12px', whiteSpace: 'pre-line' }}
+          >
+          {option.descriptor.split('.').join(' \n')}
+          </option>
+        ))}
         </select>
+
+        {/* Display only the rating without consistency descriptor */}
         <span style={{ fontSize: '12px', marginTop: '4px', display: 'block', textAlign: 'left' }}>
-        Rating: {consistencyRating}
+        Rating: {student.rating || '0.00'}
         </span>
         </td>
-        <td> <div style={{ textAlign: 'center' }}> {consistencyRating} </div></td>
 
-        {/* Similar dropdowns for clarity, articulation, and intonation */}
+
+        <td> <div style={{ textAlign: 'center', fontWeight: '600' }}> {consistencyRating} </div></td>
+
         {/* Clarity dropdown */}
         <td>
-        <div>
         <select
         value={student.clarity || ''}
         onChange={(e) => {
-          const selectedOption = clarityLookup[Number(e.target.value)];
-          const newValue = selectedOption ? selectedOption.id : student.clarity;
-          console.log('Selected Option:', selectedOption); // Debug log
-          updateData(rowIndex, 'clarity', newValue); // Update clarity column
+          const selectedId = Number(e.target.value);  // Ensure ID is a number
+          const selectedOption = clarityLookup[selectedId];  // Lookup the option by ID
+
+          if (selectedOption) {
+            // Update clarity state (Store the ID, not the descriptor string)
+            updateData(rowIndex, 'clarity', selectedId);
+
+            // Now update the displayed rating directly below the select
+            updateData(rowIndex, 'rating', selectedOption.rating); // Update the rating as well
+          }
         }}
         style={{
           padding: '4px',
@@ -550,44 +740,27 @@ const TableComponent = ({ course_code }) => {
         }}
         >
         {clarityOptions.length === 0 ? (
-          <option disabled>Loading options...</option>
+          <option disabled>Loading options...</option> // Loading state if options are not yet available
         ) : (
-          clarityOptions.map(option => {
-            const splitDescriptor = option.descriptor.split('.');
-            const formattedDescriptor = splitDescriptor.join(' \n');
-
-            return (
-              <option
-              key={option.id}
-              value={option.id}
-              style={{
-                fontSize: '12px',
-                whiteSpace: 'pre-line',
-              }}
-              >
-              {formattedDescriptor}
-              </option>
-            );
-          })
+          clarityOptions.map(option => (
+            <option
+            key={option.id}
+            value={option.id}
+            style={{ fontSize: '12px', whiteSpace: 'pre-line' }}
+            >
+            {option.descriptor.split('.').join(' \n')}  {/* Format descriptor for better readability */}
+            </option>
+          ))
         )}
         </select>
-        <span
-        style={{
-          fontSize: '12px',
-          marginTop: '4px',
-          display: 'block',
-          textAlign: 'left',
-        }}
-        >
-        Rating: {student.clarity ? clarityLookup[student.clarity]?.rating : '0.00'}
+
+        {/* Display only the rating without clarity descriptor */}
+        <span style={{ fontSize: '12px', marginTop: '4px', display: 'block', textAlign: 'left' }}>
+        Rating: {student.rating || '0.00'}  {/* Display rating value */}
         </span>
-        </div>
         </td>
 
-
-        <td> <div style={{ textAlign: 'center' }}> {clarityRating} </div></td>
-
-
+        <td> <div style={{ textAlign: 'center', fontWeight: '600' }}> {clarityRating} </div></td>
 
         {/* Articulation dropdown */}
         <td>
@@ -595,10 +768,19 @@ const TableComponent = ({ course_code }) => {
         <select
         value={student.articulation || ''}
         onChange={(e) => {
-          const selectedOption = articulationLookup[Number(e.target.value)];
-          const newValue = selectedOption ? selectedOption.id : student.articulation;
-          console.log('Selected Option:', selectedOption); // Debug log
-          updateData(rowIndex, 'articulation', newValue); // Update articulation column
+          const selectedId = Number(e.target.value);  // Ensure the selected value is treated as a number
+          const selectedOption = articulationLookup[selectedId];  // Lookup articulation option by ID
+
+          if (selectedOption) {
+            // Update articulation state (Store the ID)
+            updateData(rowIndex, 'articulation', selectedId);
+
+            // Log the selected option's rating (for debugging)
+            console.log('Selected Option:', selectedOption);
+
+            // Now update the rating directly below the select dropdown
+            updateData(rowIndex, 'articulationRating', selectedOption.rating); // Store the rating in the row
+          }
         }}
         style={{
           padding: '4px',
@@ -607,10 +789,10 @@ const TableComponent = ({ course_code }) => {
         }}
         >
         {articulationOptions.length === 0 ? (
-          <option disabled>Loading options...</option>
+          <option disabled>Loading options...</option> // Show loading state if options are not available
         ) : (
           articulationOptions.map(option => {
-            const splitDescriptor = option.descriptor.split('.');
+            const splitDescriptor = option.descriptor.split('.');  // Split descriptor to add line breaks
             const formattedDescriptor = splitDescriptor.join(' \n');
 
             return (
@@ -619,7 +801,7 @@ const TableComponent = ({ course_code }) => {
               value={option.id}
               style={{
                 fontSize: '12px',
-                whiteSpace: 'pre-line',
+                whiteSpace: 'pre-line',  // Ensure the formatting with line breaks is respected
               }}
               >
               {formattedDescriptor}
@@ -628,6 +810,8 @@ const TableComponent = ({ course_code }) => {
           })
         )}
         </select>
+
+        {/* Display the articulation rating below the dropdown */}
         <span
         style={{
           fontSize: '12px',
@@ -641,11 +825,13 @@ const TableComponent = ({ course_code }) => {
         </div>
         </td>
 
+        {/* Display articulation rating in a separate column */}
         <td>
-          <div style={{ textAlign: 'center' }}>
-            {articulationRating}
-          </div>
+        <div style={{ textAlign: 'center', fontWeight: '600' }}>
+        {articulationRating}
+        </div>
         </td>
+
 
         {/* Intonation and Stress dropdown */}
         <td>
@@ -653,10 +839,19 @@ const TableComponent = ({ course_code }) => {
         <select
         value={student.intonation_and_stress || ''}
         onChange={(e) => {
-          const selectedOption = intonationAndStressLookup[Number(e.target.value)];
-          const newValue = selectedOption ? selectedOption.id : student.intonation_and_stress;
-          console.log('Selected Option:', selectedOption); // Debug log
-          updateData(rowIndex, 'intonation_and_stress', newValue); // Update column
+          const selectedId = Number(e.target.value); // Ensure the selected value is treated as a number
+          const selectedOption = intonationAndStressLookup[selectedId]; // Lookup intonation and stress option by ID
+
+          if (selectedOption) {
+            // Update intonation_and_stress state (Store the ID)
+            updateData(rowIndex, 'intonation_and_stress', selectedId);
+
+            // Log the selected option's rating (for debugging)
+            console.log('Selected Option:', selectedOption);
+
+            // Now update the rating directly below the select dropdown
+            updateData(rowIndex, 'intonationAndStressRating', selectedOption.rating); // Store the rating in the row
+          }
         }}
         style={{
           padding: '4px',
@@ -665,19 +860,19 @@ const TableComponent = ({ course_code }) => {
         }}
         >
         {intonationAndStressOptions.length === 0 ? (
-          <option disabled>Loading options...</option> // Loading state
+          <option disabled>Loading options...</option> // Show loading state if options are not available
         ) : (
           intonationAndStressOptions.map(option => {
-            const splitDescriptor = option.descriptor.split('.');
+            const splitDescriptor = option.descriptor.split('.'); // Split descriptor to add line breaks
             const formattedDescriptor = splitDescriptor.join(' \n');
 
             return (
               <option
               key={option.id}
-              value={option.id} // Ensure value corresponds to the ID
+              value={option.id}
               style={{
                 fontSize: '12px',
-                whiteSpace: 'pre-line',
+                whiteSpace: 'pre-line', // Ensure the formatting with line breaks is respected
               }}
               >
               {formattedDescriptor}
@@ -686,6 +881,8 @@ const TableComponent = ({ course_code }) => {
           })
         )}
         </select>
+
+        {/* Display the intonation and stress rating below the dropdown */}
         <span
         style={{
           fontSize: '12px',
@@ -694,33 +891,44 @@ const TableComponent = ({ course_code }) => {
           textAlign: 'left',
         }}
         >
-        Rating: {intonationAndStressRating || '0.00'}
+        Rating: {student.intonation_and_stress ? intonationAndStressLookup[student.intonation_and_stress]?.rating || '0.00' : '0.00'}
         </span>
         </div>
         </td>
+
         <td>
-          <div style={{ textAlign: 'center' }}>
+          <div style={{ textAlign: 'center', fontWeight: '600' }}>
             {intonationAndStressRating}
           </div>
         </td>
 
         {/* Pronunciation Average */}
         <td>
-          <div style={{ textAlign: 'center' }}>
+          <div style={{ textAlign: 'center', fontWeight: '600' }}>
             {pronunciationAverage.toFixed(2)}
           </div>
         </td>
 
         {/* Grammar */}
+        {/* Accuracy dropdown */}
         <td>
         <div>
         <select
         value={student.accuracy || ''}
         onChange={(e) => {
-          const selectedOption = accuracyLookup[Number(e.target.value)];
-          const newValue = selectedOption ? selectedOption.id : student.accuracy;
-          console.log('Selected Option:', selectedOption); // Debug log
-          updateData(rowIndex, 'accuracy', newValue); // Update column
+          const selectedId = Number(e.target.value); // Ensure the selected value is treated as a number
+          const selectedOption = accuracyLookup[selectedId]; // Lookup accuracy option by ID
+
+          if (selectedOption) {
+            // Update accuracy state (Store the ID)
+            updateData(rowIndex, 'accuracy', selectedId);
+
+            // Log the selected option's rating (for debugging)
+            console.log('Selected Option:', selectedOption);
+
+            // Now update the rating directly below the select dropdown
+            updateData(rowIndex, 'accuracyRating', selectedOption.rating); // Store the rating in the row
+          }
         }}
         style={{
           padding: '4px',
@@ -729,19 +937,19 @@ const TableComponent = ({ course_code }) => {
         }}
         >
         {accuracyOptions.length === 0 ? (
-          <option disabled>Loading options...</option> // Loading state
+          <option disabled>Loading options...</option> // Show loading state if options are not available
         ) : (
           accuracyOptions.map(option => {
-            const splitDescriptor = option.descriptor.split('.');
+            const splitDescriptor = option.descriptor.split('.'); // Split descriptor to add line breaks
             const formattedDescriptor = splitDescriptor.join(' \n');
 
             return (
               <option
               key={option.id}
-              value={option.id} // Ensure value corresponds to the ID
+              value={option.id}
               style={{
                 fontSize: '12px',
-                whiteSpace: 'pre-line',
+                whiteSpace: 'pre-line', // Ensure the formatting with line breaks is respected
               }}
               >
               {formattedDescriptor}
@@ -750,6 +958,8 @@ const TableComponent = ({ course_code }) => {
           })
         )}
         </select>
+
+
         <span
         style={{
           fontSize: '12px',
@@ -758,83 +968,104 @@ const TableComponent = ({ course_code }) => {
           textAlign: 'left',
         }}
         >
-        Rating: {accuracyRating || '0.00'}
+        Rating: {student.accuracy ? accuracyLookup[student.accuracy]?.rating || '0.00' : '0.00'}
         </span>
         </div>
         </td>
 
         <td>
-          <div style={{ textAlign: 'center' }}>
-          {accuracyRating}
-          </div>
+        <div style={{ textAlign: 'center', fontWeight: '600' }}>
+        {accuracyRating}
+        </div>
+        </td>
+
+        {/* ClarityofThought */}
+        <td>
+        <div>
+        <select
+        value={student.clarity_of_thought || ''}
+        onChange={(e) => {
+          const selectedId = Number(e.target.value); // Ensure the selected value is treated as a number
+          const selectedOption = clarityofthoughtLookup[selectedId]; // Lookup clarity_of_thought option by ID
+
+          if (selectedOption) {
+            // Update clarity_of_thought state (Store the ID)
+            updateData(rowIndex, 'clarity_of_thought', selectedId);
+
+            // Log the selected option's rating (for debugging)
+            console.log('Selected Option:', selectedOption);
+
+            // Now update the rating directly below the select dropdown
+            updateData(rowIndex, 'clarity_of_thought_rating', selectedOption.rating); // Store the rating in the row
+          }
+        }}
+        style={{
+          padding: '4px',
+          backgroundColor: 'transparent',
+          width: '350px',
+        }}
+        >
+        {clarityofthoughtOptions.length === 0 ? (
+          <option disabled>Loading options...</option> // Show loading state if options are not available
+        ) : (
+          clarityofthoughtOptions.map(option => {
+            const splitDescriptor = option.descriptor.split('.'); // Split descriptor to add line breaks
+            const formattedDescriptor = splitDescriptor.join(' \n');
+
+            return (
+              <option
+              key={option.id}
+              value={option.id}
+              style={{
+                fontSize: '12px',
+                whiteSpace: 'pre-line', // Ensure the formatting with line breaks is respected
+              }}
+              >
+              {formattedDescriptor}
+              </option>
+            );
+          })
+        )}
+        </select>
+
+        <span
+        style={{
+          fontSize: '12px',
+          marginTop: '4px',
+          display: 'block',
+          textAlign: 'left',
+        }}
+        >
+        Rating: {student.clarity_of_thought ? clarityofthoughtLookup[student.clarity_of_thought]?.rating || '0.00' : '0.00'}
+        </span>
+        </div>
         </td>
 
         <td>
-          <div>
-          <select
-          value={student.clarity_of_thought || ''}
-          onChange={(e) => {
-            const selectedOption = clarityofthoughtLookup[Number(e.target.value)];
-            const newValue = selectedOption ? selectedOption.id : student.clarity_of_thought;
-            console.log('Selected Option:', selectedOption); // Debug log
-            updateData(rowIndex, 'clarity_of_thought', newValue); // Update column
-          }}
-          style={{
-            padding: '4px',
-            backgroundColor: 'transparent',
-            width: '350px',
-          }}
-          >
-          {clarityofthoughtOptions.length === 0 ? (
-            <option disabled>Loading options...</option> // Loading state
-          ) : (
-            clarityofthoughtOptions.map(option => {
-              const splitDescriptor = option.descriptor.split('.');
-              const formattedDescriptor = splitDescriptor.join(' \n');
-
-              return (
-                <option
-                key={option.id}
-                value={option.id} // Ensure value corresponds to the ID
-                style={{
-                  fontSize: '12px',
-                  whiteSpace: 'pre-line',
-                }}
-                >
-                {formattedDescriptor}
-                </option>
-              );
-            })
-          )}
-          </select>
-          <span
-          style={{
-            fontSize: '12px',
-            marginTop: '4px',
-            display: 'block',
-            textAlign: 'left',
-          }}
-          >
-          Rating: {clarityofthoughtRating || '0.00'}
-          </span>
-          </div>
-        </td>
-
-        <td>
-          <div style={{ textAlign: 'center' }}>
+          <div style={{ textAlign: 'center', fontWeight: '600' }}>
             {clarityofthoughtRating}
           </div>
         </td>
 
+        {/* syntax */}
         <td>
         <div>
         <select
         value={student.syntax || ''}
         onChange={(e) => {
-          const selectedOption = syntaxLookup[Number(e.target.value)];
-          const newValue = selectedOption ? selectedOption.id : student.syntax;
-          console.log('Selected Option:', selectedOption); // Debug log
-          updateData(rowIndex, 'syntax', newValue); // Update column
+          const selectedId = Number(e.target.value); // Ensure the selected value is treated as a number
+          const selectedOption = syntaxLookup[selectedId]; // Lookup syntax option by ID
+
+          if (selectedOption) {
+            // Update syntax state (Store the ID)
+            updateData(rowIndex, 'syntax', selectedId);
+
+            // Log the selected option's rating (for debugging)
+            console.log('Selected Option:', selectedOption);
+
+            // Now update the rating directly below the select dropdown
+            updateData(rowIndex, 'syntaxRating', selectedOption.rating); // Store the rating in the row
+          }
         }}
         style={{
           padding: '4px',
@@ -843,19 +1074,19 @@ const TableComponent = ({ course_code }) => {
         }}
         >
         {syntaxOptions.length === 0 ? (
-          <option disabled>Loading options...</option> // Loading state
+          <option disabled>Loading options...</option> // Show loading state if options are not available
         ) : (
           syntaxOptions.map(option => {
-            const splitDescriptor = option.descriptor.split('.');
+            const splitDescriptor = option.descriptor.split('.'); // Split descriptor to add line breaks
             const formattedDescriptor = splitDescriptor.join(' \n');
 
             return (
               <option
               key={option.id}
-              value={option.id} // Ensure value corresponds to the ID
+              value={option.id}
               style={{
                 fontSize: '12px',
-                whiteSpace: 'pre-line',
+                whiteSpace: 'pre-line', // Ensure the formatting with line breaks is respected
               }}
               >
               {formattedDescriptor}
@@ -864,6 +1095,7 @@ const TableComponent = ({ course_code }) => {
           })
         )}
         </select>
+
         <span
         style={{
           fontSize: '12px',
@@ -872,33 +1104,43 @@ const TableComponent = ({ course_code }) => {
           textAlign: 'left',
         }}
         >
-        Rating: {syntaxRating || '0.00'}
+        Rating: {student.syntax ? syntaxLookup[student.syntax]?.rating || '0.00' : '0.00'}
         </span>
         </div>
         </td>
 
         <td>
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: 'center', fontWeight: '600' }}>
         {syntaxRating}
         </div>
         </td>
 
         <td>
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: 'center', fontWeight: '600' }}>
         {grammarAverage.toFixed(2)}
         </div>
         </td>
 
         {/* Fluency */}
+        {/* Quality Of Response */}
         <td>
         <div>
         <select
         value={student.quality_of_response || ''}
         onChange={(e) => {
-          const selectedOption = qualityOfResponseLookup[Number(e.target.value)];
-          const newValue = selectedOption ? selectedOption.id : student.quality_of_response;
-          console.log('Selected Option:', selectedOption); // Debug log
-          updateData(rowIndex, 'quality_of_response', newValue); // Update column
+          const selectedId = Number(e.target.value); // Ensure the selected value is treated as a number
+          const selectedOption = qualityOfResponseLookup[selectedId]; // Lookup Quality Of Response option by ID
+
+          if (selectedOption) {
+            // Update Quality Of Response state (Store the ID)
+            updateData(rowIndex, 'quality_of_response', selectedId);
+
+            // Log the selected option's rating (for debugging)
+            console.log('Selected Option:', selectedOption);
+
+            // Now update the rating directly below the select dropdown
+            updateData(rowIndex, 'qualityOfResponseRating', selectedOption.rating); // Store the rating in the row
+          }
         }}
         style={{
           padding: '4px',
@@ -907,19 +1149,19 @@ const TableComponent = ({ course_code }) => {
         }}
         >
         {qualityOfResponseOptions.length === 0 ? (
-          <option disabled>Loading options...</option> // Loading state
+          <option disabled>Loading options...</option> // Show loading state if options are not available
         ) : (
           qualityOfResponseOptions.map(option => {
-            const splitDescriptor = option.descriptor.split('.');
+            const splitDescriptor = option.descriptor.split('.'); // Split descriptor to add line breaks
             const formattedDescriptor = splitDescriptor.join(' \n');
 
             return (
               <option
               key={option.id}
-              value={option.id} // Ensure value corresponds to the ID
+              value={option.id}
               style={{
                 fontSize: '12px',
-                whiteSpace: 'pre-line',
+                whiteSpace: 'pre-line', // Ensure the formatting with line breaks is respected
               }}
               >
               {formattedDescriptor}
@@ -928,6 +1170,7 @@ const TableComponent = ({ course_code }) => {
           })
         )}
         </select>
+
         <span
         style={{
           fontSize: '12px',
@@ -936,28 +1179,36 @@ const TableComponent = ({ course_code }) => {
           textAlign: 'left',
         }}
         >
-        Rating: {qualityOfResponseRating || '0.00'}
+        Rating: {student.quality_of_response ? qualityOfResponseLookup[student.quality_of_response]?.rating || '0.00' : '0.00'}
         </span>
         </div>
         </td>
 
-
         <td>
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: 'center', fontWeight: '600' }}>
         {qualityOfResponseRating}
         </div>
         </td>
 
-
+        {/* Detail Of Response */}
         <td>
         <div>
         <select
         value={student.detail_of_response || ''}
         onChange={(e) => {
-          const selectedOption = detailOfResponseLookup[Number(e.target.value)];
-          const newValue = selectedOption ? selectedOption.id : student.detail_of_response;
-          console.log('Selected Option:', selectedOption); // Debug log
-          updateData(rowIndex, 'detail_of_response', newValue); // Update column
+          const selectedId = Number(e.target.value); // Ensure the selected value is treated as a number
+          const selectedOption = detailOfResponseLookup[selectedId]; // Lookup Quality Of Response option by ID
+
+          if (selectedOption) {
+            // Update Quality Of Response state (Store the ID)
+            updateData(rowIndex, 'detail_of_response', selectedId);
+
+            // Log the selected option's rating (for debugging)
+            console.log('Selected Option:', selectedOption);
+
+            // Now update the rating directly below the select dropdown
+            updateData(rowIndex, 'detailOfResponseRating', selectedOption.rating); // Store the rating in the row
+          }
         }}
         style={{
           padding: '4px',
@@ -966,19 +1217,19 @@ const TableComponent = ({ course_code }) => {
         }}
         >
         {detailOfResponseOptions.length === 0 ? (
-          <option disabled>Loading options...</option> // Loading state
+          <option disabled>Loading options...</option> // Show loading state if options are not available
         ) : (
           detailOfResponseOptions.map(option => {
-            const splitDescriptor = option.descriptor.split('.');
+            const splitDescriptor = option.descriptor.split('.'); // Split descriptor to add line breaks
             const formattedDescriptor = splitDescriptor.join(' \n');
 
             return (
               <option
               key={option.id}
-              value={option.id} // Ensure value corresponds to the ID
+              value={option.id}
               style={{
                 fontSize: '12px',
-                whiteSpace: 'pre-line',
+                whiteSpace: 'pre-line', // Ensure the formatting with line breaks is respected
               }}
               >
               {formattedDescriptor}
@@ -987,6 +1238,7 @@ const TableComponent = ({ course_code }) => {
           })
         )}
         </select>
+
         <span
         style={{
           fontSize: '12px',
@@ -995,20 +1247,19 @@ const TableComponent = ({ course_code }) => {
           textAlign: 'left',
         }}
         >
-        Rating: {detailOfResponseRating || '0.00'}
+        Rating: {student.detail_of_response ? detailOfResponseLookup[student.detail_of_response]?.rating || '0.00' : '0.00'}
         </span>
         </div>
         </td>
 
-
         <td>
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: 'center', fontWeight: '600' }}>
         {detailOfResponseRating}
         </div>
         </td>
 
         <td>
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: 'center', fontWeight: '600' }}>
         {fluencyAverage.toFixed(2)}
         </div>
         </td>
@@ -1028,9 +1279,21 @@ const TableComponent = ({ course_code }) => {
           resize: 'vertical',
         }}
         aria-label={`Edit comment for ${student.fullName}`}
-        placeholder="Add comment..."
+        placeholder="Leave a comment (optional)"
         />
         </td>
+
+        <td>
+        <div style={{ textAlign: 'center' }}>
+        <SubmitButton
+        onClick={() => handleRowSubmit(rowIndex)} // Trigger row submission
+        disabled={submittedRows[rowIndex]}       // Disable if already submitted
+        >
+        {submittedRows[rowIndex] ? 'Submitted' : 'Submit'}
+        </SubmitButton>
+        </div>
+        </td>
+
         </tr>
       );
     })}

@@ -17,6 +17,7 @@ const ImplementingSubjectsTable = () => {
     department: "",
     program: "",
     assignedPoc: "",
+    enrolledStudents: "",
   });
 
   const [pocs, setPocs] = useState([]);
@@ -78,6 +79,7 @@ const ImplementingSubjectsTable = () => {
       department: values.department,
       program: values.program,
       assignedPoc: values.assigned_poc || "",
+      enrolledStudents: values.enrolled_students,
     });
     setShowUpdateModal(true); // Open the Update modal
   };
@@ -106,6 +108,7 @@ const ImplementingSubjectsTable = () => {
       { Header: "Employee ID", accessor: "employee_id" },
       { Header: "Assigned POC", accessor: "assigned_poc" },
       { Header: "Email", accessor: "email" },
+      { Header: "Enrolled Students", accessor: "enrolled_students" },
       {
         Header: "Actions",
         accessor: "actions",

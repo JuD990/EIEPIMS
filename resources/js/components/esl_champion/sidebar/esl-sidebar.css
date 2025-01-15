@@ -45,9 +45,9 @@
   width: 100%;
 }
 
-.esl-eie-management-sidebar-button, 
-.esl-eie-diagnostic-sidebar-button, 
-.esl-eie-reporting-sidebar-button, 
+.esl-eie-management-sidebar-button,
+.esl-eie-diagnostic-sidebar-button,
+.esl-eie-reporting-sidebar-button,
 .esl-dashboard-sidebar-button {
   height: 80px;
   border: none;
@@ -59,28 +59,27 @@
   cursor: pointer;
   text-align: left;
   width: 100%;
-  margin-bottom: 10px;
 }
-.esl-eie-management-sidebar-button:hover, 
-.esl-eie-diagnostic-sidebar-button:hover, 
-.esl-eie-reporting-sidebar-button:hover, 
+.esl-eie-management-sidebar-button:hover,
+.esl-eie-diagnostic-sidebar-button:hover,
+.esl-eie-reporting-sidebar-button:hover,
 .esl-dashboard-sidebar-button:hover {
   background-color: #0187F1;
   border-radius: 8px;
 }
-.esl-eie-management-sidebar-button:hover p, 
-.esl-eie-diagnostic-sidebar-button:hover p, 
-.esl-eie-reporting-sidebar-button:hover p, 
+.esl-eie-management-sidebar-button:hover p,
+.esl-eie-diagnostic-sidebar-button:hover p,
+.esl-eie-reporting-sidebar-button:hover p,
 .esl-dashboard-sidebar-button:hover p{
   color: white;
 }
 
 .esl-eie-management-sidebar-button img {
   width: 60px;
-  height: 60px; 
+  height: 60px;
   margin-right: 10px;
   margin-left: 5px;
-} 
+}
 .esl-eie-diagnostic-sidebar-button img {
   width: 50px; /* Adjust icon size */
   height: 50px; /* Keep icons square */
@@ -99,9 +98,9 @@
   margin-right: 15px; /* Space between icon and title */
   margin-left: 10px;
 }
-.esl-eie-management-sidebar-button p, 
-.esl-eie-diagnostic-sidebar-button p, 
-.esl-eie-reporting-sidebar-button p, 
+.esl-eie-management-sidebar-button p,
+.esl-eie-diagnostic-sidebar-button p,
+.esl-eie-reporting-sidebar-button p,
 .esl-dashboard-sidebar-button p{
   margin: 0; /* Remove default margin from <p> */
   font-size: 20px; /* Adjust font size */
@@ -115,6 +114,8 @@
   flex-direction: column; /* Stacks buttons vertically */
 }
 
+.diagnosticReports-button,
+.interview-button,
 .epgf-rubric-button,
 .monthly-champions-button,
 .certification-button,
@@ -125,6 +126,8 @@
   padding: 10px;
 }
 
+.diagnosticReports-button:hover,
+.interview-button:hover,
 .epgf-rubric-button:hover,
 .monthly-champions-button:hover,
 .certification-button:hover,
@@ -132,6 +135,8 @@
   background-color: #0187F1; /* Highlight color on hover */
   border-radius: 8px; /* Rounded corners */
 }
+.diagnosticReports-button:hover p,
+.interview-button:hover p,
 .epgf-rubric-button:hover p,
 .monthly-champions-button:hover p,
 .certification-button:hover p,
@@ -157,14 +162,37 @@
   margin-top: -10px;
 }
 
-.epgf-rubric-button p, 
-.monthly-champions-button p, 
+.diagnosticReports-button img{
+  margin-left: 42px;
+  width: 60px;
+  height: 60px;
+}
+.interview-button img{
+  margin-left: 48px;
+  width: 60px;
+  height: 60px;
+}
+
+.diagnosticReports-button p,
+.interview-button p,
+.epgf-rubric-button p,
+.monthly-champions-button p,
 .certification-button p,
 .accounts-button p{
   text-align: left;
   font-family: 'Poppins';
   font-size: 18px;
 }
+
+.diagnosticReports-button p{
+  margin-top: 15px;
+  margin-left: 20px;
+}
+.interview-button p{
+  margin-top: 15px;
+  margin-left: 20px;
+}
+
 .epgf-rubric-button p{
   margin-top: 15px;
   margin-left: 30px;

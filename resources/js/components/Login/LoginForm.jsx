@@ -8,7 +8,7 @@ import eyeIcon from "@assets/eye-icon.png";
 import eyeOffIcon from "@assets/eye-off-icon.png";
 import dropdownLogo from "@assets/dropdown-logo-login.png";
 import loginBGimage from "@assets/login-bg-image.png";
-import apiService from "../../../services/apiServices";
+import apiService from "@services/apiServices";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -29,104 +29,99 @@ const LoginForm = () => {
   };
 
 // Handle form submission
-const handleLogin = async (event) => {
-  event.preventDefault();
+  const handleLogin = async (event) => {
+    event.preventDefault();
 
-  // Basic frontend validation to check if any field is empty
-  if (!email || !password || !userType) {
-    setError("Please enter all the credentials.");
-    return;
-  }
+    if (!email || !password || !userType) {
+      setError("Please enter all the credentials.");
+      return;
+    }
 
-  // Map user types to their respective database tables
-  const userTypeToTableMap = {
-    'Student': 'students',
-    'College POC': 'college_pocs',
-    'Lead EIE POC': 'lead_pocs',
-    'Head EIE POC': 'eie_heads',
-    'ESL Prime': 'esl_prime',
-    'ESL Champion': 'esl_champion',
+    const userTypeToTableMap = {
+      'Student': 'students',
+      'College POC': 'college_pocs',
+      'Lead EIE POC': 'lead_pocs',
+      'Head EIE POC': 'eie_heads',
+      'ESL Prime': 'esl_prime',
+      'ESL Champion': 'esl_champion',
+    };
+
+    const table = userTypeToTableMap[userType];
+
+    try {
+      await getCsrfToken();
+
+      const response = await apiService.post(`/login`, {
+        email: `${email}@unc.edu.ph`,
+        password: password,
+        user_type: table,
+      });
+
+      if (response.status === 200) {
+        console.log("Login Successful: ", response.data);
+        const { token, employee_id } = response.data;
+
+        if (!employee_id) {
+          setError("Employee ID not found in the response.");
+          return;
+        }
+
+        // Store necessary data in localStorage
+        localStorage.setItem("authToken", token);
+        localStorage.setItem("employee_id", employee_id);
+        localStorage.setItem("userType", userType);
+
+        // Navigate based on user type
+        switch (userType) {
+          case "Student":
+            navigate("/student-dashboard");
+            break;
+          case "College POC":
+            navigate("/college-poc-dashboard");
+            break;
+          case "Lead EIE POC":
+            navigate("/lead-eie-poc-dashboard");
+            break;
+          case "Head EIE POC":
+            navigate("/eie-head-poc-dashboard");
+            break;
+          case "ESL Prime":
+            navigate("/esl-dashboard");
+            break;
+          case "ESL Champion":
+            navigate("/esl-dashboard");
+            break;
+          default:
+            navigate("/");
+        }
+      }
+    } catch (error) {
+      console.error("Login failed: ", error);
+
+      if (error.response) {
+        switch (error.response.status) {
+          case 401:
+            setError("Invalid credentials, please try again.");
+            break;
+          case 404:
+            setError("User not found");
+            break;
+          case 405:
+            setError("Method not allowed. Please check your request method.");
+            break;
+          case 500:
+            setError("Internal server error. Please try again later.");
+            break;
+          default:
+            setError("An unexpected error occurred. Please try again.");
+        }
+      } else if (error.request) {
+        setError("No response from server. Please try again later.");
+      } else {
+        setError("Error: " + error.message);
+      }
+    }
   };
-
-  const table = userTypeToTableMap[userType];
-
-  try {
-    // Fetch CSRF Token before logging in
-    await getCsrfToken();
-
-    const response = await apiService.post(`/login`, {
-      email: `${email}@unc.edu.ph`, // Append domain to email
-      password: password,
-      user_type: table, // Include the user type in the request
-    });
-
-    // Handle successful login
-    if (response.status === 200) {
-      console.log("Login Successful: ", response.data);
-      const { token, employee_id } = response.data;  // Destructure token and employee_id
-
-      if (!employee_id) {
-        setError("Employee ID not found in the response.");
-        return;
-      }
-
-      // Store token and employee_id in localStorage
-      localStorage.setItem("authToken", token);
-      localStorage.setItem("employee_id", employee_id);  // Store employeeId
-
-      // Navigate based on user type
-      switch (userType) {
-        case "Student":
-          navigate("/student-dashboard");
-          break;
-        case "College POC":
-          navigate("/college-poc-dashboard");
-          break;
-        case "Lead EIE POC":
-          navigate("/lead-eie-poc-dashboard");
-          break;
-        case "Head EIE POC":
-          navigate("/eie-head-poc-dashboard");
-          break;
-        case "ESL Prime":
-          navigate("/esl-dashboard");
-          break;
-        case "ESL Champion":
-          navigate("/esl-dashboard");
-          break;
-        default:
-          navigate("/");
-      }
-    }
-  } catch (error) {
-    console.error("Login failed: ", error);
-    // Check for specific error response status
-    if (error.response) {
-      switch (error.response.status) {
-        case 401:
-          setError("Invalid credentials, please try again.");
-          break;
-        case 404:
-          setError("User not found");
-          break;
-        case 405:
-          setError("Method not allowed. Please check your request method.");
-          break;
-        case 500:
-          setError("Internal server error. Please try again later.");
-          break;
-        default:
-          setError("An unexpected error occurred. Please try again.");
-      }
-    } else if (error.request) {
-      setError("No response from server. Please try again later.");
-    } else {
-      setError("Error: " + error.message);
-    }
-  }
-};
-
-
 
   return (
     <div

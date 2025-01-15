@@ -1,15 +1,29 @@
-course_code,code,course_title,semester,year_level,program,department,employee_id,assigned_poc,email
-ACT101,101,Fundamentals of Computer Technology,First Semester,1st Year,Associate in Computer Technology,School of Computer and Information Sciences,2001,Alice Carter,alicecarter@unc.edu.ph
-BLIS201,201,Information Organization,Second Semester,2nd Year,Bachelor of Library and Information Science,School of Computer and Information Sciences,2002,Bob Williams,bobwilliams@unc.edu.ph
-CS202,202,Data Structures and Algorithms,First Semester,2nd Year,Bachelor of Science in Computer Science,School of Computer and Information Sciences,2003,Carol Martinez,carolmartinez@unc.edu.ph
-IT301,301,Network Administration,Second Semester,3rd Year,Bachelor of Science in Information Technology,School of Computer and Information Sciences,2004,David Johnson,davidjohnson@unc.edu.ph
-CS101,101,Introduction to Programming,First Semester,1st Year,Bachelor of Science in Computer Science,School of Computer and Information Sciences,2005,Eve Brown,evebrown@unc.edu.ph
-ACT102,102,Introduction to Networking,Second Semester,1st Year,Associate in Computer Technology,School of Computer and Information Sciences,2006,Frank White,frankwhite@unc.edu.ph
-BLIS301,301,Cataloging and Classification,First Semester,3rd Year,Bachelor of Library and Information Science,School of Computer and Information Sciences,2007,Frank White,frankwhite@unc.edu.ph
-CS305,305,Web Development,First Semester,3rd Year,Bachelor of Science in Computer Science,School of Computer and Information Sciences,2008,Frank White,frankwhite@unc.edu.ph
-IT202,202,Database Management Systems,Second Semester,2nd Year,Bachelor of Science in Information Technology,School of Computer and Information Sciences,2009,Frank White,frankwhite@unc.edu.ph
-CS103,103,Object-Oriented Programming,Second Semester,1st Year,Bachelor of Science in Computer Science,School of Computer and Information Sciences,2004,David Johnson,davidjohnson@unc.edu.ph
-ACT105,105,Mobile App Development,First Semester,2nd Year,Associate in Computer Technology,School of Computer and Information Sciences,2005,Eve Brown,evebrown@unc.edu.ph
-BLIS401,401,Information Ethics and Law,First Semester,4th Year,Bachelor of Library and Information Science,School of Computer and Information Sciences,2002,Bob Williams,bobwilliams@unc.edu.ph
-IT305,305,Cloud Computing,First Semester,3rd Year,Bachelor of Science in Information Technology,School of Computer and Information Sciences,2003,Carol Martinez,carolmartinez@unc.edu.ph
-CS201,201,Software Engineering,First Semester,2nd Year,Bachelor of Science in Computer Science,School of Computer and Information Sciences,2001,Alice Carter,alicecarter@unc.edu.ph
+course_code,code,course_title,semester,year_level,program,department,employee_id,assigned_poc,email,enrolled_students
+PC101,101,Purposive Communication 1,1st Semester,1st Year,ACT,SCIS,2001,Alice Carter,alicecarter@unc.edu.ph,4
+LIS101,102,Introduction to LIS,1st Semester,1st Year,BLIS,SCIS,2002,Bob Williams,bobwilliams@unc.edu.ph,3
+PC102,103,Purposive Communication 2,1st Semester,1st Year,BSCS,SCIS,2003,Carol Martinez,carolmartinez@unc.edu.ph,6
+PC103,104,Purposive Communication 3,1st Semester,1st Year,BSIT,SCIS,2004,David Johnson,davidjohnson@unc.edu.ph,8
+SIP101,105,Social Issues and Professional Practice 1,1st Semester,2nd Year,ACT,SCIS,2001,Alice Carter,alicecarter@unc.edu.ph,5
+IRS101,106,Information Resources and Services 1,1st Semester,2nd Year,BLIS,SCIS,2005,Eve Brown,evebrown@unc.edu.ph,2
+SIP102,107,Social Issues and Professional Practice 2,1st Semester,2nd Year,BSCS,SCIS,2006,Frank Miller,frankmiller@unc.edu.ph,11
+SIP103,108,Social Issues and Professional Practice 3,1st Semester,2nd Year,BSIT,SCIS,2002,Bob Williams,bobwilliams@unc.edu.ph,9
+IA101,109,Indexing and Abstracting,1st Semester,3rd Year,BLIS,SCIS,2005,Eve Brown,evebrown@unc.edu.ph,3
+QM201,110,Quantitative Methods incl. Sim & Mod,1st Semester,3rd Year,BSCS,SCIS,2006,Frank Miller,frankmiller@unc.edu.ph,5
+QM202,111,Quantitative Methods,1st Semester,3rd Year,BSIT,SCIS,2002,Bob Williams,bobwilliams@unc.edu.ph,5
+RMLIS301,112,Research Methods in LIS,1st Semester,4th Year,BLIS,SCIS,2005,Eve Brown,evebrown@unc.edu.ph,5
+SP401,113,Senior Project,1st Semester,4th Year,BSCS,SCIS,2006,Frank Miller,frankmiller@unc.edu.ph,4
+CAP402,114,Capstone,1st Semester,4th Year,BSIT,SCIS,2002,Bob Williams,bobwilliams@unc.edu.ph,10
+IP201,115,Intermediate Programming,2nd Semester,1st Year,ACT,SCIS,2001,Alice Carter,alicecarter@unc.edu.ph,10
+CMIR202,116,Collection Management of Information Resources,2nd Semester,1st Year,BLIS,SCIS,2002,Bob Williams,bobwilliams@unc.edu.ph,8
+IP202,117,Intermediate Programming 1,2nd Semester,1st Year,BSCS,SCIS,2003,Carol Martinez,carolmartinez@unc.edu.ph,4
+IP203,118,Intermediate Programming 2,2nd Semester,1st Year,BSIT,SCIS,2004,David Johnson,davidjohnson@unc.edu.ph,9
+DBM301,119,Database Management (Info Mgt) / ACT PEP,2nd Semester,2nd Year,ACT,SCIS,2001,Alice Carter,alicecarter@unc.edu.ph,5
+IRS102,120,Information Resources and Services II,2nd Semester,2nd Year,BLIS,SCIS,2005,Eve Brown,evebrown@unc.edu.ph,4
+DBM302,121,Database Management (Info Mgt) 1,2nd Semester,2nd Year,BSCS,SCIS,2006,Frank Miller,frankmiller@unc.edu.ph,6
+DBM303,122,Database Management (Info Mgt) 2,2nd Semester,2nd Year,BSIT,SCIS,2002,Bob Williams,bobwilliams@unc.edu.ph,9
+IA102,123,Indexing and Abstracting II,2nd Semester,3rd Year,BLIS,SCIS,2005,Eve Brown,evebrown@unc.edu.ph,6
+PNCSIT101,124,"Presentation, Negotiation, and Consulting Skills in IT 1",2nd Semester,3rd Year,BSCS,SCIS,2006,Frank Miller,frankmiller@unc.edu.ph,9
+PNCSIT102,125,"Presentation, Negotiation, and Consulting Skills in IT 2",2nd Semester,3rd Year,BSIT,SCIS,2002,Bob Williams,bobwilliams@unc.edu.ph,3
+TECH101,126,TECHPEP 1,2nd Semester,4th Year,BLIS,SCIS,2005,Eve Brown,evebrown@unc.edu.ph,6
+TECH102,127,TECHPEP 2,2nd Semester,4th Year,BSCS,SCIS,2006,Frank Miller,frankmiller@unc.edu.ph,8
+TECH103,128,TECHPEP 3,2nd Semester,4th Year,BSIT,SCIS,2002,Bob Williams,bobwilliams@unc.edu.ph,7

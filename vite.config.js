@@ -14,6 +14,7 @@ export default defineConfig({
             '@assets': path.resolve(__dirname, 'resources/js/assets'),
             '@services': path.resolve(__dirname, 'resources/services'),
             '@user-info': path.resolve(__dirname, 'resources/js/components/user_info'),
+            '@logout': path.resolve(__dirname, 'resources/js/components/Logout'),
         },
     },
 });

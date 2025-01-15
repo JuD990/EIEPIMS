@@ -11,25 +11,51 @@ import ClassAverageSummary from './class-average-summary/class-average-summary';
 import axios from 'axios';
 
 const EPGFScorecard = () => {
+  const [taskTitle, setTaskTitle] = useState('');
+  const [courseTitle, setCourseTitle] = useState('');
+  const [studentCount, setStudentCount] = useState(0); // enrolled_students
+  const [studentCountActive, setStudentCountActive] = useState(0); // active_students
+  const [classAverage, setClassAverage] = useState(0);
+  const [evaluatedCount, setEvaluatedCount] = useState(0);
+
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const course_code = params.get('course_code');
 
-  const [courseTitle, setCourseTitle] = useState(''); // State to store the course_title
-
-  // Fetch the course details when course_code is available
+  // Fetch all necessary data in a single useEffect hook
   useEffect(() => {
     if (course_code) {
-      axios.get(`/api/epgf-scorecard?course_code=${course_code}`)
-      .then((response) => {
-        if (response.data.success) {
-          setCourseTitle(response.data.course_title); // Set course title
+      // Fetch all the data in parallel using axios.all for efficiency
+      axios.all([
+        axios.get(`/api/epgf-scorecard?course_code=${course_code}`),
+                axios.get(`/api/get-student-count?course_code=${course_code}`),
+                axios.get(`/api/get-student-count-active?course_code=${course_code}`),
+                axios.get(`/api/get-evaluated-count?course_code=${course_code}`),
+                axios.get(`/api/get-class-average?course_code=${course_code}`)
+      ])
+      .then(axios.spread((courseDetails, studentCountResponse, activeStudentCountResponse, evaluatedCountResponse, classAverageResponse) => {
+        // Handle course details
+        if (courseDetails.data.success) {
+          setCourseTitle(courseDetails.data.course_title);
         } else {
           console.error('Course not found');
         }
-      })
+
+        // Handle student count
+        setStudentCount(studentCountResponse.data.student_count);
+
+        // Handle active student count
+        setStudentCountActive(activeStudentCountResponse.data.student_count);
+
+        // Handle evaluated count
+        setEvaluatedCount(evaluatedCountResponse.data.evaluated_count);
+
+        // Handle class average
+        setClassAverage(classAverageResponse.data.average !== undefined ? classAverageResponse.data.average : 0);
+
+      }))
       .catch((error) => {
-        console.error('Error fetching course details:', error);
+        console.error('Error fetching data:', error);
       });
     }
   }, [course_code]);
@@ -38,18 +64,18 @@ const EPGFScorecard = () => {
     <div>
     <UserInfo />
     <CollegePOCsidebar />
-
     <br /><br />
     <Link to="/class-management" style={{ textDecoration: 'none' }}>
     <div className='epgf-scorecard-subject-details'>
     <div className='subject-name-container'>
     <FaChevronLeft className='back-icon' />
-    <h1 className='epgf-scorecard-subject-name'>{courseTitle || 'Loading...'}</h1> {/* Display course_title dynamically */}
+    <h1 className='epgf-scorecard-subject-name'>{courseTitle || 'Loading...'}</h1>
     </div>
     <h1 className='epgf-scorecard-subject-code'>{course_code}</h1>
     </div>
-    <br /><br />
     </Link>
+    <br /><br />
+
     <div className="epgf-scorecard-page-title">
     <h1 style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '28px' }}>Student EIE PGF Scorecard</h1>
     </div>
@@ -59,11 +85,12 @@ const EPGFScorecard = () => {
     <p className='task-label'>Task Title:</p>
     <input
     type="text"
-    placeholder="Task Title..."
+    placeholder="Enter Task Title (Required)"
     className="custom-input"
+    value={taskTitle}
+    onChange={(e) => setTaskTitle(e.target.value)}
     />
     </div>
-
     <div className='search'>
     <input
     type="text"
@@ -72,20 +99,24 @@ const EPGFScorecard = () => {
     />
     </div>
     </div>
+
     <br />
-    <Table course_code={course_code} />
+    <Table course_code={course_code} taskTitle={taskTitle} />
     <br /><br />
-    <div style={{ position: 'relative', width: '100%' }}>
-      <Button label="Submit" />
-      </div>
-      <div style={{ position: 'relative', width: '100%' }}>
-      <ExportButton label="Export" rightSpacing="180px" />
-      </div>
-      <div className="border-box">
-      <p><b>4/50 </b>Evaluated</p>
+    <div className="page-container">
+    <div className="container">
+    <ClassAverageSummary
+    course_code={course_code}
+    average={classAverage}
+    studentCount={studentCount}
+    studentCountActive={studentCountActive}
+    evaluatedCount={evaluatedCount}
+    />
     </div>
-    <br />
-    <ClassAverageSummary />
+    <div className="border-box">
+    <p><b>{evaluatedCount}/{studentCountActive} </b>Evaluated</p>
+    </div>
+    </div>
     <br /><br /><br /><br />
     </div>
   );

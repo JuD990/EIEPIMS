@@ -34,6 +34,12 @@ Route::get('/detailOfResponse/{majorVersion}', [EpgfRubricController::class, 'ge
 Route::get('/epgf-scorecard', [EpgfScoreCardController::class, 'getCourseDetails']);
 Route::get('/epgf-scorecard/students', [EpgfScoreCardController::class, 'getActiveStudents']);
 Route::get('/active-students', [EpgfScoreCardController::class, 'getActiveStudents']);
+Route::post('/eie-scorecard-class-reports', [EpgfScoreCardController::class, 'storeStudentDataReports']);
+Route::get('/get-student-count', [EpgfScoreCardController::class, 'getStudentCountByCourseCode']);
+Route::get('/get-student-count-active', [EpgfScoreCardController::class, 'getStudentCountByCourseCodeAndActive']);
+Route::get('/get-class-average', [EpgfScoreCardController::class, 'getClassAverageByCourseCode']);
+Route::get('/get-evaluated-count', [EpgfScoreCardController::class, 'getEvaluatedCount']);
+Route::post('/store-class-data', [EpgfScoreCardController::class, 'storeClassData']);
 
 // ClassList routes
 Route::get('filter-students', [ClassListController::class, 'filterStudentsByCourseAndEmployee']);
@@ -44,6 +50,13 @@ Route::post('/upload-class-list', [ClassListController::class, 'uploadClassList'
 Route::get('/implementing-subject/{employee_id}', [ImplementingSubjectController::class, 'getClassData']);
 Route::post('/upload-subjects', [ImplementingSubjectController::class, 'upload'])->name('subjects.upload');
 Route::get('/implementing-subjects', [ImplementingSubjectController::class, 'index'])->name('subjects.index');
+// Route to get the department for an employee
+Route::get('/employee-department/{userType}/{employeeId}', [ImplementingSubjectController::class, 'getEmployeeDepartment']);
+
+// Route to get the programs for a department
+Route::get('/programs/{department}', [ImplementingSubjectController::class, 'getProgramsForDepartment']);
+Route::get('/programs-with-enrollment-first-semester/{department}', [ImplementingSubjectController::class, 'getProgramsWithEnrollmentCountFirstSemester']);
+Route::get('/programs-with-enrollment-second-semester/{department}', [ImplementingSubjectController::class, 'getProgramsWithEnrollmentCountSecondSemester']);
 
 // CollegePOC routes
 Route::get('/pocs', [CollegePOCController::class, 'getPocs'])->name('college.pocs');

@@ -1,12 +1,10 @@
 import React from 'react';
 
-const SubmitButton = () => {
+const SubmitButton = ({ onClick }) => {
   const label = "Submit";
-  const rightSpacing = '20px';
-  const onClick = () => { console.log("Button clicked"); };
 
   return (
-    <button style={{ ...styles.button, right: rightSpacing }} onClick={onClick}>
+    <button style={styles.button} onClick={onClick}>
     {label}
     </button>
   );
@@ -14,19 +12,18 @@ const SubmitButton = () => {
 
 const styles = {
   button: {
-    width: '150px',
-    height: '50px',
+    width: '100px',
+    height: '40px',
     borderRadius: '12px',
     backgroundColor: '#0187F1',
     color: '#FFFFFF',
-    fontSize: '23px',
+    fontSize: '15px',
     fontFamily: 'Poppins, sans-serif',
     fontWeight: '600',
-    position: 'absolute',
-    right: '0',
     border: 'none',
     cursor: 'pointer',
     outline: 'none',
+    display: 'inline-block',
   },
 };
 

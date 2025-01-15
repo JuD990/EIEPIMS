@@ -10,7 +10,7 @@ return(
       <div className="dashboard-container">
         <div className="dashboard-content">
           <div className="dashboard-page-title">
-          <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800 }}>Monthly Champions</h1>
+          <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800 }}>Template</h1>
           </div>
         </div>
       </div>

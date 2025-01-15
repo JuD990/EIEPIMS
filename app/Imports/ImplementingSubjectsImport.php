@@ -27,6 +27,7 @@ class ImplementingSubjectsImport implements ToModel, WithHeadingRow
             'employee_id' => $row['employee_id'],
             'assigned_poc' => $row['assigned_poc'],
             'email' => $row['email'],
+            'enrolled_students' => $row['enrolled_students'],
         ]);
     }
 }
