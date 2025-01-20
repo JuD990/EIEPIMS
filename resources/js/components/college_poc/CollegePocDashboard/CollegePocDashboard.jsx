@@ -4,6 +4,7 @@ import CollegePOCsidebar from "../sidebar/college-poc-sidebar";
 import UserInfo from "@user-info/User-info";
 import Table1 from "./table/college-poc-table-1st-semester";
 import Table2 from "./table/college-poc-table-2nd-semester";
+import LogoutButton from "@logout/Logout";
 
 const CollegePocDashboard = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false); // State to handle dropdown visibility
@@ -17,16 +18,7 @@ const CollegePocDashboard = () => {
   return (
     <div>
     <CollegePOCsidebar />
-    <div className="user-info-container" style={{ position: "relative" }}>
-    {/* Make UserInfo clickable */}
-    <div
-    onClick={() => setDropdownOpen((prev) => !prev)} // Toggle dropdown visibility
-    style={{ cursor: "pointer" }}
-    >
     <UserInfo />
-    </div>
-    </div>
-
     <div className="dashboard-container">
     <div className="dashboard-content">
     <div className="dashboard-page-title">
@@ -39,29 +31,6 @@ const CollegePocDashboard = () => {
     <br />
     </div>
   );
-};
-
-// Inline styles for dropdown menu and buttons (can be replaced with CSS classes)
-const dropdownMenuStyle = {
-  position: "absolute",
-  top: "100%",
-  right: 0,
-  backgroundColor: "white",
-  border: "1px solid #ccc",
-  borderRadius: "4px",
-  boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-  zIndex: 1000,
-  padding: "8px",
-};
-
-const buttonStyle = {
-  display: "block",
-  width: "100%",
-  padding: "8px 12px",
-  textAlign: "left",
-  border: "none",
-  background: "none",
-  cursor: "pointer",
 };
 
 export default CollegePocDashboard;

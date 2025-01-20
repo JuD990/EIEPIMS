@@ -68,6 +68,8 @@ Route::get('/master-class-list', [MasterClassListController::class, 'index']);
 // Authentication routes
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::middleware('auth:sanctum')->get('/user-info', [AuthController::class, 'getUserInfo']);
+Route::middleware('auth:sanctum')->delete('/logout', [AuthController::class, 'logout']); // Add the logout route
 Route::get('/sanctum/csrf-cookie', function () {
     return response()->json(['message' => 'CSRF token set']);
 });
+

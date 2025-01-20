@@ -1,14 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import apiService from "../../../services/apiServices";
+import apiService from "@services/apiServices";
 
 const LogoutButton = () => {
     const navigate = useNavigate();
 
     const handleLogout = async () => {
         try {
-            // Call the logout API
-            await apiService.post('/logout');
+            await apiService.delete("/logout");  // Change POST to DELETE
 
             // Clear local storage
             localStorage.removeItem("authToken");
@@ -16,7 +15,7 @@ const LogoutButton = () => {
             localStorage.removeItem("userType");
 
             // Redirect to the login page
-            navigate("/login");
+            navigate("/");
         } catch (error) {
             console.error("Logout failed: ", error);
             alert("Failed to log out. Please try again.");
@@ -24,8 +23,8 @@ const LogoutButton = () => {
     };
 
     return (
-        <button onClick={handleLogout} className="logout-button">
-        Logout
+        <button onClick={handleLogout}>
+        <p>Logout</p>
         </button>
     );
 };
