@@ -3,7 +3,9 @@ import "./User-info.css";
 import userinfo from "@assets/user-user.png";
 import apiService from "@services/apiServices";
 import { useNavigate } from "react-router-dom";
-import LogoutButton from "@logout/Logout"; // Import the LogoutButton component
+import LogoutButton from "@logout/Logout";
+import logoutIcon from "@assets/logout_icon.png";
+import profileIcon from "@assets/profile.png";
 
 const UserInfo = () => {
   const [user, setUser] = useState(null);
@@ -54,7 +56,7 @@ const UserInfo = () => {
   }, []);
 
   const handleProfileClick = () => {
-    navigate("/profile"); // Adjust the route based on your app
+    navigate("#"); // Adjust the route
   };
 
   if (loading) return <div>Loading...</div>;
@@ -64,7 +66,7 @@ const UserInfo = () => {
     <div
     className="user-info"
     ref={dropdownRef}
-    onClick={() => setDropdownOpen((prev) => !prev)} // Attach the handler here
+    onClick={() => setDropdownOpen((prev) => !prev)}
     >
     <div className="user-icon">
     <img src={userinfo} alt="User Icon" />
@@ -76,10 +78,12 @@ const UserInfo = () => {
     {dropdownOpen && (
       <div className="user-info-dropdown-menu">
       <button onClick={handleProfileClick} className="user-info-dropdown-item">
+      <img src={profileIcon} alt="Profile Icon" className="profile-dropdown-icon" />
       Profile
       </button>
-      <div className="user-info-dropdown-item">
-      <LogoutButton /> {/* Use the LogoutButton component here */}
+      <div className="logout-user-info-dropdown-item">
+      <img src={logoutIcon} alt="Logout Icon" className="dropdown-icon" />
+      <LogoutButton />
       </div>
       </div>
     )}

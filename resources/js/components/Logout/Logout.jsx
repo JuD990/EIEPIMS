@@ -7,7 +7,7 @@ const LogoutButton = () => {
 
     const handleLogout = async () => {
         try {
-            await apiService.delete("/logout");  // Change POST to DELETE
+            await apiService.delete("/logout");
 
             // Clear local storage
             localStorage.removeItem("authToken");
