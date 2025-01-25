@@ -39,7 +39,7 @@ class DummyUserSeeder extends Seeder
                 'lastname' => 'Reyes',
                 'password' => Hash::make('password123'),
                 'email' => 'eiehead@unc.edu.ph',
-                'department' => 'Administration',
+                'department' => 'SCIS',
                 'role' => 'EIE Head',
                 'created_at' => now(),
                 'updated_at' => now(),

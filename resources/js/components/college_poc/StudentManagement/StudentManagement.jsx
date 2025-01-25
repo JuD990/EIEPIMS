@@ -16,9 +16,6 @@ const EPGFScorecard = () => {
         <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800 }}>Student Management</h1>
       </div>
       <br />
-      <div style={{ position: 'relative', width: '100%' }}>
-        <ExportButton label="Export" rightSpacing="50px" />
-      </div>
       <StudentManagementDropdown/>
       <br />
       <StudentManagementTable />

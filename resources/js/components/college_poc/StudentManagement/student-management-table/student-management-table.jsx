@@ -15,16 +15,28 @@ const StudentManagementTable = () => {
   });
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/class-list")
+    const storedEmployeeId = localStorage.getItem("employee_id");
+
+    if (!storedEmployeeId) {
+      console.error("No employee ID found in localStorage.");
+      return;
+    }
+
+    console.log("Stored Employee ID:", storedEmployeeId);
+
+    fetch(`http://localhost:8000/api/manage-class-list?employee_id=${storedEmployeeId}`)
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       return response.json();
     })
-    .then((data) => setStudents(data))
+    .then((data) => {
+      console.log("Filtered Data:", data); // Debugging filtered data
+      setStudents(data);
+    })
     .catch((error) => console.error("Error fetching data:", error.message));
-  }, []);
+  }, []);  // This will run only on mount
 
 
   const handleInputChange = (e) => {
@@ -44,8 +56,68 @@ const StudentManagementTable = () => {
     }));
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent form reload
+
+    const storedEmployeeId = localStorage.getItem("employee_id");
+
+    if (!storedEmployeeId) {
+      console.error("No employee ID found in localStorage.");
+      return;
+    }
+
+    const studentId = formData.studentId; // Get the student ID from form data
+
+    console.log("Submitting student update for studentId:", studentId);  // Log the studentId
+    console.log("Form Data being submitted:", formData);  // Log all form data being sent
+
+    fetch(`http://localhost:8000/api/update-student/${studentId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${storedEmployeeId}`,
+      },
+      body: JSON.stringify({
+        firstName: formData.firstName,
+        middleName: formData.middleName,
+        lastName: formData.lastName,
+        classification: formData.classification,
+        yearLevel: formData.yearLevel,
+        status: formData.status,
+        reason: formData.reason,
+      }),
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Update Success:", data);
+
+      // Refetch the student data after the update
+      const storedEmployeeId = localStorage.getItem("employee_id");
+      fetch(`http://localhost:8000/api/manage-class-list?employee_id=${storedEmployeeId}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Refetched Data:", data);
+        setStudents(data); // Update the students state with the new data
+        setShowModal(false); // Close the modal after success
+      })
+      .catch((error) => console.error("Error fetching updated student data:", error.message));
+    })
+    .catch((error) => console.error("Error updating student:", error.message));
+  };
+
   const handleUpdateClick = (row) => {
     setFormData({
+      studentId: row.original.student_id,  // Ensure studentId is populated correctly
       firstName: row.original.firstname || '',
       middleName: row.original.middlename || '',
       lastName: row.original.lastname || '',
@@ -54,18 +126,20 @@ const StudentManagementTable = () => {
       status: row.original.status || '',
       reason: row.original.reason_for_shift_or_drop || ''
     });
+
     setShowModal(true);
   };
+
 
   const columns = React.useMemo(
     () => [
       {
         Header: "No.",
-        accessor: "id",
+        accessor: "class_lists_id",
       },
       {
         Header: "Full Name",
-        accessor: (row) => `${row.firstname} ${row.middlename ? row.middlename + '.' : ''} ${row.lastname}`,
+        accessor: (row) => `${row.firstname} ${row.middlename} ${row.lastname}`,
       },
       {
         Header: "Status",
@@ -113,6 +187,10 @@ const StudentManagementTable = () => {
         ),
       },
       {
+        Header: "Course Code",
+        accessor: "course_code",
+      },
+      {
         Header: "Actions",
         accessor: "actions",
         Cell: ({ row }) => (
@@ -138,9 +216,7 @@ const StudentManagementTable = () => {
     ],
     []
   );
-
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-  useTable({ columns, data: students });
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data: students });
 
   return (
     <>
@@ -344,7 +420,8 @@ const StudentManagementTable = () => {
       Cancel
       </button>
       <button
-      type="submit"
+      type="button"
+      onClick={handleSubmit}
       style={{
         width: '100px',
         height: '40px',

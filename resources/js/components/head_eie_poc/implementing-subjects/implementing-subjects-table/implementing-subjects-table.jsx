@@ -14,20 +14,31 @@ const ImplementingSubjectsTable = () => {
     code: "",
     courseCode: "",
     semester: "",
-    department: "",
     program: "",
+    employeeId: "",
     assignedPoc: "",
+    email: "",
     enrolledStudents: "",
   });
 
   const [pocs, setPocs] = useState([]);
   const [csvErrors, setCsvErrors] = useState([]);
 
-  // Fetch data from the Laravel API
   const fetchData = async () => {
+    const employeeId = localStorage.getItem("employee_id");
+    if (!employeeId) {
+      setError("Employee ID is required.");
+      return;
+    }
+
+    setIsLoading(true);
     try {
-      const response = await axios.get("/api/implementing-subjects");
-      setData(response.data);
+      const response = await axios.get("/api/implementing-subjects", {
+        headers: { "employee_id": employeeId },
+      });
+      if (JSON.stringify(response.data) !== JSON.stringify(data)) {
+        setData(response.data);
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
       setError("Failed to fetch data. Please try again later.");
@@ -35,6 +46,11 @@ const ImplementingSubjectsTable = () => {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchData(); // Call fetchData once when the component mounts
+  }, []);
+
 
   // Fetch POCs from the API
   useEffect(() => {
@@ -56,20 +72,19 @@ const ImplementingSubjectsTable = () => {
   // Polling to refresh data
   useEffect(() => {
     fetchData();
-    const intervalId = setInterval(fetchData, 5000);
-    return () => clearInterval(intervalId);
   }, []);
 
   // Handle form data input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(`Field: ${name}, Value: ${value}`);
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
     }));
   };
 
-  // Update form data when row is clicked
+
   const handleUpdate = (values) => {
     setFormData({
       courseTitle: values.course_title,
@@ -78,22 +93,39 @@ const ImplementingSubjectsTable = () => {
       semester: values.semester,
       department: values.department,
       program: values.program,
-      assignedPoc: values.assigned_poc || "",
+      assignedPoc: values.assigned_poc || "", // Clear the previous assigned POC
       enrolledStudents: values.enrolled_students,
     });
     setShowUpdateModal(true); // Open the Update modal
   };
 
-  // Handle form submission
+
+  const [isUpdating, setIsUpdating] = useState(false);
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    setIsUpdating(true);
+
+    const updatedFormData = {
+      ...formData,
+      assignedPoc: formData.assignedPoc === "None" ? null : formData.assignedPoc,
+      employee_id: formData.assignedPoc === "None" ? null : formData.employee_id,
+      email: formData.assignedPoc === "None" ? null : formData.email,
+    };
+
     try {
-      const response = await axios.put(`/api/implementing-subjects/${formData.courseCode}`, formData);
-      console.log("Form submitted successfully:", response.data);
-      setShowUpdateModal(false); // Close the modal after submission
-      fetchData();
+      const response = await axios.put(
+        `/api/update-implementing-subjects/${updatedFormData.courseCode}`,
+        updatedFormData
+      );
+      if (response.status === 200) {
+        setShowUpdateModal(false);
+        fetchData();
+      }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("Error updating subject:", error);
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -222,144 +254,67 @@ const ImplementingSubjectsTable = () => {
             Update Credentials
           </h2>
           <form onSubmit={handleFormSubmit}>
-            <div style={{ marginBottom: "20px" }}>
-              <label
-                style={{
-                  display: "block",
-                  fontSize: "20px",
-                  color: "#383838",
-                }}
-              >
-                Course Title:
-              </label>
-              <input
-                type="text"
-                name="courseTitle"
-                value={formData.courseTitle}
-                onChange={handleInputChange}
-                style={{
-                  width: "100%",
-                  padding: "10px",
-                  borderRadius: "5px",
-                  border: "1px solid #333333",
-                }}
-              />
-            </div>
-            <div style={{ marginBottom: "20px" }}>
-              <label
-                style={{
-                  display: "block",
-                  fontSize: "20px",
-                  color: "#383838",
-                }}
-              >
-                Code:
-              </label>
-              <input
-                type="text"
-                name="code"
-                value={formData.code}
-                onChange={handleInputChange}
-                style={{
-                  width: "100%",
-                  padding: "10px",
-                  borderRadius: "5px",
-                  border: "1px solid #333333",
-                }}
-              />
-            </div>
-            <div style={{ marginBottom: "20px" }}>
-              <label
-                style={{
-                  display: "block",
-                  fontSize: "20px",
-                  color: "#383838",
-                }}
-              >
-                Course Code:
-              </label>
-              <input
-                type="text"
-                name="code"
-                value={formData.courseCode}
-                onChange={handleInputChange}
-                style={{
-                  width: "100%",
-                  padding: "10px",
-                  borderRadius: "5px",
-                  border: "1px solid #333333",
-                }}
-              />
-            </div>
-            <div style={{ marginBottom: "20px" }}>
-              <label
-                style={{
-                  display: "block",
-                  fontSize: "20px",
-                  color: "#383838",
-                }}
-              >
-                Semester:
-              </label>
-              <input
-                type="text"
-                name="code"
-                value={formData.semester}
-                onChange={handleInputChange}
-                style={{
-                  width: "100%",
-                  padding: "10px",
-                  borderRadius: "5px",
-                  border: "1px solid #333333",
-                }}
-              />
-            </div>
-            <div style={{ marginBottom: "20px" }}>
-              <label
-                style={{
-                  display: "block",
-                  fontSize: "20px",
-                  color: "#383838",
-                }}
-              >
-                Department:
-              </label>
-              <input
-                type="text"
-                name="code"
-                value={formData.department}
-                onChange={handleInputChange}
-                style={{
-                  width: "100%",
-                  padding: "10px",
-                  borderRadius: "5px",
-                  border: "1px solid #333333",
-                }}
-              />
-            </div>
-            <div style={{ marginBottom: "20px" }}>
-              <label
-                style={{
-                  display: "block",
-                  fontSize: "20px",
-                  color: "#383838",
-                }}
-              >
-                Program:
-              </label>
-              <input
-                type="text"
-                name="code"
-                value={formData.program}
-                onChange={handleInputChange}
-                style={{
-                  width: "100%",
-                  padding: "10px",
-                  borderRadius: "5px",
-                  border: "1px solid #333333",
-                }}
-              />
-            </div>
+          <div style={{ marginBottom: "20px" }}>
+          <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
+          Course Title:
+          </label>
+          <input
+          type="text"
+          name="courseTitle"
+          value={formData.courseTitle}
+          onChange={handleInputChange}
+          style={{ width: "100%", padding: "10px", borderRadius: "5px", border: "1px solid #333333" }}
+          />
+          </div>
+          <div style={{ marginBottom: "20px" }}>
+          <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
+          Code:
+          </label>
+          <input
+          type="text"
+          name="code"
+          value={formData.code}
+          onChange={handleInputChange}
+          style={{ width: "100%", padding: "10px", borderRadius: "5px", border: "1px solid #333333" }}
+          />
+          </div>
+          <div style={{ marginBottom: "20px" }}>
+          <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
+          Course Code:
+          </label>
+          <input
+          type="text"
+          name="courseCode"
+          value={formData.courseCode}
+          onChange={handleInputChange}
+          style={{ width: "100%", padding: "10px", borderRadius: "5px", border: "1px solid #333333" }}
+          />
+          </div>
+          <div style={{ marginBottom: "20px" }}>
+          <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
+          Semester:
+          </label>
+          <input
+          type="text"
+          name="semester"
+          value={formData.semester}
+          onChange={handleInputChange}
+          style={{ width: "100%", padding: "10px", borderRadius: "5px", border: "1px solid #333333" }}
+          />
+          </div>
+
+          <div style={{ marginBottom: "20px" }}>
+          <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
+          Program:
+          </label>
+          <input
+          type="text"
+          name="program"
+          value={formData.program}
+          onChange={handleInputChange}
+          style={{ width: "100%", padding: "10px", borderRadius: "5px", border: "1px solid #333333" }}
+          />
+          </div>
 
             <div style={{ marginBottom: "20px" }}>
               <label
@@ -375,36 +330,34 @@ const ImplementingSubjectsTable = () => {
                 Re-Assign POC:
               </label>
               <select
-                id="assignedPoc"
-                name="assignedPoc"
-                value={formData.assignedPoc}
-                onChange={handleInputChange}
-                style={{
-                  width: "100%",
-                  padding: "12px 14px",
-                  borderRadius: "8px",
-                  border: "1px solid #ccc",
-                  backgroundColor: "#f9f9f9",
-                  fontSize: "16px",
-                  fontFamily: "Arial, sans-serif",
-                  outline: "none",
-                  boxSizing: "border-box",
-                  transition: "border-color 0.2s",
-                }}
-                aria-label="Select Point of Contact"
+              id="assignedPoc"
+              name="assignedPoc"
+              value={formData.assignedPoc}
+              onChange={handleInputChange}
+              style={{
+                width: "100%",
+                padding: "12px 14px",
+                borderRadius: "8px",
+                border: "1px solid #ccc",
+                backgroundColor: "#f9f9f9",
+                fontSize: "16px",
+                fontFamily: "Arial, sans-serif",
+                outline: "none",
+                boxSizing: "border-box",
+                transition: "border-color 0.2s",
+              }}
+              aria-label="Select Point of Contact"
               >
-                <option value="">Select POC</option>
-                {pocs.length > 0 ? (
-                  pocs.map((poc) => (
-                    <option key={poc.id} value={poc.email}>
-                      {poc.firstname} {poc.lastname} ({poc.email})
-                    </option>
-                  ))
-                ) : (
-                  <option value="" disabled>
-                    No POCs available
+              <option value="None">None</option>
+              {pocs.length > 0 ? (
+                pocs.map((poc) => (
+                  <option key={poc.email} value={poc.email}>
+                  {poc.firstname} {poc.lastname} ({poc.email})
                   </option>
-                )}
+                ))
+              ) : (
+                <option value="" disabled>No POCs available</option>
+              )}
               </select>
             </div>
 

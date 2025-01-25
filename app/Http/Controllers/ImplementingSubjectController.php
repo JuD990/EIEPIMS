@@ -17,6 +17,40 @@ class ImplementingSubjectController extends Controller
         $subjects = ImplementingSubjects::all();
         return response()->json($subjects);
     }
+
+    public function fetchImplementingSubjects(Request $request)
+    {
+        // Get employee_id from the request headers
+        $employeeId = $request->header('employee_id');
+
+        if (!$employeeId) {
+            return response()->json(['error' => 'Employee ID is required'], 400);
+        }
+
+        // Find the employee using the employee_id to get the department
+        $employee = EIEHeads::where('employee_id', $employeeId)->first();
+
+        if (!$employee) {
+            Log::warning("Employee not found for employee_id: $employeeId");
+            return response()->json(['error' => 'Employee not found'], 404);
+        }
+
+        // Get the department of the employee
+        $department = $employee->department;
+
+        // Log the department to verify it's correct
+        Log::info("Employee found. Department: $department");
+
+        // Filter the implementing subjects based on the department
+        $subjects = ImplementingSubjects::where('department', $department)->get();
+
+        // Log the subjects fetched to verify data
+        Log::info("Subjects fetched: " . $subjects->toJson());
+
+        // Return the filtered subjects
+        return response()->json($subjects);
+    }
+
     public function upload(Request $request)
     {
         Log::info('File upload attempt:', ['files' => $request->files]);
@@ -79,25 +113,50 @@ class ImplementingSubjectController extends Controller
             return response()->json(['message' => 'No file uploaded.'], 400);
         }
     }
-        // Get class data based on employee_id
+        // Get class data based on employee_id and subjects semester
         public function getClassData($employee_id)
         {
-            Log::info('Employee ID: ' . $employee_id);
-            // Query for all subjects associated with the given employee_id
-            $classData = ImplementingSubjects::where('employee_id', $employee_id)->get();
+            try {
+                Log::info('Employee ID: ' . $employee_id);
 
-            if ($classData->isNotEmpty()) {
+                // Determine the current semester based on the current month
+                $currentMonth = now()->month;
+
+                if ($currentMonth >= 1 && $currentMonth <= 5) {
+                    $currentSemester = '2nd Semester'; // January to May
+                } elseif ($currentMonth >= 8 && $currentMonth <= 12) {
+                    $currentSemester = '1st Semester'; // August to December
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No Classes Available for the current semester'
+                    ]);
+                }
+
+                // Query for subjects associated with the given employee_id and current semester
+                $classData = ImplementingSubjects::where('employee_id', $employee_id)
+                ->where('semester', $currentSemester)
+                ->get();
+
+                if ($classData->isNotEmpty()) {
+                    return response()->json([
+                        'success' => true,
+                        'classData' => $classData
+                    ]);
+                }
+
                 return response()->json([
-                    'success' => true,
-                    'classData' => $classData
+                    'success' => false,
+                    'message' => 'No Classes Available for the current semester'
                 ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Server error: ' . $e->getMessage()
+                ], 500);
             }
-
-            return response()->json([
-                'success' => false,
-                'message' => 'No Classes Available'
-            ]);
         }
+
 
         public function getEmployeeDepartment($userType, $employeeId)
         {
@@ -291,5 +350,42 @@ class ImplementingSubjectController extends Controller
             }
         }
 
+        public function updateImplementingSubject(Request $request, $courseCode)
+        {
+            $subject = ImplementingSubjects::where('course_code', $courseCode)->first();
 
+            if (!$subject) {
+                return response()->json(['message' => 'Subject not found'], 404);
+            }
+
+            $validated = $request->validate([
+                'courseTitle' => 'required|string|max:255',
+                'code' => 'required|string|max:50',
+                'courseCode' => 'required|string|max:50',
+                'semester' => 'required|string|max:50',
+                'department' => 'required|string|max:100',
+                'program' => 'required|string|max:100',
+                'assignedPoc' => 'nullable|string|max:255',
+                'enrolledStudents' => 'required|integer',
+            ]);
+
+            $assignedPoc = $validated['assignedPoc'] === 'None' ? null : $validated['assignedPoc'];
+
+            \Log::info('Assigned POC:', ['assignedPoc' => $assignedPoc]);
+
+            $subject->update([
+                'course_title' => $validated['courseTitle'],
+                'code' => $validated['code'],
+                'course_code' => $validated['courseCode'],
+                'semester' => $validated['semester'],
+                'department' => $validated['department'],
+                'program' => $validated['program'],
+                'assigned_poc' => $assignedPoc,
+                'employee_id' => $assignedPoc === null ? null : $subject->employee_id,
+                'email' => $assignedPoc === null ? null : $subject->email,
+                'enrolled_students' => $validated['enrolledStudents'],
+            ]);
+
+            return response()->json(['message' => 'Subject updated successfully', 'subject' => $subject]);
+        }
 }

@@ -697,15 +697,19 @@ const TableComponent = ({ course_code, taskTitle, department }) => {
           width: '350px',
         }}
         >
-        {consistencyOptions.map(option => (
-          <option
-          key={option.id}
-          value={option.id}
-          style={{ fontSize: '12px', whiteSpace: 'pre-line' }}
-          >
-          {option.descriptor.split('.').join(' \n')}
-          </option>
-        ))}
+        {consistencyOptions.length === 0 ? (
+          <option disabled>EPGF Rubric Version Not Set</option> // Loading state if options are not yet available
+        ) : (
+          consistencyOptions.map(option => (
+            <option
+            key={option.id}
+            value={option.id}
+            style={{ fontSize: '12px', whiteSpace: 'pre-line' }}
+            >
+            {option.descriptor.split('.').join(' \n')}
+            </option>
+          ))
+        )}
         </select>
 
         {/* Display only the rating without consistency descriptor */}
@@ -713,7 +717,6 @@ const TableComponent = ({ course_code, taskTitle, department }) => {
         Rating: {student.rating || '0.00'}
         </span>
         </td>
-
 
         <td> <div style={{ textAlign: 'center', fontWeight: '600' }}> {consistencyRating} </div></td>
 
@@ -740,7 +743,7 @@ const TableComponent = ({ course_code, taskTitle, department }) => {
         }}
         >
         {clarityOptions.length === 0 ? (
-          <option disabled>Loading options...</option> // Loading state if options are not yet available
+          <option disabled>EPGF Rubric Version Not Set</option> // Loading state if options are not yet available
         ) : (
           clarityOptions.map(option => (
             <option
@@ -789,7 +792,7 @@ const TableComponent = ({ course_code, taskTitle, department }) => {
         }}
         >
         {articulationOptions.length === 0 ? (
-          <option disabled>Loading options...</option> // Show loading state if options are not available
+          <option disabled>EPGF Rubric Version Not Set</option> // Show loading state if options are not available
         ) : (
           articulationOptions.map(option => {
             const splitDescriptor = option.descriptor.split('.');  // Split descriptor to add line breaks
@@ -860,7 +863,7 @@ const TableComponent = ({ course_code, taskTitle, department }) => {
         }}
         >
         {intonationAndStressOptions.length === 0 ? (
-          <option disabled>Loading options...</option> // Show loading state if options are not available
+          <option disabled>EPGF Rubric Version Not Set</option> // Show loading state if options are not available
         ) : (
           intonationAndStressOptions.map(option => {
             const splitDescriptor = option.descriptor.split('.'); // Split descriptor to add line breaks
@@ -937,7 +940,7 @@ const TableComponent = ({ course_code, taskTitle, department }) => {
         }}
         >
         {accuracyOptions.length === 0 ? (
-          <option disabled>Loading options...</option> // Show loading state if options are not available
+          <option disabled>EPGF Rubric Version Not Set</option> // Show loading state if options are not available
         ) : (
           accuracyOptions.map(option => {
             const splitDescriptor = option.descriptor.split('.'); // Split descriptor to add line breaks
@@ -1006,7 +1009,7 @@ const TableComponent = ({ course_code, taskTitle, department }) => {
         }}
         >
         {clarityofthoughtOptions.length === 0 ? (
-          <option disabled>Loading options...</option> // Show loading state if options are not available
+          <option disabled>EPGF Rubric Version Not Set</option> // Show loading state if options are not available
         ) : (
           clarityofthoughtOptions.map(option => {
             const splitDescriptor = option.descriptor.split('.'); // Split descriptor to add line breaks
@@ -1074,7 +1077,7 @@ const TableComponent = ({ course_code, taskTitle, department }) => {
         }}
         >
         {syntaxOptions.length === 0 ? (
-          <option disabled>Loading options...</option> // Show loading state if options are not available
+          <option disabled>EPGF Rubric Version Not Set</option> // Show loading state if options are not available
         ) : (
           syntaxOptions.map(option => {
             const splitDescriptor = option.descriptor.split('.'); // Split descriptor to add line breaks
@@ -1149,7 +1152,7 @@ const TableComponent = ({ course_code, taskTitle, department }) => {
         }}
         >
         {qualityOfResponseOptions.length === 0 ? (
-          <option disabled>Loading options...</option> // Show loading state if options are not available
+          <option disabled>EPGF Rubric Version Not Set</option> // Show loading state if options are not available
         ) : (
           qualityOfResponseOptions.map(option => {
             const splitDescriptor = option.descriptor.split('.'); // Split descriptor to add line breaks
@@ -1217,7 +1220,7 @@ const TableComponent = ({ course_code, taskTitle, department }) => {
         }}
         >
         {detailOfResponseOptions.length === 0 ? (
-          <option disabled>Loading options...</option> // Show loading state if options are not available
+          <option disabled>EPGF Rubric Version Not Set</option> // Show loading state if options are not available
         ) : (
           detailOfResponseOptions.map(option => {
             const splitDescriptor = option.descriptor.split('.'); // Split descriptor to add line breaks

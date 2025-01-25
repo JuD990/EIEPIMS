@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('year_level', 10);
             $table->string('program', 50);
             $table->string('department', 50);
-            $table->string('employee_id');
-            $table->string('assigned_poc', 200);
+            $table->string('employee_id')->nullable();
+            $table->string('assigned_poc', 200)->nullable();
             $table->string('email', 50)->nullable();
             $table->decimal('epgf_average', 5, 2)->nullable()->default("0.00");
             $table->decimal('completion_rate', 5, 2)->nullable();

@@ -61,11 +61,11 @@ const StudentManagementTable = () => {
     () => [
       {
         Header: "No.",
-        accessor: "id",
+        accessor: "class_lists_id",
       },
       {
         Header: "Full Name",
-        accessor: (row) => `${row.firstname} ${row.middlename ? row.middlename + '.' : ''} ${row.lastname}`,
+        accessor: (row) => `${row.firstname} ${row.middlename} ${row.lastname}`,
       },
       {
         Header: "Status",
