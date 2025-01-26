@@ -7,6 +7,14 @@ use App\Http\Controllers\ClassListController;
 use App\Http\Controllers\MasterClassListController;
 use App\Http\Controllers\EpgfScoreCardController;
 use App\Http\Controllers\EpgfRubricController;
+use App\Http\Controllers\UserManagement;
+
+// User Management
+Route::get('/students', [UserManagement::class, 'getStudents']);
+Route::put('/students/{student_id}/reset-password', [UserManagement::class, 'resetPassword']);
+Route::post('/store-students', [UserManagement::class, 'storeStudents']);
+Route::put('/students/{student_id}', [UserManagement::class, 'updateStudents']);
+Route::post('/import-students', [UserManagement::class, 'importCSV']);
 
 //EPGF Setup
 Route::post('/import', [EpgfRubricController::class, 'import']);
@@ -61,6 +69,7 @@ Route::get('/programs-with-enrollment-second-semester/{department}', [Implementi
 
 // CollegePOC routes
 Route::get('/pocs', [CollegePOCController::class, 'getPocs'])->name('college.pocs');
+Route::get('/filtered-pocs', [CollegePOCController::class, 'getFilteredPocs'])->name('college.filtered_pocs');
 
 // MasterClassList routes
 Route::post('/import-master-class-list', [MasterClassListController::class, 'import']);

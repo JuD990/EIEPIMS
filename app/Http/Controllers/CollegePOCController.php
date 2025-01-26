@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CollegePOCs; // Assuming CollegePoc is the model for POCs
+use App\Models\CollegePOCs;
+use App\Models\EIEHeads;
 use Illuminate\Http\Request;
 
 class CollegePOCController extends Controller
@@ -14,12 +15,28 @@ class CollegePOCController extends Controller
      */
     public function getPocs()
     {
-        // Assuming you are fetching all POCs from the database
         $pocs = CollegePOCs::all();
+        return response()->json($pocs);
+    }
 
-        // Return the POCs, either as a view or a JSON response
-        return response()->json($pocs); // If you're using JSON
-        // OR
-        // return view('your_view', compact('pocs')); // If you're passing to a view
+    public function getFilteredPocs(Request $request)
+    {
+        // Retrieve the employee_id from the request
+        $employeeId = $request->input('employee_id');
+
+        // Fetch the department of the given employee_id
+        $employee = EIEHeads::where('employee_id', $employeeId)->first();
+
+        if (!$employee) {
+            return response()->json(['error' => 'Employee not found'], 404);
+        }
+
+        // Get the department
+        $department = $employee->department;
+
+        // Fetch POCs based on the department
+        $pocs = CollegePOCs::where('department', $department)->get();
+
+        return response()->json($pocs);
     }
 }

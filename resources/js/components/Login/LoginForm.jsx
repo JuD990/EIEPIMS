@@ -28,7 +28,7 @@ const LoginForm = () => {
     }
   };
 
-// Handle form submission
+  // Handle form submission
   const handleLogin = async (event) => {
     event.preventDefault();
 
@@ -59,17 +59,24 @@ const LoginForm = () => {
 
       if (response.status === 200) {
         console.log("Login Successful: ", response.data);
-        const { token, employee_id } = response.data;
+        const { token, employee_id, student_id } = response.data;
 
-        if (!employee_id) {
-          setError("Employee ID not found in the response.");
+        if (!employee_id && !student_id) {
+          setError("Employee ID or Student ID not found in the response.");
           return;
         }
 
         // Store necessary data in localStorage
         localStorage.setItem("authToken", token);
-        localStorage.setItem("employee_id", employee_id);
-        localStorage.setItem("userType", userType);
+
+        if (userType === "Student" && student_id) {
+          localStorage.setItem("student_id", student_id);
+        } else if (employee_id) {
+          localStorage.setItem("employee_id", employee_id);
+        } else {
+          setError("Employee ID or Student ID not found.");
+          return;
+        }
 
         // Navigate based on user type
         switch (userType) {
@@ -132,77 +139,77 @@ const LoginForm = () => {
           backgroundPosition: 'center',
     }}
     >
-      <div className="logos">
-        <img className="unc-logo" src={uncLogo} alt="UNC Logo" />
-        <img className="system-logo" src={systemLogo} alt="System Logo" />
-      </div>
-      <h1 className="main-title">
-      <span className="eie" title="English Immersive Environment">EIE</span> Program Implementation Management System
-      </h1>
-      <h2 className="subtitle">Please enter your credentials</h2>
-      <form className="login-form" onSubmit={handleLogin}>
-        {error && <div className="error-message">{error}</div>}
-        
-        <div className="form-group dropdown-container">
-          <label className="form-label">Login As:</label>
-          <select
-            className="dropdown"
-            value={userType}
-            onChange={(e) => setUserType(e.target.value)}
-          >
-            <option value="Student">Student</option>
-            <option value="College POC">College POC</option>
-            <option value="Lead EIE POC">Lead EIE POC</option>
-            <option value="Head EIE POC">Head EIE POC</option>
-            <option value="ESL Prime">ESL Prime</option>
-            <option value="ESL Champion">ESL Champion</option>
-          </select>
-          <img className="dropdown-logo" src={dropdownLogo} alt="Dropdown Logo" />
-        </div>
+    <div className="logos">
+    <img className="unc-logo" src={uncLogo} alt="UNC Logo" />
+    <img className="system-logo" src={systemLogo} alt="System Logo" />
+    </div>
+    <h1 className="main-title">
+    <span className="eie" title="English Immersive Environment">EIE</span> Program Implementation Management System
+    </h1>
+    <h2 className="subtitle">Please enter your credentials</h2>
+    <form className="login-form" onSubmit={handleLogin}>
+    {error && <div className="error-message">{error}</div>}
 
-        <div className="form-group email-input-container">
-          <label className="form-label">Email:</label>
-          <input
-            type="text"
-            className="email-input"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <div className="email-domain">
-            <span>@unc.edu.ph</span>
-            <img className="user-icon" src={userIcon} alt="User Icon" />
-          </div>
-        </div>
+    <div className="form-group dropdown-container">
+    <label className="form-label">Login As:</label>
+    <select
+    className="dropdown"
+    value={userType}
+    onChange={(e) => setUserType(e.target.value)}
+    >
+    <option value="Student">Student</option>
+    <option value="College POC">College POC</option>
+    <option value="Lead EIE POC">Lead EIE POC</option>
+    <option value="Head EIE POC">Head EIE POC</option>
+    <option value="ESL Prime">ESL Prime</option>
+    <option value="ESL Champion">ESL Champion</option>
+    </select>
+    <img className="dropdown-logo" src={dropdownLogo} alt="Dropdown Logo" />
+    </div>
 
-        <div className="form-group password-input-container">
-          <label className="form-label">Password:</label>
-          <div className="password-input-wrapper">
-            <input
-              type={showPassword ? "text" : "password"}
-              className="password-input"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <img
-              className="toggle-password-icon"
-              src={showPassword ? eyeOffIcon : eyeIcon}
-              alt="Toggle Password Visibility"
-              onClick={() => setShowPassword(!showPassword)}
-            />
-          </div>
-        </div>
+    <div className="form-group email-input-container">
+    <label className="form-label">Email:</label>
+    <input
+    type="text"
+    className="email-input"
+    placeholder="Email"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+    />
+    <div className="email-domain">
+    <span>@unc.edu.ph</span>
+    <img className="user-icon" src={userIcon} alt="User Icon" />
+    </div>
+    </div>
 
-        <div className="forgot-password-container">
-          <div className="forgot-password">
-            <a href="/forgot-password">Forgot Password?</a>
-          </div>
-          <button className="login-button" type="submit">
-            Login
-          </button>
-        </div>
-      </form>
+    <div className="form-group password-input-container">
+    <label className="form-label">Password:</label>
+    <div className="password-input-wrapper">
+    <input
+    type={showPassword ? "text" : "password"}
+    className="password-input"
+    placeholder="Password"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    />
+    <img
+    className="toggle-password-icon"
+    src={showPassword ? eyeOffIcon : eyeIcon}
+    alt="Toggle Password Visibility"
+    onClick={() => setShowPassword(!showPassword)}
+    />
+    </div>
+    </div>
+
+    <div className="forgot-password-container">
+    <div className="forgot-password">
+    <a href="/forgot-password">Forgot Password?</a>
+    </div>
+    <button className="login-button" type="submit">
+    Login
+    </button>
+    </div>
+    </form>
     </div>
   );
 };

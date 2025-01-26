@@ -47,9 +47,14 @@ class AuthController extends Controller
 
             // Check the user's password (use Hash::check for hashed passwords)
             if (!$this->checkPassword($user, $password)) {
-                Log::warning("Login failed: Invalid credentials for user type: $userType with email: $email");
+                Log::warning("Login failed: Invalid credentials for user type: $userType with email: $email", [
+                    'email' => $email,
+                    'user_type' => $userType
+                ]);
+                Log::warning("Expected password", ['password' => $password]); // Log the password securely if needed (avoid this in production)
                 return response()->json(['error' => 'Invalid credentials'], 401);
             }
+
 
             // Create a token for the authenticated user
             $token = $user->createToken('authToken')->plainTextToken;
@@ -65,12 +70,13 @@ class AuthController extends Controller
                             'last_activity' => time(),
             ]);
 
-            // Return employee_id along with token and user info
+            // Return employee_id or student_id along with token and user info
             return response()->json([
                 'token' => $token,
                 'user' => $user,
                 'session_id' => $sessionId,
-                'employee_id' => $user->employee_id, // Return the correct employee_id
+                'employee_id' => $user->employee_id ?? null, // For non-students
+                'student_id' => $user->student_id ?? null,   // For students, if available
             ], 200);
         } catch (\Exception $e) {
             Log::error("Login Error: " . $e->getMessage());
@@ -111,9 +117,12 @@ class AuthController extends Controller
             return Hash::check($password, $user->password); // Compare hashed password
         }
 
-        // If password column is empty, fall back to checking student_id (or another method)
-        // Example: Assuming the password is the same as the student_id, adjust as necessary.
-        return false; // or return trim($user->student_id) === trim($password);
+        // If the password column is empty, compare the password with the student_id
+        if (empty($user->password) && isset($user->student_id)) {
+            return trim($user->student_id) === trim($password); // Compare with student_id if no password is set
+        }
+
+        return false; // Return false if password is not valid or not found
     }
 
     /**
@@ -132,7 +141,7 @@ class AuthController extends Controller
         return response()->json([
             'name' => $user->firstname . ' ' . $user->lastname,    // Concatenate first name and last name with a space
             'role' => $user->role ?? $request->input('user_type'),  // Role or user type
-            'employee_id' => $user->employee_id,  // Return the employee_id
+                                'employee_id' => $user->employee_id,  // Return the employee_id
         ]);
     }
 }

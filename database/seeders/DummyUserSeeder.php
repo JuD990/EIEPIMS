@@ -85,7 +85,7 @@ class DummyUserSeeder extends Seeder
                 'lastname' => 'Danila',
                 'password' => Hash::make('password123'),
                 'email' => 'leadpoc@unc.edu.ph',
-                'department' => 'Science',
+                'department' => 'SCIS',
                 'role' => 'Lead POC',
                 'created_at' => now(),
                 'updated_at' => now(),

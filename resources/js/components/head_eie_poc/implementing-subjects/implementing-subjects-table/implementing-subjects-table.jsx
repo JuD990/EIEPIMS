@@ -23,9 +23,9 @@ const ImplementingSubjectsTable = () => {
 
   const [pocs, setPocs] = useState([]);
   const [csvErrors, setCsvErrors] = useState([]);
+  const employeeId = localStorage.getItem("employee_id");
 
   const fetchData = async () => {
-    const employeeId = localStorage.getItem("employee_id");
     if (!employeeId) {
       setError("Employee ID is required.");
       return;
@@ -54,20 +54,23 @@ const ImplementingSubjectsTable = () => {
 
   // Fetch POCs from the API
   useEffect(() => {
-    const fetchPocs = async () => {
+    const fetchFilteredPocs = async () => {
       try {
-        const response = await axios.get("/api/pocs");
+        const response = await axios.get("/api/filtered-pocs", {
+          params: { employee_id: employeeId },
+        });
+
         setPocs(response.data);
       } catch (error) {
-        console.error("Error fetching POCs:", error);
+        console.error("Error fetching filtered POCs:", error);
         setError("Failed to fetch POCs. Please try again later.");
       } finally {
-        setIsLoadingPocs(false);
+        setIsLoading(false);
       }
     };
 
-    fetchPocs();
-  }, []);
+    fetchFilteredPocs();
+  }, [employeeId]);
 
   // Polling to refresh data
   useEffect(() => {
@@ -108,9 +111,9 @@ const ImplementingSubjectsTable = () => {
 
     const updatedFormData = {
       ...formData,
-      assignedPoc: formData.assignedPoc === "None" ? null : formData.assignedPoc,
-      employee_id: formData.assignedPoc === "None" ? null : formData.employee_id,
-      email: formData.assignedPoc === "None" ? null : formData.email,
+      assignedPoc: formData.assignedPoc || null,
+      employee_id: formData.employee_id || null,
+      email: formData.email || null,
     };
 
     try {
@@ -120,7 +123,7 @@ const ImplementingSubjectsTable = () => {
       );
       if (response.status === 200) {
         setShowUpdateModal(false);
-        fetchData();
+        fetchData(); // Refresh data after successful update
       }
     } catch (error) {
       console.error("Error updating subject:", error);
@@ -128,6 +131,20 @@ const ImplementingSubjectsTable = () => {
       setIsUpdating(false);
     }
   };
+
+
+  const handlePocChange = (e) => {
+    const selectedPocId = e.target.value;
+    const selectedPoc = pocs.find((poc) => poc.employee_id === selectedPocId);
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      assignedPoc: selectedPoc ? `${selectedPoc.firstname} ${selectedPoc.lastname}` : null,
+      employee_id: selectedPoc ? selectedPoc.employee_id : null,
+      email: selectedPoc ? selectedPoc.email : null,
+    }));
+  };
+
 
   const columns = React.useMemo(
     () => [
@@ -316,50 +333,47 @@ const ImplementingSubjectsTable = () => {
           />
           </div>
 
-            <div style={{ marginBottom: "20px" }}>
-              <label
-                htmlFor="assignedPoc"
-                style={{
-                  display: "block",
-                  fontSize: "18px",
-                  color: "#383838",
-                  marginBottom: "8px",
-                  fontWeight: "600",
-                }}
-              >
-                Re-Assign POC:
-              </label>
-              <select
-              id="assignedPoc"
-              name="assignedPoc"
-              value={formData.assignedPoc}
-              onChange={handleInputChange}
-              style={{
-                width: "100%",
-                padding: "12px 14px",
-                borderRadius: "8px",
-                border: "1px solid #ccc",
-                backgroundColor: "#f9f9f9",
-                fontSize: "16px",
-                fontFamily: "Arial, sans-serif",
-                outline: "none",
-                boxSizing: "border-box",
-                transition: "border-color 0.2s",
-              }}
-              aria-label="Select Point of Contact"
-              >
-              <option value="None">None</option>
-              {pocs.length > 0 ? (
-                pocs.map((poc) => (
-                  <option key={poc.email} value={poc.email}>
-                  {poc.firstname} {poc.lastname} ({poc.email})
-                  </option>
-                ))
-              ) : (
-                <option value="" disabled>No POCs available</option>
-              )}
-              </select>
-            </div>
+          <div style={{ marginBottom: "20px" }}>
+          <label
+          htmlFor="assignedPoc"
+          style={{
+            display: "block",
+            fontSize: "18px",
+            color: "#383838",
+            marginBottom: "8px",
+            fontWeight: "600",
+          }}
+          >
+          Re-Assign POC:
+          </label>
+          <select
+          id="assignedPoc"
+          name="assignedPoc"
+          value={formData.employee_id || ""}
+          onChange={handlePocChange}
+          style={{
+            width: "100%",
+            padding: "12px 14px",
+            borderRadius: "8px",
+            border: "1px solid #ccc",
+            backgroundColor: "#f9f9f9",
+            fontSize: "16px",
+            fontFamily: "Arial, sans-serif",
+            outline: "none",
+            boxSizing: "border-box",
+            transition: "border-color 0.2s",
+          }}
+          aria-label="Select Point of Contact"
+          >
+          <option value="">None</option>
+          {pocs.map((poc) => (
+            <option key={poc.employee_id} value={poc.employee_id}>
+            {poc.firstname} {poc.lastname} ({poc.email})
+            </option>
+          ))}
+          </select>
+          </div>
+
 
             {/* Action Buttons */}
             <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>

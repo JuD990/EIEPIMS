@@ -366,12 +366,11 @@ class ImplementingSubjectController extends Controller
                 'department' => 'required|string|max:100',
                 'program' => 'required|string|max:100',
                 'assignedPoc' => 'nullable|string|max:255',
-                'enrolledStudents' => 'required|integer',
+                'employee_id' => 'nullable|string|max:50',
+                'email' => 'nullable|email|max:255',
             ]);
 
-            $assignedPoc = $validated['assignedPoc'] === 'None' ? null : $validated['assignedPoc'];
-
-            \Log::info('Assigned POC:', ['assignedPoc' => $assignedPoc]);
+            \Log::info('Updating subject with:', $validated);
 
             $subject->update([
                 'course_title' => $validated['courseTitle'],
@@ -380,12 +379,12 @@ class ImplementingSubjectController extends Controller
                 'semester' => $validated['semester'],
                 'department' => $validated['department'],
                 'program' => $validated['program'],
-                'assigned_poc' => $assignedPoc,
-                'employee_id' => $assignedPoc === null ? null : $subject->employee_id,
-                'email' => $assignedPoc === null ? null : $subject->email,
-                'enrolled_students' => $validated['enrolledStudents'],
+                'assigned_poc' => $validated['assignedPoc'],
+                'employee_id' => $validated['employee_id'],
+                'email' => $validated['email'],
             ]);
 
             return response()->json(['message' => 'Subject updated successfully', 'subject' => $subject]);
         }
+
 }

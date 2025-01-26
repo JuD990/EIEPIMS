@@ -50,12 +50,20 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.form-modal.show {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .form-container {
   background-color: #ffffff;
   width: 600px;
-  height: 800px;
+  height: 830px;
   border-radius: 5px;
   padding: 20px;
   border: 1px solid black;

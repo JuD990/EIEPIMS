@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('firstname', 50);
             $table->string('middlename', 50)->nullable();
             $table->string('lastname', 50);
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->string('email', 50)->unique();
             $table->string('department', 20);
             $table->string('role')->default('EIE Head');
