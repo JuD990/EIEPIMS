@@ -3,7 +3,8 @@ import axios from 'axios';
 import './TableComponent.css';
 import SubmitButton from '../buttons/submit-button';
 
-const TableComponent = ({ course_code, taskTitle, department }) => {
+const TableComponent = ({ course_code, taskTitle, department, course_title }) => {
+  const [courseTitle, setCourseTitle] = useState(null);
   const [version, setVersion] = useState(null);
   const [students, setStudents] = useState([]); // State to store students
   const [loading, setLoading] = useState(true); // Loading state
@@ -495,19 +496,6 @@ const TableComponent = ({ course_code, taskTitle, department }) => {
       const handleRowSubmit = async (rowIndex) => {
         const student = students[rowIndex];
 
-        // Check if taskTitle is empty
-        if (!taskTitle.trim()) {
-          alert('Please input a Task Title before submitting.');
-          return;
-        }
-
-        // Validate the 'type' field (should be Reading, Writing, or Listening)
-        const validTypes = ['Reading', 'Writing', 'Listening'];
-        if (!validTypes.includes(student.type)) {
-          alert('Please check the Type field. It should be one of "Reading", "Writing", or "Listening".');
-          return;
-        }
-
         // Retrieve the student's attribute IDs (for example, consistency, clarity, etc.)
         const consistencyId = student.consistency;
         const clarityId = student.clarity;
@@ -534,7 +522,7 @@ const TableComponent = ({ course_code, taskTitle, department }) => {
                   fullName: `${student.firstname} ${student.lastname}`,
                   epgf_average: epgfAverage.toFixed(2),
                   proficiency_level: getProficiencyLevel(epgfAverage).level,
-                  type: student.type,
+                  type: student.type || 'Reading',
 
                   // Pronunciation
                   consistency_descriptor: selectedConsistency ? selectedConsistency.descriptor : 'N/A',
@@ -571,6 +559,7 @@ const TableComponent = ({ course_code, taskTitle, department }) => {
                   department: `${student.department}`,
                   program: `${student.program}`,
                   active_students: active_students,
+                  course_title: course_title,
         };
 
         // Helper function to check for '0.00' or 'N/A'
@@ -619,6 +608,7 @@ const TableComponent = ({ course_code, taskTitle, department }) => {
             try {
               const result = JSON.parse(text); // Attempt to parse the response
               console.log('Server response:', result);
+              window.location.reload();
             } catch (parseError) {
               console.error('Failed to parse JSON:', parseError);  // Handle JSON parsing errors
             }
@@ -686,7 +676,7 @@ const TableComponent = ({ course_code, taskTitle, department }) => {
           if (selectedOption) {
             // Update consistency state
             updateData(rowIndex, 'consistency', selectedId); // Store the ID, not the descriptor string
-
+            console.log('Selected Option:', selectedOption);
             // Now update the displayed rating directly below the select
             updateData(rowIndex, 'rating', selectedOption.rating); // Assuming you want to update the rating as well
           }

@@ -37,6 +37,7 @@ const UploadingButton = () => {
       });
       alert("Subject file uploaded successfully!");
       console.log(response.data);
+      window.location.reload(); // Refresh the page
     } catch (error) {
       console.error("Error uploading subject file:", error.response?.data || error.message);
       alert("Failed to upload subject file.");
@@ -63,6 +64,7 @@ const UploadingButton = () => {
       });
       alert("Class List uploaded successfully!");
       console.log(response.data);
+      window.location.reload(); // Refresh the page
     } catch (error) {
       console.error("Error uploading class list:", error.response?.data || error.message);
       alert("Failed to upload class list.");
@@ -74,43 +76,43 @@ const UploadingButton = () => {
 
   return (
     <div className="upload-buttons-container">
-      {/* Upload Subject Button */}
-      <button onClick={handleSubjectButtonClick} className="implementing-subjects-upload-button">
-        {subjectLoading ? (
-          <span>Uploading...</span>
-        ) : (
-          <>
-            <img src={uploadLogo} alt="Upload Icon" className="upload-icon" />
-            <span className="upload-label">Upload Subject</span>
-          </>
-        )}
-      </button>
-      <input
-        type="file"
-        accept=".csv, .xlsx, .xls"
-        ref={subjectFileInputRef}
-        onChange={handleSubjectFileChange}
-        style={{ display: "none" }}
-      />
+    {/* Upload Subject Button */}
+    <button onClick={handleSubjectButtonClick} className="implementing-subjects-upload-button">
+    {subjectLoading ? (
+      <span>Uploading...</span>
+    ) : (
+      <>
+      <img src={uploadLogo} alt="Upload Icon" className="upload-icon" />
+      <span className="upload-label">Upload Subject</span>
+      </>
+    )}
+    </button>
+    <input
+    type="file"
+    accept=".csv, .xlsx, .xls"
+    ref={subjectFileInputRef}
+    onChange={handleSubjectFileChange}
+    style={{ display: "none" }}
+    />
 
-      {/* Upload Class List Button */}
-      <button onClick={handleClassListButtonClick} className="class-list-upload-button">
-        {classListLoading ? (
-          <span>Uploading...</span>
-        ) : (
-          <>
-            <img src={classListLogo} alt="Class List Icon" className="upload-icon" />
-            <span className="upload-label">Upload Class List</span>
-          </>
-        )}
-      </button>
-      <input
-        type="file"
-        accept=".csv, .xlsx, .xls"
-        ref={classListFileInputRef}
-        onChange={handleClassListFileChange}
-        style={{ display: "none" }}
-      />
+    {/* Upload Class List Button */}
+    <button onClick={handleClassListButtonClick} className="class-list-upload-button">
+    {classListLoading ? (
+      <span>Uploading...</span>
+    ) : (
+      <>
+      <img src={classListLogo} alt="Class List Icon" className="upload-icon" />
+      <span className="upload-label">Upload Class List</span>
+      </>
+    )}
+    </button>
+    <input
+    type="file"
+    accept=".csv, .xlsx, .xls"
+    ref={classListFileInputRef}
+    onChange={handleClassListFileChange}
+    style={{ display: "none" }}
+    />
     </div>
   );
 };

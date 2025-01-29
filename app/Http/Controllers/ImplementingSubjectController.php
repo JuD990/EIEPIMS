@@ -129,7 +129,7 @@ class ImplementingSubjectController extends Controller
                 } else {
                     return response()->json([
                         'success' => false,
-                        'message' => 'No Classes Available for the current semester'
+                        'message' => 'No Classes Available'
                     ]);
                 }
 
@@ -147,7 +147,7 @@ class ImplementingSubjectController extends Controller
 
                 return response()->json([
                     'success' => false,
-                    'message' => 'No Classes Available for the current semester'
+                    'message' => 'No Classes Available'
                 ]);
             } catch (\Exception $e) {
                 return response()->json([
@@ -352,12 +352,14 @@ class ImplementingSubjectController extends Controller
 
         public function updateImplementingSubject(Request $request, $courseCode)
         {
+            // Retrieve the implementing subject by course code
             $subject = ImplementingSubjects::where('course_code', $courseCode)->first();
 
             if (!$subject) {
                 return response()->json(['message' => 'Subject not found'], 404);
             }
 
+            // Validate incoming data
             $validated = $request->validate([
                 'courseTitle' => 'required|string|max:255',
                 'code' => 'required|string|max:50',
@@ -365,13 +367,19 @@ class ImplementingSubjectController extends Controller
                 'semester' => 'required|string|max:50',
                 'department' => 'required|string|max:100',
                 'program' => 'required|string|max:100',
-                'assignedPoc' => 'nullable|string|max:255',
+                'assigned_poc' => 'nullable|string|max:255',
                 'employee_id' => 'nullable|string|max:50',
                 'email' => 'nullable|email|max:255',
             ]);
 
+            $validated = array_map(function ($value) {
+                return $value === '' ? null : $value;
+            }, $validated);
+
+            // Log the validated and transformed data
             \Log::info('Updating subject with:', $validated);
 
+            // Update the subject data in the database
             $subject->update([
                 'course_title' => $validated['courseTitle'],
                 'code' => $validated['code'],
@@ -379,11 +387,12 @@ class ImplementingSubjectController extends Controller
                 'semester' => $validated['semester'],
                 'department' => $validated['department'],
                 'program' => $validated['program'],
-                'assigned_poc' => $validated['assignedPoc'],
+                'assigned_poc' => $validated['assigned_poc'],
                 'employee_id' => $validated['employee_id'],
                 'email' => $validated['email'],
             ]);
 
+            // Return success response
             return response()->json(['message' => 'Subject updated successfully', 'subject' => $subject]);
         }
 

@@ -18,7 +18,7 @@ class ClassLists extends Model
         'student_id', 'firstname', 'middlename', 'lastname',
         'email', 'program', 'department', 'year_level', 'gender', 'status',
         'classification', 'reason_for_shift_or_drop', 'pronunciation',
-        'grammar', 'fluency', 'epgf_average', 'completion_rate',
+        'grammar', 'fluency', 'epgf_average',
         'proficiency_level', 'course_code'
     ];
 

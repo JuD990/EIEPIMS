@@ -22,6 +22,8 @@ class EieScorecardClassReport extends Model
         'epgf_average',
         'proficiency_level',
         'program',
+        'active_students',
+        'course_title',
 
         // Pronunciation
         'consistency_descriptor',

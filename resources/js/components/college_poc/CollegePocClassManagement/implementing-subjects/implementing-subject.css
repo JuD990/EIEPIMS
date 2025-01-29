@@ -8,7 +8,6 @@
     align-items: center; /* Center subjects horizontally */
     padding: 20px; /* Add some padding around the container */
     margin-top: 50px; /* Add space from the top */
-    margin-left: 150px;
     width: 100%; /* Make subjects take up the full width of the container */
     max-width: 2000px; /* Optional: Limit the maximum width */
     gap: 40px;
@@ -147,4 +146,5 @@
     text-align: center;
     font-size: 24px;
     font-family: 'Poppins';
+    margin-left: 250px;
 }

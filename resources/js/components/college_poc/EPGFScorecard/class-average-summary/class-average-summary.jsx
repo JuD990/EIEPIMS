@@ -50,13 +50,12 @@ const ClassAverageSummary = ({ course_code, average, studentCount, evaluatedCoun
           average,
           completionRate,
           proficiencyLevel: level,
-          enrolled_students: studentCount, // Send studentCount as enrolled_students
-          active_students: studentCountActive, // Send studentCountActive as active_students
+          enrolled_students: studentCount,
+          active_students: studentCountActive,
         });
-
         console.log("Data sent to backend:", response.data);
       } catch (error) {
-        console.error("Error sending data to backend:", error);
+        console.error("Error sending data to backend:", error.response ? error.response.data : error.message);
       }
     };
 

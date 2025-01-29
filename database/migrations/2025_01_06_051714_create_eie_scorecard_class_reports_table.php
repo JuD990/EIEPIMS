@@ -25,13 +25,14 @@ return new class extends Migration
              $table->integer('epgf_rubric_id');
              $table->string('student_id', 50);
              $table->string('department', 100);
-             $table->string('task_title')->default('No Title');
+             $table->string('task_title');
              $table->string('type');
              $table->string('comment')->default('No Comment');
              $table->decimal('epgf_average', 5, 2);
              $table->string('proficiency_level');
              $table->string('program');
              $table->integer('active_students');
+             $table->string('course_title');
 
              // Pronunciation
              $table->text('consistency_descriptor');

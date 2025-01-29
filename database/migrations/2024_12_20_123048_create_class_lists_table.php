@@ -29,7 +29,6 @@ return new class extends Migration
             $table->decimal('grammar', 5, 2)->nullable();
             $table->decimal('fluency', 5, 2)->nullable();
             $table->decimal('epgf_average', 5, 2)->nullable();
-            $table->decimal('completion_rate', 5, 2)->nullable();
             $table->string('proficiency_level', 50)->nullable();
             $table->string('course_code');
             $table->timestamps();

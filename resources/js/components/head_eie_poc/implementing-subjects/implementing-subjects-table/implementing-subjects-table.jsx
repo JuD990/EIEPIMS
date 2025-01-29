@@ -16,7 +16,7 @@ const ImplementingSubjectsTable = () => {
     semester: "",
     program: "",
     employeeId: "",
-    assignedPoc: "",
+    assigned_poc: "",
     email: "",
     enrolledStudents: "",
   });
@@ -87,7 +87,6 @@ const ImplementingSubjectsTable = () => {
     }));
   };
 
-
   const handleUpdate = (values) => {
     setFormData({
       courseTitle: values.course_title,
@@ -96,12 +95,11 @@ const ImplementingSubjectsTable = () => {
       semester: values.semester,
       department: values.department,
       program: values.program,
-      assignedPoc: values.assigned_poc || "", // Clear the previous assigned POC
+      assigned_poc: values.assigned_poc,
       enrolledStudents: values.enrolled_students,
     });
-    setShowUpdateModal(true); // Open the Update modal
+    setShowUpdateModal(true);
   };
-
 
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -111,10 +109,12 @@ const ImplementingSubjectsTable = () => {
 
     const updatedFormData = {
       ...formData,
-      assignedPoc: formData.assignedPoc || null,
-      employee_id: formData.employee_id || null,
-      email: formData.email || null,
+      assigned_poc: formData.assigned_poc && formData.assigned_poc.trim() !== "" ? formData.assigned_poc : null,
+      employee_id: formData.employee_id ? formData.employee_id : null,
+      email: formData.email ? formData.email : null,
     };
+
+    console.log("handleFormSubmit - Submitting Data:", updatedFormData);
 
     try {
       const response = await axios.put(
@@ -122,29 +122,44 @@ const ImplementingSubjectsTable = () => {
         updatedFormData
       );
       if (response.status === 200) {
+        console.log("✅ Successfully updated subject.");
         setShowUpdateModal(false);
         fetchData(); // Refresh data after successful update
       }
     } catch (error) {
-      console.error("Error updating subject:", error);
+      console.error("❌ Error updating subject:", error.response?.data || error);
     } finally {
       setIsUpdating(false);
     }
   };
 
-
   const handlePocChange = (e) => {
     const selectedPocId = e.target.value;
-    const selectedPoc = pocs.find((poc) => poc.employee_id === selectedPocId);
 
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      assignedPoc: selectedPoc ? `${selectedPoc.firstname} ${selectedPoc.lastname}` : null,
-      employee_id: selectedPoc ? selectedPoc.employee_id : null,
-      email: selectedPoc ? selectedPoc.email : null,
-    }));
+    if (!selectedPocId) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        assigned_poc: null,
+        employee_id: null,
+        email: null,
+      }));
+    } else {
+      const selectedPoc = pocs.find((poc) => poc.employee_id === selectedPocId);
+
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        assigned_poc: selectedPoc ? `${selectedPoc.firstname} ${selectedPoc.lastname}` : null,
+        employee_id: selectedPoc ? selectedPoc.employee_id : null,
+        email: selectedPoc ? selectedPoc.email : null,
+      }));
+    }
+
+    console.log("Updated Form Data:", {
+      assigned_poc: selectedPocId ? `${selectedPocId}` : null,
+      employee_id: selectedPocId ? selectedPocId : null,
+      email: selectedPocId ? pocs.find((poc) => poc.employee_id === selectedPocId)?.email : null,
+    });
   };
-
 
   const columns = React.useMemo(
     () => [

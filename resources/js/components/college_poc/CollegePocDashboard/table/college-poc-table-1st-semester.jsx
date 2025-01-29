@@ -19,7 +19,6 @@ const TableComponent = () => {
                 const storedUserType = localStorage.getItem('userType');
 
                 if (!storedEmployeeId || !storedUserType) {
-                    setErrorMessage('Employee ID or User Type is not available.');
                     setLoading(false);
                     return;
                 }
@@ -85,7 +84,7 @@ const TableComponent = () => {
     if (Object.keys(programs).length === 0 || Object.values(programs).every((semester) => Object.keys(semester).length === 0)) {
         return (
             <div className="dashboard-college-poc-container">
-            <div className="no-data-message">No Subjects available for this department.</div>
+            <div className="no-data-message">No Implementing Subjects available in your department.</div>
             </div>
         );
     }

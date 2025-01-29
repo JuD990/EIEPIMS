@@ -30,13 +30,15 @@ const EslPrimeEPGFRubricVersion = () => {
     .then((data) => {
       console.log(`${fileType} uploaded successfully:`, data);
       showToast(`${fileType} uploaded successfully!`, "success");
+
+      // Refresh the page after successful upload
+      window.location.reload();
     })
     .catch((error) => {
       console.error(`Error uploading ${fileType}:`, error);
       showToast(`Error: ${error.message}`, "error");
     });
   };
-
 
   // Helper function to get the correct upload endpoint
   const getUploadEndpoint = (fileType) => {

@@ -101,7 +101,7 @@ const EPGFScorecard = () => {
     </div>
 
     <br />
-    <Table course_code={course_code} taskTitle={taskTitle} />
+    <Table course_code={course_code} taskTitle={taskTitle} course_title={courseTitle} />
     <br /><br />
     <div className="page-container">
     <div className="container">
