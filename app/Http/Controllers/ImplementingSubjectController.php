@@ -44,9 +44,6 @@ class ImplementingSubjectController extends Controller
         // Filter the implementing subjects based on the department
         $subjects = ImplementingSubjects::where('department', $department)->get();
 
-        // Log the subjects fetched to verify data
-        Log::info("Subjects fetched: " . $subjects->toJson());
-
         // Return the filtered subjects
         return response()->json($subjects);
     }
@@ -286,8 +283,6 @@ class ImplementingSubjectController extends Controller
                     }
                 }
 
-                Log::info('Programs Response: ', ['programs' => $programs]);
-
                 return response()->json([
                     'success' => true,
                     'programs' => $programs,
@@ -336,8 +331,6 @@ class ImplementingSubjectController extends Controller
                     }
                 }
 
-                Log::info('Programs Response: ', ['programs' => $programs]);
-
                 return response()->json([
                     'success' => true,
                     'programs' => $programs,
@@ -352,7 +345,6 @@ class ImplementingSubjectController extends Controller
 
         public function updateImplementingSubject(Request $request, $courseCode)
         {
-            \Log::info('🛠 Raw Request Data:', $request->all());
 
             $subject = ImplementingSubjects::where('course_code', $courseCode)->first();
 
@@ -383,12 +375,31 @@ class ImplementingSubjectController extends Controller
                 return $value === '' ? null : $value;
             }, $validated);
 
-            \Log::info('✅ Processed Data (After Transformation):', $validated);
-
             $subject->update($validated);
 
             return response()->json(['message' => 'Subject updated successfully', 'subject' => $subject]);
         }
 
+        public function getDropdownData()
+        {
+            try {
+                $programs = ImplementingSubjects::distinct()->pluck('program');
+                $semesters = ImplementingSubjects::distinct()->pluck('semester');
+                $yearLevels = ImplementingSubjects::distinct()->pluck('year_level');
+
+                \Log::info('Programs: ', $programs->toArray()); // Ensure it's logging the data properly
+                \Log::info('Semesters: ', $semesters->toArray());
+                \Log::info('Year Levels: ', $yearLevels->toArray());
+
+                return response()->json([
+                    'programs' => $programs,
+                    'semesters' => $semesters,
+                    'year_levels' => $yearLevels,
+                ]);
+            } catch (\Exception $e) {
+                \Log::error('Error fetching data: ' . $e->getMessage());
+                return response()->json(['error' => 'Unable to fetch data'], 500);
+            }
+        }
 
 }

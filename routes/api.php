@@ -66,6 +66,7 @@ Route::get('/employee-department/{userType}/{employeeId}', [ImplementingSubjectC
 Route::get('/programs/{department}', [ImplementingSubjectController::class, 'getProgramsForDepartment']);
 Route::get('/programs-with-enrollment-first-semester/{department}', [ImplementingSubjectController::class, 'getProgramsWithEnrollmentCountFirstSemester']);
 Route::get('/programs-with-enrollment-second-semester/{department}', [ImplementingSubjectController::class, 'getProgramsWithEnrollmentCountSecondSemester']);
+Route::get('/implementing-subjects/dropdown', [ImplementingSubjectController::class, 'getDropdownData']);
 
 // CollegePOC routes
 Route::get('/pocs', [CollegePOCController::class, 'getPocs'])->name('college.pocs');

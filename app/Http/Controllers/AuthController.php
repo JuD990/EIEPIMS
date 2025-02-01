@@ -141,7 +141,7 @@ class AuthController extends Controller
         return response()->json([
             'name' => $user->firstname . ' ' . $user->lastname,    // Concatenate first name and last name with a space
             'role' => $user->role ?? $request->input('user_type'),  // Role or user type
-                                'employee_id' => $user->employee_id,  // Return the employee_id
+            'employee_id' => $user->employee_id,  // Return the employee_id
         ]);
     }
 }

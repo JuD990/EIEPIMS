@@ -124,14 +124,12 @@ const ImplementingSubjectsTable = () => {
 
   // Log formData after it changes
   useEffect(() => {
-    console.log("Form data after change:", formData); // Logs after state update
+
   }, [formData]); // Triggered after formData state changes
 
   // Handle form submit
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form data before submitting:", formData); // Logs before form submit
-
     setIsUpdating(true);
 
     // Prepare data for API submission
@@ -141,8 +139,6 @@ const ImplementingSubjectsTable = () => {
       employee_id: formData.employee_id && formData.employee_id.trim() !== "" ? formData.employee_id : null,
       email: formData.email && formData.email.trim() !== "" ? formData.email : null,
     };
-
-    console.log("🛠 Sending Data:", JSON.stringify(updatedFormData, null, 2)); // Double-check the data you're sending
 
     try {
       const response = await axios.put(

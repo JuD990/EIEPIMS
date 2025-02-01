@@ -14,7 +14,6 @@ const EIEHeadImplementingSubjects = () => {
 
   useEffect(() => {
     const storedEmployeeId = localStorage.getItem("employee_id");
-    console.log('EmployeeID:', storedEmployeeId);
     if (storedEmployeeId) {
       setEmployeeId(storedEmployeeId);
     } else {
