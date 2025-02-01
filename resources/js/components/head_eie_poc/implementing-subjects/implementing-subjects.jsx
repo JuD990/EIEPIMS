@@ -35,13 +35,8 @@ const EIEHeadImplementingSubjects = () => {
     <div>
     <EIEHeadSidebar />
     <UserInfo />
-    <div className="dashboard-container">
-    <div className="dashboard-content">
-    <div className="dashboard-page-title">
-    <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800 }}>Implementing Subjects</h1>
-    </div>
-    </div>
-    </div>
+    <br/><br/><br/><br/><br/>
+    <h1 style={{ ffontFamily: 'Epilogue', fontWeight: 800, marginLeft: '350px', color: '#0187F1' }}>Implementing Subjects</h1>
     <br />
     <ImplementingSubjectDropdown
     selectedProgram={selectedProgram}

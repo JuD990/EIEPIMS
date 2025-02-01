@@ -352,7 +352,8 @@ class ImplementingSubjectController extends Controller
 
         public function updateImplementingSubject(Request $request, $courseCode)
         {
-            // Retrieve the implementing subject by course code
+            \Log::info('🛠 Raw Request Data:', $request->all());
+
             $subject = ImplementingSubjects::where('course_code', $courseCode)->first();
 
             if (!$subject) {
@@ -372,28 +373,22 @@ class ImplementingSubjectController extends Controller
                 'email' => 'nullable|email|max:255',
             ]);
 
+            // If email or employee_id is null, set assigned_poc to null
+            if (is_null($validated['employee_id']) || is_null($validated['email'])) {
+                $validated['assigned_poc'] = null;
+            }
+
+            // Transform any empty strings to null
             $validated = array_map(function ($value) {
                 return $value === '' ? null : $value;
             }, $validated);
 
-            // Log the validated and transformed data
-            \Log::info('Updating subject with:', $validated);
+            \Log::info('✅ Processed Data (After Transformation):', $validated);
 
-            // Update the subject data in the database
-            $subject->update([
-                'course_title' => $validated['courseTitle'],
-                'code' => $validated['code'],
-                'course_code' => $validated['courseCode'],
-                'semester' => $validated['semester'],
-                'department' => $validated['department'],
-                'program' => $validated['program'],
-                'assigned_poc' => $validated['assigned_poc'],
-                'employee_id' => $validated['employee_id'],
-                'email' => $validated['email'],
-            ]);
+            $subject->update($validated);
 
-            // Return success response
             return response()->json(['message' => 'Subject updated successfully', 'subject' => $subject]);
         }
+
 
 }

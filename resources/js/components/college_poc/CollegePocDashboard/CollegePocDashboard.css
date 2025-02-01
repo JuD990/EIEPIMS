@@ -1,9 +1,0 @@
-.dashboard-page-title{
-    margin-left: 350px;
-    color: #0187F1;
-  }
-
-  .user-info-container {
-    position: relative;
-    z-index: 10; /* Ensure higher stacking context */
-  }

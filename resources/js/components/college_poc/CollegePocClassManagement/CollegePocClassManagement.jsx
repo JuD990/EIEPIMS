@@ -2,7 +2,6 @@ import React from "react";
 import CollegePOCsidebar from "../sidebar/college-poc-sidebar";
 import UserInfo from '@user-info/User-info';
 import ImplementingSubjects from "./implementing-subjects/implementing-subject";
-import "./CollegePocClassManagement.css"
 import DashboardDropdown from "./dropdown-button/dashboard-dropdown";
 
 const CollegePocImplementingSubjects = () => {
@@ -12,7 +11,7 @@ const CollegePocImplementingSubjects = () => {
       <UserInfo />
       <br /><br /><br /><br /><br />
       <div className="implementing-subject-page-title">
-        <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800 }}>Class Management</h1>
+      <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '350px', color: '#0187F1' }}>Class Management</h1>
       </div>
       <DashboardDropdown/>
       <ImplementingSubjects />

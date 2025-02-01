@@ -11,13 +11,8 @@ const EIEHeadStudentManagement = () => {
         <div>
         <EIEHeadSidebar/>
         <UserInfo/>
-        <div className="dashboard-container">
-          <div className="dashboard-content">
-            <div className="dashboard-page-title">
-            <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800 }}>Student Management</h1>
-            </div>
-          </div>
-        </div>
+        <br/><br/><br/><br/><br/>
+        <h1 style={{ ffontFamily: 'Epilogue', fontWeight: 800, marginLeft: '350px', color: '#0187F1' }}>Student Management</h1>
         <StudentManagementDropdown/>
         <div style={{ position: 'relative', width: '100%' }}>
         <ExportButton label="Export" rightSpacing="34px" />

@@ -47,11 +47,6 @@ const ImplementingSubjectsTable = () => {
     }
   };
 
-  useEffect(() => {
-    fetchData(); // Call fetchData once when the component mounts
-  }, []);
-
-
   // Fetch POCs from the API
   useEffect(() => {
     const fetchFilteredPocs = async () => {
@@ -65,7 +60,7 @@ const ImplementingSubjectsTable = () => {
         console.error("Error fetching filtered POCs:", error);
         setError("Failed to fetch POCs. Please try again later.");
       } finally {
-        setIsLoading(false);
+        setIsLoadingPocs(false);
       }
     };
 
@@ -103,18 +98,51 @@ const ImplementingSubjectsTable = () => {
 
   const [isUpdating, setIsUpdating] = useState(false);
 
+  const handlePocChange = (e) => {
+    const selectedPocId = e.target.value;
+
+    if (selectedPocId === "") {
+      // Reset to null when 'None' is selected
+      setFormData({
+        ...formData,
+        assigned_poc: null,
+        employee_id: null,
+        email: null,
+      });
+    } else {
+      const selectedPoc = pocs.find((poc) => poc.employee_id === selectedPocId);
+      if (selectedPoc) {
+        setFormData({
+          ...formData,
+          assigned_poc: `${selectedPoc.firstname} ${selectedPoc.lastname}`,
+          employee_id: selectedPoc.employee_id,
+          email: selectedPoc.email,
+        });
+      }
+    }
+  };
+
+  // Log formData after it changes
+  useEffect(() => {
+    console.log("Form data after change:", formData); // Logs after state update
+  }, [formData]); // Triggered after formData state changes
+
+  // Handle form submit
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    console.log("Form data before submitting:", formData); // Logs before form submit
+
     setIsUpdating(true);
 
+    // Prepare data for API submission
     const updatedFormData = {
       ...formData,
       assigned_poc: formData.assigned_poc && formData.assigned_poc.trim() !== "" ? formData.assigned_poc : null,
-      employee_id: formData.employee_id ? formData.employee_id : null,
-      email: formData.email ? formData.email : null,
+      employee_id: formData.employee_id && formData.employee_id.trim() !== "" ? formData.employee_id : null,
+      email: formData.email && formData.email.trim() !== "" ? formData.email : null,
     };
 
-    console.log("handleFormSubmit - Submitting Data:", updatedFormData);
+    console.log("🛠 Sending Data:", JSON.stringify(updatedFormData, null, 2)); // Double-check the data you're sending
 
     try {
       const response = await axios.put(
@@ -131,34 +159,6 @@ const ImplementingSubjectsTable = () => {
     } finally {
       setIsUpdating(false);
     }
-  };
-
-  const handlePocChange = (e) => {
-    const selectedPocId = e.target.value;
-
-    if (!selectedPocId) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        assigned_poc: null,
-        employee_id: null,
-        email: null,
-      }));
-    } else {
-      const selectedPoc = pocs.find((poc) => poc.employee_id === selectedPocId);
-
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        assigned_poc: selectedPoc ? `${selectedPoc.firstname} ${selectedPoc.lastname}` : null,
-        employee_id: selectedPoc ? selectedPoc.employee_id : null,
-        email: selectedPoc ? selectedPoc.email : null,
-      }));
-    }
-
-    console.log("Updated Form Data:", {
-      assigned_poc: selectedPocId ? `${selectedPocId}` : null,
-      employee_id: selectedPocId ? selectedPocId : null,
-      email: selectedPocId ? pocs.find((poc) => poc.employee_id === selectedPocId)?.email : null,
-    });
   };
 
   const columns = React.useMemo(
@@ -241,7 +241,7 @@ const ImplementingSubjectsTable = () => {
           </table>
         </div>
       )}
-      
+
       {/* Show CSV upload errors */}
       {csvErrors.length > 0 && (
         <div style={{ color: "red", marginTop: "20px" }}>
@@ -388,7 +388,6 @@ const ImplementingSubjectsTable = () => {
           ))}
           </select>
           </div>
-
 
             {/* Action Buttons */}
             <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>

@@ -4,7 +4,9 @@ import { useTable } from "react-table";
 const StudentManagementTable = () => {
   const [students, setStudents] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
+    studentId: '',
     firstName: '',
     middleName: '',
     lastName: '',
@@ -33,6 +35,7 @@ const StudentManagementTable = () => {
       ...prevData,
       [name]: value,
     }));
+    setError(""); // Clear error when user types
   };
 
   const handleStatusChange = (e) => {
@@ -40,12 +43,14 @@ const StudentManagementTable = () => {
     setFormData((prevData) => ({
       ...prevData,
       status: value,
-      reason: value === 'Active' ? '' : prevData.reason
+      reason: value === "Active" ? "" : prevData.reason
     }));
+    setError(""); // Clear error when status changes
   };
 
   const handleUpdateClick = (row) => {
     setFormData({
+      studentId: row.original.student_id || '',
       firstName: row.original.firstname || '',
       middleName: row.original.middlename || '',
       lastName: row.original.lastname || '',
@@ -56,6 +61,72 @@ const StudentManagementTable = () => {
     });
     setShowModal(true);
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const storedEmployeeId = localStorage.getItem("employee_id");
+
+    if (!storedEmployeeId) {
+      console.error("No employee ID found in localStorage.");
+      return;
+    }
+
+    // ✅ Validate reason for Shift/Drop
+    if ((formData.status === "Dropped" || formData.status === "Shifted") && !formData.reason.trim()) {
+      setError("Reason for Shift/Drop is required.");
+      return; // Stop form submission
+    } else {
+      setError(""); // Clear error if input is valid
+    }
+
+    const studentId = formData.studentId; // ✅ Use studentId
+
+    console.log("Submitting student update for studentId:", studentId);
+    console.log("Form Data being submitted:", formData);
+
+    fetch(`http://localhost:8000/api/update-student/${studentId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${storedEmployeeId}`,
+      },
+      body: JSON.stringify({
+        firstName: formData.firstName,
+        middleName: formData.middleName,
+        lastName: formData.lastName,
+        classification: formData.classification,
+        yearLevel: formData.yearLevel,
+        status: formData.status,
+        reason: formData.reason,
+      }),
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Update Success:", data);
+
+      // ✅ Fetch updated student list
+      return fetch(`http://localhost:8000/api/class-list`);
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Refetched Data:", data);
+      setStudents(data);
+      setShowModal(false); // ✅ Close modal only on success
+    })
+    .catch((error) => console.error("Error:", error.message));
+  };
+
 
   const columns = React.useMemo(
     () => [
@@ -245,7 +316,7 @@ const StudentManagementTable = () => {
           }}>
             Update Credentials
           </h2>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div style={{ marginBottom: '20px' }}>
               <label style={{ display: 'block', fontSize: '20px', color: '#383838' }}>First Name:</label>
               <input
@@ -315,16 +386,30 @@ const StudentManagementTable = () => {
                 <option value="Shifted">Shifted</option>
               </select>
             </div>
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '20px', color: '#383838' }}>Reason for Shift/Drop:</label>
-              <textarea
-                name="reason"
-                value={formData.reason}
-                onChange={handleInputChange}
-                placeholder="Reason for shift/dropping"
-                disabled={formData.status === 'Active'}  // Disable if status is Active
-                style={{ width: '100%', height: '100px', padding: '10px', borderRadius: '5px', border: '1px solid #333333' }}
-              />
+            <div style={{ marginBottom: "20px" }}>
+            <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
+            Reason for Shift/Drop:
+            </label>
+            <textarea
+            name="reason"
+            value={formData.reason}
+            onChange={handleInputChange}
+            placeholder="Reason for shift/dropping"
+            disabled={formData.status === "Active"}
+            style={{
+              width: "100%",
+              height: "100px",
+              padding: "10px",
+              borderRadius: "5px",
+              border: "1px solid #333333",
+            }}
+            />
+            {/* ✅ Show error message if needed */}
+            {error && (
+              <p style={{ color: "red", marginTop: "5px", fontWeight: "bold" }}>
+              {error}
+              </p>
+            )}
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
               <button

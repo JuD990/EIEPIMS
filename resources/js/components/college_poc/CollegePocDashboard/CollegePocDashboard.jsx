@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./CollegePocDashboard.css";
 import CollegePOCsidebar from "../sidebar/college-poc-sidebar";
 import UserInfo from "@user-info/User-info";
 import Table1 from "./table/college-poc-table-1st-semester";
@@ -19,13 +18,8 @@ const CollegePocDashboard = () => {
     <div>
     <CollegePOCsidebar />
     <UserInfo />
-    <div className="dashboard-container">
-    <div className="dashboard-content">
-    <div className="dashboard-page-title">
-    <h1 style={{ fontFamily: "Epilogue", fontWeight: 800 }}>Dashboard</h1>
-    </div>
-    </div>
-    </div>
+    <br/><br/><br/><br/><br/>
+    <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#0187F1' }}>Dashboard</h1>
     <br />
     {isSecondSemester ? <Table1 /> : isFirstSemester ? <Table2 /> : null}
     <br />

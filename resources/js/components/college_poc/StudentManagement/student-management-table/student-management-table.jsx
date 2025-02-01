@@ -4,7 +4,9 @@ import { useTable } from "react-table";
 const StudentManagementTable = () => {
   const [students, setStudents] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
+    studentId: '',
     firstName: '',
     middleName: '',
     lastName: '',
@@ -45,6 +47,7 @@ const StudentManagementTable = () => {
       ...prevData,
       [name]: value,
     }));
+    setError(""); // Clear error when user types
   };
 
   const handleStatusChange = (e) => {
@@ -52,8 +55,9 @@ const StudentManagementTable = () => {
     setFormData((prevData) => ({
       ...prevData,
       status: value,
-      reason: value === 'Active' ? '' : prevData.reason
+      reason: value === "Active" ? "" : prevData.reason
     }));
+    setError(""); // Clear error when status changes
   };
 
   const handleSubmit = (e) => {
@@ -66,16 +70,24 @@ const StudentManagementTable = () => {
       return;
     }
 
-    const studentId = formData.studentId; // Get the student ID from form data
+    // Validate reason for Shift/Drop
+    if ((formData.status === "Dropped" || formData.status === "Shifted") && !formData.reason.trim()) {
+      setError("Reason for Shift/Drop is required.");
+      return; // Stop form submission
+    } else {
+      setError(""); // Clear error if input is valid
+    }
 
-    console.log("Submitting student update for studentId:", studentId);  // Log the studentId
-    console.log("Form Data being submitted:", formData);  // Log all form data being sent
+    const studentId = formData.studentId;
+
+    console.log("Submitting student update for studentId:", studentId);
+    console.log("Form Data being submitted:", formData);
 
     fetch(`http://localhost:8000/api/update-student/${studentId}`, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${storedEmployeeId}`,
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${storedEmployeeId}`,
       },
       body: JSON.stringify({
         firstName: formData.firstName,
@@ -95,24 +107,20 @@ const StudentManagementTable = () => {
     })
     .then((data) => {
       console.log("Update Success:", data);
-
-      // Refetch the student data after the update
-      const storedEmployeeId = localStorage.getItem("employee_id");
-      fetch(`http://localhost:8000/api/manage-class-list?employee_id=${storedEmployeeId}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Refetched Data:", data);
-        setStudents(data); // Update the students state with the new data
-        setShowModal(false); // Close the modal after success
-      })
-      .catch((error) => console.error("Error fetching updated student data:", error.message));
+      return fetch(`http://localhost:8000/api/manage-class-list?employee_id=${storedEmployeeId}`);
     })
-    .catch((error) => console.error("Error updating student:", error.message));
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Refetched Data:", data);
+      setStudents(data);
+      setShowModal(false);
+    })
+    .catch((error) => console.error("Error:", error.message));
   };
 
   const handleUpdateClick = (row) => {
@@ -391,16 +399,30 @@ const StudentManagementTable = () => {
       <option value="Shifted">Shifted</option>
       </select>
       </div>
-      <div style={{ marginBottom: '20px' }}>
-      <label style={{ display: 'block', fontSize: '20px', color: '#383838' }}>Reason for Shift/Drop:</label>
+      <div style={{ marginBottom: "20px" }}>
+      <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
+      Reason for Shift/Drop:
+      </label>
       <textarea
       name="reason"
       value={formData.reason}
       onChange={handleInputChange}
       placeholder="Reason for shift/dropping"
-      disabled={formData.status === 'Active'}  // Disable if status is Active
-      style={{ width: '100%', height: '100px', padding: '10px', borderRadius: '5px', border: '1px solid #333333' }}
+      disabled={formData.status === "Active"}
+      style={{
+        width: "100%",
+        height: "100px",
+        padding: "10px",
+        borderRadius: "5px",
+        border: "1px solid #333333",
+      }}
       />
+      {/* ✅ Show error message if needed */}
+      {error && (
+        <p style={{ color: "red", marginTop: "5px", fontWeight: "bold" }}>
+        {error}
+        </p>
+      )}
       </div>
       <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
       <button

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./EIEreporting.css"
 import CollegePOCsidebar from "../sidebar/college-poc-sidebar";
 import UserInfo from '@user-info/User-info';
 import Table1 from "./table/eie-reporting-table-1st-sem";
@@ -20,7 +19,7 @@ const EIEreporting = () => {
       <UserInfo />
       <br /><br /><br /><br /><br />
       <div className="eie-reporting-page-title">
-        <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800 }}>EIE Reporting</h1>
+        <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#0187F1' }}>EIE Reporting</h1>
       </div>
       {isSecondSemester ? <Table1 /> : isFirstSemester ? <Table2 /> : null}
     </div>
