@@ -47,7 +47,7 @@ const ESLSidebar = () => {
   };
 
   const handleEslMonthlyChampsClick = () => {
-    navigate("/esl-monthly-champions");
+    navigate("/esl-template");
   };
 
   const handleEslAccountsClick = () => {

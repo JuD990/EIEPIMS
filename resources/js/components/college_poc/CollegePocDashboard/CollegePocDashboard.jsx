@@ -3,7 +3,6 @@ import CollegePOCsidebar from "../sidebar/college-poc-sidebar";
 import UserInfo from "@user-info/User-info";
 import Table1 from "./table/college-poc-table-1st-semester";
 import Table2 from "./table/college-poc-table-2nd-semester";
-import LogoutButton from "@logout/Logout";
 
 const CollegePocDashboard = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false); // State to handle dropdown visibility

@@ -11,14 +11,42 @@ class DummyUserSeeder extends Seeder
     public function run()
     {
         // ================= Student Role =================
-        $students = [
+ /*       $students = [
             [
                 'student_id' => 'STU001',
                 'firstname' => 'Christine Joy',
                 'middlename' => '',
                 'lastname' => 'Cleofe',
                 'password' => Hash::make('password123'),
-                'email' => 'student@unc.edu.ph',
+                'email' => 'christinejoy.cleofe@unc.edu.ph',
+                'department' => 'SCIS',
+                'year_level' => '4th Year',
+                'program' => 'BSIT',
+                'role' => 'Student',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'student_id' => 'STU002',
+                'firstname' => 'Camille',
+                'middlename' => '',
+                'lastname' => 'Abang',
+                'password' => Hash::make('password123'),
+                'email' => 'camille.abang@unc.edu.ph',
+                'department' => 'SCIS',
+                'year_level' => '4th Year',
+                'program' => 'BSIT',
+                'role' => 'Student',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'student_id' => 'STU003',
+                'firstname' => 'Jude Christian',
+                'middlename' => 'V.',
+                'lastname' => 'Adolfo',
+                'password' => Hash::make('password123'),
+                'email' => 'judechristian.adolfo@unc.edu.ph',
                 'department' => 'SCIS',
                 'year_level' => '4th Year',
                 'program' => 'BSIT',
@@ -29,7 +57,7 @@ class DummyUserSeeder extends Seeder
         ];
 
         DB::table('students')->insert($students);
-
+*/
         // ================= EIE Head Role =================
         $eie_heads = [
             [

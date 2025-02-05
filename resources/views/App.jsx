@@ -5,6 +5,7 @@ import LoginForm from "../js/components/Login/LoginForm";
 import EslChampionDashboard from "../js/components/esl_champion/EslChampionDashboard/EslChampionDashboard";
 {/* Student Imports*/}
 import StudentDashboard from "../js/components/student/StudentDashboard";
+import StudentViewScores from "../js/components/student/eie-evaluations-scores/view-scores"
 {/* Head POC Imports*/}
 import HeadEiePocDashboard from "../js/components/head_eie_poc/eie-head-dashboard/HeadEiePocDashboard";
 import EIEHeadReporting from "../js/components/head_eie_poc/eie-head-eie-reporting/eie-head-eie-reporting";
@@ -23,7 +24,7 @@ import CollegePocStudentManagement from "../js/components/college_poc/StudentMan
 import EslPrimeEieReporting from "../js/components/esl_prime/EIE-reporting/esl-prime-eie-reporting";
 import ElPrimeEPGFRubricVersion from "../js/components/esl_prime/EIE-management/epgf-rubric-version/esl-prime-epgf-rubric-versioning";
 import EslCertification from "../js/components/esl_prime/EIE-management/certification/esl-prime-certification";
-import EslMonthlyChampions from "../js/components/esl_prime/EIE-management/monthly-champion/esl-prime-monthly-champion";
+import EslTemplate from "../js/components/esl_prime/EIE-management/template/esl-template-champion";
 import EslPrimeAccountManagement from "../js/components/esl_prime/EIE-management/accounts/esl-prime-account-management";
 import EslPrimeDashboard from "../js/components/esl_prime/EslPrimeDashboard/EslPrimeDashboard";
 import EslInterviewScorecard from "../js/components/esl_prime/EIE-diagnostic/esl-interview-scorecard/esl-interview-scorecard";
@@ -39,6 +40,7 @@ const App = () => {
         <Route path="/" element={<LoginForm />} />
         {/* Student */}
         <Route path="/student-dashboard" element={<PrivateRoute><StudentDashboard /></PrivateRoute>} />
+        <Route path="/view-scores/:historicalScorecardId" element={<PrivateRoute><StudentViewScores /></PrivateRoute>} />
         {/* College POC */}
         <Route path="/college-poc-dashboard" element={<PrivateRoute><CollegePocDashboard /></PrivateRoute>} />
         <Route path="/class-management" element={<PrivateRoute><CollegePocImplementingSubject /></PrivateRoute>} />
@@ -58,7 +60,7 @@ const App = () => {
         {/* ESL EIE Management*/}
         <Route path="/esl-epgf-versioning" element={<PrivateRoute><ElPrimeEPGFRubricVersion /></PrivateRoute>} />
         <Route path="/esl-certification" element={<PrivateRoute><EslCertification /></PrivateRoute>} />
-        <Route path="/esl-monthly-champions" element={<PrivateRoute><EslMonthlyChampions /></PrivateRoute>} />
+        <Route path="/esl-template" element={<PrivateRoute><EslTemplate /></PrivateRoute>} />
         <Route path="/esl-account-management" element={<PrivateRoute><EslPrimeAccountManagement /></PrivateRoute>} />
 
         {/* EIE Head */}

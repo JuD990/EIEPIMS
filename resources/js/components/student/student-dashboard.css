@@ -1,0 +1,16 @@
+/* Dashboard Title */
+.dashboard-title {
+    font-family: 'Epilogue';
+    font-weight: 800;
+    margin-left: 340px;
+    color: #0187F1;
+}
+
+/* Student Dashboard Card Container */
+.student-dashboard-cards-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two cards per row */
+    gap: 20px;
+    margin-left: 340px;
+    margin-top: 20px;
+}

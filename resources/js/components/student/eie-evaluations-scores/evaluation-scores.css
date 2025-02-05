@@ -1,0 +1,112 @@
+/* Base Card Styling */
+.student-dashboard-card-4 {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2), 0px 6px 20px rgba(0, 0, 0, 0.19);
+    position: relative;
+    display: flex;
+    flex-direction: column; /* Stack content vertically */
+    align-items: flex-start; /* Align content to the left */
+    justify-content: flex-start; /* Start from the top */
+    padding: 20px;
+    width: 600px;
+    height: 400px; /* Card height */
+    background-color: white;
+    justify-self: end;
+    margin-right: 25px;
+}
+
+/* Card Title Styling */
+.card-title-4 {
+    font-size: 22px;
+    font-weight: bold;
+    font-family: "Poppins";
+    margin: 0;
+    text-align: left; /* Align title to the left */
+    width: 100%; /* Ensures title takes up full width for left alignment */
+}
+
+/* Dropdown Container */
+.evaluation-scores-dropdown-container {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #E5E5E5;
+    border-radius: 8px;
+    padding: 5px;
+    background-color: white;
+    width: auto; /* Allows width to adjust based on content */
+}
+
+/* Custom Dropdown */
+.evaluation-scores-custom-dropdown {
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    border: none;
+    outline: none;
+    appearance: none; /* Remove default dropdown styling */
+    padding: 5px 30px 5px 10px; /* Adjust padding for dropdown icon */
+    background: transparent;
+    cursor: pointer;
+}
+
+/* Dropdown Icon */
+.evaluation-scores-dropdown-icon {
+    position: absolute;
+    right: 10px;
+    color: blue;
+    pointer-events: none; /* Prevents clicking on the icon */
+}
+
+/* Ensure Dropdown Width Adjusts Based on Text */
+.evaluation-scores-custom-dropdown option {
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+}
+
+/* Table Styling */
+/* Table Styling */
+.evaluation-scores-table {
+    margin-top: 20px; /* Add space between dropdown and table */
+    border-collapse: separate; /* Separate the borders of the cells */
+    border-spacing: 20px; /* Adds space between columns */
+    padding: 10px 50px;
+    text-align: center; /* Center text in all table cells */
+    display: block;
+    overflow-y: auto; /* Add scroll for overflow if necessary */
+}
+
+/* Row border styling */
+.evaluation-scores-table tr {
+    border-bottom: 1px solid #ddd; /* Adds a light border below each row */
+}
+
+/* Make sure cells inside the rows don't have borders */
+.evaluation-scores-table th,
+.evaluation-scores-table td {
+    padding: 1px; /* Add some padding to make the table look better */
+    border: none; /* Remove borders from cells */
+}
+
+/* Header Styling */
+.evaluation-scores-table th {
+    font-weight: bold; /* Bold the header text */
+}
+
+/* Add space between rows */
+.evaluation-scores-table tr + tr {
+    border-top: 1px solid #ddd; /* Add a border on top of each row except the first */
+}
+
+.view-score-link {
+    color: #0187F1;
+    text-decoration: underline; /* ✅ Adds underline */
+    cursor: pointer; /* Optional: Makes it look clickable */
+    border: none; /* Optional: Removes button border if needed */
+    background: none; /* Optional: Removes background if it's a button */
+    font-size: inherit; /* Optional: Keeps the default text size */
+}
+

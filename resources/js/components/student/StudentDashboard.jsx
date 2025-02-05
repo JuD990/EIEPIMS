@@ -1,9 +1,29 @@
-import React from 'react';
+import React from "react";
+import UserInfo from "@user-info/User-info";
+import Studentsidebar from "./sidebar/student-sidebar";
+import "./student-dashboard.css";
+import CardOne from "./eie-monthly-performance-summary/monthly-performance-summary";
+import CardTwo from "./current-implementing-subject/current-student-subject";
+import CardThree from "./eie-performance-summary/eie-performance-summary";
+import CardFour from "./eie-evaluations-scores/evaluation-scores";
 
 const StudentDashboard = () => {
   return (
     <div>
-      <h1>Student Dashboard</h1>
+    <Studentsidebar />
+    <UserInfo />
+    <br/><br/><br/><br/><br/>
+
+    <h1 className="dashboard-title">Dashboard</h1>
+
+    {/* Student Dashboard Cards Container */}
+    <div className="student-dashboard-cards-container">
+    <CardOne />
+    <CardTwo />
+    <CardThree />
+    <CardFour />
+    <br/><br/>
+    </div>
     </div>
   );
 };

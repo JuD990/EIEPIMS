@@ -32,8 +32,6 @@ return new class extends Migration
             $table->string('proficiency_level', 50)->nullable();
             $table->string('course_code');
             $table->timestamps();
-    
-            $table->unique(['student_id', 'course_code']);
         });
     }    
 

@@ -7,13 +7,8 @@ return(
     <div>
         <Sidebar/>
         <UserInfo/>
-      <div className="dashboard-container">
-        <div className="dashboard-content">
-          <div className="dashboard-page-title">
-          <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800 }}>Interview Scorecard</h1>
-          </div>
-        </div>
-      </div>
+        <br/><br/><br/><br/><br/>
+        <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#0187F1' }}>Interview Scorecard</h1>
     </div>
     );
 };

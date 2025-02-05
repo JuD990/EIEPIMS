@@ -28,10 +28,10 @@ const EPGFScorecard = () => {
       // Fetch all the data in parallel using axios.all for efficiency
       axios.all([
         axios.get(`/api/epgf-scorecard?course_code=${course_code}`),
-                axios.get(`/api/get-student-count?course_code=${course_code}`),
-                axios.get(`/api/get-student-count-active?course_code=${course_code}`),
-                axios.get(`/api/get-evaluated-count?course_code=${course_code}`),
-                axios.get(`/api/get-class-average?course_code=${course_code}`)
+        axios.get(`/api/get-student-count?course_code=${course_code}`),
+        axios.get(`/api/get-student-count-active?course_code=${course_code}`),
+        axios.get(`/api/get-evaluated-count?course_code=${course_code}`),
+        axios.get(`/api/get-class-average?course_code=${course_code}`)
       ])
       .then(axios.spread((courseDetails, studentCountResponse, activeStudentCountResponse, evaluatedCountResponse, classAverageResponse) => {
         // Handle course details
@@ -85,7 +85,7 @@ const EPGFScorecard = () => {
     <p className='task-label'>Task Title:</p>
     <input
     type="text"
-    placeholder="Enter Task Title (Required)"
+    placeholder="Enter Task Title (Optional)"
     className="custom-input"
     value={taskTitle}
     onChange={(e) => setTaskTitle(e.target.value)}

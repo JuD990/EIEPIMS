@@ -553,7 +553,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title }) =>
 
                   comment: student.comment,
                   course_code: course_code,
-                  task_title: taskTitle,
+                  task_title: taskTitle || "No Title",
                   epgf_rubric_id: version,
                   student_id: `${student.student_id}`,
                   department: `${student.department}`,
@@ -569,6 +569,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title }) =>
 
         // Create an array of keys to exclude from the validation check
         const excludedKeys = [
+          'task_title',
           'epgf_average',
           'proficiency_level',
           'comment',

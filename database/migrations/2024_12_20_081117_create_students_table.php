@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('year_level');
             $table->string('program');
             $table->string('role')->default('Student');
+            $table->decimal('egpf_average', 5, 2)->nullable();
+            $table->string('proficiency_level')->nullable();
             $table->timestamps();
         });
     }

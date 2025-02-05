@@ -4,24 +4,36 @@ import { useTable } from "react-table";
 const Table = ({ rubricVersion }) => {
   const [rubricDetails, setRubricDetails] = useState(null);
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchRubricDetails = async () => {
-      if (!rubricVersion) return;
+      setLoading(true);
+      setError(null);
 
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/get-rubric-details", {
-          method: "POST",
+        const response = await fetch("http://127.0.0.1:8000/api/display-epgf-rubric", {
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ version: rubricVersion }),
         });
 
         const data = await response.json();
+
+        // Handle errors if data is empty or not found
+        if (data.error) {
+          setError(data.error);
+          return;
+        }
+
         setRubricDetails(data);
       } catch (error) {
+        setError("Error fetching rubric details");
         console.error("Error fetching rubric details:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -30,16 +42,34 @@ const Table = ({ rubricVersion }) => {
 
   useEffect(() => {
     if (rubricDetails) {
-      const formattedData = rubricDetails.pronunciation.map((pronunciation, index) => ({
-        pronunciation: pronunciation.pronunciation || "",
-        pronunciationDescriptor: pronunciation.descriptor || "",
-        pronunciationRating: pronunciation.rating || "",
-        grammar: rubricDetails.grammar[index]?.grammar || "",
-        grammarDescriptor: rubricDetails.grammar[index]?.descriptor || "",
-        grammarRating: rubricDetails.grammar[index]?.rating || "",
-        fluency: rubricDetails.fluency[index]?.fluency || "",
-        fluencyDescriptor: rubricDetails.fluency[index]?.descriptor || "",
-        fluencyRating: rubricDetails.fluency[index]?.rating || "",
+      // Helper function to remove duplicates from a string by splitting into words and rejoining
+      const removeDuplicates = (text) => {
+        const words = text?.split(/\s+/) || []; // Split on spaces, handle multiple spaces
+        const cleanedWords = words.map((word) => word.replace(/[^\w\s]/g, "")); // Remove punctuation
+        return [...new Set(cleanedWords)].join(" ");
+      };
+
+      // Function to format descriptors and replace '.' with a new line
+      const formatDescriptor = (descriptor) => {
+        if (!descriptor) return "";
+        return descriptor.split(".").map((text, index) => (
+          <span key={index}>
+          {text.trim()}
+          {index < descriptor.split(".").length - 1 && <br />}
+          </span>
+        ));
+      };
+
+      const formattedData = rubricDetails.pronunciations.map((pronunciation, index) => ({
+        pronunciation: removeDuplicates(pronunciation.pronunciation || ""),
+                                                                                        pronunciationDescriptor: formatDescriptor(pronunciation.descriptor || ""),
+                                                                                        pronunciationRating: pronunciation.rating || "",
+                                                                                        grammar: removeDuplicates(rubricDetails.grammars[index]?.grammar || ""),
+                                                                                        grammarDescriptor: formatDescriptor(rubricDetails.grammars[index]?.descriptor || ""),
+                                                                                        grammarRating: rubricDetails.grammars[index]?.rating || "",
+                                                                                        fluency: removeDuplicates(rubricDetails.fluencies[index]?.fluency || ""),
+                                                                                        fluencyDescriptor: formatDescriptor(rubricDetails.fluencies[index]?.descriptor || ""),
+                                                                                        fluencyRating: rubricDetails.fluencies[index]?.rating || "",
       }));
       setData(formattedData);
     }
@@ -82,6 +112,9 @@ const Table = ({ rubricVersion }) => {
       boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
     }}
     >
+    {loading && <p>Loading...</p>}
+    {error && <p style={{ color: "red" }}>{error}</p>}
+
     <table
     {...getTableProps()}
     style={{

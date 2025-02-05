@@ -32,12 +32,11 @@
     margin-left: 60px;
 }
 
-
 .eie {
-    font-weight: bold; /* Emphasize "EIE" */
-    color: #007bff; /* Optional: Change the text color */
-    text-decoration: underline; /* Optional: Add an underline for emphasis */
-    cursor: help; /* Show a help cursor on hover */
+    font-weight: bold;
+    color: #007bff;
+    text-decoration: underline;
+    cursor: help;
 }
   
 .subtitle {
@@ -58,16 +57,41 @@
 }
   
 .form-group {
-    margin-bottom: 13px;
+    margin-top: 8px;
 }
-  
-.form-label {
+
+.password-form-label{
     font-family: 'Poppins';
     font-size: 15px;
     color: #383838;
+    margin-top: 15px;
+    margin-right: 2px;
+    margin-bottom: 15px;
+    font-weight: bolder;
+    white-space: nowrap;
+}
+
+.email-form-label{
+    font-family: 'Poppins';
+    font-size: 15px;
+    color: #383838;
+    margin-top: 15px;
+    margin-right: 3px;
+    margin-bottom: 15px;
+    font-weight: bolder;
+    white-space: nowrap;
+}
+
+.login-form-label {
+    font-family: 'Poppins';
+    font-size: 15px;
+    color: #383838;
+    margin-top: 18px;
+    margin-bottom: 12px;
     margin-right: 3px;
     font-weight: bolder;
     white-space: nowrap;
+
 }
   
 .dropdown-container {
@@ -80,7 +104,7 @@
     width: 400px;
     height: 50px;
     padding: 10px;
-    font-family: 'Montserrat Regular';
+    font-family: 'Poppins';
     font-size: 16px;
     border-radius: 10px;
     appearance: none;
@@ -112,7 +136,7 @@
     width: 220px;
     height: 50px;
     padding: 10px;
-    font-family: 'Montserrat Regular';
+    font-family: 'Poppins';
     font-size: 18px;
     border-radius: 10px;
     margin-left: 16px;
@@ -157,7 +181,7 @@
     width: 374px;
     height: 50px;
     padding: 10px 40px 10px 10px;
-    font-family: 'Montserrat Regular';
+    font-family: 'Poppins';
     font-size: 16px;
     border-radius: 10px;
     border: 1px solid #ccc;
@@ -200,7 +224,7 @@
     background-color: #0187F1;
     border-radius: 32px;
     color: #FFF3F0;
-    font-family: 'Baloo Thambi Regular';
+    font-family: 'Poppins';
     font-size: 18px;
     text-align: center;
     font-weight: bold;

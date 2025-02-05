@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('lastname', 50);
             $table->string('password')->nullable();
             $table->string('email', 50)->unique();
-            $table->string('role')->default('ESL Champion');
+            $table->string('role');
             $table->timestamps();
         });
     }

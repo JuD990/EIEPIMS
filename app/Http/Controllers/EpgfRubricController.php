@@ -270,4 +270,30 @@ class EpgfRubricController extends Controller
             return response()->json(['error' => 'Internal Server Error'], 500);
         }
     }
+
+    public function displayEpgfRubric()
+    {
+        // Step 1: Find the active rubric
+        $activeRubric = EpgfRubric::where('status', 'active')->first();
+
+        // Check if active rubric exists
+        if (!$activeRubric) {
+            return response()->json(['error' => 'No active rubric found'], 404);
+        }
+
+        // Get the epgf_rubric_id
+        $epgfRubricId = $activeRubric->epgf_rubric_id;
+
+        // Step 2: Retrieve data from the related tables
+        $pronunciations = EpgfPronunciation::where('epgf_pronunciation_id', $epgfRubricId)->get();
+        $grammars = EpgfGrammar::where('epgf_grammar_id', $epgfRubricId)->get();
+        $fluencies = EpgfFluency::where('epgf_fluency_id', $epgfRubricId)->get();
+
+        // Step 3: Return the data as JSON response
+        return response()->json([
+            'pronunciations' => $pronunciations,
+            'grammars' => $grammars,
+            'fluencies' => $fluencies,
+        ]);
+    }
 }

@@ -151,7 +151,7 @@ const LoginForm = () => {
     {error && <div className="error-message">{error}</div>}
 
     <div className="form-group dropdown-container">
-    <label className="form-label">Login As:</label>
+    <label className="login-form-label">Login As:</label>
     <select
     className="dropdown"
     value={userType}
@@ -168,7 +168,7 @@ const LoginForm = () => {
     </div>
 
     <div className="form-group email-input-container">
-    <label className="form-label">Email:</label>
+    <label className="email-form-label">Email:</label>
     <input
     type="text"
     className="email-input"
@@ -183,7 +183,7 @@ const LoginForm = () => {
     </div>
 
     <div className="form-group password-input-container">
-    <label className="form-label">Password:</label>
+    <label className="password-form-label">Password:</label>
     <div className="password-input-wrapper">
     <input
     type={showPassword ? "text" : "password"}
@@ -203,7 +203,6 @@ const LoginForm = () => {
 
     <div className="forgot-password-container">
     <div className="forgot-password">
-    <a href="/forgot-password">Forgot Password?</a>
     </div>
     <button className="login-button" type="submit">
     Login

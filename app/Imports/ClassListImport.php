@@ -11,17 +11,6 @@ class ClassListImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
-        // Check if the combination of student_id and course_code already exists
-        $existingRecord = ClassLists::where('student_id', $row['student_id'])
-            ->where('course_code', $row['course_code'])
-            ->first();
-
-        // If a record already exists, skip inserting
-        if ($existingRecord) {
-            return null;  // Skips the duplicate record
-        }
-
-        // If no duplicate, insert the new record
         return new ClassLists([
             'student_id'           => $row['student_id'],
             'firstname'            => $row['firstname'],
@@ -43,6 +32,6 @@ class ClassListImport implements ToModel, WithHeadingRow
             'proficiency_level'    => $row['proficiency_level'] ?? null,
             'course_code'          => $row['course_code'],
         ]);
-        
     }
+
 }

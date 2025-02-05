@@ -1,0 +1,197 @@
+/* ViewScores.css */
+
+/* General Styling */
+.view-scores-container {
+    position: relative;
+}
+
+/* Back Button */
+.back-button {
+    display: flex;
+    align-items: center;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 340px;
+}
+
+.back-button img {
+    width: 60px;
+    height: 60px;
+    margin-right: 8px;
+}
+
+.back-button p {
+    font-size: 30px;
+    margin-top: 18px;
+    font-family: "Epilogue", sans-serif;
+    font-weight: bold;
+    color: #0187F1;
+}
+
+/* Main Card */
+.main-card {
+    display: flex;
+    justify-content: flex-end;
+    border: 1px solid black;
+    width: 1550px;
+    height: 900px;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin-left: 340px;
+    position: relative;
+}
+
+/* Subject Title */
+.subject-title {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: "Epilogue", sans-serif;
+    color: #0187F1;
+}
+
+/* Cards */
+.cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Styles for the top-card container */
+.top-card {
+    border: 1px solid black;
+    width: 500px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+/* Use Grid Layout for Key-Value Pairs */
+.evaluation-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap: 10px; /* Space between rows */
+    font-size: 18px;
+    font-family: "Poppins", sans-serif;
+}
+
+/* Style the values differently */
+.value {
+    font-weight: bold;
+    text-align: right;
+}
+
+/* Larger font for PGF Average */
+.value.large {
+    font-size: 30px;
+    font-weight: 400;
+}
+
+/* Styling for the Proficiency badge */
+.value-badge {
+    font-size: 20px;
+    font-weight: 600;
+    padding: 5px 5px;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+}
+
+
+.top-card p{
+    margin-left: 20px;
+}
+
+.bottom-card {
+    border: 1px solid black;
+    width: 500px;
+    height: 300px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.bottom-card p{
+    margin-left: 20px;
+    font-size: 20px;
+}
+
+/* Date & Type */
+.date-type-container {
+    position: absolute;
+    top: 140px;
+    left: 150px;
+    width: 700px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+    font-family: "Poppins", sans-serif;
+    color: #000;
+}
+
+/* Panels */
+.panels-container {
+    position: absolute;
+    top: 180px;
+    left: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.panel {
+    width: 700px;
+    height: 65px;
+    background-color: #fff;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    font-family: "Poppins", sans-serif;
+}
+
+.panel span {
+    font-size: 30px;
+    font-family: "Poppins", sans-serif;
+}
+
+.panel-score {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.panel-score p {
+    font-size: 30px;
+    color: #0187F1;
+    margin-top: 18px;
+}
+
+.panel-score img {
+    width: 60px;
+    height: 30px;
+}
+
+/* Dropdown Content */
+.panel-content {
+    width: 700px;
+    background-color: #fff;
+    padding: 20px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 5px;
+}

@@ -8,6 +8,12 @@ use App\Http\Controllers\MasterClassListController;
 use App\Http\Controllers\EpgfScoreCardController;
 use App\Http\Controllers\EpgfRubricController;
 use App\Http\Controllers\UserManagement;
+use App\Http\Controllers\HistoricalScorecardController;
+
+//Student
+Route::get('/get-courses', [HistoricalScorecardController::class, 'getCoursesByStudent']);
+Route::get('/get-course-details', [HistoricalScorecardController::class, 'getCourseDetails']);
+
 
 // User Management
 Route::get('/students', [UserManagement::class, 'getStudents']);
@@ -22,6 +28,7 @@ Route::get('/rubric-versions', [EpgfRubricController::class, 'getRubricVersions'
 Route::post('/set-default', [EpgfRubricController::class, 'setDefault']);
 Route::post('/get-rubric-details', [EpgfRubricController::class, 'getRubricDetails']);
 Route::get('/rubric/active-version', [EpgfRubricController::class, 'getActiveVersion']);
+Route::get('/display-epgf-rubric', [EpgfRubricController::class, 'displayEpgfRubric']);
 
 //Pronunciation
 Route::get('/consistency/{majorVersion}', [EpgfRubricController::class, 'getConsistency']);

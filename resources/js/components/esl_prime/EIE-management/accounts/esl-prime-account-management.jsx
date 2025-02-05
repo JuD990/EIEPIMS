@@ -11,13 +11,8 @@ return(
     <div>
       <Sidebar />
       <UserInfo />
-      <div className="dashboard-container">
-        <div className="dashboard-content">
-          <div className="dashboard-page-title">
-          <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '-60px' }}>User Management</h1>
-          </div>
-        </div>
-      </div>
+          <br/><br/><br/><br/><br/>
+          <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '345px', color: '#0187F1' }}>User Management</h1>
       <UserManagementDropdown/>
       <UserManagementTable />
       <UserManagementButtons/>
