@@ -3,7 +3,7 @@ import axios from "axios";
 import { useTable } from "react-table";
 import "./user-management-table.css";
 
-const UserManagementTable = () => {
+const UserManagementTable = ({searchQuery}) => {
   const [students, setStudents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -117,6 +117,16 @@ const UserManagementTable = () => {
     }
   };
 
+  // Filter students based on search query
+  const filteredStudents = students.filter((student) =>
+  student.firstname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  student.lastname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  student.student_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  student.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  student.department.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  student.program.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   // Define columns for the table
   const columns = React.useMemo(
     () => [
@@ -175,7 +185,7 @@ const UserManagementTable = () => {
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
     columns,
-    data: students,
+    data: filteredStudents,
   });
 
   if (isLoading) {

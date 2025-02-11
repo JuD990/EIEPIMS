@@ -3,7 +3,7 @@ import axios from 'axios';
 import './TableComponent.css';
 import SubmitButton from '../buttons/submit-button';
 
-const TableComponent = ({ course_code, taskTitle, department, course_title }) => {
+const TableComponent = ({ course_code, taskTitle, department, course_title, searchQuery }) => {
   const [courseTitle, setCourseTitle] = useState(null);
   const [version, setVersion] = useState(null);
   const [students, setStudents] = useState([]); // State to store students
@@ -415,6 +415,11 @@ const TableComponent = ({ course_code, taskTitle, department, course_title }) =>
     return acc;
   }, {});
 
+  const filteredStudents = students.filter(student =>
+  `${student.firstname} ${student.lastname}`
+  .toLowerCase()
+  .includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="epgf-scorecard-table-container">
@@ -427,7 +432,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title }) =>
     </tr>
     </thead>
     <tbody>
-    {students.map((student, rowIndex) => {
+      {filteredStudents.map((student, rowIndex) => {
 
       {/* Pronunciation */}
       const consistencySelectedOption = consistencyOptions?.find(option => option.id === student.consistency);
@@ -533,7 +538,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title }) =>
                   articulation_rating: selectedArticulation ? selectedArticulation.rating : '0.00',
                   intonation_and_stress_descriptor: selectedIntonationAndStress ? selectedIntonationAndStress.descriptor : 'N/A',
                   intonation_and_stress_rating: selectedIntonationAndStress ? selectedIntonationAndStress.rating : '0.00',
-                  pronunciation_average: fluencyAverage.toFixed(2),
+                  pronunciation_average: pronunciationAverage.toFixed(2),
 
                   // Grammar
                   accuracy_descriptor: selectedAccuracy ? selectedAccuracy.descriptor : 'N/A',
@@ -542,7 +547,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title }) =>
                   clarity_of_thought_rating: selectedClarityOfThought ? selectedClarityOfThought.rating : '0.00',
                   syntax_descriptor: selectedSyntax ? selectedSyntax.descriptor : 'N/A',
                   syntax_rating: selectedSyntax ? selectedSyntax.rating : '0.00',
-                  grammar_average: fluencyAverage.toFixed(2),
+                  grammar_average: grammarAverage.toFixed(2),
 
                   // Fluency
                   quality_of_response_descriptor: selectedQualityOfResponse ? selectedQualityOfResponse.descriptor : 'N/A',
@@ -551,6 +556,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title }) =>
                   detail_of_response_rating: selectedDetailOfResponse ? selectedDetailOfResponse.rating : '0.00',
                   fluency_average: fluencyAverage.toFixed(2),
 
+                  class_lists_id: Number(student.class_lists_id) || 0,
                   comment: student.comment,
                   course_code: course_code,
                   task_title: taskTitle || "No Title",
@@ -654,7 +660,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title }) =>
         })()}
         </td>
 
-
         <td>
         <select
         value={student.type || ''}
@@ -679,7 +684,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title }) =>
             updateData(rowIndex, 'consistency', selectedId); // Store the ID, not the descriptor string
             console.log('Selected Option:', selectedOption);
             // Now update the displayed rating directly below the select
-            updateData(rowIndex, 'rating', selectedOption.rating); // Assuming you want to update the rating as well
+            updateData(rowIndex, 'consistencyRating', selectedOption.rating); // Assuming you want to update the rating as well
           }
         }}
         style={{
@@ -705,7 +710,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title }) =>
 
         {/* Display only the rating without consistency descriptor */}
         <span style={{ fontSize: '12px', marginTop: '4px', display: 'block', textAlign: 'left' }}>
-        Rating: {student.rating || '0.00'}
+        Rating: {student.consistency ? consistencyLookup[student.consistency]?.rating || '0.00' : '0.00'}
         </span>
         </td>
 
@@ -724,7 +729,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title }) =>
             updateData(rowIndex, 'clarity', selectedId);
 
             // Now update the displayed rating directly below the select
-            updateData(rowIndex, 'rating', selectedOption.rating); // Update the rating as well
+            updateData(rowIndex, 'clarityRating', selectedOption.rating); // Update the rating as well
           }
         }}
         style={{
@@ -750,7 +755,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title }) =>
 
         {/* Display only the rating without clarity descriptor */}
         <span style={{ fontSize: '12px', marginTop: '4px', display: 'block', textAlign: 'left' }}>
-        Rating: {student.rating || '0.00'}  {/* Display rating value */}
+        Rating: {student.clarity ? clarityLookup[student.clarity]?.rating || '0.00' : '0.00'}
         </span>
         </td>
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTable } from "react-table";
 
-const StudentManagementTable = () => {
+const StudentManagementTable = ({ searchQuery }) => {
   const [students, setStudents] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState("");
@@ -138,6 +138,16 @@ const StudentManagementTable = () => {
     setShowModal(true);
   };
 
+  // Filter students based on search query
+  const filteredStudents = students.filter((student) =>
+  (student.firstname?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+  (student.lastname?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+  (student.student_id?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+  (student.email?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+  (student.department?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+  (student.program?.toLowerCase() || "").includes(searchQuery.toLowerCase())
+  );
+
 
   const columns = React.useMemo(
     () => [
@@ -224,7 +234,10 @@ const StudentManagementTable = () => {
     ],
     []
   );
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data: students });
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
+    columns,
+    data: filteredStudents,
+  });
 
   return (
     <>

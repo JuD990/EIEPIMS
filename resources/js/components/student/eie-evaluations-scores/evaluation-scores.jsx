@@ -8,13 +8,17 @@ const EvaluationScores = () => {
     const [selectedCourse, setSelectedCourse] = useState("Select a Course");
     const [courses, setCourses] = useState([]);
     const [tasks, setTasks] = useState([]);
+    const [filteredTasks, setFilteredTasks] = useState([]); // This will hold filtered tasks
 
     useEffect(() => {
         const studentId = localStorage.getItem("student_id");
         if (studentId) {
             axios.get(`http://127.0.0.1:8000/api/get-courses?student_id=${studentId}`)
             .then(response => {
-                setCourses(response.data);
+                const coursesData = response.data.courses || [];
+                const recordsData = response.data.records || []; // Fetch full task records
+                setCourses(coursesData); // Set unique course titles
+                setTasks(recordsData); // Set all task records
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
@@ -26,9 +30,14 @@ const EvaluationScores = () => {
         const selected = event.target.value;
         setSelectedCourse(selected);
 
-        // Filter tasks based on the selected course
-        const filteredTasks = courses.filter(course => course.course_title === selected);
-        setTasks(filteredTasks);
+        // If 'Select a Course' is chosen, reset filtered tasks to an empty array
+        if (selected === "Select a Course") {
+            setFilteredTasks([]);
+        } else {
+            // Filter tasks based on the selected course
+            const filtered = tasks.filter(task => task.course_title === selected);
+            setFilteredTasks(filtered);
+        }
     };
 
     const navigateToViewScores = (historicalScorecardId) => {
@@ -46,8 +55,8 @@ const EvaluationScores = () => {
         >
         <option value="Select a Course">Select a Course</option>
         {courses.map((course, index) => (
-            <option key={index} value={course.course_title}>
-            {course.course_title}
+            <option key={index} value={course}>
+            {course}
             </option>
         ))}
         </select>
@@ -64,23 +73,28 @@ const EvaluationScores = () => {
         </tr>
         </thead>
         <tbody>
-        {tasks.map((task, index) => (
-            <tr key={index}>
-            <td>{task.task_title}</td>
-            <td>{task.type}</td>
-            <td>{task.date}</td>
-            <td>
-            <button
-            className="view-score-link"
-            onClick={() => navigateToViewScores(task.historical_scorecards_id)}
-            >
-            View Score
-            </button>
-            </td>
+        {filteredTasks.length === 0 ? (
+            <tr>
+            <td colSpan="4">No tasks available for the selected course</td>
             </tr>
-        ))}
+        ) : (
+            filteredTasks.map((task, index) => (
+                <tr key={index}>
+                <td>{task.task_title}</td>
+                <td>{task.type}</td>
+                <td>{task.date}</td>
+                <td>
+                <button
+                className="view-score-link"
+                onClick={() => navigateToViewScores(task.historical_scorecards_id)}
+                >
+                View Score
+                </button>
+                </td>
+                </tr>
+            ))
+        )}
         </tbody>
-
         </table>
         </div>
     );

@@ -42,7 +42,7 @@ class EpgfScoreCardController extends Controller
         // Fetch students with "Active" status and the provided course_code
         $students = ClassLists::where('status', 'Active')
         ->where('course_code', $course_code)
-        ->get(['firstname', 'lastname', 'year_level', 'student_id', 'department', 'program']);
+        ->get(['class_lists_id', 'firstname', 'lastname', 'year_level', 'student_id', 'department', 'program']);
 
         if ($students->isNotEmpty()) {
             return response()->json([
@@ -192,7 +192,10 @@ class EpgfScoreCardController extends Controller
             ]);
 
             // Step 2: Store the summary data in the ClassLists table
-            $classList = ClassLists::where('student_id', $validatedData['student_id'])->first();
+            $classList = ClassLists::where('student_id', $validatedData['student_id'])
+            ->where('course_code', $validatedData['course_code'])
+            ->first();
+
 
             if ($classList) {
                 $classList->update([

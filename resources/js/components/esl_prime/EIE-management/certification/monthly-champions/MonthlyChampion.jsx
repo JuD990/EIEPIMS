@@ -1,32 +1,91 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTable } from "react-table";
-import "./MonthlyChampion.css"; // Ensure this file is included for styling
-import Template from "@assets/eie-monthly-champ.png";
+import axios from "axios";
+import { pdf } from "@react-pdf/renderer";
+import Certificate from "./MonthlyCertificate"; // Import the Certificate component
+import "./MonthlyChampion.css";
 
 const MonthlyChampion = () => {
-    // Sample data
-    const data = React.useMemo(
-        () => [
-            { name: "John Doe", yearLevel: "2nd Year", program: "BS Computer Science", pgfAverage: 3.50 },
-            { name: "Jane Smith", yearLevel: "3rd Year", program: "BS Information Technology", pgfAverage: 3.20 },
-            { name: "Mike Johnson", yearLevel: "1st Year", program: "BS Nursing", pgfAverage: 2.80 },
-        ],
-        []
-    );
+    const [data, setData] = useState([]);
 
-    // Define table columns
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get("/api/class-lists");
+                console.log("📜 Raw API Data:", response.data);
+
+                // Sorting the data from highest to lowest epgf_average
+                const sortedData = response.data.sort((a, b) => b.epgf_average - a.epgf_average);
+                setData(sortedData);
+            } catch (error) {
+                console.error("❌ Error fetching data:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const handleViewCertificate = async (rowData) => {
+        console.log("🖥️ Selected Row Data:", rowData);
+
+        if (!rowData.class_lists_id) {
+            console.error("❌ ERROR: class_lists_id is missing! Check API response.");
+            return;
+        }
+
+        try {
+            const response = await axios.get(`http://127.0.0.1:8000/api/certificate/${rowData.class_lists_id}`);
+            console.log("📜 API Response:", response.data);
+
+            if (!response.data || Object.keys(response.data).length === 0) {
+                console.error("❌ ERROR: Empty API response!");
+                return;
+            }
+
+            const { name, year_level, department, dean_name, month, current_year, next_year, esl_champion } = response.data;
+
+            console.log("✅ Extracted Data:", { name, year_level, department, dean_name, month, current_year, next_year, esl_champion });
+
+            const certificateData = {
+                name: name ?? "N/A",
+                yearLevel: year_level ?? "N/A",
+                department: department ?? "N/A",
+                deanName: dean_name ?? "N/A",
+                eslChampion: esl_champion ?? "N/A",
+                month: month ?? "N/A",
+                currentYear: current_year ?? "N/A",
+                nextYear: next_year ?? "N/A",
+            };
+
+            console.log("🖼️ Final Certificate Data:", certificateData);
+
+            // Generate PDF
+            const doc = <Certificate {...certificateData} />;
+            const pdfBlob = await pdf(doc).toBlob();
+            const pdfUrl = URL.createObjectURL(pdfBlob);
+            window.open(pdfUrl, "_blank");
+
+        } catch (error) {
+            console.error("❌ Error fetching certificate data:", error);
+        }
+    };
+
     const columns = React.useMemo(
         () => [
-            { Header: "Name", accessor: "name" },
-            { Header: "Year Level", accessor: "yearLevel" },
+            { Header: "Name", accessor: (row) => `${row.firstname} ${row.lastname}` },
+            { Header: "Year Level", accessor: "year_level" },
             { Header: "Program", accessor: "program" },
-            { Header: "PGF Average", accessor: "pgfAverage" },
+            { Header: "Department", accessor: "department" },
+            { Header: "EPGF Average", accessor: "epgf_average" },
             {
                 Header: "Action",
                 accessor: "action",
-                Cell: ({ row }) => (
-                    <button className="monthly-champion-action-btn" onClick={() => handleAction(row.original)}>
-                    Certificate
+                    Cell: ({ row }) => (
+                    <button
+                        className="monthly-champion-action-btn"
+                        onClick={() => handleViewCertificate(row.original)}
+                    >
+                        View Certificate
                     </button>
                 ),
             },
@@ -34,21 +93,9 @@ const MonthlyChampion = () => {
         []
     );
 
-    // Action button handler
-    const handleAction = (rowData) => {
-        // Create a temporary anchor element for the image download
-        const link = document.createElement("a");
-        link.href = Template;  // Set the href to the image URL
-        link.download = Template.split("/").pop();  // Set the download filename (using the filename from URL)
-
-        // Trigger the download by simulating a click
-        link.click();
-    };
-
-    // Create table instance
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
         columns,
-        data
+        data,
     });
 
     return (

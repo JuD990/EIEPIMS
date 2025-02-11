@@ -26,7 +26,7 @@ const StudentManagementDropdown = () => {
   const currentCodeOptions = subjectCodes[selectedSubject] || [];
 
   return (
-    <div className="student-dropdown-container">
+    <div className="eie-head-student-dropdown-container">
       {/* Subject Dropdown */}
       <div className="student-dropdown-wrapper">
         <button

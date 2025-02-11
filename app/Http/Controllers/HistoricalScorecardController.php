@@ -12,13 +12,13 @@ class HistoricalScorecardController extends Controller
     {
         $studentId = $request->query('student_id');
 
-        // Fetch course_title, type, and formatted date from created_at
+        // Fetch course_title, task_title, type, and formatted date from created_at
         $records = HistoricalScorecard::where('student_id', $studentId)
         ->select('historical_scorecards_id', 'course_title', 'type', 'task_title', 'created_at')
         ->get()
         ->map(function ($record) {
             return [
-                'historical_scorecards_id' => $record->historical_scorecards_id,  // Corrected field name
+                'historical_scorecards_id' => $record->historical_scorecards_id,
                 'course_title' => $record->course_title,
                 'type' => $record->type,
                 'task_title' => $record->task_title,
@@ -26,7 +26,13 @@ class HistoricalScorecardController extends Controller
             ];
         });
 
-        return response()->json($records);
+        // Get unique course titles and make sure the response is an array
+        $uniqueCourses = $records->pluck('course_title')->unique()->values()->all();
+
+        return response()->json([
+            'courses' => $uniqueCourses, // Array of unique course titles
+            'records' => $records // Full detailed records
+        ]);
     }
 
     public function getCourseDetails(Request $request)

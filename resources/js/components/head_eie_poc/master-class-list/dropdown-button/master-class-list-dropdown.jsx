@@ -11,7 +11,7 @@ const MasterClassListDropdown = () => {
 
   const programs = ["BSIT", "BSCS", "BLIS", "ACT"];
   const yearLevels = ["1st Year", "2nd Year", "3rd Year", "4th Year"];
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState("");
 
   return (
     <div className="eie-head-dropdown-container" style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
@@ -70,20 +70,20 @@ const MasterClassListDropdown = () => {
       </div>
         {/* Right side Search Area */}
         <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search"
-          style={{
-            width: '476px',
-            height: '60px',
-            borderRadius: '8px',
-            borderColor: '#333333',
-            paddingLeft: '10px',
-            fontSize: '16px',
-            marginLeft: 'auto',
-            marginRight: '35px',
-          }}
+        type="text"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder="Search"
+        style={{
+          width: '476px',
+          height: '60px',
+          borderRadius: '8px',
+          borderColor: '#333333',
+          paddingLeft: '10px',
+          fontSize: '16px',
+          marginLeft: 'auto',
+          marginRight: '35px',
+        }}
         />
     </div>
   );

@@ -91,6 +91,8 @@ const EPGFrubricVersionDropdown = () => {
         version === cleanedVersion ? updatedVersion : version.replace("*", "")
         )
         );
+
+        window.location.reload();
       } else {
         console.error("Failed to set default:", await response.text());
       }
@@ -98,6 +100,7 @@ const EPGFrubricVersionDropdown = () => {
       console.error("Error setting default:", error);
     }
   };
+
 
   return (
     <div className="student-dropdown-container">

@@ -9,6 +9,9 @@ use App\Http\Controllers\EpgfScoreCardController;
 use App\Http\Controllers\EpgfRubricController;
 use App\Http\Controllers\UserManagement;
 use App\Http\Controllers\HistoricalScorecardController;
+use App\Http\Controllers\CertificateController;
+
+Route::get('/certificate/{id}', [CertificateController::class, 'getCertificateData']);
 
 //Student
 Route::get('/get-courses', [HistoricalScorecardController::class, 'getCoursesByStudent']);
@@ -61,6 +64,7 @@ Route::get('/class-list', [ClassListController::class, 'getClassList']);
 Route::post('/upload-class-list', [ClassListController::class, 'uploadClassList']);
 Route::get('/manage-class-list', [ClassListController::class, 'ManageClassList']);
 Route::put('/update-student/{studentId}', [ClassListController::class, 'updateStudent']);
+Route::get('/class-lists', [ClassListController::class, 'fetchMonthlyChamps']);
 
 // ImplementingSubject routes
 Route::get('/implementing-subject/{employee_id}', [ImplementingSubjectController::class, 'getClassData']);

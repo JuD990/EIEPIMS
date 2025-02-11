@@ -154,7 +154,7 @@ const ImplementingSubjects = () => {
           </div>
           <div className="proficiency-level">
           <p style={{ color }}>{level}</p>
-          <p>Proficiency</p>
+          <p>Proficiency Level</p>
           </div>
           </div>
           </div>

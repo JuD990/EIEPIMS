@@ -6,7 +6,6 @@ import UserInfo from '@user-info/User-info';
 import { FaChevronLeft } from 'react-icons/fa';
 import Table from "./table/scorecard-table-2";
 import Button from './buttons/submit-button';
-import ExportButton from './buttons/export-button';
 import ClassAverageSummary from './class-average-summary/class-average-summary';
 import axios from 'axios';
 
@@ -17,6 +16,7 @@ const EPGFScorecard = () => {
   const [studentCountActive, setStudentCountActive] = useState(0); // active_students
   const [classAverage, setClassAverage] = useState(0);
   const [evaluatedCount, setEvaluatedCount] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
@@ -91,17 +91,20 @@ const EPGFScorecard = () => {
     onChange={(e) => setTaskTitle(e.target.value)}
     />
     </div>
-    <div className='search'>
+    {/* Search Input */}
+    <div className="search">
     <input
     type="text"
-    placeholder="Search..."
+    placeholder="Search Student..."
     className="search-input"
+    value={searchQuery}
+    onChange={(e) => setSearchQuery(e.target.value)}
     />
     </div>
     </div>
 
     <br />
-    <Table course_code={course_code} taskTitle={taskTitle} course_title={courseTitle} />
+    <Table searchQuery={searchQuery} course_code={course_code} taskTitle={taskTitle} course_title={courseTitle} />
     <br /><br />
     <div className="page-container">
     <div className="container">
@@ -117,7 +120,6 @@ const EPGFScorecard = () => {
     <p><b>{evaluatedCount}/{studentCountActive} </b>Evaluated</p>
     </div>
     </div>
-    <br /><br /><br /><br />
     </div>
   );
 };

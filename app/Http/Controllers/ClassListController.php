@@ -177,5 +177,16 @@ class ClassListController extends Controller
         }
     }
 
+    public function fetchMonthlyChamps()
+    {
+        // Fetch only records where epgf_average is not null and greater than 0, then sort in descending order
+        $classLists = ClassLists::whereNotNull('epgf_average')
+        ->where('epgf_average', '>', 0)
+        ->orderByDesc('epgf_average')
+        ->get();
+
+        return response()->json($classLists);
+    }
+
 
 }

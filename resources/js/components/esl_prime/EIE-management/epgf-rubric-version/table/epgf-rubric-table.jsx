@@ -62,14 +62,14 @@ const Table = ({ rubricVersion }) => {
 
       const formattedData = rubricDetails.pronunciations.map((pronunciation, index) => ({
         pronunciation: removeDuplicates(pronunciation.pronunciation || ""),
-                                                                                        pronunciationDescriptor: formatDescriptor(pronunciation.descriptor || ""),
-                                                                                        pronunciationRating: pronunciation.rating || "",
-                                                                                        grammar: removeDuplicates(rubricDetails.grammars[index]?.grammar || ""),
-                                                                                        grammarDescriptor: formatDescriptor(rubricDetails.grammars[index]?.descriptor || ""),
-                                                                                        grammarRating: rubricDetails.grammars[index]?.rating || "",
-                                                                                        fluency: removeDuplicates(rubricDetails.fluencies[index]?.fluency || ""),
-                                                                                        fluencyDescriptor: formatDescriptor(rubricDetails.fluencies[index]?.descriptor || ""),
-                                                                                        fluencyRating: rubricDetails.fluencies[index]?.rating || "",
+        pronunciationDescriptor: formatDescriptor(pronunciation.descriptor || ""),
+        pronunciationRating: pronunciation.rating || "",
+        grammar: removeDuplicates(rubricDetails.grammars[index]?.grammar || ""),
+        grammarDescriptor: formatDescriptor(rubricDetails.grammars[index]?.descriptor || ""),
+        grammarRating: rubricDetails.grammars[index]?.rating || "",
+        fluency: removeDuplicates(rubricDetails.fluencies[index]?.fluency || ""),
+        fluencyDescriptor: formatDescriptor(rubricDetails.fluencies[index]?.descriptor || ""),
+        fluencyRating: rubricDetails.fluencies[index]?.rating || "",
       }));
       setData(formattedData);
     }
@@ -112,9 +112,6 @@ const Table = ({ rubricVersion }) => {
       boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
     }}
     >
-    {loading && <p>Loading...</p>}
-    {error && <p style={{ color: "red" }}>{error}</p>}
-
     <table
     {...getTableProps()}
     style={{

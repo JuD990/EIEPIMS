@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTable } from "react-table";
 
-const StudentManagementTable = () => {
+const StudentManagementTable = ({ searchQuery }) => {
   const [students, setStudents] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState("");
@@ -15,6 +15,10 @@ const StudentManagementTable = () => {
     status: '',
     reason: ''
   });
+
+  const filteredStudents = students.filter(student =>
+  `${student.firstname} ${student.lastname}`.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     fetch("http://localhost:8000/api/class-list")
@@ -211,7 +215,7 @@ const StudentManagementTable = () => {
   );
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data: students });
+  useTable({ columns, data: filteredStudents });
 
   return (
     <>

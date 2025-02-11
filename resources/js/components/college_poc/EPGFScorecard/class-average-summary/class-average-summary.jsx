@@ -74,7 +74,7 @@ const ClassAverageSummary = ({ course_code, average, studentCount, evaluatedCoun
     </div>
     <div className="class-proficiency-level-column">
     <div style={{ color: color }}><strong>{level}</strong></div>
-    <div>Proficiency</div>
+    <div>Proficiency Level</div>
     </div>
     </div>
   );
