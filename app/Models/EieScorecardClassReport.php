@@ -24,6 +24,7 @@ class EieScorecardClassReport extends Model
         'program',
         'active_students',
         'course_title',
+        'year_level',
 
         // Pronunciation
         'consistency_descriptor',

@@ -556,7 +556,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
                   detail_of_response_rating: selectedDetailOfResponse ? selectedDetailOfResponse.rating : '0.00',
                   fluency_average: fluencyAverage.toFixed(2),
 
-                  class_lists_id: Number(student.class_lists_id) || 0,
                   comment: student.comment,
                   course_code: course_code,
                   task_title: taskTitle || "No Title",
@@ -566,6 +565,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
                   program: `${student.program}`,
                   active_students: active_students,
                   course_title: course_title,
+                  year_level: `${student.year_level}`,
         };
 
         // Helper function to check for '0.00' or 'N/A'

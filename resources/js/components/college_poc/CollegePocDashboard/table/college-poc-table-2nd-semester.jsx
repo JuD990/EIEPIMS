@@ -1,274 +1,320 @@
-import React, { useState, useEffect } from 'react';
-import './CollegePOCTableComponent.css';
-import axios from 'axios';
+import React, { useState, useEffect, useMemo } from "react";
+import axios from "axios";
+import "./CollegePOCTableComponent.css";
 
 const TableComponent = () => {
     const [target, setTarget] = useState(100);
-    const currentYear = new Date().getFullYear();
     const [department, setDepartment] = useState(null);
-    const [programs, setPrograms] = useState({}); // Group programs by semester and year level
-    const [enrollmentCount, setEnrollmentCount] = useState({}); // Holds enrollment count by program and year level
-    const [errorMessage, setErrorMessage] = useState('');
+    const [enrollmentCount, setEnrollmentCount] = useState({});
     const [loading, setLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const months = ["January", "February", "March", "April", "May"];
 
     useEffect(() => {
-        const fetchDepartmentAndPrograms = async () => {
+        const fetchDepartmentAndData = async () => {
             try {
-                // Retrieve stored values
-                const storedEmployeeId = localStorage.getItem('employee_id');
-                const storedUserType = localStorage.getItem('userType');
+                const storedEmployeeId = localStorage.getItem("employee_id");
+                const storedUserType = localStorage.getItem("userType");
 
                 if (!storedEmployeeId || !storedUserType) {
+                    setErrorMessage("Missing employee ID or user type.");
                     setLoading(false);
                     return;
                 }
 
                 // Fetch department
-                const departmentResponse = await axios.get(
+                const { data: departmentData } = await axios.get(
                     `/api/employee-department/${storedUserType}/${storedEmployeeId}`
                 );
 
-                if (departmentResponse.data?.success) {
-                    const department = departmentResponse.data.department;
-                    setDepartment(department);
-
-                    // Fetch programs and enrollment counts for the department
-                    const programsResponse = await axios.get(`/api/programs-with-enrollment-second-semester/${department}`);
-
-                    if (programsResponse.data?.success) {
-                        const programsData = programsResponse.data.programs;
-                        const enrollmentData = programsResponse.data.enrollmentCount;
-
-                        if (typeof programsData === 'object' && programsData !== null) {
-                            console.log('Fetched programs data:', programsData);
-                            console.log('Fetched enrollment count:', enrollmentData);
-
-                            setPrograms(programsData);
-                            setEnrollmentCount(enrollmentData);
-                        } else {
-                            setErrorMessage('Invalid data format received for programs.');
-                        }
-                    } else {
-                        setErrorMessage(programsResponse.data?.message || 'Failed to fetch programs.');
-                    }
-                } else {
-                    setErrorMessage(departmentResponse.data?.message || 'Failed to fetch department.');
+                if (!departmentData?.success) {
+                    setErrorMessage(departmentData?.message || "Failed to fetch department.");
+                    setLoading(false);
+                    return;
                 }
+
+                setDepartment(departmentData.department);
+
+                // Fetch enrollment data
+                const { data: enrollmentData } = await axios.get(
+                    `/api/programs-with-enrollment-second-semester/${departmentData.department}`
+                );
+
+                if (!enrollmentData?.success) {
+                    setErrorMessage(enrollmentData?.message || "Failed to fetch enrollment data.");
+                    setLoading(false);
+                    return;
+                }
+
+                setEnrollmentCount(enrollmentData.enrollmentCount);
             } catch (error) {
-                console.error('Error fetching data:', error);
-                setErrorMessage('Error fetching data.');
+                console.error("Error fetching data:", error);
+                setErrorMessage("Error fetching data.");
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchDepartmentAndPrograms();
+        fetchDepartmentAndData();
     }, []);
 
-    const getStudentCountForProgram = (program, yearLevel) => {
-        // Get the total student count for the program and year level
-        const count = enrollmentCount[yearLevel]?.[program]?.total_enrolled || 0;
-        return count;
-    };
+    const calculateYearLevelTotals = (yearLevel) => {
+        let totals = {};
 
-    const calculateTotalRow = (yearLevel) => {
-        let totalSubmitted = 0;
-        let totalCompletionRate = 0;
-        let totalPGFAverage = 0;
-        let count = 0;
+        months.forEach((month) => {
+            let totalSubmitted = 0;
+            let totalCompletionRate = 0;
+            let totalPGFAverage = 0;
+            let count = 0;
+            let topChampion = { name: "N/A", epgf_average: 0 };
 
-        Object.keys(enrollmentCount[yearLevel] || {}).forEach((program) => {
-            totalSubmitted += getStudentCountForProgram(program, yearLevel);
-            // You can replace the following with actual completion rate and PGF values
-            totalCompletionRate += 0;  // Placeholder, calculate properly
-            totalPGFAverage += 0;      // Placeholder, calculate properly
-            count++;
+            Object.values(enrollmentCount[yearLevel] || {}).forEach((programData) => {
+                if (programData[month]) {
+                    totalSubmitted += programData[month].submitted || 0;
+                    totalCompletionRate += parseFloat(programData[month].completion_rate) || 0;
+                    totalPGFAverage += parseFloat(programData[month].epgf_average) || 0;
+                    count++;
+
+                    // Ensure the champion is determined per month, per year level
+                    if (programData[month].champion !== "N/A" && programData[month].epgf_average > topChampion.epgf_average) {
+                        topChampion = {
+                            name: programData[month].champion,
+                            epgf_average: programData[month].epgf_average,
+                        };
+                    }
+                }
+            });
+
+            totals[month] = {
+                totalSubmitted,
+                totalCompletionRate: count ? (totalCompletionRate / count).toFixed(2) : "0.00",
+                       totalPGFAverage: count ? (totalPGFAverage / count).toFixed(2) : "0.00",
+                       champion: topChampion.name || "N/A", // Store the top champion per month per year level
+            };
         });
 
-        return {
-            totalSubmitted,
-            totalCompletionRate: totalCompletionRate / count, // average if needed
-            totalPGFAverage: totalPGFAverage / count, // average if needed
-        };
+        return totals;
     };
 
-    // Calculate Grand Total for all Year Levels
     const calculateGrandTotal = () => {
-        let grandTotalSubmitted = 0;
-        let grandTotalCompletionRate = 0;
-        let grandTotalPGFAverage = 0;
-        let count = 0;
+        let grandTotals = {};
 
-        Object.keys(enrollmentCount).forEach((yearLevel) => {
-            const totals = calculateTotalRow(yearLevel);
-            grandTotalSubmitted += totals.totalSubmitted;
-            grandTotalCompletionRate += totals.totalCompletionRate;
-            grandTotalPGFAverage += totals.totalPGFAverage;
-            count++;
+        months.forEach((month) => {
+            let grandTotalSubmitted = 0;
+            let grandTotalCompletionRate = 0;
+            let grandTotalPGFAverage = 0;
+            let count = 0;
+            let overallChampion = { name: "N/A", epgf_average: 0 };
+
+            Object.keys(enrollmentCount).forEach((yearLevel) => {
+                const yearTotals = calculateYearLevelTotals(yearLevel)[month];
+                grandTotalSubmitted += yearTotals.totalSubmitted;
+                grandTotalCompletionRate += parseFloat(yearTotals.totalCompletionRate);
+                grandTotalPGFAverage += parseFloat(yearTotals.totalPGFAverage);
+                count++;
+
+                // Ensure the overall department champion is chosen per month
+                if (yearTotals.champion !== "N/A" && yearTotals.epgf_average > overallChampion.epgf_average) {
+                    overallChampion = {
+                        name: yearTotals.champion,
+                        epgf_average: yearTotals.epgf_average,
+                    };
+                }
+            });
+
+            grandTotals[month] = {
+                grandTotalSubmitted,
+                grandTotalCompletionRate: count ? (grandTotalCompletionRate / count).toFixed(2) : "0.00",
+                       grandTotalPGFAverage: count ? (grandTotalPGFAverage / count).toFixed(2) : "0.00",
+                       champion: overallChampion.name || "N/A", // Overall department champion per month
+            };
         });
 
-        return {
-            grandTotalSubmitted,
-            grandTotalCompletionRate: grandTotalCompletionRate / count, // average
-            grandTotalPGFAverage: grandTotalPGFAverage / count, // average
-        };
+        return grandTotals;
     };
 
-    // Handle loading and error
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    const grandTotal = useMemo(() => calculateGrandTotal(), [enrollmentCount]);
 
-    if (errorMessage) {
-        return <div>Error: {errorMessage}</div>;
-    }
+    if (loading) return <div className="spinner"></div>;
 
-    // Handle case when no programs are available
-    if (Object.keys(programs).length === 0 || Object.values(programs).every((semester) => Object.keys(semester).length === 0)) {
-        return (
-            <div className="dashboard-college-poc-container">
-            <div className="no-data-message">No Implementing Subjects available in your department.</div>
-            </div>
-        );
-    }
+    const epgfProficiencyLevels = [
+        { threshold: 0.00, level: "Beginning", color: "rgb(226, 63, 68)" },
+        { threshold: 0.50, level: "Low Acquisition", color: "rgb(226, 63, 68)" },
+        { threshold: 0.75, level: "High Acquisition", color: "rgb(226, 63, 68)" },
+        { threshold: 1.00, level: "Emerging", color: "#FFCD56" },
+        { threshold: 1.25, level: "Low Developing", color: "#FFCD56" },
+        { threshold: 1.50, level: "High Developing", color: "#FFCD56" },
+        { threshold: 1.75, level: "Low Proficient", color: "#FFCD56" },
+        { threshold: 2.00, level: "Proficient", color: "green" },
+        { threshold: 2.25, level: "High Proficient", color: "green" },
+        { threshold: 2.50, level: "Advanced", color: "green" },
+        { threshold: 3.00, level: "High Advanced", color: "#00008B" },
+        { threshold: 4.00, level: "Native/Bilingual", color: "#00008B" },
+    ];
 
-    const grandTotal = calculateGrandTotal();
+    const getProficiencyLevel = (epgfAverage) => {
+        for (let i = 0; i < epgfProficiencyLevels.length; i++) {
+            const current = epgfProficiencyLevels[i];
+            const previous = epgfProficiencyLevels[i - 1];
+
+            if (
+                (previous ? epgfAverage > previous.threshold : true) &&
+                epgfAverage <= current.threshold
+            ) {
+                return { level: current.level, color: current.color };
+            }
+        }
+        return { level: "Unknown", color: "black" };
+    };
+
+    const getCompletionExpectation = (completionRate) => {
+        return parseFloat(completionRate) === 100 ? "Meets Expectation" : "Below Expectation";
+    };
+
 
     return (
         <div className="dashboard-college-poc-container">
         <table className="dashboard-college-poc-table">
         <thead>
+        {/* First header row for month grouping */}
+        <tr>
+        <th rowSpan="2">Year Level</th>
+        <th rowSpan="2">Course</th>
+        <th rowSpan="2">Expected Submissions</th>
+        <th rowSpan="2">Target</th>
+        <th rowSpan="2">Implementing Subjects</th>
+        {months.map((month) => (
+            <th key={month} colSpan="4" style={{ textAlign: "center" }}>{month}</th>
+        ))}
+        </tr>
+
+        {/* Second header row for individual columns under each month */}
         <tr className="dashboard-college-poc-header-colored">
-        <th colSpan="5" className="dashboard-college-poc-table-header-cell"></th>
-        <th colSpan="4" className="dashboard-college-poc-table-header-cell" style={{ textAlign: 'center' }}>
-        January {currentYear}
-        </th>
-        <th colSpan="4" className="dashboard-college-poc-table-header-cell" style={{ textAlign: 'center' }}>
-        February {currentYear}
-        </th>
-        <th colSpan="4" className="dashboard-college-poc-table-header-cell" style={{ textAlign: 'center' }}>
-        March {currentYear}
-        </th>
-        <th colSpan="4" className="dashboard-college-poc-table-header-cell" style={{ textAlign: 'center' }}>
-        April {currentYear}
-        </th>
-        <th colSpan="4" className="dashboard-college-poc-table-header-cell" style={{ textAlign: 'center' }}>
-        May {currentYear}
-        </th>
-        </tr>
-        <tr className="dashboard-college-poc-header-plain" style={{ textAlign: 'center' }}>
-        <th className="dashboard-college-poc-table-header-cell">Year Level</th>
-        <th className="dashboard-college-poc-table-header-cell">Course</th>
-        <th className="dashboard-college-poc-table-header-cell">Expected Submission(s)</th>
-        <th className="dashboard-college-poc-table-header-cell">Target</th>
-        <th className="dashboard-college-poc-table-header-cell">Implementing Subjects</th>
-
-        <th className="dashboard-college-poc-table-header-cell">Submitted</th>
-        <th className="dashboard-college-poc-table-header-cell">Completion Rate</th>
-        <th className="dashboard-college-poc-table-header-cell">PGF Average</th>
-        <th className="dashboard-college-poc-table-header-cell">Name of SPARK Champion</th>
-
-        <th className="dashboard-college-poc-table-header-cell">Submitted</th>
-        <th className="dashboard-college-poc-table-header-cell">Completion Rate</th>
-        <th className="dashboard-college-poc-table-header-cell">PGF Average</th>
-        <th className="dashboard-college-poc-table-header-cell">Name of SPARK Champion</th>
-
-        <th className="dashboard-college-poc-table-header-cell">Submitted</th>
-        <th className="dashboard-college-poc-table-header-cell">Completion Rate</th>
-        <th className="dashboard-college-poc-table-header-cell">PGF Average</th>
-        <th className="dashboard-college-poc-table-header-cell">Name of SPARK Champion</th>
-
-        <th className="dashboard-college-poc-table-header-cell">Submitted</th>
-        <th className="dashboard-college-poc-table-header-cell">Completion Rate</th>
-        <th className="dashboard-college-poc-table-header-cell">PGF Average</th>
-        <th className="dashboard-college-poc-table-header-cell">Name of SPARK Champion</th>
-
-        <th className="dashboard-college-poc-table-header-cell">Submitted</th>
-        <th className="dashboard-college-poc-table-header-cell">Completion Rate</th>
-        <th className="dashboard-college-poc-table-header-cell">PGF Average</th>
-        <th className="dashboard-college-poc-table-header-cell">Name of SPARK Champion</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        {Object.keys(enrollmentCount).map((yearLevel) => (
-            <React.Fragment key={yearLevel}>
-            <tr>
-            <td colSpan="5" style={{ fontWeight: 'bold', textAlign: 'left', backgroundColor: '#d9edf7' }}>
-            {yearLevel}
-            </td>
-            <td colSpan="4" style={{ fontWeight: 'bold', textAlign: 'left', backgroundColor: '#d9edf7' }}>
-            {yearLevel}
-            </td>
-            <td colSpan="4" style={{ fontWeight: 'bold', textAlign: 'left', backgroundColor: '#d9edf7' }}>
-            {yearLevel}
-            </td>
-            <td colSpan="4" style={{ fontWeight: 'bold', textAlign: 'left', backgroundColor: '#d9edf7' }}>
-            {yearLevel}
-            </td>
-            <td colSpan="4" style={{ fontWeight: 'bold', textAlign: 'left', backgroundColor: '#d9edf7' }}>
-            {yearLevel}
-            </td>
-            <td colSpan="4" style={{ fontWeight: 'bold', textAlign: 'left', backgroundColor: '#d9edf7' }}>
-            {yearLevel}
-            </td>
-            </tr>
-            {Object.keys(enrollmentCount[yearLevel]).map((program, index) => {
-                const studentCount = getStudentCountForProgram(program, yearLevel);
-                return (
-                    <tr key={index}>
-                    <td>{yearLevel}</td>
-                    <td>{program || 'N/A'}</td>
-                    <td>{studentCount}</td> {/* Display expected submissions (student count) */}
-                    <td>{target}%</td>
-                    <td>{enrollmentCount[yearLevel][program]?.course_titles.join(', ') || 'N/A'}</td>
-
-                    {/* January */}
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-
-
-
-                    {/* Repeat for other months */}
-                    </tr>
-                );
-            })}
-
-            {/* Total Row for Year Level */}
-            <tr style={{ fontWeight: 'bold', backgroundColor: '#f2f2f2' }}>
-            <td colSpan="2" style={{ textAlign: 'left' }}>{yearLevel} Total</td>
-            <td>{calculateTotalRow(yearLevel).totalSubmitted}</td>
-            <td>100%</td>
-            <td></td>
-
-            <td></td>
-            <td>
-            <span style={{ backgroundColor: 'yellow', padding: '5px' }}>100.00%</span>
-            <span style={{ backgroundColor: 'lightblue', padding: '5px' }}>Meets Expectation</span>
-            </td>
-            <td>
-            <span style={{ backgroundColor: 'yellow', padding: '5px' }}>3.50</span>
-            <span style={{ backgroundColor: 'lightblue', padding: '5px' }}>High Advanced</span>
-            </td>
-            <td></td>
-
-            {/* Repeat for the other months */}
-            </tr>
+        {months.map(() => (
+            <React.Fragment key={Math.random()}>
+            <th>Submitted</th>
+            <th>
+            Completion Rate <br />
+            <small style={{ fontWeight: "normal" }}>(Expectation)</small>
+            </th>
+            <th>
+            PGF Average <br />
+            <small style={{ fontWeight: "normal" }}>(Proficiency Level)</small>
+            </th>
+            <th>SPARK Champion</th>
             </React.Fragment>
         ))}
+        </tr>
+        </thead>
+        <tbody>
+        {Object.keys(enrollmentCount).map((yearLevel) => {
+            let yearLevelTotalEnrolled = 0; // Track total enrolled per year level
 
+            return (
+                <React.Fragment key={yearLevel}>
+                {Object.keys(enrollmentCount[yearLevel]).map((program, index) => {
+                    const programData = enrollmentCount[yearLevel][program];
+                    yearLevelTotalEnrolled += programData.total_enrolled || 0; // Accumulate total enrolled
+
+                    return (
+                        <tr key={index}>
+                        <td>{yearLevel}</td>
+                        <td>{program || "N/A"}</td>
+                        <td>{programData.total_enrolled || 0}</td> {/* Expected Submissions */}
+                        <td>{target}%</td>
+                        <td>{programData.course_titles.join(", ") || "N/A"}</td>
+                        {months.map((month) => (
+                            <React.Fragment key={month}>
+                            <td>{programData[month]?.submitted || 0}</td>
+                            <td>
+                            {programData[month]?.completion_rate || "0.00"}<br />
+                            <small style={{ color: programData[month]?.completion_rate_expectation === "Meets Expectation" ? "green" : "black" }}>
+                            {programData[month]?.completion_rate_expectation || "N/A"}
+                            </small>
+                            </td>
+                            <td>
+                            {programData[month]?.epgf_average || "0.00"} <br />
+                            <small>{programData[month]?.proficiency_level || ""}</small>
+                            </td>
+                            <td>{programData[month]?.champion || "N/A"}</td>
+                            </React.Fragment>
+                        ))}
+                        </tr>
+                    );
+                })}
+
+                {/* Year Level Total Row */}
+                <tr style={{ fontWeight: "bold", backgroundColor: "#f0f0f0" }}>
+                <td colSpan="2">{yearLevel} Total</td>
+                <td>{Object.values(enrollmentCount[yearLevel]).reduce((sum, program) => sum + (program.total_enrolled || 0), 0)}</td>
+                <td>100%</td>
+                <td></td>
+                {months.map((month) => {
+                    const totals = calculateYearLevelTotals(yearLevel)[month];
+                    const proficiency = getProficiencyLevel(parseFloat(totals.totalPGFAverage));
+                    return (
+                        <React.Fragment key={month}>
+                        <td>{totals.totalSubmitted}</td>
+                        <td>
+                        <span style={{ backgroundColor: "yellow", padding: "5px" }}>
+                        {totals.totalCompletionRate}%
+                        </span>
+                        <span style={{ backgroundColor: "lightblue", padding: "5px", marginLeft: "5px" }}>
+                        {getCompletionExpectation(totals.totalCompletionRate)}
+                        </span>
+                        </td>
+                        <td>
+                        <span style={{ backgroundColor: "yellow", padding: "5px" }}>
+                        {totals.totalPGFAverage}
+                        </span>
+                        <span style={{ backgroundColor: "lightblue", padding: "5px", marginLeft: "5px" }}>
+                        {proficiency.level}
+                        </span>
+                        </td>
+                        <td>{totals.champion || "N/A"}</td>
+                        </React.Fragment>
+                    );
+                })}
+                </tr>
+                </React.Fragment>
+            );
+        })}
         {/* Grand Total Row */}
-        <tr style={{ fontWeight: 'bold', backgroundColor: '#d9edf7' }}>
-        <td colSpan="2" style={{ textAlign: 'left' }}>{department} Total</td>
-        <td>{grandTotal.grandTotalSubmitted}</td>
+        <tr style={{ fontWeight: "bold", backgroundColor: "#d9edf7" }}>
+        <td colSpan="2">{department} Total</td>
+        <td>{Object.keys(enrollmentCount).reduce((sum, yearLevel) => sum + Object.values(enrollmentCount[yearLevel]).reduce((s, program) => s + (program.total_enrolled || 0), 0), 0)}</td>
         <td>100%</td>
         <td></td>
-        <td></td>
-        {/* Repeat for the other months */}
+        {months.map((month) => {
+            const totals = grandTotal[month];
+            const proficiency = getProficiencyLevel(parseFloat(totals.grandTotalPGFAverage));
+            return (
+                <React.Fragment key={month}>
+                <td>{totals.grandTotalSubmitted}</td>
+                <td>
+                <span style={{ backgroundColor: "yellow", padding: "5px" }}>
+                {totals.grandTotalCompletionRate}%
+                </span>
+                <span style={{ backgroundColor: "lightblue", padding: "5px", marginLeft: "5px" }}>
+                {getCompletionExpectation(totals.grandTotalCompletionRate)}
+                </span>
+                </td>
+                <td>
+                <span style={{ backgroundColor: "yellow", padding: "5px" }}>
+                {totals.grandTotalPGFAverage}
+                </span>
+                <span style={{ backgroundColor: "lightblue", padding: "5px", marginLeft: "5px" }}>
+                {proficiency.level}
+                </span>
+                </td>
+                <td>{totals.champion || "N/A"}</td>
+                </React.Fragment>
+            );
+        })}
         </tr>
         </tbody>
+
         </table>
         </div>
     );

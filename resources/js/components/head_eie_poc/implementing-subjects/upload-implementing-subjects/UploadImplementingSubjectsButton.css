@@ -1,19 +1,19 @@
 .upload-buttons-container {
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  justify-content: flex-end; /* Aligns elements to the right */
+  align-items: center; /* Vertically aligns elements to the center */
+  gap: 15px; /* Adds space between the elements */
+  margin-right: 55px; /* Optional: Adjusts the margin on the right */
   white-space: nowrap;
-  gap: 15px; /* Add space between buttons */
-  margin-top: -50px;
-  margin-right: 20px;
 }
+
 
 .implementing-subjects-upload-button,
 .class-list-upload-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 180px;
+  width: 200px;
   height: 45px;
   background-color: #0187F1;
   border: none;
@@ -50,3 +50,4 @@
 .class-list-upload-button:hover {
   background-color: #FF9A14; /* Darker hover color for Class List button */
 }
+

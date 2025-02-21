@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('program');
             $table->integer('active_students');
             $table->string('course_title');
+            $table->string('year_level');
 
             // Pronunciation
             $table->text('consistency_descriptor');

@@ -6,6 +6,7 @@ const StudentManagementTable = ({ searchQuery }) => {
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
+    classListsId: '',
     studentId: '',
     firstName: '',
     middleName: '',
@@ -13,12 +14,17 @@ const StudentManagementTable = ({ searchQuery }) => {
     classification: '',
     yearLevel: '',
     status: '',
-    reason: ''
+    reason: '',
+    courseCode: '',
   });
 
   const filteredStudents = students.filter(student =>
-  `${student.firstname} ${student.lastname}`.toLowerCase().includes(searchQuery.toLowerCase())
+  `${student.firstname} ${student.lastname}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  (student.course_code?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+  (student.status?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+  (student.year_level?.toString() || "").includes(searchQuery)
   );
+
 
   useEffect(() => {
     fetch("http://localhost:8000/api/class-list")
@@ -54,17 +60,21 @@ const StudentManagementTable = ({ searchQuery }) => {
 
   const handleUpdateClick = (row) => {
     setFormData({
-      studentId: row.original.student_id || '',
+      classListsId: row.original.class_lists_id,  // Assign class_lists_id
       firstName: row.original.firstname || '',
       middleName: row.original.middlename || '',
       lastName: row.original.lastname || '',
       classification: row.original.classification || '',
       yearLevel: row.original.year_level || '',
       status: row.original.status || '',
-      reason: row.original.reason_for_shift_or_drop || ''
+      reason: row.original.reason_for_shift_or_drop || '',
+      courseCode: row.original.course_code || '',
     });
+
+    console.log("Updated formData:", formData); // Debugging
     setShowModal(true);
   };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -84,12 +94,7 @@ const StudentManagementTable = ({ searchQuery }) => {
       setError(""); // Clear error if input is valid
     }
 
-    const studentId = formData.studentId; // ✅ Use studentId
-
-    console.log("Submitting student update for studentId:", studentId);
-    console.log("Form Data being submitted:", formData);
-
-    fetch(`http://localhost:8000/api/update-student/${studentId}`, {
+    fetch(`http://localhost:8000/api/update-student/${formData.classListsId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -103,6 +108,7 @@ const StudentManagementTable = ({ searchQuery }) => {
         yearLevel: formData.yearLevel,
         status: formData.status,
         reason: formData.reason,
+        courseCode: formData.courseCode
       }),
     })
     .then((response) => {
@@ -186,6 +192,10 @@ const StudentManagementTable = ({ searchQuery }) => {
         Cell: ({ value }) => (
           <span>{value ? `- ${value}` : ""}</span> // Prepend '-' if there is content
         ),
+      },
+      {
+        Header: "Subject",
+        accessor: "course_code",
       },
       {
         Header: "Actions",
@@ -350,6 +360,16 @@ const StudentManagementTable = ({ searchQuery }) => {
                 onChange={handleInputChange}
                 style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #333333' }}
               />
+            </div>
+            <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', fontSize: '20px', color: '#383838' }}>Subject:</label>
+            <input
+            type="text"
+            name="courseCode"
+            value={formData.courseCode}
+            onChange={handleInputChange}
+            style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #333333' }}
+            />
             </div>
             <div style={{ marginBottom: '20px' }}>
               <label style={{ display: 'block', fontSize: '20px', color: '#383838' }}>Classification:</label>

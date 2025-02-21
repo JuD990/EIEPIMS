@@ -71,7 +71,10 @@ Route::get('/implementing-subject/{employee_id}', [ImplementingSubjectController
 Route::post('/upload-subjects', [ImplementingSubjectController::class, 'upload'])->name('subjects.upload');
 Route::get('/implementing-subjects', [ImplementingSubjectController::class, 'fetchImplementingSubjects']);
 Route::put('/update-implementing-subjects/{courseCode}', [ImplementingSubjectController::class, 'updateImplementingSubject'])->name('subjects.updateImplementingSubject');
-Route::get('/employee-department/{userType}/{employeeId}', [ImplementingSubjectController::class, 'getEmployeeDepartment']);
+Route::get('/employee-department/{userType}/{employeeId}',
+           [ImplementingSubjectController::class, 'getEmployeeDepartment']
+)->where('userType', '.*');
+
 
 // Route to get the programs for a department
 Route::get('/programs/{department}', [ImplementingSubjectController::class, 'getProgramsForDepartment']);

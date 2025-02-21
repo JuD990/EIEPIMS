@@ -19,6 +19,9 @@ const UploadClassListButton = () => {
                 });
                 alert(response.data.message);
                 setIsCsvUploaded(true);
+
+                // Allow page refresh after a successful upload
+                window.location.reload(); // Refresh the page
             } catch (error) {
                 alert('Error uploading file: ' + error.response.data.message);
             }
@@ -27,21 +30,21 @@ const UploadClassListButton = () => {
 
     return (
         <div className="class-list-buttons-container">
-            <div className="class-list-buttons">
-                <div className="class-list-upload-csv-button">
-                    <input
-                        type="file"
-                        id="csv-upload"
-                        accept=".csv"
-                        style={{ display: 'none' }}
-                        onChange={handleFileUpload}
-                    />
-                    <label htmlFor="csv-upload">
-                        Upload CSV
-                    </label>
-                </div>
-            </div>
-            {isCsvUploaded && <p>CSV file uploaded and processed successfully!</p>}
+        <div className="class-list-buttons">
+        <div className="class-list-upload-csv-button">
+        <input
+        type="file"
+        id="csv-upload"
+        accept=".csv"
+        style={{ display: 'none' }}
+        onChange={handleFileUpload}
+        />
+        <label htmlFor="csv-upload">
+        Upload CSV
+        </label>
+        </div>
+        </div>
+        {isCsvUploaded && <p>CSV file uploaded and processed successfully!</p>}
         </div>
     );
 };

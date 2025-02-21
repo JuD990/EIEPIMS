@@ -6,14 +6,16 @@ const StudentManagementTable = ({ searchQuery }) => {
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
-    studentId: '',
+    classListsId: '',  // Add this line to store class_lists_id
+    studentId: '',      // This might not be needed anymore if you're only using classListsId
     firstName: '',
     middleName: '',
     lastName: '',
     classification: '',
     yearLevel: '',
     status: '',
-    reason: ''
+    reason: '',
+    courseCode: '',
   });
 
   useEffect(() => {
@@ -83,7 +85,7 @@ const StudentManagementTable = ({ searchQuery }) => {
     console.log("Submitting student update for studentId:", studentId);
     console.log("Form Data being submitted:", formData);
 
-    fetch(`http://localhost:8000/api/update-student/${studentId}`, {
+    fetch(`http://localhost:8000/api/update-student/${formData.classListsId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -97,6 +99,7 @@ const StudentManagementTable = ({ searchQuery }) => {
         yearLevel: formData.yearLevel,
         status: formData.status,
         reason: formData.reason,
+        courseCode: formData.courseCode
       }),
     })
     .then((response) => {
@@ -124,17 +127,21 @@ const StudentManagementTable = ({ searchQuery }) => {
   };
 
   const handleUpdateClick = (row) => {
+    console.log("Row data:", row.original); // Debugging - check if class_lists_id exists
+
     setFormData({
-      studentId: row.original.student_id,  // Ensure studentId is populated correctly
+      classListsId: row.original.class_lists_id,  // Assign class_lists_id
       firstName: row.original.firstname || '',
       middleName: row.original.middlename || '',
       lastName: row.original.lastname || '',
       classification: row.original.classification || '',
       yearLevel: row.original.year_level || '',
       status: row.original.status || '',
-      reason: row.original.reason_for_shift_or_drop || ''
+      reason: row.original.reason_for_shift_or_drop || '',
+      courseCode: row.original.course_code || '',
     });
 
+    console.log("Updated formData:", formData); // Debugging
     setShowModal(true);
   };
 
@@ -145,6 +152,8 @@ const StudentManagementTable = ({ searchQuery }) => {
   (student.student_id?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
   (student.email?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
   (student.department?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+  (student.course_code?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+  (student.status?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
   (student.program?.toLowerCase() || "").includes(searchQuery.toLowerCase())
   );
 
@@ -369,6 +378,16 @@ const StudentManagementTable = ({ searchQuery }) => {
       type="text"
       name="lastName"
       value={formData.lastName}
+      onChange={handleInputChange}
+      style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #333333' }}
+      />
+      </div>
+      <div style={{ marginBottom: '20px' }}>
+      <label style={{ display: 'block', fontSize: '20px', color: '#383838' }}>Subject:</label>
+      <input
+      type="text"
+      name="courseCode"
+      value={formData.courseCode}
       onChange={handleInputChange}
       style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #333333' }}
       />

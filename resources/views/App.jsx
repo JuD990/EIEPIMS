@@ -25,10 +25,12 @@ import EslPrimeEieReporting from "../js/components/esl_prime/EIE-reporting/esl-p
 import ElPrimeEPGFRubricVersion from "../js/components/esl_prime/EIE-management/epgf-rubric-version/esl-prime-epgf-rubric-versioning";
 import EslCertification from "../js/components/esl_prime/EIE-management/certification/esl-prime-certification";
 import EslTemplate from "../js/components/esl_prime/EIE-management/template/esl-template-champion";
-import EslPrimeAccountManagement from "../js/components/esl_prime/EIE-management/accounts/esl-prime-account-management";
 import EslPrimeDashboard from "../js/components/esl_prime/EslPrimeDashboard/EslPrimeDashboard";
 import EslInterviewScorecard from "../js/components/esl_prime/EIE-diagnostic/esl-interview-scorecard/esl-interview-scorecard";
 import EslDiagnosticReports from "../js/components/esl_prime/EIE-diagnostic/eie-diagnostic-reports/eie-diagnostic-reports";
+
+{/* ESL User Management Imports*/}
+import EslPrimeAccountManagement from "../js/components/esl_prime/EIE-management/accounts/esl-prime-account-management";
 
 // PrivateRoute Import
 import PrivateRoute from "../js/components/routes/PrivateRoute";

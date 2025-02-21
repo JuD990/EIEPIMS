@@ -3,7 +3,7 @@ import { useTable } from "react-table";
 import axios from "axios";
 import "./implementing-subjects-table.css";
 
-const ImplementingSubjectsTable = () => {
+const ImplementingSubjectsTable = ({searchQuery}) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,6 +18,7 @@ const ImplementingSubjectsTable = () => {
     employeeId: "",
     assigned_poc: "",
     email: "",
+    activeStudents: "",
     enrolledStudents: "",
   });
 
@@ -36,7 +37,20 @@ const ImplementingSubjectsTable = () => {
       const response = await axios.get("/api/implementing-subjects", {
         headers: { "employee_id": employeeId },
       });
-      if (JSON.stringify(response.data) !== JSON.stringify(data)) {
+
+      // Apply the search query to filter the results
+      if (searchQuery) {
+        const filteredData = response.data.filter(item =>
+        item.course_title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.course_code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.assigned_poc.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.program.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.department.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setData(filteredData);
+      } else {
         setData(response.data);
       }
     } catch (error) {
@@ -46,6 +60,7 @@ const ImplementingSubjectsTable = () => {
       setIsLoading(false);
     }
   };
+
 
   // Fetch POCs from the API
   useEffect(() => {
@@ -70,7 +85,8 @@ const ImplementingSubjectsTable = () => {
   // Polling to refresh data
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [searchQuery]); // Add searchQuery as a dependency
+
 
   // Handle form data input changes
   const handleInputChange = (e) => {
@@ -91,6 +107,7 @@ const ImplementingSubjectsTable = () => {
       department: values.department,
       program: values.program,
       assigned_poc: values.assigned_poc,
+      activeStudents: values.active_students,
       enrolledStudents: values.enrolled_students,
     });
     setShowUpdateModal(true);
@@ -168,6 +185,7 @@ const ImplementingSubjectsTable = () => {
       { Header: "Employee ID", accessor: "employee_id" },
       { Header: "Assigned POC", accessor: "assigned_poc" },
       { Header: "Email", accessor: "email" },
+      { Header: "Active Students", accessor: "active_students" },
       { Header: "Enrolled Students", accessor: "enrolled_students" },
       {
         Header: "Actions",
@@ -187,8 +205,7 @@ const ImplementingSubjectsTable = () => {
     []
   );
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data });
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
 
   return (
     <div style={{ margin: "20px" }}>

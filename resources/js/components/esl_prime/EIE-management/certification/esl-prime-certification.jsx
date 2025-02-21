@@ -4,10 +4,10 @@ import UserInfo from "@user-info/User-info";
 import MonthlyChampion from "./monthly-champions/MonthlyChampion";
 import EIEDiagnostics from "./eie-diagnostics/EIEDiagnostics";
 import "./esl-prime-certification.css";
-import CertificationDropdown from './dropdown-button/dropdown';
 
-const eslCertification = () => {
+const EslCertification = () => {
   const [activeTab, setActiveTab] = useState(1); // Default to Monthly Champion tab
+  const [searchQuery, setSearchQuery] = useState(""); // ✅ Define searchQuery state
 
   return (
     <div>
@@ -17,8 +17,8 @@ const eslCertification = () => {
 
     <h1 className="certification-title">Certification</h1>
 
+    {/* Tabs Container */}
     <div className="tabs-container">
-    {/* Tabs */}
     <div
     onClick={() => setActiveTab(1)}
     className={`tab ${activeTab === 1 ? "active-tab" : ""}`}
@@ -35,16 +35,23 @@ const eslCertification = () => {
 
     {/* Divider line */}
     <div className="divider-line"></div>
-    <CertificationDropdown />
-    <br/><br/>
-    {/* Display corresponding content based on active tab */}
-    {activeTab === 1 && <MonthlyChampion />}
-    {activeTab === 2 && <EIEDiagnostics />}
 
+    {/* Search Input - Positioned at the Bottom of Divider */}
+    <div className="search-container">
+    <input
+    type="text"
+    value={searchQuery}
+    onChange={(e) => setSearchQuery(e.target.value)}
+    placeholder="Search"
+    className="search-input"
+    />
+    </div>
 
-
+    {/* Pass searchQuery as a prop */}
+    {activeTab === 1 && <MonthlyChampion searchQuery={searchQuery} />}
+    {activeTab === 2 && <EIEDiagnostics searchQuery={searchQuery} />}
     </div>
   );
 };
 
-export default eslCertification;
+export default EslCertification;

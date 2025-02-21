@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTable } from "react-table";
 
-const MasterClassListTable = () => {
+const MasterClassListTable = ({searchQuery}) => {
   const [data, setData] = useState([]); // State to hold the table data
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
@@ -11,6 +11,7 @@ const MasterClassListTable = () => {
     classification: '',
     yearLevel: '',
     status: '',
+    gender: '',
     reason: ''
   });
 
@@ -46,6 +47,7 @@ const MasterClassListTable = () => {
       classification: rowData.classification || '',
       yearLevel: rowData.year_level || '',
       status: rowData.status || '',
+      gender: rowData.gender || '',
       reason: rowData.reason_for_shift_or_drop || '',
     });
     setShowModal(true);
@@ -75,6 +77,18 @@ const MasterClassListTable = () => {
       })
       .catch((error) => console.error("Error updating data:", error));
   };
+
+  const filteredData = data.filter((row) => {
+    const fullName = `${row.firstname} ${row.middlename ? row.middlename + '.' : ''} ${row.lastname}`.toLowerCase();
+    return (
+      fullName.includes(searchQuery.toLowerCase()) ||
+      (row.status && row.status.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (row.reason_for_shift_or_drop && row.reason_for_shift_or_drop.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (row.classification && row.classification.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (row.email && row.email.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (row.year_level && row.year_level.toString().toLowerCase().includes(searchQuery.toLowerCase()))
+    );
+  });
 
   const columns = React.useMemo(
     () => [
@@ -165,8 +179,10 @@ const MasterClassListTable = () => {
     []
   );
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data });
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
+    columns,
+    data: filteredData,
+  });
 
   return (
     <>

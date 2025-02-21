@@ -63,9 +63,8 @@ const styles = StyleSheet.create({
     },
     bottomText: {
         fontSize: 14,
-        marginTop: 10,
         marginBottom: 10,
-        marginTop: 40,
+        marginTop: 50,
     },
     bestText: {
         fontFamily: "Helvetica-BoldOblique",

@@ -5,7 +5,7 @@ import { pdf } from "@react-pdf/renderer";
 import Certificate from "./MonthlyCertificate"; // Import the Certificate component
 import "./MonthlyChampion.css";
 
-const MonthlyChampion = () => {
+const MonthlyChampion = ({ searchQuery }) => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
@@ -24,6 +24,21 @@ const MonthlyChampion = () => {
 
         fetchData();
     }, []);
+
+    // ✅ Filter data based on searchQuery
+    const filteredData = data.filter((item) => {
+        const fullName = `${item.firstname} ${item.lastname}`.toLowerCase();
+        const yearLevel = item.year_level.toString().toLowerCase();
+        const program = item.program.toLowerCase();
+        const department = item.department.toLowerCase();
+
+        return (
+            fullName.includes(searchQuery.toLowerCase()) ||
+            yearLevel.includes(searchQuery.toLowerCase()) ||
+            program.includes(searchQuery.toLowerCase()) ||
+            department.includes(searchQuery.toLowerCase())
+        );
+    });
 
     const handleViewCertificate = async (rowData) => {
         console.log("🖥️ Selected Row Data:", rowData);
@@ -73,29 +88,29 @@ const MonthlyChampion = () => {
     const columns = React.useMemo(
         () => [
             { Header: "Name", accessor: (row) => `${row.firstname} ${row.lastname}` },
-            { Header: "Year Level", accessor: "year_level" },
-            { Header: "Program", accessor: "program" },
-            { Header: "Department", accessor: "department" },
-            { Header: "EPGF Average", accessor: "epgf_average" },
-            {
-                Header: "Action",
-                accessor: "action",
-                    Cell: ({ row }) => (
-                    <button
-                        className="monthly-champion-action-btn"
-                        onClick={() => handleViewCertificate(row.original)}
-                    >
-                        View Certificate
-                    </button>
-                ),
-            },
+                                  { Header: "Year Level", accessor: "year_level" },
+                                  { Header: "Program", accessor: "program" },
+                                  { Header: "Department", accessor: "department" },
+                                  { Header: "EPGF Average", accessor: "epgf_average" },
+                                  {
+                                      Header: "Action",
+                                      accessor: "action",
+                                      Cell: ({ row }) => (
+                                          <button
+                                          className="monthly-champion-action-btn"
+                                          onClick={() => handleViewCertificate(row.original)}
+                                          >
+                                          View Certificate
+                                          </button>
+                                      ),
+                                  },
         ],
         []
     );
 
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
         columns,
-        data,
+        data: filteredData, // ✅ Use filtered data
     });
 
     return (

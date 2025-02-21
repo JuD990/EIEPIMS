@@ -22,8 +22,8 @@ const handleAction = () => {
     link2.click();
 };
 
-const EIEDiagnostics = () => {
-    // Sample data with new columns
+const EIEDiagnostics = ({ searchQuery }) => {
+    // Sample data
     const data = React.useMemo(
         () => [
             { name: "John Doe", lowAcquisition: 5, highAcquisition: 8, emerging: 7, lowDeveloping: 6, highDeveloping: 8, proficient: 9, highProficient: 10, advanced: 9, highAdvanced: 10, nativeBilingual: 10, cefr: "C1" },
@@ -33,7 +33,18 @@ const EIEDiagnostics = () => {
         []
     );
 
-    // Define table columns with new structure
+    // ✅ Filter data based on searchQuery
+    const filteredData = data.filter((item) => {
+        const fullName = item.name.toLowerCase();
+        const cefrLevel = item.cefr.toLowerCase();
+
+        return (
+            fullName.includes(searchQuery.toLowerCase()) ||
+            cefrLevel.includes(searchQuery.toLowerCase())
+        );
+    });
+
+    // Define table columns
     const columns = React.useMemo(
         () => [
             { Header: "Name", accessor: "name" },
@@ -53,7 +64,7 @@ const EIEDiagnostics = () => {
                 accessor: "action",
                 Cell: () => (
                     <button className="monthly-champion-action-btn" onClick={handleAction}>
-                    Download Both Certificates
+                    View Certificates
                     </button>
                 ),
             }
@@ -63,7 +74,7 @@ const EIEDiagnostics = () => {
 
     // Create table instance
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data });
+    useTable({ columns, data: filteredData });
 
     return (
         <div className="monthly-champion-container">

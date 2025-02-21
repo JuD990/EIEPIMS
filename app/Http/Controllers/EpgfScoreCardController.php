@@ -75,6 +75,7 @@ class EpgfScoreCardController extends Controller
             'program' => 'required|string',
             'active_students' => 'required|numeric',
             'course_title' => 'required|string',
+            'year_level' => 'required|string',
 
             // Pronunciation
             'consistency_descriptor' => 'nullable|string',
@@ -119,6 +120,7 @@ class EpgfScoreCardController extends Controller
                 'program' => $validatedData['program'],
                 'active_students' => $validatedData['active_students'],
                 'course_title' => $validatedData['course_title'],
+                'year_level' => $validatedData['year_level'],
                 'pronunciation_average' => $validatedData['pronunciation_average'] ?? null,
                 'grammar_average' => $validatedData['grammar_average'] ?? null,
                 'fluency_average' => $validatedData['fluency_average'] ?? null,
@@ -162,6 +164,7 @@ class EpgfScoreCardController extends Controller
                 'program' => $validatedData['program'],
                 'active_students' => $validatedData['active_students'],
                 'course_title' => $validatedData['course_title'],
+                'year_level' => $validatedData['year_level'],
                 'pronunciation_average' => $validatedData['pronunciation_average'] ?? null,
                 'grammar_average' => $validatedData['grammar_average'] ?? null,
                 'fluency_average' => $validatedData['fluency_average'] ?? null,

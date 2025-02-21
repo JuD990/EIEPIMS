@@ -68,6 +68,7 @@ const LoginForm = () => {
 
         // Store necessary data in localStorage
         localStorage.setItem("authToken", token);
+        localStorage.setItem("userType", userType); // ✅ Store userType
 
         if (userType === "Student" && student_id) {
           localStorage.setItem("student_id", student_id);
@@ -77,6 +78,8 @@ const LoginForm = () => {
           setError("Employee ID or Student ID not found.");
           return;
         }
+
+        console.log("Stored User Type:", localStorage.getItem("userType")); // ✅ Debugging
 
         // Navigate based on user type
         switch (userType) {
@@ -93,8 +96,6 @@ const LoginForm = () => {
             navigate("/eie-head-poc-dashboard");
             break;
           case "ESL Prime":
-            navigate("/esl-dashboard");
-            break;
           case "ESL Champion":
             navigate("/esl-dashboard");
             break;

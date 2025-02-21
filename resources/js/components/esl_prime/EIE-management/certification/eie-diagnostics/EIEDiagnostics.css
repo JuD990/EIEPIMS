@@ -3,6 +3,7 @@
     padding: 20px;
     text-align: center;
     font-family: 'Poppins', sans-serif; /* Unified font */
+    white-space: nowrap;
 }
 
 .monthly-champion-table-container {

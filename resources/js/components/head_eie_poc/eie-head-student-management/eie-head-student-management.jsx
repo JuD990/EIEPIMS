@@ -19,12 +19,11 @@ const EIEHeadStudentManagement = () => {
     {/* Wrapper to align dropdown and search input in a row */}
     <div style={{
       display: 'flex',
-      justifyContent: 'space-between', // Push items apart
+      justifyContent: 'flex-end', // Push items to the right
       alignItems: 'center', // Align items vertically
       margin: '20px 35px', // Add some margin
+      width: '100%', // Ensure it takes the full width
     }}>
-    <StudentManagementDropdown />
-
     <input
     type="text"
     value={searchQuery}
@@ -35,11 +34,12 @@ const EIEHeadStudentManagement = () => {
       height: '60px',
       borderRadius: '8px',
       borderColor: '#333333',
-      paddingLeft: '10px',
+      marginRight: '70px',
       fontSize: '16px',
     }}
     />
     </div>
+
 
     <StudentManagementTable searchQuery={searchQuery} />
     <br />

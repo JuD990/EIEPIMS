@@ -7,6 +7,7 @@ use App\Models\ImplementingSubjects;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class ClassListController extends Controller
 {
@@ -49,7 +50,7 @@ class ClassListController extends Controller
     public function getClassList()
     {
         try {
-            $students = ClassLists::select('class_lists_id', 'student_id', 'firstname', 'middlename', 'lastname', 'status', 'year_level', 'classification', 'gender', 'reason_for_shift_or_drop')
+            $students = ClassLists::select('class_lists_id', 'student_id', 'firstname', 'middlename', 'lastname', 'status', 'year_level', 'classification', 'gender', 'reason_for_shift_or_drop', 'course_code')
                 ->get();
     
             return response()->json($students, 200);
@@ -132,7 +133,7 @@ class ClassListController extends Controller
         }
     }
 
-    public function updateStudent(Request $request, $student_id)
+    public function updateStudent(Request $request, $class_lists_id)
     {
         try {
             // Validate incoming data
@@ -144,10 +145,11 @@ class ClassListController extends Controller
                 'yearLevel' => 'required|string',
                 'status' => 'required|string',
                 'reason' => 'nullable|string',
+                'courseCode' => 'nullable|string',
             ]);
 
-            // Find the student by ID
-            $student = ClassLists::where('student_id', $student_id)->first();
+            // Find the student by class_lists_id instead of student_id
+            $student = ClassLists::where('class_lists_id', $class_lists_id)->first();
 
             if (!$student) {
                 return response()->json(['message' => 'Student not found.'], 404);
@@ -161,32 +163,34 @@ class ClassListController extends Controller
             $student->year_level = $request->input('yearLevel');
             $student->status = $request->input('status');
             $student->reason_for_shift_or_drop = $request->input('reason');
+            $student->course_code = $request->input('courseCode');
 
             // Save the updated student record
             $student->save();
 
-            // Return a response indicating success
             return response()->json(['message' => 'Student information updated successfully.'], 200);
 
         } catch (\Illuminate\Database\QueryException $e) {
-            // Handle database-specific errors
             return response()->json(['message' => 'Database error: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
-            // Handle unexpected errors
             return response()->json(['message' => 'Failed to update student information.', 'error' => $e->getMessage()], 500);
         }
     }
 
     public function fetchMonthlyChamps()
     {
-        // Fetch only records where epgf_average is not null and greater than 0, then sort in descending order
+        // Get the current month
+        $currentMonth = Carbon::now()->month;
+
+        // Fetch records where epgf_average is not null and greater than 0,
+        // and where the created_at month matches the current month (ignoring the year)
         $classLists = ClassLists::whereNotNull('epgf_average')
         ->where('epgf_average', '>', 0)
+        ->whereMonth('created_at', $currentMonth)
         ->orderByDesc('epgf_average')
         ->get();
 
         return response()->json($classLists);
     }
-
 
 }
