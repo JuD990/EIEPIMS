@@ -96,8 +96,9 @@ const LoginForm = () => {
             navigate("/eie-head-poc-dashboard");
             break;
           case "ESL Prime":
+            navigate("/esl-prime-dashboard");
           case "ESL Champion":
-            navigate("/esl-dashboard");
+            navigate("/esl-champion-dashboard");
             break;
           default:
             navigate("/");

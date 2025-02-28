@@ -1,0 +1,29 @@
+.monthly-champion-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* To ensure it takes the full height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+.monthly-champion-card {
+    width: 450px;
+    height: 580px;
+    border: 2px solid black; /* Black border */
+    border-radius: 8px; /* Optional: For rounded corners */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.monthly-champion-image {
+    width: 100%;
+    height: auto;
+    max-width: 400px;
+}

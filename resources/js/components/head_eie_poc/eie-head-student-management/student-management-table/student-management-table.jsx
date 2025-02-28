@@ -185,6 +185,10 @@ const StudentManagementTable = ({ searchQuery }) => {
         accessor: "gender",
       },
       {
+        Header: "Course Code",
+        accessor: "course_code",
+      },
+      {
         Header: () => (
           <div style={{ whiteSpace: "nowrap" }}>Reason for Shift/Drop</div>
         ),
@@ -194,8 +198,12 @@ const StudentManagementTable = ({ searchQuery }) => {
         ),
       },
       {
-        Header: "Subject",
-        accessor: "course_code",
+        Header: "EPGF Average",
+        accessor: "epgf_average",
+      },
+      {
+        Header: "Proficiency Level",
+        accessor: "proficiency_level",
       },
       {
         Header: "Actions",

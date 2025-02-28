@@ -1,0 +1,51 @@
+/* MonthlyChampion.css */
+.monthly-champion-container {
+    padding: 20px;
+    text-align: center;
+    font-family: 'Poppins', sans-serif; /* Unified font */
+    white-space: nowrap;
+}
+
+.monthly-champion-table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-left: 340px;
+}
+
+.monthly-champion-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid #ddd;
+    font-family: 'Poppins', sans-serif; /* Unified font */
+    border-radius: 8px; /* Optional: for rounded corners */
+}
+
+.monthly-champion-th {
+    background-color: #F4F7FC;
+    padding: 12px;
+    text-align: center;
+    border-bottom: 2px solid #ddd;
+    font-size: 20px;
+    font-weight: bold; /* Adding bold text to headers */
+}
+
+.monthly-champion-td {
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+    border: 2px solid #ddd;
+    text-align: center; /* Aligning data to center */
+}
+
+.monthly-champion-action-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.monthly-champion-action-btn:hover {
+    background-color: #0056b3;
+}

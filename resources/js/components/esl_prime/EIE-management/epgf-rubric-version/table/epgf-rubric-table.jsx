@@ -62,14 +62,14 @@ const Table = ({ rubricVersion }) => {
 
       const formattedData = rubricDetails.pronunciations.map((pronunciation, index) => ({
         pronunciation: removeDuplicates(pronunciation.pronunciation || ""),
-        pronunciationDescriptor: formatDescriptor(pronunciation.descriptor || ""),
-        pronunciationRating: pronunciation.rating || "",
-        grammar: removeDuplicates(rubricDetails.grammars[index]?.grammar || ""),
-        grammarDescriptor: formatDescriptor(rubricDetails.grammars[index]?.descriptor || ""),
-        grammarRating: rubricDetails.grammars[index]?.rating || "",
-        fluency: removeDuplicates(rubricDetails.fluencies[index]?.fluency || ""),
-        fluencyDescriptor: formatDescriptor(rubricDetails.fluencies[index]?.descriptor || ""),
-        fluencyRating: rubricDetails.fluencies[index]?.rating || "",
+                                                                                        pronunciationDescriptor: formatDescriptor(pronunciation.descriptor || ""),
+                                                                                        pronunciationRating: pronunciation.rating || "",
+                                                                                        grammar: removeDuplicates(rubricDetails.grammars[index]?.grammar || ""),
+                                                                                        grammarDescriptor: formatDescriptor(rubricDetails.grammars[index]?.descriptor || ""),
+                                                                                        grammarRating: rubricDetails.grammars[index]?.rating || "",
+                                                                                        fluency: removeDuplicates(rubricDetails.fluencies[index]?.fluency || ""),
+                                                                                        fluencyDescriptor: formatDescriptor(rubricDetails.fluencies[index]?.descriptor || ""),
+                                                                                        fluencyRating: rubricDetails.fluencies[index]?.rating || "",
       }));
       setData(formattedData);
     }

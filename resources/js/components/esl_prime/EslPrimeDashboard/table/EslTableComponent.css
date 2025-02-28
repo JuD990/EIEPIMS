@@ -1,0 +1,122 @@
+/* TableComponent.css */
+.dashboard-college-poc-container {
+    overflow-x: auto;
+    overflow-y: auto;
+    height: 700px;
+    margin-left: 340px;
+    margin-right: 35px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    text-align: center;
+    font-family: 'Poppins';
+    white-space: nowrap;
+}
+
+.dashboard-college-poc-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-college-poc-table th,
+.dashboard-college-poc-table td {
+    padding: 12px 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.dashboard-college-poc-table th {
+    background-color: #F4F7FC;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 1; /* Ensures header stays above other content when scrolling */
+}
+
+.dashboard-college-poc-table td {
+    background-color: #f4f4f4;
+}
+
+.dashboard-college-poc-header-colored {
+    background-color: #28a745;
+}
+
+.dashboard-college-poc-table-header-cell {
+    text-align: center;
+    font-weight: bold;
+}
+
+.dashboard-college-poc-table-header-plain {
+    background-color: #e9ecef;
+    font-weight: normal;
+}
+
+.dashboard-college-poc-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.dashboard-college-poc-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.dashboard-college-poc-table tbody tr.no-data td {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+}
+
+.dashboard-college-poc-table td {
+    background-color: #fafafa;
+}
+
+/* Add a message when no data is available */
+.no-data-message {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+    padding: 20px;
+    font-weight: bold;
+}
+.loading-container {
+    text-align: center;
+    font-size: 18px;
+    padding: 20px;
+}
+.highlight-yellow {
+    background-color: yellow;
+    padding: 5px;
+}
+.error-message {
+    color: red;
+    font-weight: bold;
+}
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.dashboard-college-poc-table thead th {
+    background-color: #F4F7FC;
+    font-weight: bold;
+    position: sticky;
+    z-index: 1; /* Ensures header stays above other content when scrolling */
+}
+
+.dashboard-college-poc-table thead tr:first-child th {
+    top: 0; /* Keeps the first header row sticky at the top */
+}
+
+.dashboard-college-poc-table thead tr:nth-child(2) th {
+    top: 40px; /* Adjust the value based on the height of your first header row */
+}
+

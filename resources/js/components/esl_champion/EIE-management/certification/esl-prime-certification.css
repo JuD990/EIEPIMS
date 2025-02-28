@@ -1,12 +1,55 @@
- .dashboard-container {
-    display: flex;
-  }
-  
-  .dashboard-page-title {
-    color: #0187F1;
-    font-family: 'Epilogue';
-    font-weight: 800;
-    margin-top: 120px;
-    margin-left: 420px;
-  }
-  
+/* Certification Title */
+.certification-title {
+  font-family: "Epilogue";
+  font-weight: 800;
+  margin-left: 340px;
+  color: #0187F1;
+}
+
+/* Tabs Container */
+.tabs-container {
+  position: relative;
+  display: flex;
+  width: calc(100% - 340px);
+  left: 340px;
+}
+
+.tabs-container p{
+  font-size: 20px;
+}
+
+/* Individual Tab */
+.tab {
+  padding: 40px 30px;
+  cursor: pointer;
+}
+
+/* Active Tab */
+.active-tab {
+  border-bottom: 8px solid #0187F1;
+}
+
+/* Divider Line */
+.divider-line {
+  height: 2px;
+  background-color: #7B7878;
+  margin-top: -5px;
+  margin-bottom: 20px;
+  width: 1450px;
+  margin-left: 365px;
+  margin-right: auto;
+}
+.search-container {
+  display: flex;
+  justify-content: flex-end; /* Push input to the right */
+  margin-top: 10px; /* Add space below the divider */
+}
+
+.search-input {
+  width: 476px;
+  height: 60px;
+  border-radius: 8px;
+  border: 1px solid #333333;
+  padding-left: 10px;
+  font-size: 16px;
+}

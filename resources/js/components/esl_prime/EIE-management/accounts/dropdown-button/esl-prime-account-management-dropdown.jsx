@@ -2,62 +2,97 @@ import React, { useState } from "react";
 import "./esl-prime-account-management-dropdown.css";
 import { FaChevronDown } from "react-icons/fa";
 
-const UserManagementDropdown = ({ searchQuery, setSearchQuery }) => {
+const UserManagementDropdown = () => {
   const [isUserTypeOpen, setIsUserTypeOpen] = useState(false);
-  const [selectedUserType, setSelectedUserType] = useState("Students");
+  const [selectedUserType, setSelectedUserType] = useState("Student");
+  const [isDepartmentOpen, setIsDepartmentOpen] = useState(false);
+  const [selectedDepartment, setSelectedDepartment] = useState("Computer Studies");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // List of user types
-  const userTypeOptions = ["Students", "EIE Head POC", "Lead POC", "College POC"];
+  const userType = ["Student", "College POC", "EIE Head POC"];
+  const departments = ["Computer Studies", "Nursing", "Law", "Engineering and Architecture"];
 
-  const toggleUserTypeDropdown = () => {
-    setIsUserTypeOpen((prev) => !prev);
-  };
-
-  const handleUserTypeSelect = (userType) => {
-    setSelectedUserType(userType);
-    setIsUserTypeOpen(false); // Close dropdown after selection
-  };
+  // Filter departments based on search query
+  const filteredDepartments = departments.filter((dept) =>
+    dept.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
-    <div className="student-dropdown-container">
-    <div className="dropdowns-wrapper">
-    <div className="student-dropdown-wrapper">
-    <button className="student-dropdown-btn" onClick={toggleUserTypeDropdown}>
-    {selectedUserType} <FaChevronDown />
-    </button>
-    {isUserTypeOpen && (
-      <div className="student-dropdown-menu">
-      {userTypeOptions.map((option) => (
-        <div
-        key={option}
-        className={`student-dropdown-item ${selectedUserType === option ? "selected" : ""}`}
-        onClick={() => handleUserTypeSelect(option)}
-        >
-        {option}
+    <div className="student-dropdown-container" style={{ display: 'flex', alignItems: 'center' }}>
+      {/* Left side container for dropdowns */}
+      <div className="dropdowns-wrapper" style={{ display: 'flex', gap: '20px' }}>
+        {/* User Type Dropdown */}
+        <div className="student-dropdown-wrapper">
+          <button
+            className="student-dropdown-btn"
+            onClick={() => setIsUserTypeOpen((prev) => !prev)}
+          >
+            {selectedUserType}
+            <FaChevronDown className={`dropdown-arrow ${isUserTypeOpen ? "open" : ""}`} />
+          </button>
+          {isUserTypeOpen && (
+            <div className="student-dropdown-menu">
+              {userType.map((type, index) => (
+                <p
+                  key={index}
+                  className={`student-dropdown-item ${selectedUserType === type ? "selected" : ""}`}
+                  onClick={() => {
+                    setSelectedUserType(type);
+                    setIsUserTypeOpen(false);
+                  }}
+                >
+                  {type}
+                </p>
+              ))}
+            </div>
+          )}
         </div>
-      ))}
-      </div>
-    )}
-    </div>
-    </div>
 
-    {/* Search Input */}
-    <input
-    type="text"
-    value={searchQuery}
-    onChange={(e) => setSearchQuery(e.target.value)}
-    placeholder="Search"
-    style={{
-      width: '476px',
-      height: '60px',
-      borderRadius: '8px',
-      borderColor: '#333333',
-      paddingLeft: '10px',
-      fontSize: '16px',
-      marginLeft: 'auto',
-      marginRight: '25px',
-    }}
-    />
+        {/* Department Dropdown */}
+        <div className="student-dropdown-wrapper">
+          <button
+            className="student-dropdown-btn"
+            onClick={() => setIsDepartmentOpen((prev) => !prev)}
+          >
+            {selectedDepartment}
+            <FaChevronDown className={`dropdown-arrow ${isDepartmentOpen ? "open" : ""}`} />
+          </button>
+          {isDepartmentOpen && (
+            <div className="student-dropdown-menu">
+              {filteredDepartments.map((dept, index) => (
+                <p
+                  key={index}
+                  className={`student-dropdown-item ${selectedDepartment === dept ? "selected" : ""}`}
+                  onClick={() => {
+                    setSelectedDepartment(dept);
+                    setIsDepartmentOpen(false);
+                  }}
+                >
+                  {dept}
+                </p>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Right side Search Area */}
+      <input
+        type="text"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder="Search"
+        style={{
+          width: '476px',
+          height: '60px',
+          borderRadius: '8px',
+          borderColor: '#333333',
+          paddingLeft: '10px',
+          fontSize: '16px',
+          marginLeft: 'auto',
+          marginRight: '25px',
+        }}
+      />
     </div>
   );
 };

@@ -1,25 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import Sidebar from '../../sidebar/esl-sidebar';
 import UserInfo from '@user-info/User-info';
-import "./esl-prime-account-management.css";
 import UserManagementDropdown from "./dropdown-button/esl-prime-account-management-dropdown";
-import UserManagementTable from "./user-management-table/user-management-table";
+import UserStudentTable from "./user-management-table/students-table/student-table";
 import UserManagementButtons from "./user-management-buttons/user-management-button";
 
 const eslPrimeAccountManagement = () => {
+    const [searchQuery, setSearchQuery] = useState("");
 return(
     <div>
       <Sidebar />
       <UserInfo />
-      <div className="dashboard-container">
-        <div className="dashboard-content">
-          <div className="dashboard-page-title">
-          <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '-60px' }}>User Management</h1>
-          </div>
-        </div>
-      </div>
-      <UserManagementDropdown/>
-      <UserManagementTable />
+          <br /><br /><br /><br /><br />
+    <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#0187F1' }}>User Management</h1>
+<UserManagementDropdown searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <UserStudentTable searchQuery={searchQuery}/>
       <UserManagementButtons/>
     </div>
     );

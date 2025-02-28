@@ -1,22 +1,57 @@
-import React from "react";
-import ESLSidebar from '../../sidebar/esl-sidebar';
-import UserInfo from '@user-info/User-info';
-import './esl-prime-certification.css';
+import React, { useState } from "react";
+import ESLSidebar from "../../sidebar/esl-sidebar";
+import UserInfo from "@user-info/User-info";
+import MonthlyChampion from "./monthly-champions/MonthlyChampion";
+import EIEDiagnostics from "./eie-diagnostics/EIEDiagnostics";
+import "./esl-prime-certification.css";
 
-const eslCertification = () => {
-return(
+const EslCertification = () => {
+  const [activeTab, setActiveTab] = useState(1); // Default to Monthly Champion tab
+  const [searchQuery, setSearchQuery] = useState(""); // ✅ Define searchQuery state
+
+  return (
     <div>
-      <ESLSidebar />
-      <UserInfo />
-      <div className="dashboard-container">
-        <div className="dashboard-content">
-          <div className="dashboard-page-title">
-          <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800 }}>Certification</h1>
-          </div>
-        </div>
-      </div>
+    <ESLSidebar />
+    <UserInfo />
+    <br /><br /><br /><br /><br />
+
+    <h1 className="certification-title">Certification</h1>
+
+    {/* Tabs Container */}
+    <div className="tabs-container">
+    <div
+    onClick={() => setActiveTab(1)}
+    className={`tab ${activeTab === 1 ? "active-tab" : ""}`}
+    >
+    <p> Monthly Champion </p>
     </div>
-    );
+    <div
+    onClick={() => setActiveTab(2)}
+    className={`tab ${activeTab === 2 ? "active-tab" : ""}`}
+    >
+    <p> EIE Diagnostics </p>
+    </div>
+    </div>
+
+    {/* Divider line */}
+    <div className="divider-line"></div>
+
+    {/* Search Input - Positioned at the Bottom of Divider */}
+    <div className="search-container">
+    <input
+    type="text"
+    value={searchQuery}
+    onChange={(e) => setSearchQuery(e.target.value)}
+    placeholder="Search"
+    className="search-input"
+    />
+    </div>
+
+    {/* Pass searchQuery as a prop */}
+    {activeTab === 1 && <MonthlyChampion searchQuery={searchQuery} />}
+    {activeTab === 2 && <EIEDiagnostics searchQuery={searchQuery} />}
+    </div>
+  );
 };
 
-export default eslCertification;
+export default EslCertification;

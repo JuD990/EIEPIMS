@@ -3,6 +3,7 @@ import EIEHeadSidebar from '../sidebar/eie-head-sidebar';
 import UserInfo from '@user-info/User-info';
 import ImplementingSubjectsTable from "./implementing-subjects-table/implementing-subjects-table";
 import UploadingButton from "./upload-implementing-subjects/upload-button";
+import Dropdown from "./dropdown-button/implementing-subjects-dropdown";
 
 const EIEHeadImplementingSubjects = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,14 +20,22 @@ const EIEHeadImplementingSubjects = () => {
     <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '350px', color: '#0187F1' }}>Implementing Subjects</h1>
     <div style={{
       display: 'flex',
-      flexDirection: 'column', // Stack the items vertically
+      flexDirection: 'column', // Stack items vertically
       alignItems: 'flex-end', // Align items to the right
       margin: '20px 35px',
-      gap: '10px', // Space between the button and the input
-      width: '100%', // Make sure the container takes up the full width
+      gap: '10px',
+      width: '100%',
     }}>
     {/* Uploading Button */}
     <UploadingButton onFileUpload={handleFileUpload} />
+
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: '430px'
+    }}>
+    {/* Dropdown */}
+    <Dropdown />
 
     {/* Search Input */}
     <input
@@ -44,6 +53,7 @@ const EIEHeadImplementingSubjects = () => {
       marginRight: '55px'
     }}
     />
+    </div>
     </div>
 
     <ImplementingSubjectsTable searchQuery={searchQuery} />

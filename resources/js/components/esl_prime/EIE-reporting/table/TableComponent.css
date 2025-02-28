@@ -1,0 +1,50 @@
+/* TableComponent.css */
+.eie-reporting-college-poc-container {
+    overflow-x: auto;
+    overflow-y: auto;
+    height: 600px;
+    margin-left: 340px;
+    margin-right: 35px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    text-align: center;
+    font-family: 'Poppins';
+}
+
+.eie-reporting-college-poc-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+.eie-reporting-college-poc-header-colored {
+    background-color: #F4F7FC;
+    z-index: 2; /* Make sure it stays above the plain header */
+    height: 40px;
+}
+
+.eie-reporting-college-poc-header-plain {
+    background-color: white;
+    position: sticky;
+    top: 0; /* Keep it at the top of the viewport */
+    z-index: 1; /* Make sure it is below the colored header */
+    border-top: 2px solid #F4F7FC; /* Border to separate the two rows */
+    height: 40px;
+}
+
+.eie-reporting-college-poc-table-header-cell {
+    padding: 8px 15px;
+    text-align: left;
+    background-color: #F4F7FC;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 2; /* Keep it above the plain header */
+    position: sticky;
+    top: 0;
+    white-space: nowrap;
+    height: 40px;
+}
+
+.eie-reporting-college-poc-table-body-cell {
+    border: 1px solid #ddd;
+    padding: 8px;
+    white-space: nowrap;
+}

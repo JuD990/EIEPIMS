@@ -7,7 +7,7 @@ const StudentManagementTable = ({ searchQuery }) => {
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     classListsId: '',  // Add this line to store class_lists_id
-    studentId: '',      // This might not be needed anymore if you're only using classListsId
+    studentId: '',
     firstName: '',
     middleName: '',
     lastName: '',
@@ -99,7 +99,7 @@ const StudentManagementTable = ({ searchQuery }) => {
         yearLevel: formData.yearLevel,
         status: formData.status,
         reason: formData.reason,
-        courseCode: formData.courseCode
+        courseCode: formData.courseCode,
       }),
     })
     .then((response) => {
@@ -205,6 +205,10 @@ const StudentManagementTable = ({ searchQuery }) => {
         accessor: "gender",
       },
       {
+        Header: "Course Code",
+        accessor: "course_code",
+      },
+      {
         Header: () => (
           <div style={{ whiteSpace: "nowrap" }}>Reason for Shift/Drop</div>
         ),
@@ -214,8 +218,12 @@ const StudentManagementTable = ({ searchQuery }) => {
         ),
       },
       {
-        Header: "Course Code",
-        accessor: "course_code",
+        Header: "EPGF Average",
+        accessor: "epgf_average",
+      },
+      {
+        Header: "Proficiency Level",
+        accessor: "proficiency_level",
       },
       {
         Header: "Actions",

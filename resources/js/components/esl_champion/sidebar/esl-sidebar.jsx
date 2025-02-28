@@ -22,7 +22,7 @@ const ESLSidebar = () => {
 
   // Handlers for navigation and state updates
   const handleDashboardClick = () => {
-    navigate("/esl-dashboard");
+    navigate("/esl-champion-dashboard");
     setShowManagementButtons(false); // Hide management buttons
     setShowDiagnosticsButtons(false); // Hide diagnostics buttons
   };

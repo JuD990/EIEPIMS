@@ -30,7 +30,7 @@ const MasterClassList = () => {
       borderColor: '#333333',
       paddingLeft: '10px',
       fontSize: '16px',
-      marginRight: '35px',
+      marginRight: '385px',
     }}
     />
     </div>

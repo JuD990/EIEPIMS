@@ -47,6 +47,7 @@ const ImplementingSubjectsTable = ({searchQuery}) => {
         item.course_code.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.assigned_poc.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.program.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.semester.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.department.toLowerCase().includes(searchQuery.toLowerCase())
         );
         setData(filteredData);

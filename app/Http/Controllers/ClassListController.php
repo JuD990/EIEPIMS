@@ -50,7 +50,7 @@ class ClassListController extends Controller
     public function getClassList()
     {
         try {
-            $students = ClassLists::select('class_lists_id', 'student_id', 'firstname', 'middlename', 'lastname', 'status', 'year_level', 'classification', 'gender', 'reason_for_shift_or_drop', 'course_code')
+            $students = ClassLists::select('class_lists_id', 'student_id', 'firstname', 'middlename', 'lastname', 'status', 'year_level', 'classification', 'gender', 'reason_for_shift_or_drop', 'course_code', 'epgf_average', 'proficiency_level')
                 ->get();
     
             return response()->json($students, 200);
@@ -121,7 +121,9 @@ class ClassListController extends Controller
                 'classification',
                 'gender',
                 'reason_for_shift_or_drop',
-                'course_code'
+                'course_code',
+                'epgf_average',
+                'proficiency_level',
             )
             ->whereIn('course_code', $excludedCourseCodes)
             ->get();

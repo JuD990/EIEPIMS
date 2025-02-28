@@ -1,17 +1,29 @@
-import React from "react";
-import EIEHeadSidebar from '../sidebar/eie-head-sidebar';
+import React, { useState } from "react";
+import EIEHeadSidebar from "../sidebar/eie-head-sidebar";
 import UserInfo from '@user-info/User-info';
+import Table1 from "./table/eie-reporting-table-1st-sem";
+import Table2 from "./table/eie-reporting-table-2nd-sem";
 
-const EIEHeadReporting = () => {
-    return(
-        <div>
-            <UserInfo/>
-            <EIEHeadSidebar/>
-            <br/><br/><br/><br/><br/>
-            <h1 style={{ ffontFamily: 'Epilogue', fontWeight: 800, marginLeft: '350px', color: '#0187F1' }}>EIE Reporting</h1>
+const EIEreporting = () => {
+  const [dropdownOpen, setDropdownOpen] = useState(false); // State to handle dropdown visibility
 
-        </div>
-    );
+  const currentMonth = new Date().getMonth(); // 0 for January, 11 for December
+
+  // Check if current month is between August (7) and December (11) or January (0) and May (4)
+  const isSecondSemester = currentMonth >= 7 && currentMonth <= 11; // August to December
+  const isFirstSemester = currentMonth >= 0 && currentMonth <= 4; // January to May
+
+  return (
+    <div>
+      <EIEHeadSidebar />
+      <UserInfo />
+      <br /><br /><br /><br /><br />
+      <div className="eie-reporting-page-title">
+        <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#0187F1' }}>EIE Reporting</h1>
+      </div>
+      {isSecondSemester ? <Table1 /> : isFirstSemester ? <Table2 /> : null}
+    </div>
+  );
 };
 
-export default EIEHeadReporting;
+export default EIEreporting;

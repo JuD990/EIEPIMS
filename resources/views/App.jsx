@@ -51,8 +51,8 @@ const App = () => {
         <Route path="/college-poc-student-management" element={<PrivateRoute><CollegePocStudentManagement /></PrivateRoute>} />
 
         {/* ESL */}
-        <Route path="/esl-dashboard" element={<PrivateRoute><EslChampionDashboard /></PrivateRoute>} />
-        <Route path="/esl-dashboard" element={<PrivateRoute><EslPrimeDashboard /></PrivateRoute>} />
+        <Route path="/esl-champion-dashboard" element={<PrivateRoute><EslChampionDashboard /></PrivateRoute>} />
+        <Route path="/esl-prime-dashboard" element={<PrivateRoute><EslPrimeDashboard /></PrivateRoute>} />
         <Route path="/esl-eie-reporting" element={<PrivateRoute><EslPrimeEieReporting /></PrivateRoute>} />
 
         {/* ESL Diagnostcs*/}
