@@ -296,4 +296,40 @@ class EpgfRubricController extends Controller
             'fluencies' => $fluencies,
         ]);
     }
+
+    public function updateEpgfRubric(Request $request, $id)
+    {
+        // Update Pronunciation
+        $pronunciation = EpgfPronunciation::find($id);
+        if ($pronunciation) {
+            $pronunciation->update([
+                'pronunciation' => $request->input('pronunciation'),
+                                   'descriptor' => $request->input('pronunciationDescriptor'),
+                                   'rating' => $request->input('pronunciationRating'),
+            ]);
+        }
+
+        // Update Grammar
+        $grammar = EpgfGrammar::find($id);
+        if ($grammar) {
+            $grammar->update([
+                'grammar' => $request->input('grammar'),
+                             'descriptor' => $request->input('grammarDescriptor'),
+                             'rating' => $request->input('grammarRating'),
+            ]);
+        }
+
+        // Update Fluency
+        $fluency = EpgfFluency::find($id);
+        if ($fluency) {
+            $fluency->update([
+                'fluency' => $request->input('fluency'),
+                             'descriptor' => $request->input('fluencyDescriptor'),
+                             'rating' => $request->input('fluencyRating'),
+            ]);
+        }
+
+        return response()->json(['message' => 'Rubric updated successfully']);
+    }
+
 }

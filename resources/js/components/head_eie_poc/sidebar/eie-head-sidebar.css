@@ -9,6 +9,35 @@
   border-right: 3px solid #e0e0e0;
   position: fixed;
   z-index: 10;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow-y: auto; /* Enables scrolling */
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: #c4c4c4 #f3f3f3; /* Custom scrollbar colors */
+}
+
+.unc-branding {
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center; /* Center align items */
+  justify-content: center;
+  margin-top: auto; /* Pushes it to the bottom */
+  padding: 15px 15px;
+}
+
+.unc-logo {
+  width: 100px; /* Adjust size as needed */
+  height: auto;
+  margin-bottom: 5px; /* Space between logo and text */
+}
+
+.unc-text {
+  font-size: 14px;
+  font-weight: bold;
+  color: #857878;
+  text-align: center; /* Center the text */
 }
 
 /* Logo and Title section */
@@ -42,6 +71,33 @@
   width: 100%;
 }
 
+/* Active State */
+.eie-head-dashboard-sidebar-button.active,
+.eie-head-implementing-subject-sidebar-button.active,
+.eie-head-master-class-list-sidebar-button.active,
+.eie-head-student-management-sidebar-button.active,
+.eie-head-eie-reporting-sidebar-button.active {
+  background-color: #DC2626;
+  border-radius: 20px;
+}
+
+.eie-head-dashboard-sidebar-button.active p,
+.eie-head-implementing-subject-sidebar-button.active p,
+.eie-head-master-class-list-sidebar-button.active p,
+.eie-head-student-management-sidebar-button.active p,
+.eie-head-eie-reporting-sidebar-button.active p {
+  color: white;
+}
+
+.eie-head-dashboard-sidebar-button.active img,
+.eie-head-implementing-subject-sidebar-button.active img,
+.eie-head-master-class-list-sidebar-button.active img,
+.eie-head-student-management-sidebar-button.active img,
+.eie-head-eie-reporting-sidebar-button.active img {
+  filter: brightness(0) invert(1);
+}
+
+
 .eie-head-student-management-sidebar-button, 
 .eie-head-eie-reporting-sidebar-button, 
 .eie-head-implementing-subject-sidebar-button,
@@ -64,8 +120,8 @@
 .eie-head-implementing-subject-sidebar-button:hover,
 .eie-head-master-class-list-sidebar-button:hover,
 .eie-head-dashboard-sidebar-button:hover{
-  background-color: #0187F1;
-  border-radius: 8px;
+  background-color: #DC2626;
+  border-radius: 20px;
 }
 .eie-head-student-management-sidebar-button:hover p, 
 .eie-head-eie-reporting-sidebar-button:hover p, 
@@ -75,35 +131,43 @@
   color: white;
 }
 
+.eie-head-student-management-sidebar-button:hover img,
+.eie-head-eie-reporting-sidebar-button:hover img,
+.eie-head-implementing-subject-sidebar-button:hover img,
+.eie-head-master-class-list-sidebar-button:hover img,
+.eie-head-dashboard-sidebar-button:hover img{
+  filter: brightness(0) invert(1);
+}
+
 .eie-head-student-management-sidebar-button img {
   width: 60px;
   height: 90px;
   margin-right: 15px;
-  margin-left: 5px;
+  margin-left: 20px;
 } 
 .eie-head-eie-reporting-sidebar-button img {
   width: 50px;
   height: 50px;
   margin-right: 15px;
-  margin-left: 8px;
+  margin-left: 25px;
 }
 .eie-head-implementing-subject-sidebar-button img{
   width: 50px;
   height: 80px;
-  margin-right: 20px;
-  margin-left: 5px;
+  margin-right: 18px;
+  margin-left: 25px;
 }
 .eie-head-master-class-list-sidebar-button img{
   width: 60px;
   height: 55px;
   margin-right: 18px;
-  margin-left: -2px;
+  margin-left: 15px;
 }
 .eie-head-dashboard-sidebar-button img{
   width: 50px;
   height: 70px;
-  margin-right: 20px;
-  margin-left: 5px;
+  margin-right: 15px;
+  margin-left: 28px;
 }
 .eie-head-student-management-sidebar-button p, 
 .eie-head-eie-reporting-sidebar-button p, 

@@ -45,13 +45,13 @@
     font-weight: 600;
     font-size: 16px;
     cursor: pointer;
-    border: 2px solid #0187F1;
+    border: 2px solid #6B6D76;
     padding: 10px 20px;
     border-radius: 8px;
   }
   
   .reset-pass-button {
-    color: #0187F1;
+    color: #383838;
     background-color: transparent;
     margin-left: 10px; /* Adjust margin if necessary */
     white-space: nowrap;
@@ -59,7 +59,7 @@
   
   .edit-button {
     color: #FFFFFF;
-    background-color: #0187F1;
+    background-color: #6B6D76;
     border: none;
     margin-right: 10px; /* Adjust margin if necessary */
   }

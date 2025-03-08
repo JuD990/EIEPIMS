@@ -88,22 +88,22 @@ const MonthlyChampion = ({ searchQuery }) => {
     const columns = React.useMemo(
         () => [
             { Header: "Name", accessor: (row) => `${row.firstname} ${row.lastname}` },
-                                  { Header: "Year Level", accessor: "year_level" },
-                                  { Header: "Program", accessor: "program" },
-                                  { Header: "Department", accessor: "department" },
-                                  { Header: "EPGF Average", accessor: "epgf_average" },
-                                  {
-                                      Header: "Action",
-                                      accessor: "action",
-                                      Cell: ({ row }) => (
-                                          <button
-                                          className="monthly-champion-action-btn"
-                                          onClick={() => handleViewCertificate(row.original)}
-                                          >
-                                          View Certificate
-                                          </button>
-                                      ),
-                                  },
+            { Header: "Year Level", accessor: "year_level" },
+            { Header: "Program", accessor: "program" },
+            { Header: "Department", accessor: "department" },
+            { Header: "EPGF Average", accessor: "epgf_average" },
+            {
+                Header: "Action",
+                accessor: "action",
+                Cell: ({ row }) => (
+                    <button
+                    className="monthly-champion-action-btn"
+                    onClick={() => handleViewCertificate(row.original)}
+                    >
+                    View Certificate
+                    </button>
+                ),
+            },
         ],
         []
     );

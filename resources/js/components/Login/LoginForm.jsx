@@ -137,17 +137,19 @@ const LoginForm = () => {
     className="login-container"
     style={{
       backgroundImage: `url(${loginBGimage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
     }}
     >
     <div className="logos">
-    <img className="unc-logo" src={uncLogo} alt="UNC Logo" />
+    <img className="unc-logo-login" src={uncLogo} alt="UNC Logo" />
     <img className="system-logo" src={systemLogo} alt="System Logo" />
     </div>
-    <h1 className="main-title">
-    <span className="eie" title="English Immersive Environment">EIE</span> Program Implementation Management System
+    <h1 className="main-title-login">
+    <span className="eie" title="English Immersive Environment">EIE</span>
+    <span className="pims"> Program Implementation Management System</span>
     </h1>
+
     <h2 className="subtitle">Please enter your credentials</h2>
     <form className="login-form" onSubmit={handleLogin}>
     {error && <div className="error-message">{error}</div>}

@@ -245,7 +245,7 @@ const TableComponent = () => {
                 })}
 
                 {/* Year Level Total Row */}
-                <tr style={{ fontWeight: "bold", backgroundColor: "#f0f0f0" }}>
+                <tr className="year-level-total">
                 <td colSpan="2">{yearLevel} Total</td>
                 <td>{Object.values(enrollmentCount[yearLevel]).reduce((sum, program) => sum + (program.total_enrolled || 0), 0)}</td>
                 <td>100%</td>
@@ -257,18 +257,20 @@ const TableComponent = () => {
                         <React.Fragment key={month}>
                         <td>{totals.totalSubmitted}</td>
                         <td>
-                        <span style={{ backgroundColor: "yellow", padding: "5px" }}>
+                        <span>
                         {totals.totalCompletionRate}%
                         </span>
-                        <span style={{ backgroundColor: "lightblue", padding: "5px", marginLeft: "5px" }}>
+                        <br />
+                        <span>
                         {getCompletionExpectation(totals.totalCompletionRate)}
                         </span>
                         </td>
                         <td>
-                        <span style={{ backgroundColor: "yellow", padding: "5px" }}>
+                        <span>
                         {totals.totalPGFAverage}
                         </span>
-                        <span style={{ backgroundColor: "lightblue", padding: "5px", marginLeft: "5px" }}>
+                        <br />
+                        <span>
                         {proficiency.level}
                         </span>
                         </td>
@@ -281,7 +283,7 @@ const TableComponent = () => {
             );
         })}
         {/* Grand Total Row */}
-        <tr style={{ fontWeight: "bold", backgroundColor: "#d9edf7" }}>
+        <tr className="grand-total">
         <td colSpan="2">{department} Total</td>
         <td>{Object.keys(enrollmentCount).reduce((sum, yearLevel) => sum + Object.values(enrollmentCount[yearLevel]).reduce((s, program) => s + (program.total_enrolled || 0), 0), 0)}</td>
         <td>100%</td>
@@ -293,18 +295,20 @@ const TableComponent = () => {
                 <React.Fragment key={month}>
                 <td>{totals.grandTotalSubmitted}</td>
                 <td>
-                <span style={{ backgroundColor: "yellow", padding: "5px" }}>
+                <span>
                 {totals.grandTotalCompletionRate}%
                 </span>
-                <span style={{ backgroundColor: "lightblue", padding: "5px", marginLeft: "5px" }}>
+                <br />
+                <span>
                 {getCompletionExpectation(totals.grandTotalCompletionRate)}
                 </span>
                 </td>
                 <td>
-                <span style={{ backgroundColor: "yellow", padding: "5px" }}>
+                <span>
                 {totals.grandTotalPGFAverage}
                 </span>
-                <span style={{ backgroundColor: "lightblue", padding: "5px", marginLeft: "5px" }}>
+                <br />
+                <span>
                 {proficiency.level}
                 </span>
                 </td>

@@ -7,25 +7,57 @@ import Table2 from "./table/college-poc-table-2nd-semester";
 const CollegePocDashboard = () => {
   // Determine the current semester
   const currentMonth = new Date().getMonth(); // 0 for January, 11 for December
-  console.log(currentMonth);
-  const semester = useMemo(() => {
-    if (currentMonth >= 8 && currentMonth <= 12) return "1st Semester"; // Aug–Dec
-    return "2nd Semester"; // Jan–May (default)
+  const currentSemester = useMemo(() => {
+    return currentMonth >= 8 && currentMonth <= 12 ? "1st Semester" : "2nd Semester"; // Aug–Dec: 1st, Jan–May: 2nd
   }, [currentMonth]);
+
+  const [selectedSemester, setSelectedSemester] = useState(currentSemester);
+
+  // Function to toggle semesters
+  const toggleSemester = () => {
+    setSelectedSemester((prev) => (prev === "1st Semester" ? "2nd Semester" : "1st Semester"));
+  };
 
   return (
     <div>
     <CollegePOCsidebar />
     <UserInfo />
-    <br /><br /><br /><br /><br />
-    <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#0187F1' }}>
-    Dashboard - {semester}
+    <br /><br /><br /><br /><br /><br />
+
+    {/* Header Container for Title and Button */}
+    <div style={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginLeft: "340px",
+      marginRight: "35px"
+    }}>
+    {/* Title */}
+    <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, color: '#383838' }}>
+    Dashboard - {selectedSemester}
     </h1>
-    <br />
-    {semester === "1st Semester" ? <Table1 /> : <Table2 />}
+
+    {/* Semester Toggle Button */}
+    <button
+    onClick={toggleSemester}
+    style={{
+      padding: "8px 16px",
+      backgroundColor: "#DC2626",
+      color: "white",
+      border: "none",
+      borderRadius: "5px",
+      cursor: "pointer",
+      fontSize: "16px",
+      fontWeight: "bold"
+    }}
+    >
+    View {selectedSemester === "1st Semester" ? "2nd Semester" : "1st Semester"}
+    </button>
+    </div>
+
+    {selectedSemester === "1st Semester" ? <Table1 /> : <Table2 />}
     <br />
     </div>
   );
 };
-
 export default CollegePocDashboard;

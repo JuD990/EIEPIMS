@@ -28,6 +28,7 @@ import EslTemplate from "../js/components/esl_prime/EIE-management/template/esl-
 import EslPrimeDashboard from "../js/components/esl_prime/EslPrimeDashboard/EslPrimeDashboard";
 import EslInterviewScorecard from "../js/components/esl_prime/EIE-diagnostic/esl-interview-scorecard/esl-interview-scorecard";
 import EslDiagnosticReports from "../js/components/esl_prime/EIE-diagnostic/eie-diagnostic-reports/eie-diagnostic-reports";
+import EslImplementingSubjects from "../js/components/esl_prime/EIE-management/implementing-subjects/implementing-subjects";
 
 {/* ESL User Management Imports*/}
 import EslPrimeAccountManagement from "../js/components/esl_prime/EIE-management/accounts/esl-prime-account-management";
@@ -64,6 +65,7 @@ const App = () => {
         <Route path="/esl-certification" element={<PrivateRoute><EslCertification /></PrivateRoute>} />
         <Route path="/esl-template" element={<PrivateRoute><EslTemplate /></PrivateRoute>} />
         <Route path="/esl-account-management" element={<PrivateRoute><EslPrimeAccountManagement /></PrivateRoute>} />
+        <Route path="/esl-implementing-subjects" element={<PrivateRoute><EslImplementingSubjects /></PrivateRoute>} />
 
         {/* EIE Head */}
         <Route path="/eie-head-poc-dashboard" element={<PrivateRoute><HeadEiePocDashboard /></PrivateRoute>} />

@@ -21,7 +21,15 @@ const ImplementingSubjectDropdown = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/implementing-subjects/dropdown');
+        const employeeId = localStorage.getItem("employee_id");
+        if (!employeeId) {
+          console.error("Employee ID not found in localStorage");
+          return;
+        }
+
+        const response = await axios.get(`http://127.0.0.1:8000/api/implementing-subjects/specific-dropdown`, {
+          params: { employee_id: employeeId }
+        });
 
         if (response.status === 200) {
           const data = response.data;
@@ -31,12 +39,13 @@ const ImplementingSubjectDropdown = () => {
           setSemesters(data.semesters || []);
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
   }, []);
+
 
   return (
     <div

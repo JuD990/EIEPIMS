@@ -13,9 +13,13 @@
     margin-bottom: 25px;
 }
 
-.unc-logo {
-    width: 130px;
+.unc-logo-login {
+    width: 140px;
     margin: 0 10px;
+}
+
+.eie{
+    color: #CF212A;
 }
 
 .system-logo {
@@ -23,21 +27,28 @@
     margin: 0 10px;
 }
 
-.main-title {
-    font-size: 30px;
-    color: #0187F1;
+.main-title-login {
+    font-size: 40px;
     text-align: center;
-    font-weight: 600;
     font-family: 'Inter';
     margin-left: 60px;
+    white-space: nowrap;
 }
 
 .eie {
-    font-weight: bold;
-    color: #007bff;
-    text-decoration: underline;
+    font-weight: 900;
+    color: #CF212A;
+    text-decoration: none;
+    font-family: 'Inter';
     cursor: help;
 }
+
+.pims {
+    color: #6B6D76;
+    font-family: 'Inter Medium';
+}
+
+
   
 .subtitle {
     font-family: 'Poppins';
@@ -110,7 +121,7 @@
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    border: 1px solid #ccc;
+    border: 2px solid #6B6D76;
     background-color: #fff;
     margin-left: 16px
 }
@@ -140,7 +151,12 @@
     font-size: 18px;
     border-radius: 10px;
     margin-left: 16px;
-    border: 1px solid #ccc;
+    border: 2px solid #6B6D76;
+}
+
+.email-input:focus{
+    border: 2px solid #CF212A;
+    outline: none;
 }
   
 .email-domain {
@@ -152,7 +168,7 @@
     background-color: #FFFFFF;
     border-radius: 10px;
     margin-left: 10px;
-    border: 1px solid #ccc;
+    border: 2px solid #6B6D76;
 }
   
 .email-domain img {
@@ -184,12 +200,12 @@
     font-family: 'Poppins';
     font-size: 16px;
     border-radius: 10px;
-    border: 1px solid #ccc;
+    border: 2px solid #6B6D76;
     transition: border 0.3s ease;
 }
 
 .password-input:focus {
-    border: 2px solid #007bff;
+    border: 2px solid #CF212A;
     outline: none;
 }
 
@@ -221,7 +237,7 @@
 .login-button {
     width: 110px;
     height: 45px;
-    background-color: #0187F1;
+    background-color: #CF212A;
     border-radius: 32px;
     color: #FFF3F0;
     font-family: 'Poppins';

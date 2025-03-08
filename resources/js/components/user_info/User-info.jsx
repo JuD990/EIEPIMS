@@ -61,6 +61,7 @@ const UserInfo = () => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
+  console.log(user); // Check if user.year_level is present
 
   return (
     <div
@@ -73,7 +74,13 @@ const UserInfo = () => {
     </div>
     <div className="user-details">
     <h2 className="user-name">{user.name}</h2>
-    <p className="user-role">{user.role}</p>
+    <p className="user-role">
+    {[user.department, user.role, user.year_level]
+      .filter(Boolean)
+      .join(' ')
+      .toUpperCase()}
+      </p>
+
     </div>
     {dropdownOpen && (
       <div className="user-info-dropdown-menu">

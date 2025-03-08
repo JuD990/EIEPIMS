@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CollegePOCs;
 use App\Models\EIEHeads;
+use App\Models\LeadPOCs;
 use Illuminate\Http\Request;
 
 class CollegePOCController extends Controller
@@ -16,7 +17,19 @@ class CollegePOCController extends Controller
     public function getPocs()
     {
         $pocs = CollegePOCs::all();
-        return response()->json($pocs);
+        return response()->json(['data' => $pocs]);
+    }
+
+    public function getEIEHeads()
+    {
+        $pocs = EIEHeads::all();
+        return response()->json(['data' => $pocs]);
+    }
+
+    public function getLeadPOCs()
+    {
+        $pocs = LeadPOCs::all();
+        return response()->json(['data' => $pocs]);
     }
 
     public function getFilteredPocs(Request $request)

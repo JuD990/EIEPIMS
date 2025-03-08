@@ -27,7 +27,7 @@
 
 /* Interior card (blue part) aligned to the left */
 .combined-card .interior-card {
-    background-color: #9ECEF3; /* Light blue background */
+    background-color: #FFA047; /* Light blue background */
     border-radius: 15px; /* Rounded corners */
     width: 50px; /* Set width for the blue card */
     height: 200px; /* Set height for the blue card */

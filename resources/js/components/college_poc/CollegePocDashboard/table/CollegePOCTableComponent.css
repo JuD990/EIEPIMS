@@ -57,8 +57,10 @@
 }
 
 .dashboard-college-poc-table tbody tr:hover {
-    background-color: #f1f1f1;
+    background-color: rgba(0, 123, 255, 0.1);
+    transition: background-color 0.2s ease-in-out;
 }
+
 
 .dashboard-college-poc-table tbody tr.no-data td {
     text-align: center;
@@ -106,11 +108,12 @@
 }
 
 .dashboard-college-poc-table thead th {
-    background-color: #F4F7FC;
-    font-weight: bold;
+    top: 0;
     position: sticky;
-    z-index: 1; /* Ensures header stays above other content when scrolling */
+    background: #F4F7FC;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
 
 .dashboard-college-poc-table thead tr:first-child th {
     top: 0; /* Keeps the first header row sticky at the top */
@@ -118,5 +121,21 @@
 
 .dashboard-college-poc-table thead tr:nth-child(2) th {
     top: 40px; /* Adjust the value based on the height of your first header row */
+}
+.dashboard-college-poc-table tbody tr.year-level-total td {
+    background-color: #D9D9D9 !important;
+    font-weight: bold;
+}
+
+.dashboard-college-poc-table tbody tr.grand-total td {
+    background-color: #FFD298 !important;
+    font-weight: bold;
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
 }
 

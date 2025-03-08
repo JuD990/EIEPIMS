@@ -61,7 +61,7 @@ const EslPrimeEPGFRubricVersion = () => {
     <ESLSidebar />
     <UserInfo />
     <br/><br/><br/><br/><br/>
-    <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#0187F1' }}>
+    <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#383838' }}>
     EPGF Rubric Version
     </h1>
 

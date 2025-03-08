@@ -10,20 +10,14 @@ const ImplementingSubjectsTable = ({searchQuery}) => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [isLoadingPocs, setIsLoadingPocs] = useState(true);
   const [formData, setFormData] = useState({
-    courseTitle: "",
-    code: "",
-    courseCode: "",
-    semester: "",
-    program: "",
+    course_code: "",
     employeeId: "",
     assigned_poc: "",
     email: "",
-    activeStudents: "",
-    enrolledStudents: "",
   });
-
   const [pocs, setPocs] = useState([]);
   const [csvErrors, setCsvErrors] = useState([]);
+  const [isUpdating, setIsUpdating] = useState(false);
   const employeeId = localStorage.getItem("employee_id");
 
   const fetchData = async () => {
@@ -35,25 +29,26 @@ const ImplementingSubjectsTable = ({searchQuery}) => {
     setIsLoading(true);
     try {
       const response = await axios.get("/api/implementing-subjects", {
-        headers: { "employee_id": employeeId },
+        headers: { employee_id: employeeId },
       });
 
-      // Apply the search query to filter the results
-      if (searchQuery) {
-        const filteredData = response.data.filter(item =>
-        item.course_title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.course_code.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.assigned_poc.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.program.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.semester.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.department.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-        setData(filteredData);
-      } else {
-        setData(response.data);
-      }
+      const filteredData = searchQuery
+      ? response.data.filter((item) =>
+      [
+        item.course_title,
+        item.code,
+        item.course_code,
+        item.assigned_poc,
+        item.program,
+        item.semester,
+        item.department,
+      ]
+      .map((field) => field.toLowerCase())
+      .some((field) => field.includes(searchQuery.toLowerCase()))
+      )
+      : response.data;
+
+      setData(filteredData);
     } catch (error) {
       console.error("Error fetching data:", error);
       setError("Failed to fetch data. Please try again later.");
@@ -62,15 +57,12 @@ const ImplementingSubjectsTable = ({searchQuery}) => {
     }
   };
 
-
-  // Fetch POCs from the API
   useEffect(() => {
     const fetchFilteredPocs = async () => {
       try {
         const response = await axios.get("/api/filtered-pocs", {
           params: { employee_id: employeeId },
         });
-
         setPocs(response.data);
       } catch (error) {
         console.error("Error fetching filtered POCs:", error);
@@ -83,50 +75,29 @@ const ImplementingSubjectsTable = ({searchQuery}) => {
     fetchFilteredPocs();
   }, [employeeId]);
 
-  // Polling to refresh data
   useEffect(() => {
     fetchData();
-  }, [searchQuery]); // Add searchQuery as a dependency
+  }, [searchQuery]);
 
-
-  // Handle form data input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log(`Field: ${name}, Value: ${value}`);
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
   const handleUpdate = (values) => {
     setFormData({
-      courseTitle: values.course_title,
-      code: values.code,
-      courseCode: values.course_code,
-      semester: values.semester,
-      department: values.department,
-      program: values.program,
+      course_code: values.course_code,
       assigned_poc: values.assigned_poc,
-      activeStudents: values.active_students,
-      enrolledStudents: values.enrolled_students,
+      employee_id: values.employee_id || "",
+      email: values.email || "",
     });
     setShowUpdateModal(true);
   };
 
-  const [isUpdating, setIsUpdating] = useState(false);
-
   const handlePocChange = (e) => {
     const selectedPocId = e.target.value;
-
-    if (selectedPocId === "") {
-      // Reset to null when 'None' is selected
-      setFormData({
-        ...formData,
-        assigned_poc: null,
-        employee_id: null,
-        email: null,
-      });
+    if (!selectedPocId) {
+      setFormData({ ...formData, assigned_poc: "", employee_id: "", email: "" });
     } else {
       const selectedPoc = pocs.find((poc) => poc.employee_id === selectedPocId);
       if (selectedPoc) {
@@ -140,36 +111,25 @@ const ImplementingSubjectsTable = ({searchQuery}) => {
     }
   };
 
-  // Log formData after it changes
-  useEffect(() => {
-
-  }, [formData]); // Triggered after formData state changes
-
-  // Handle form submit
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setIsUpdating(true);
-
-    // Prepare data for API submission
-    const updatedFormData = {
-      ...formData,
-      assigned_poc: formData.assigned_poc && formData.assigned_poc.trim() !== "" ? formData.assigned_poc : null,
-      employee_id: formData.employee_id && formData.employee_id.trim() !== "" ? formData.employee_id : null,
-      email: formData.email && formData.email.trim() !== "" ? formData.email : null,
-    };
-
     try {
       const response = await axios.put(
-        `/api/update-implementing-subjects/${updatedFormData.courseCode}`,
-        updatedFormData
+        `/api/update-implementing-subjects/${formData.course_code}`,
+        {
+          assigned_poc: formData.assigned_poc.trim() || null,
+                                       employee_id: formData.employee_id.trim() || null,
+                                       email: formData.email.trim() || null,
+        }
       );
       if (response.status === 200) {
-        console.log("✅ Successfully updated subject.");
+        console.log("✅ Successfully updated assigned POC.");
         setShowUpdateModal(false);
-        fetchData(); // Refresh data after successful update
+        fetchData();
       }
     } catch (error) {
-      console.error("❌ Error updating subject:", error.response?.data || error);
+      console.error("❌ Error updating assigned POC:", error.response?.data || error);
     } finally {
       setIsUpdating(false);
     }
@@ -300,68 +260,6 @@ const ImplementingSubjectsTable = ({searchQuery}) => {
             Update Credentials
           </h2>
           <form onSubmit={handleFormSubmit}>
-          <div style={{ marginBottom: "20px" }}>
-          <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-          Course Title:
-          </label>
-          <input
-          type="text"
-          name="courseTitle"
-          value={formData.courseTitle}
-          onChange={handleInputChange}
-          style={{ width: "100%", padding: "10px", borderRadius: "5px", border: "1px solid #333333" }}
-          />
-          </div>
-          <div style={{ marginBottom: "20px" }}>
-          <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-          Code:
-          </label>
-          <input
-          type="text"
-          name="code"
-          value={formData.code}
-          onChange={handleInputChange}
-          style={{ width: "100%", padding: "10px", borderRadius: "5px", border: "1px solid #333333" }}
-          />
-          </div>
-          <div style={{ marginBottom: "20px" }}>
-          <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-          Course Code:
-          </label>
-          <input
-          type="text"
-          name="courseCode"
-          value={formData.courseCode}
-          onChange={handleInputChange}
-          style={{ width: "100%", padding: "10px", borderRadius: "5px", border: "1px solid #333333" }}
-          />
-          </div>
-          <div style={{ marginBottom: "20px" }}>
-          <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-          Semester:
-          </label>
-          <input
-          type="text"
-          name="semester"
-          value={formData.semester}
-          onChange={handleInputChange}
-          style={{ width: "100%", padding: "10px", borderRadius: "5px", border: "1px solid #333333" }}
-          />
-          </div>
-
-          <div style={{ marginBottom: "20px" }}>
-          <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-          Program:
-          </label>
-          <input
-          type="text"
-          name="program"
-          value={formData.program}
-          onChange={handleInputChange}
-          style={{ width: "100%", padding: "10px", borderRadius: "5px", border: "1px solid #333333" }}
-          />
-          </div>
-
           <div style={{ marginBottom: "20px" }}>
           <label
           htmlFor="assignedPoc"

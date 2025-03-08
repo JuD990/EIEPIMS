@@ -234,7 +234,7 @@ const StudentManagementTable = ({ searchQuery }) => {
             width: '88px',
             height: '35px',
             borderRadius: '12px',
-            backgroundColor: '#0187F1',
+            backgroundColor: '#6B6D76',
             color: '#FFFFFF',
             fontSize: '15px',
             fontFamily: 'Poppins',

@@ -115,7 +115,7 @@ const TableComponent = () => {
                 count++;
 
                 // Ensure the overall department champion is chosen per month
-                if (yearTotals.champion !== "N/A" && yearTotals.epgf_average > overallChampion.epgf_average) {
+                if (yearTotals.champion !== "N/A" && parseFloat(yearTotals.totalPGFAverage) > overallChampion.epgf_average) {
                     overallChampion = {
                         name: yearTotals.champion,
                         epgf_average: yearTotals.epgf_average,
@@ -235,7 +235,7 @@ const TableComponent = () => {
                             </td>
                             <td>
                             {programData[month]?.epgf_average || "0.00"} <br />
-                            <small>{programData[month]?.proficiency_level || "N/A"}</small>
+                            <small>{programData[month]?.proficiency_level || ""}</small>
                             </td>
                             <td>{programData[month]?.champion || "N/A"}</td>
                             </React.Fragment>
@@ -245,7 +245,7 @@ const TableComponent = () => {
                 })}
 
                 {/* Year Level Total Row */}
-                <tr style={{ fontWeight: "bold", backgroundColor: "#f0f0f0" }}>
+                <tr className="year-level-total" style={{ backgroundColor: "#D9D9D9" }}>
                 <td colSpan="2">{yearLevel} Total</td>
                 <td>{Object.values(enrollmentCount[yearLevel]).reduce((sum, program) => sum + (program.total_enrolled || 0), 0)}</td>
                 <td>100%</td>
@@ -257,20 +257,14 @@ const TableComponent = () => {
                         <React.Fragment key={month}>
                         <td>{totals.totalSubmitted}</td>
                         <td>
-                        <span style={{ backgroundColor: "yellow", padding: "5px" }}>
-                        {totals.totalCompletionRate}%
-                        </span>
-                        <span style={{ backgroundColor: "lightblue", padding: "5px", marginLeft: "5px" }}>
-                        {getCompletionExpectation(totals.totalCompletionRate)}
-                        </span>
+                        <span>{totals.totalCompletionRate}%</span>
+                        <br />
+                        <span>{getCompletionExpectation(totals.totalCompletionRate)}</span>
                         </td>
                         <td>
-                        <span style={{ backgroundColor: "yellow", padding: "5px" }}>
-                        {totals.totalPGFAverage}
-                        </span>
-                        <span style={{ backgroundColor: "lightblue", padding: "5px", marginLeft: "5px" }}>
-                        {proficiency.level}
-                        </span>
+                        <span>{totals.totalPGFAverage}</span>
+                        <br />
+                        <span>{proficiency.level}</span>
                         </td>
                         <td>{totals.champion || "N/A"}</td>
                         </React.Fragment>
@@ -280,8 +274,9 @@ const TableComponent = () => {
                 </React.Fragment>
             );
         })}
+
         {/* Grand Total Row */}
-        <tr style={{ fontWeight: "bold", backgroundColor: "#d9edf7" }}>
+        <tr className="grand-total" style={{ backgroundColor: "#FFD298" }}>
         <td colSpan="2">{department} Total</td>
         <td>{Object.keys(enrollmentCount).reduce((sum, yearLevel) => sum + Object.values(enrollmentCount[yearLevel]).reduce((s, program) => s + (program.total_enrolled || 0), 0), 0)}</td>
         <td>100%</td>
@@ -293,20 +288,14 @@ const TableComponent = () => {
                 <React.Fragment key={month}>
                 <td>{totals.grandTotalSubmitted}</td>
                 <td>
-                <span style={{ backgroundColor: "yellow", padding: "5px" }}>
-                {totals.grandTotalCompletionRate}%
-                </span>
-                <span style={{ backgroundColor: "lightblue", padding: "5px", marginLeft: "5px" }}>
-                {getCompletionExpectation(totals.grandTotalCompletionRate)}
-                </span>
+                <span>{totals.grandTotalCompletionRate}%</span>
+                <br />
+                <span>{getCompletionExpectation(totals.grandTotalCompletionRate)}</span>
                 </td>
                 <td>
-                <span style={{ backgroundColor: "yellow", padding: "5px" }}>
-                {totals.grandTotalPGFAverage}
-                </span>
-                <span style={{ backgroundColor: "lightblue", padding: "5px", marginLeft: "5px" }}>
-                {proficiency.level}
-                </span>
+                <span>{totals.grandTotalPGFAverage}</span>
+                <br />
+                <span>{proficiency.level}</span>
                 </td>
                 <td>{totals.champion || "N/A"}</td>
                 </React.Fragment>

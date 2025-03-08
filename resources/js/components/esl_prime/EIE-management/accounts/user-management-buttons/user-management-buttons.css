@@ -12,8 +12,8 @@
 }
 
 .upload-csv-button {
-  border: 2px solid #0187f1;
-  color: #0187f1;
+  border: 2px solid #6B6D76;
+  color: #383838;
   background-color: transparent;
   padding: 15px 10px;
   font-family: 'Poppins', sans-serif;
@@ -27,7 +27,7 @@
 }
 
 .add-account-button {
-  background-color: #0187f1;
+  background-color: #6B6D76;
   color: #ffffff;
   padding: 10px 10px;
   font-family: 'Poppins', sans-serif;
@@ -93,7 +93,7 @@ input {
 }
 
 .cancel-button {
-  background-color: #de0051;
+  background-color: #DC2626;
   color: #ffffff;
   padding: 10px 20px;
   font-family: 'Poppins', sans-serif;
@@ -104,7 +104,7 @@ input {
 }
 
 .add-button {
-  background-color: #0187f1;
+  background-color: #6B6D76;
   color: #ffffff;
   padding: 10px 20px;
   font-family: 'Poppins', sans-serif;

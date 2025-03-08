@@ -15,14 +15,10 @@ const Table = ({ rubricVersion }) => {
       try {
         const response = await fetch("http://127.0.0.1:8000/api/display-epgf-rubric", {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         });
 
         const data = await response.json();
-
-        // Handle errors if data is empty or not found
         if (data.error) {
           setError(data.error);
           return;
@@ -42,14 +38,12 @@ const Table = ({ rubricVersion }) => {
 
   useEffect(() => {
     if (rubricDetails) {
-      // Helper function to remove duplicates from a string by splitting into words and rejoining
       const removeDuplicates = (text) => {
-        const words = text?.split(/\s+/) || []; // Split on spaces, handle multiple spaces
-        const cleanedWords = words.map((word) => word.replace(/[^\w\s]/g, "")); // Remove punctuation
+        const words = text?.split(/\s+/) || [];
+        const cleanedWords = words.map((word) => word.replace(/[^\w\s]/g, ""));
         return [...new Set(cleanedWords)].join(" ");
       };
 
-      // Function to format descriptors and replace '.' with a new line
       const formatDescriptor = (descriptor) => {
         if (!descriptor) return "";
         return descriptor.split(".").map((text, index) => (
@@ -61,6 +55,7 @@ const Table = ({ rubricVersion }) => {
       };
 
       const formattedData = rubricDetails.pronunciations.map((pronunciation, index) => ({
+        id: pronunciation.id, // Ensure ID is present for updates
         pronunciation: removeDuplicates(pronunciation.pronunciation || ""),
                                                                                         pronunciationDescriptor: formatDescriptor(pronunciation.descriptor || ""),
                                                                                         pronunciationRating: pronunciation.rating || "",
@@ -71,9 +66,15 @@ const Table = ({ rubricVersion }) => {
                                                                                         fluencyDescriptor: formatDescriptor(rubricDetails.fluencies[index]?.descriptor || ""),
                                                                                         fluencyRating: rubricDetails.fluencies[index]?.rating || "",
       }));
+
       setData(formattedData);
     }
   }, [rubricDetails]);
+
+  const handleUpdate = (id, category) => {
+    console.log(`Update ${category} for ID: ${id}`);
+    // Implement the update logic (e.g., open a modal, navigate to a form, or send an API request)
+  };
 
   const columns = React.useMemo(
     () => [
@@ -83,17 +84,54 @@ const Table = ({ rubricVersion }) => {
           { Header: "Pronunciation", accessor: "pronunciation" },
           { Header: "Descriptor", accessor: "pronunciationDescriptor" },
           { Header: "Rating", accessor: "pronunciationRating" },
+          {
+            Header: "Action",
+            accessor: "pronunciationUpdate",
+            Cell: ({ row }) => (
+              <button onClick={() => handleUpdate(row.original.id, "Pronunciation")} style={buttonStyle}>
+              Update
+              </button>
+            ),
+          },
           { Header: "Grammar", accessor: "grammar" },
           { Header: "Descriptor", accessor: "grammarDescriptor" },
           { Header: "Rating", accessor: "grammarRating" },
+          {
+            Header: "Action",
+            accessor: "grammarUpdate",
+            Cell: ({ row }) => (
+              <button onClick={() => handleUpdate(row.original.id, "Grammar")} style={buttonStyle}>
+              Update
+              </button>
+            ),
+          },
           { Header: "Fluency", accessor: "fluency" },
           { Header: "Descriptor", accessor: "fluencyDescriptor" },
           { Header: "Rating", accessor: "fluencyRating" },
+          {
+            Header: "Action",
+            accessor: "fluencyUpdate",
+            Cell: ({ row }) => (
+              <button onClick={() => handleUpdate(row.original.id, "Fluency")} style={buttonStyle}>
+              Update
+              </button>
+            ),
+          },
         ],
       },
     ],
     []
   );
+
+  const buttonStyle = {
+    backgroundColor: "#007bff",
+    color: "#fff",
+    border: "none",
+    padding: "8px 12px",
+    cursor: "pointer",
+    borderRadius: "5px",
+    fontFamily: "Poppins",
+  };
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
     columns,
@@ -101,50 +139,13 @@ const Table = ({ rubricVersion }) => {
   });
 
   return (
-    <div
-    style={{
-      overflowX: "auto",
-      overflowY: "auto",
-      height: "600px",
-      marginLeft: "340px",
-      marginRight: "35px",
-      border: "1px solid #ddd",
-      boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-    }}
-    >
-    <table
-    {...getTableProps()}
-    style={{
-      width: "100%",
-      borderCollapse: "collapse",
-      borderSpacing: "0",
-    }}
-    >
+    <div style={tableContainerStyle}>
+    <table {...getTableProps()} style={tableStyle}>
     <thead>
     {headerGroups.map((headerGroup) => (
-      <tr
-      {...headerGroup.getHeaderGroupProps()}
-      style={{
-        backgroundColor: "#F4F7FC",
-        color: "#383838",
-        textAlign: "center",
-        fontFamily: "Poppins",
-      }}
-      >
+      <tr {...headerGroup.getHeaderGroupProps()} style={headerRowStyle}>
       {headerGroup.headers.map((column) => (
-        <th
-        {...column.getHeaderProps()}
-        style={{
-          backgroundColor: "#F4F7FC",
-          color: "#383838",
-          padding: "25px 25px",
-          textAlign: "center",
-          borderBottom: "none",
-          fontFamily: "Poppins",
-          fontSize: "18px",
-          fontWeight: "normal",
-        }}
-        >
+        <th {...column.getHeaderProps()} style={headerCellStyle}>
         {column.render("Header")}
         </th>
       ))}
@@ -155,29 +156,9 @@ const Table = ({ rubricVersion }) => {
     {rows.map((row) => {
       prepareRow(row);
       return (
-        <tr
-        {...row.getRowProps()}
-        style={{
-          borderBottom: "1px solid #ddd",
-          backgroundColor: row.index % 2 === 0 ? "#f9f9f9" : "white",
-        }}
-        >
+        <tr {...row.getRowProps()} style={rowStyle(row.index)}>
         {row.cells.map((cell) => (
-          <td
-          {...cell.getCellProps()}
-          style={{
-            padding: "15px 20px",
-            borderBottom: "1px solid #ddd",
-            borderLeft: "1px solid #ddd",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            maxWidth: "100%",
-            fontFamily: "Poppins",
-            fontWeight: "500",
-            textAlign: "left",
-          }}
-          >
+          <td {...cell.getCellProps()} style={cellStyle}>
           {cell.render("Cell")}
           </td>
         ))}
@@ -188,6 +169,59 @@ const Table = ({ rubricVersion }) => {
     </table>
     </div>
   );
+};
+
+// Styles
+const tableContainerStyle = {
+  overflowX: "auto",
+  overflowY: "auto",
+  height: "600px",
+  marginLeft: "340px",
+  marginRight: "35px",
+  border: "1px solid #ddd",
+  boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+};
+
+const tableStyle = {
+  width: "100%",
+  borderCollapse: "collapse",
+  borderSpacing: "0",
+};
+
+const headerRowStyle = {
+  backgroundColor: "#F4F7FC",
+  color: "#383838",
+  textAlign: "center",
+  fontFamily: "Poppins",
+};
+
+const headerCellStyle = {
+  backgroundColor: "#F4F7FC",
+  color: "#383838",
+  padding: "25px 25px",
+  textAlign: "center",
+  borderBottom: "none",
+  fontFamily: "Poppins",
+  fontSize: "18px",
+  fontWeight: "normal",
+};
+
+const rowStyle = (index) => ({
+  borderBottom: "1px solid #ddd",
+  backgroundColor: index % 2 === 0 ? "#f9f9f9" : "white",
+});
+
+const cellStyle = {
+  padding: "15px 20px",
+  borderBottom: "1px solid #ddd",
+  borderLeft: "1px solid #ddd",
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  maxWidth: "100%",
+  fontFamily: "Poppins",
+  fontWeight: "500",
+  textAlign: "left",
 };
 
 export default Table;

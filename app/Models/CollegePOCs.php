@@ -23,7 +23,6 @@ class CollegePOCs extends Authenticatable
         'lastname',
         'email',
         'department',
-        'program',
         'password',
         'role',
     ];

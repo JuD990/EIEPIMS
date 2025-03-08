@@ -1,0 +1,25 @@
+student_id,firstname,middlename,lastname,email,program,department,year_level,gender,course_code,classification
+20231001,John,Michael,Doe,johndoe@unc.edu.ph,BSCRIM,CJE,1st Year,Male,IC101,Regular
+20231002,Jane,Anne,Smith,janesmith@unc.edu.ph,BSCRIM,CJE,1st Year,Female,TechEng1,Irregular
+20231003,Robert,Lee,Brown,robertbrown@unc.edu.ph,BSCRIM,CJE,2nd Year,Male,CF2,Regular
+20231004,Mary,Kate,Johnson,maryjohnson@unc.edu.ph,BSCRIM,CJE,2nd Year,Female,CP1,Regular
+20231005,David,Allen,Williams,davidwilliams@unc.edu.ph,BSCRIM,CJE,1st Year,Male,LE105,Regular
+20231006,Emily,Grace,Taylor,emilytaylor@unc.edu.ph,BSCRIM,CJE,1st Year,Female,TechEng2,Irregular
+20231007,Michael,James,White,michaelwhite@unc.edu.ph,BSCRIM,CJE,3rd Year,Male,NIC107,Regular
+20231008,Linda,Marie,Harris,lindaharris@unc.edu.ph,BSCRIM,CJE,3rd Year,Female,PEP108,Regular
+20231009,William,Joseph,Clark,williamclark@unc.edu.ph,BSCRIM,CJE,2nd Year,Male,IC101,Irregular
+20231010,Susan,Elaine,Hall,susanhall@unc.edu.ph,BSCRIM,CJE,2nd Year,Female,TechEng1,Regular
+20231011,Daniel,Edward,Moore,danielmoore@unc.edu.ph,BSCRIM,CJE,3rd Year,Male,CF2,Regular
+20231012,Jessica,Rose,Martinez,jessicamartinez@unc.edu.ph,BSCRIM,CJE,3rd Year,Female,CP1,Regular
+20231013,James,Patrick,Garcia,jamesgarcia@unc.edu.ph,BSCRIM,CJE,2nd Year,Male,LE105,Irregular
+20231014,Amanda,Lynn,Anderson,amandaanderson@unc.edu.ph,BSCRIM,CJE,2nd Year,Female,TechEng2,Regular
+20231015,Christopher,Robert,Thomas,christopherthomas@unc.edu.ph,BSCRIM,CJE,4th Year,Male,NIC107,Regular
+20231016,Sarah,Elizabeth,Lopez,sarahlopez@unc.edu.ph,BSCRIM,CJE,4th Year,Female,PEP108,Irregular
+20231017,Brian,Scott,King,brianking@unc.edu.ph,BSCRIM,CJE,1st Year,Male,IC101,Regular
+20231018,Laura,Michelle,Green,lauragreen@unc.edu.ph,BSCRIM,CJE,1st Year,Female,TechEng1,Regular
+20231019,Kevin,Matthew,Young,kevinyoung@unc.edu.ph,BSCRIM,CJE,2nd Year,Male,CF2,Irregular
+20231020,Stephanie,Nicole,Adams,stephanieadams@unc.edu.ph,BSCRIM,CJE,2nd Year,Female,CP1,Regular
+20231021,Eric,Daniel,Baker,ericbaker@unc.edu.ph,BSCRIM,CJE,3rd Year,Male,LE105,Regular
+20231022,Rebecca,Lauren,Carter,rebeccacarter@unc.edu.ph,BSCRIM,CJE,3rd Year,Female,TechEng2,Regular
+20231023,Ryan,Joshua,Nelson,ryannelson@unc.edu.ph,BSCRIM,CJE,4th Year,Male,NIC107,Irregular
+20231024,Nicole,Christine,Rogers,nicolerogers@unc.edu.ph,BSCRIM,CJE,4th Year,Female,PEP108,Regular

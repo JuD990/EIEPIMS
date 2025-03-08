@@ -14,7 +14,7 @@ const EPGFScorecard = () => {
       <Sidebar />
       <br /><br /><br /><br /><br />
       <div className="student-management-page-title">
-      <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#0187F1' }}>Student Management</h1>
+      <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#383838' }}>Student Management</h1>
       </div>
       <StudentManagementDropdown searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <br />

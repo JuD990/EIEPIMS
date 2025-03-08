@@ -3,7 +3,7 @@
   font-family: "Epilogue";
   font-weight: 800;
   margin-left: 340px;
-  color: #0187F1;
+  color: #383838;
 }
 
 /* Tabs Container */
@@ -26,7 +26,9 @@
 
 /* Active Tab */
 .active-tab {
-  border-bottom: 8px solid #0187F1;
+  border-bottom: 8px solid #383838;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 
 /* Divider Line */

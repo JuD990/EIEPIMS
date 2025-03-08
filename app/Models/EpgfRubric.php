@@ -20,10 +20,4 @@ class EpgfRubric extends Model
         'version',
         'status'
     ];
-
-    // Relationship to EpgfPronunciation
-    public function pronunciation()
-    {
-        return $this->belongsTo(EpgfPronunciation::class, 'epgf_pronunciation_id');
-    }
 }

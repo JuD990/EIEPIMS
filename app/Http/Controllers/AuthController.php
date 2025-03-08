@@ -8,6 +8,7 @@ use App\Models\CollegePOCs;
 use App\Models\LeadPOCs;
 use App\Models\EIEHeads;
 use App\Models\ESLadmins;
+use App\Models\ClassLists;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -137,11 +138,41 @@ class AuthController extends Controller
 
     public function getUserInfo(Request $request)
     {
-        $user = $request->user(); // Authenticated user
+        $user = $request->user();
+        $studentId = $user->student_id ?? null;
+        $yearLevel = null;
+
+        if ($user->role === 'student' && $studentId) {
+            // Fetch latest year_level from ClassLists
+            $classList = ClassLists::where('student_id', $studentId)
+            ->orderByDesc('updated_at')
+            ->first();
+
+            if ($classList) {
+                $yearLevel = $classList->year_level;
+                Log::info("✅ Year Level Found in ClassLists", ['student_id' => $studentId, 'year_level' => $yearLevel]);
+            }
+
+            // If ClassLists does not have year_level, fetch from Students
+            if (!$yearLevel) {
+                $student = Students::where('student_id', $studentId)->first();
+                if ($student) {
+                    $yearLevel = $student->year_level;
+                    Log::info("✅ Year Level Found in Students Table", ['student_id' => $studentId, 'year_level' => $yearLevel]);
+                } else {
+                    Log::info("❌ No year_level found for student_id: " . $studentId);
+                }
+            }
+        }
+
         return response()->json([
-            'name' => $user->firstname . ' ' . $user->lastname,    // Concatenate first name and last name with a space
-            'role' => $user->role ?? $request->input('user_type'),  // Role or user type
-            'employee_id' => $user->employee_id,  // Return the employee_id
+            'name' => $user->firstname . ' ' . $user->lastname,
+            'role' => $user->role ?? $request->input('user_type'),
+                                'employee_id' => $user->employee_id,
+                                'department' => $user->department ?? '',
+                                'student_id' => $studentId,
+                                'year_level' => $yearLevel ?? '', // Change this to check response
         ]);
     }
+
 }

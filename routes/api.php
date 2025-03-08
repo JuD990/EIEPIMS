@@ -10,6 +10,10 @@ use App\Http\Controllers\EpgfRubricController;
 use App\Http\Controllers\UserManagement;
 use App\Http\Controllers\HistoricalScorecardController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\StudentController;
+
+Route::get('/performance-summary', [StudentController::class, 'getPerformanceSummary']);
+Route::get('/current-subjects/{student_id}', [StudentController::class, 'getCurrentSubjects']);
 
 Route::get('/certificate/{id}', [CertificateController::class, 'getCertificateData']);
 
@@ -32,6 +36,7 @@ Route::post('/set-default', [EpgfRubricController::class, 'setDefault']);
 Route::post('/get-rubric-details', [EpgfRubricController::class, 'getRubricDetails']);
 Route::get('/rubric/active-version', [EpgfRubricController::class, 'getActiveVersion']);
 Route::get('/display-epgf-rubric', [EpgfRubricController::class, 'displayEpgfRubric']);
+Route::put('/update-epgf-rubric/{id}', [EpgfRubricController::class, 'updateEpgfRubric']);
 
 //Pronunciation
 Route::get('/consistency/{majorVersion}', [EpgfRubricController::class, 'getConsistency']);
@@ -69,22 +74,28 @@ Route::get('/class-lists', [ClassListController::class, 'fetchMonthlyChamps']);
 // ImplementingSubject routes
 Route::get('/implementing-subject/{employee_id}', [ImplementingSubjectController::class, 'getClassData']);
 Route::post('/upload-subjects', [ImplementingSubjectController::class, 'upload'])->name('subjects.upload');
+Route::get('/esl-implementing-subjects', [ImplementingSubjectController::class, 'index']);
+Route::put('/esl-update-implementing-subjects/{courseCode}', [ImplementingSubjectController::class, 'update']);
 Route::get('/implementing-subjects', [ImplementingSubjectController::class, 'fetchImplementingSubjects']);
 Route::put('/update-implementing-subjects/{courseCode}', [ImplementingSubjectController::class, 'updateImplementingSubject'])->name('subjects.updateImplementingSubject');
 Route::get('/employee-department/{userType}/{employeeId}',
            [ImplementingSubjectController::class, 'getEmployeeDepartment']
 )->where('userType', '.*');
-
+Route::get('/getDepartmentsOptions', [ImplementingSubjectController::class, 'getDepartments']);
 
 // Route to get the programs for a department
 Route::get('/programs/{department}', [ImplementingSubjectController::class, 'getProgramsForDepartment']);
 Route::get('/programs-with-enrollment-first-semester/{department}', [ImplementingSubjectController::class, 'getProgramsWithEnrollmentCountFirstSemester']);
 Route::get('/programs-with-enrollment-second-semester/{department}', [ImplementingSubjectController::class, 'getProgramsWithEnrollmentCountSecondSemester']);
 Route::get('/implementing-subjects/dropdown', [ImplementingSubjectController::class, 'getDropdownData']);
+Route::get('/implementing-subjects/specific-dropdown', [ImplementingSubjectController::class, 'getDropdownSpecificData']);
 
 // CollegePOC routes
 Route::get('/pocs', [CollegePOCController::class, 'getPocs'])->name('college.pocs');
 Route::get('/filtered-pocs', [CollegePOCController::class, 'getFilteredPocs'])->name('college.filtered_pocs');
+Route::get('/college-pocs', [CollegePOCController::class, 'getPocs']);
+Route::get('/lead-pocs', [CollegePOCController::class, 'getLeadPOCs']);
+Route::get('/eie-head-pocs', [CollegePOCController::class, 'getEIEHeads']);
 
 // MasterClassList routes
 Route::post('/import-master-class-list', [MasterClassListController::class, 'import']);

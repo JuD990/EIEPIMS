@@ -3,66 +3,58 @@ import axios from "axios";
 import { useTable } from "react-table";
 import "./college-poc-table.css";
 
-const UserManagementTable = ({searchQuery}) => {
-  const [students, setStudents] = useState([]);
+const UserManagementTable = ({ searchQuery }) => {
+  const [collegePOCs, setCollegePOCs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    firstname: '',
-    middlename: '',
-    lastname: '',
-    student_id: '',
-    email: '',
-    department: '',
-    program: '',
+    firstname: "",
+    middlename: "",
+    lastname: "",
+    employee_id: "",
+    email: "",
+    department: "",
   });
 
   const handleCancel = () => {
     setShowModal(false);
     setFormData({
-      firstname: '',
-      middlename: '',
-      lastname: '',
-      student_id: '',
-      email: '',
-      department: '',
-      program: '',
+      firstname: "",
+      middlename: "",
+      lastname: "",
+      employee_id: "",
+      email: "",
+      department: "",
     });
   };
 
-  // Fetch students data
+  // Fetch College POCs data
   useEffect(() => {
-    const fetchStudents = async () => {
+    const fetchCollegePOCs = async () => {
       try {
-        const response = await axios.get("/api/students");
-        setStudents(response.data.data);
+        const response = await axios.get("/api/college-pocs");
+        setCollegePOCs(response.data.data);
       } catch (error) {
-        console.error("Error fetching students:", error);
+        console.error("Error fetching College POCs:", error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchStudents();
+    fetchCollegePOCs();
   }, []);
 
   // Function to reset the password
-  const handleResetPassword = async (studentId) => {
+  const handleResetPassword = async (employeeId) => {
     try {
       const confirmReset = window.confirm(
-        "Are you sure you want to reset the password for this student?"
+        "Are you sure you want to reset the password for this College POC?"
       );
       if (!confirmReset) return;
 
-      await axios.put(`/api/students/${studentId}/reset-password`);
+      await axios.put(`/api/college-pocs/${employeeId}/reset-password`);
       alert("Password reset successfully!");
-
-      // Optionally refresh the student list or update the UI
-      const updatedStudents = students.map((student) =>
-      student.student_id === studentId ? { ...student, password: null } : student
-      );
-      setStudents(updatedStudents);
     } catch (error) {
       console.error("Error resetting password:", error);
       alert("Failed to reset password. Please try again.");
@@ -70,17 +62,16 @@ const UserManagementTable = ({searchQuery}) => {
   };
 
   // Handle modal open with selected row data
-  const handleUpdateClick = (student) => {
+  const handleUpdateClick = (collegePOC) => {
     setFormData({
-      firstname: student.firstname,
-      middlename: student.middlename || "",
-      lastname: student.lastname,
-      student_id: student.student_id,
-      email: student.email,
-      department: student.department,
-      program: student.program,
+      firstname: collegePOC.firstname,
+      middlename: collegePOC.middlename || "",
+      lastname: collegePOC.lastname,
+      employee_id: collegePOC.employee_id,
+      email: collegePOC.email,
+      department: collegePOC.department,
     });
-    setShowModal(true); // Show the modal when clicking "Update"
+    setShowModal(true);
   };
 
   const handleInputChange = (e) => {
@@ -93,38 +84,32 @@ const UserManagementTable = ({searchQuery}) => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true); // Set to true when submitting
+    setIsSubmitting(true);
 
     try {
-      const response = await axios.put(`/api/students/${formData.student_id}`, formData);
+      const response = await axios.put(
+        `/api/college-pocs/${formData.employee_id}`,
+        formData
+      );
       if (response.status === 200) {
-        alert("Student data updated successfully!");
-        setShowModal(false); // Close the modal after successful update
-        window.location.reload(); // Refresh the page after the update
+        alert("College POC data updated successfully!");
+        setShowModal(false);
+        window.location.reload();
       } else {
-        alert("Failed to update student data.");
+        alert("Failed to update College POC data.");
       }
     } catch (error) {
-      console.error("Error updating student data:", error);
-      // Handle specific errors from the API
-      if (error.response && error.response.data && error.response.data.message) {
-        alert(error.response.data.message); // Display the error message from the backend
-      } else {
-        alert("An unexpected error occurred. Please try again.");
-      }
+      console.error("Error updating College POC data:", error);
+      alert("An unexpected error occurred. Please try again.");
     } finally {
-      setIsSubmitting(false); // Reset once done
+      setIsSubmitting(false);
     }
   };
 
-  // Filter students based on search query
-  const filteredStudents = students.filter((student) =>
-  student.firstname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  student.lastname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  student.student_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  student.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  student.department.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  student.program.toLowerCase().includes(searchQuery.toLowerCase())
+  // Filter College POCs based on search query
+  const filteredCollegePOCs = (collegePOCs || []).filter((poc) =>
+  [poc.firstname, poc.lastname, poc.employee_id, poc.email, poc.department]
+  .some((field) => field?.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   // Define columns for the table
@@ -140,20 +125,12 @@ const UserManagementTable = ({searchQuery}) => {
         `${row.firstname} ${row.middlename ? row.middlename + " " : ""}${row.lastname}`,
       },
       {
-        Header: "Student ID",
-        accessor: "student_id",
+        Header: "Employee ID",
+        accessor: "employee_id",
       },
       {
         Header: "Department",
         accessor: "department",
-      },
-      {
-        Header: "Year Level",
-        accessor: "year_level",
-      },
-      {
-        Header: "Program",
-        accessor: "program",
       },
       {
         Header: "Email",
@@ -166,7 +143,7 @@ const UserManagementTable = ({searchQuery}) => {
           <div className="action-buttons">
           <button
           className="reset-pass-button"
-          onClick={() => handleResetPassword(row.original.student_id)}
+          onClick={() => handleResetPassword(row.original.employee_id)}
           >
           Reset Pass
           </button>
@@ -180,24 +157,17 @@ const UserManagementTable = ({searchQuery}) => {
         ),
       },
     ],
-    [students]
+    [collegePOCs]
   );
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
     columns,
-    data: filteredStudents,
+    data: filteredCollegePOCs,
   });
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
-  const inputStyle = {
-    width: "100%",
-    padding: "10px",
-    borderRadius: "5px",
-    border: "1px solid #333333",
-  };
 
   return (
     <div className="table-container">
@@ -227,107 +197,23 @@ const UserManagementTable = ({searchQuery}) => {
 
     {/* Modal */}
     {showModal && (
-      <div
-      className={`form-modal ${showModal ? 'show' : ''}`}
-      onClick={handleCancel}
-      >
+      <div className="form-modal show" onClick={handleCancel}>
       <div className="form-container" onClick={(e) => e.stopPropagation()}>
-      <h2
-      style={{
-        fontSize: "32px",
-        fontFamily: "Epilogue, sans-serif",
-        fontWeight: "800",
-        color: "#333333",
-        marginBottom: "20px",
-      }}
-      >
-      Update Credentials
-      </h2>
+      <h2>Update Credentials</h2>
       <form onSubmit={handleFormSubmit}>
-      <div style={{ marginBottom: "20px" }}>
-      <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-      First Name:
-      </label>
-      <input
-      type="text"
-      name="firstname"
-      value={formData.firstname}
-      onChange={handleInputChange}
-      style={inputStyle}
-      />
-      </div>
-      <div style={{ marginBottom: "20px" }}>
-      <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-      Middle Name:
-      </label>
-      <input
-      type="text"
-      name="middlename"
-      value={formData.middlename}
-      onChange={handleInputChange}
-      style={inputStyle}
-      />
-      </div>
-      <div style={{ marginBottom: "20px" }}>
-      <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-      Last Name:
-      </label>
-      <input
-      type="text"
-      name="lastname"
-      value={formData.lastname}
-      onChange={handleInputChange}
-      style={inputStyle}
-      />
-      </div>
-      <div style={{ marginBottom: "20px" }}>
-      <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-      Student ID:
-      </label>
-      <input
-      type="text"
-      name="student_id"
-      value={formData.student_id}
-      onChange={handleInputChange}
-      style={inputStyle}
-      />
-      </div>
-      <div style={{ marginBottom: "20px" }}>
-      <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-      Email:
-      </label>
-      <input
-      type="text"
-      name="email"
-      value={formData.email}
-      onChange={handleInputChange}
-      style={inputStyle}
-      />
-      </div>
-      <div style={{ marginBottom: "20px" }}>
-      <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-      Department:
-      </label>
-      <input
-      type="text"
-      name="department"
-      value={formData.department}
-      onChange={handleInputChange}
-      style={inputStyle}
-      />
-      </div>
-      <div style={{ marginBottom: "20px" }}>
-      <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-      Program:
-      </label>
-      <input
-      type="text"
-      name="program"
-      value={formData.program}
-      onChange={handleInputChange}
-      style={inputStyle}
-      />
-      </div>
+      {["firstname", "middlename", "lastname", "employee_id", "email", "department",].map(
+        (field) => (
+          <div key={field} style={{ marginBottom: "20px" }}>
+          <label>{field.replace("_", " ").toUpperCase()}:</label>
+          <input
+          type="text"
+          name={field}
+          value={formData[field]}
+          onChange={handleInputChange}
+          />
+          </div>
+        )
+      )}
       <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
       <button
       type="button"
