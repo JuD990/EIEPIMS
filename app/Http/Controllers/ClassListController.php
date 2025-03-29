@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Imports\ClassListImport;
 use App\Models\ClassLists;
+use App\Models\EIEHeads;
 use App\Models\ImplementingSubjects;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -47,19 +48,35 @@ class ClassListController extends Controller
     }
 
 
-    public function getClassList()
+    public function getClassListByDepartment(Request $request)
     {
         try {
-            $students = ClassLists::select('class_lists_id', 'student_id', 'firstname', 'middlename', 'lastname', 'status', 'year_level', 'classification', 'gender', 'reason_for_shift_or_drop', 'course_code', 'epgf_average', 'proficiency_level')
-                ->get();
-    
+            // Get employee_id from the request (or from auth if using authentication)
+            $employeeId = $request->query('employee_id');
+
+            if (!$employeeId) {
+                return response()->json(['message' => 'Employee ID is required'], 400);
+            }
+
+            // Find the department of the employee
+            $eieHead = EIEHeads::where('employee_id', $employeeId)->first();
+
+            if (!$eieHead) {
+                return response()->json(['message' => 'Employee not found in EIEHeads'], 404);
+            }
+
+            // Get class lists based on department
+            $students = ClassLists::where('department', $eieHead->department)
+            ->select('class_lists_id', 'student_id', 'firstname', 'middlename', 'lastname', 'status', 'year_level', 'classification', 'gender', 'reason_for_shift_or_drop', 'course_code', 'epgf_average', 'proficiency_level', 'pronunciation', 'grammar', 'fluency')
+            ->get();
+
             return response()->json($students, 200);
         } catch (\Exception $e) {
-            Log::error('Error fetching class list: ' . $e->getMessage());
+            Log::error('Error fetching class list by department: ' . $e->getMessage());
             return response()->json(['message' => 'Error fetching class list.'], 500);
         }
     }
-    
+
     public function uploadClassList(Request $request)
     {
         // Validate file
@@ -124,6 +141,9 @@ class ClassListController extends Controller
                 'course_code',
                 'epgf_average',
                 'proficiency_level',
+                'pronunciation',
+                'grammar',
+                'fluency',
             )
             ->whereIn('course_code', $excludedCourseCodes)
             ->get();

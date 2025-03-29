@@ -17,24 +17,29 @@ const EIEHeadImplementingSubjects = () => {
     <ESLSidebar />
     <UserInfo />
     <br /><br /><br /><br /><br />
-    <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '350px', color: '#383838' }}>Implementing Subjects</h1>
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'flex-end',
-      gap: '10px',
-      width: '100%',
-    }}>
-    {/* Uploading Button */}
-    <UploadingButton onFileUpload={handleFileUpload} />
+    <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '350px', color: '#383838' }}>
+    Implementing Subjects
+    </h1>
 
-    <div style={{
+    {/* Container for UploadingButton, Dropdown, and Search Input */}
+    <div
+    style={{
       display: 'flex',
       alignItems: 'center',
-      gap: '430px'
-    }}>
+      width: '100%',
+    }}
+    >
+
+    <div
+    style={{
+      display: 'flex',
+      alignItems: 'center',
+    }}
+    >
     {/* Dropdown */}
     <Dropdown />
+    {/* Uploading Button */}
+    <UploadingButton onFileUpload={handleFileUpload} />
 
     {/* Search Input */}
     <input
@@ -43,12 +48,9 @@ const EIEHeadImplementingSubjects = () => {
     onChange={(e) => setSearchQuery(e.target.value)}
     placeholder="Search"
     style={{
-      width: '476px',
-      height: '60px',
+      width: '400px',
       borderRadius: '8px',
-      paddingLeft: '10px',
       fontSize: '16px',
-      marginRight: '20px',
       border: '2px solid #6B6D76',
     }}
     />
@@ -59,6 +61,7 @@ const EIEHeadImplementingSubjects = () => {
     <br />
     </div>
   );
+
 };
 
 export default EIEHeadImplementingSubjects;

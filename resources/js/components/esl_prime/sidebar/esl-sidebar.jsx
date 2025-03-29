@@ -143,7 +143,7 @@ const ESLSidebar = () => {
       <p>Template</p>
       </button>
       <button
-      className={`accounts-button ${activePage === "/user-students" ? "active" : ""}`}
+      className={`accounts-button ${activePage === "/esl-account-management" ? "active" : ""}`}
       onClick={() => handleNavigation("/esl-account-management")}
       >
       <img src={accountIcon} alt="Accounts Icon" />

@@ -15,7 +15,7 @@ const styles = {
     width: '100px',
     height: '40px',
     borderRadius: '12px',
-    backgroundColor: '#0187F1',
+    backgroundColor: '#DC2626',
     color: '#FFFFFF',
     fontSize: '15px',
     fontFamily: 'Poppins, sans-serif',

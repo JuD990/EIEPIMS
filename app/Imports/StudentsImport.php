@@ -16,15 +16,18 @@ class StudentsImport implements ToModel, WithHeadingRow, SkipsEmptyRows
             return null;
         }
 
-        return new Students([
-            'student_id' => $row['student_id'],
-            'firstname' => $row['firstname'],
-            'middlename' => $row['middlename'],
-            'lastname' => $row['lastname'],
-            'email' => $row['email'],
-            'department' => $row['department'],
-            'year_level' => $row['year_level'],
-            'program' => $row['program'],
-        ]);
+        // Find the student by student_id and update or create a new record
+        return Students::updateOrCreate(
+            ['student_id' => $row['student_id']], // Search
+            [
+                'firstname' => $row['firstname'],
+                'middlename' => $row['middlename'],
+                'lastname' => $row['lastname'],
+                'email' => $row['email'],
+                'department' => $row['department'],
+                'year_level' => $row['year_level'],
+                'program' => $row['program'],
+            ]
+        );
     }
 }

@@ -8,22 +8,70 @@
   border-right: 3px solid #e0e0e0;
   position: fixed;
   z-index: 10;
-  overflow-y: auto; /* Enable vertical scrolling */
+
+  display: flex;
+  flex-direction: column;
+
+  overflow-y: auto; /* Enables scrolling */
   scrollbar-width: thin; /* For Firefox */
-  scrollbar-color: #c4c4c4 #f3f3f3; /* Customize scrollbar colors */
+  scrollbar-color: #c4c4c4 #f3f3f3; /* Custom scrollbar colors */
+}
+
+.unc-branding {
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center; /* Center align items */
+  justify-content: center;
+  margin-top: auto; /* Pushes it to the bottom */
+  padding: 15px 15px;
+}
+
+.unc-logo {
+  width: 100px; /* Adjust size as needed */
+  height: auto;
+  margin-bottom: 5px; /* Space between logo and text */
+}
+
+.unc-text {
+  font-size: 14px;
+  font-weight: bold;
+  color: #857878;
+  text-align: center; /* Center the text */
 }
 
 /* Logo and Title section */
 .esl-dashboard-logo-title {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 80px;
+  gap: 5px;
+  margin-bottom: 35px;
 }
 
+.eie-text {
+  color: #FF474A; /* Red color for "EIE" */
+}
+
+.title-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.eie-text {
+  color: #FF474A; /* Red color for "EIE" */
+}
+
+.sub-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6B7280; /* Adjust color to fit design */
+  text-transform: uppercase;
+  margin-top: -5px; /* Adjust spacing */
+}
+
+
 .logo {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   margin-right: 25px;
   margin-top: 15px;
   margin-bottom: 15px;
@@ -45,6 +93,36 @@
   width: 100%;
 }
 
+/* 🔹 Main Sidebar Buttons */
+.esl-prime-pages > button.active {
+  background-color: #DC2626; /* Red */
+  color: white;
+  border-radius: 20px;
+}
+
+.esl-prime-pages > button.active p {
+  color: white;
+}
+
+.esl-prime-pages > button.active img {
+  filter: brightness(0) invert(1);
+}
+
+/* 🔸 Sub-buttons Inside Sections */
+.extra-buttons-container button.active {
+  background-color: #ffadad; /* Light Pink */
+  color: black;
+  border-radius: 20px;
+}
+
+.extra-buttons-container button.active p {
+  color: black;
+}
+
+.extra-buttons-container button.active img {
+  filter: brightness(0); /* Turns the image black */
+}
+
 .esl-eie-management-sidebar-button,
 .esl-eie-diagnostic-sidebar-button,
 .esl-eie-reporting-sidebar-button,
@@ -64,14 +142,20 @@
 .esl-eie-diagnostic-sidebar-button:hover,
 .esl-eie-reporting-sidebar-button:hover,
 .esl-dashboard-sidebar-button:hover {
-  background-color: #0187F1;
-  border-radius: 8px;
+  background-color: #DC2626;
+  border-radius: 20px;
 }
 .esl-eie-management-sidebar-button:hover p,
 .esl-eie-diagnostic-sidebar-button:hover p,
 .esl-eie-reporting-sidebar-button:hover p,
 .esl-dashboard-sidebar-button:hover p{
   color: white;
+}
+.esl-eie-management-sidebar-button:hover img,
+.esl-eie-diagnostic-sidebar-button:hover img,
+.esl-eie-reporting-sidebar-button:hover img,
+.esl-dashboard-sidebar-button:hover img {
+  filter: brightness(0) invert(1);
 }
 
 .esl-eie-management-sidebar-button img {
@@ -118,6 +202,7 @@
 .interview-button,
 .epgf-rubric-button,
 .monthly-champions-button,
+.esl-imp-subjects-button,
 .certification-button,
 .accounts-button {
   align-items: center;
@@ -129,19 +214,21 @@
 .diagnosticReports-button:hover,
 .interview-button:hover,
 .epgf-rubric-button:hover,
+.esl-imp-subjects-button:hover,
 .monthly-champions-button:hover,
 .certification-button:hover,
 .accounts-button:hover {
-  background-color: #0187F1; /* Highlight color on hover */
-  border-radius: 8px; /* Rounded corners */
+  background-color: #FFE6E2; /* Highlight color on hover */
+  border-radius: 20px; /* Rounded corners */
 }
 .diagnosticReports-button:hover p,
 .interview-button:hover p,
 .epgf-rubric-button:hover p,
 .monthly-champions-button:hover p,
 .certification-button:hover p,
+.esl-imp-subjects-button:hover p
 .accounts-button:hover p{
-  color: white;
+  color: black;
 }
 .monthly-champions-button img{
   margin-left: 32px;
@@ -158,7 +245,7 @@
   margin-left: 35px;
 }
 .accounts-button img{
-  margin-left: 40px;
+  margin-left: 35px;
   margin-top: -10px;
 }
 
@@ -169,14 +256,21 @@
 }
 .interview-button img{
   margin-left: 48px;
-  width: 60px;
+  width: 50px;
   height: 60px;
+}
+
+.esl-imp-subjects-button img{
+  margin-left: 40px;
+  width: 70px;
+  height: 70px;
 }
 
 .diagnosticReports-button p,
 .interview-button p,
 .epgf-rubric-button p,
 .monthly-champions-button p,
+.esl-imp-subjects-button p,
 .certification-button p,
 .accounts-button p{
   text-align: left;
@@ -208,6 +302,10 @@
 }
 .accounts-button p{
   margin-right: 40px;
-  margin-left: 25px;
+  margin-left: 30px;
   margin-top: 15px;
+}
+.esl-imp-subjects-button p{
+  margin-top: 15px;
+  margin-left: 25px;
 }

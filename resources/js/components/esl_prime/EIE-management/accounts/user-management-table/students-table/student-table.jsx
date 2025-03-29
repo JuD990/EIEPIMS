@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useTable } from "react-table";
 import "./student-table.css";
+import UserManagementButtons from "../../user-management-buttons-students/user-management-button";
 
 const UserManagementTable = ({searchQuery}) => {
   const [students, setStudents] = useState([]);
@@ -16,6 +17,7 @@ const UserManagementTable = ({searchQuery}) => {
     email: '',
     department: '',
     program: '',
+    year_level: '',
   });
 
   const handleCancel = () => {
@@ -28,6 +30,7 @@ const UserManagementTable = ({searchQuery}) => {
       email: '',
       department: '',
       program: '',
+      year_level: '',
     });
   };
 
@@ -79,6 +82,7 @@ const UserManagementTable = ({searchQuery}) => {
       email: student.email,
       department: student.department,
       program: student.program,
+      year_level: student.year_level,
     });
     setShowModal(true); // Show the modal when clicking "Update"
   };
@@ -93,29 +97,28 @@ const UserManagementTable = ({searchQuery}) => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true); // Set to true when submitting
+    setIsSubmitting(true);
 
     try {
-      const response = await axios.put(`/api/students/${formData.student_id}`, formData);
+      const response = await axios.put(`/api/update-students/${formData.student_id}`, formData);
       if (response.status === 200) {
-        alert("Student data updated successfully!");
-        setShowModal(false); // Close the modal after successful update
-        window.location.reload(); // Refresh the page after the update
+        setStudents((prevStudents) =>
+        prevStudents.map((student) =>
+        student.student_id === formData.student_id ? { ...student, ...formData } : student
+        )
+        );
+        setShowModal(false);
       } else {
         alert("Failed to update student data.");
       }
     } catch (error) {
       console.error("Error updating student data:", error);
-      // Handle specific errors from the API
-      if (error.response && error.response.data && error.response.data.message) {
-        alert(error.response.data.message); // Display the error message from the backend
-      } else {
-        alert("An unexpected error occurred. Please try again.");
-      }
+      alert(error.response?.data?.message || "An unexpected error occurred.");
     } finally {
-      setIsSubmitting(false); // Reset once done
+      setIsSubmitting(false);
     }
   };
+
 
   // Filter students based on search query
   const filteredStudents = students.filter((student) =>
@@ -124,6 +127,7 @@ const UserManagementTable = ({searchQuery}) => {
   student.student_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
   student.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
   student.department.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  student.year_level.toLowerCase().includes(searchQuery.toLowerCase()) ||
   student.program.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -200,6 +204,7 @@ const UserManagementTable = ({searchQuery}) => {
   };
 
   return (
+    <div>
     <div className="table-container">
     <table {...getTableProps()} className="non-sticky-table">
     <thead>
@@ -224,148 +229,56 @@ const UserManagementTable = ({searchQuery}) => {
     })}
     </tbody>
     </table>
+    </div>
+
+    {/* User Management Buttons Outside and Below the Table */}
+    <div className="user-management-container">
+    <UserManagementButtons />
+    </div>
 
     {/* Modal */}
     {showModal && (
-      <div
-      className={`form-modal ${showModal ? 'show' : ''}`}
-      onClick={handleCancel}
-      >
+      <div className={`form-modal ${showModal ? 'show' : ''}`} onClick={handleCancel}>
       <div className="form-container" onClick={(e) => e.stopPropagation()}>
-      <h2
-      style={{
-        fontSize: "32px",
-        fontFamily: "Epilogue, sans-serif",
-        fontWeight: "800",
-        color: "#333333",
-        marginBottom: "20px",
-      }}
-      >
-      Update Credentials
-      </h2>
+      <h2>Update Credentials</h2>
       <form onSubmit={handleFormSubmit}>
-      <div style={{ marginBottom: "20px" }}>
-      <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-      First Name:
-      </label>
-      <input
-      type="text"
-      name="firstname"
-      value={formData.firstname}
-      onChange={handleInputChange}
-      style={inputStyle}
-      />
+      {[
+        { name: "firstname", label: "First Name" },
+        { name: "middlename", label: "Middle Name" },
+        { name: "lastname", label: "Last Name" },
+        { name: "student_id", label: "Student ID" },
+        { name: "email", label: "Email" },
+        { name: "department", label: "Department" },
+        { name: "program", label: "Program" }
+      ].map(({ name, label }) => (
+        <div key={name} className="form-group">
+        <label>{label}:</label>
+        <input
+        type="text"
+        name={name}
+        value={formData[name]}
+        onChange={handleInputChange}
+        />
+        </div>
+      ))}
+
+      {/* Year Level Dropdown */}
+      <div className="form-group">
+      <label>Year Level:</label>
+      <select name="year_level" value={formData.year_level} onChange={handleInputChange}>
+      <option value="1st Year">1st Year</option>
+      <option value="2nd Year">2nd Year</option>
+      <option value="3rd Year">3rd Year</option>
+      <option value="4th Year">4th Year</option>
+      </select>
       </div>
-      <div style={{ marginBottom: "20px" }}>
-      <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-      Middle Name:
-      </label>
-      <input
-      type="text"
-      name="middlename"
-      value={formData.middlename}
-      onChange={handleInputChange}
-      style={inputStyle}
-      />
-      </div>
-      <div style={{ marginBottom: "20px" }}>
-      <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-      Last Name:
-      </label>
-      <input
-      type="text"
-      name="lastname"
-      value={formData.lastname}
-      onChange={handleInputChange}
-      style={inputStyle}
-      />
-      </div>
-      <div style={{ marginBottom: "20px" }}>
-      <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-      Student ID:
-      </label>
-      <input
-      type="text"
-      name="student_id"
-      value={formData.student_id}
-      onChange={handleInputChange}
-      style={inputStyle}
-      />
-      </div>
-      <div style={{ marginBottom: "20px" }}>
-      <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-      Email:
-      </label>
-      <input
-      type="text"
-      name="email"
-      value={formData.email}
-      onChange={handleInputChange}
-      style={inputStyle}
-      />
-      </div>
-      <div style={{ marginBottom: "20px" }}>
-      <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-      Department:
-      </label>
-      <input
-      type="text"
-      name="department"
-      value={formData.department}
-      onChange={handleInputChange}
-      style={inputStyle}
-      />
-      </div>
-      <div style={{ marginBottom: "20px" }}>
-      <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-      Program:
-      </label>
-      <input
-      type="text"
-      name="program"
-      value={formData.program}
-      onChange={handleInputChange}
-      style={inputStyle}
-      />
-      </div>
-      <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
-      <button
-      type="button"
-      style={{
-        width: "100px",
-        height: "40px",
-        backgroundColor: "#DE0051",
-        color: "#FFFFFF",
-        borderRadius: "12px",
-        border: "none",
-        cursor: "pointer",
-        fontSize: "16px",
-      }}
-      onClick={handleCancel}
-      >
+
+      {/* Buttons */}
+      <div className="button-container">
+      <button type="button" className="cancel-button" onClick={handleCancel}>
       Cancel
       </button>
-      <button
-      type="submit"
-      disabled={isSubmitting}
-      style={{
-        width: "100px",
-        height: "40px",
-        backgroundColor: isSubmitting ? "#B0B0B0" : "#0187F1",
-        color: "#FFFFFF",
-        borderRadius: "12px",
-        border: "none",
-        cursor: isSubmitting ? "not-allowed" : "pointer",
-        fontSize: "16px",
-        transition: "background-color 0.3s ease", // Smooth color transition
-      }}
-      onMouseOver={(e) => {
-        if (!isSubmitting) e.target.style.backgroundColor = "#0171D3"; // Darker blue on hover
-      }}
-      onMouseOut={(e) => {
-        if (!isSubmitting) e.target.style.backgroundColor = "#0187F1"; // Default color
-      }}
-      >
+      <button type="submit" className="update-button" disabled={isSubmitting}>
       {isSubmitting ? "Updating..." : "Update"}
       </button>
       </div>

@@ -37,7 +37,7 @@ const CollegePOCSidebar = () => {
 
     <button
     className={`college-poc-class-management-sidebar-button ${
-      location.pathname === "/class-management" ? "active" : ""
+      location.pathname.startsWith("/class-management") || location.pathname.startsWith("/epgf-scorecard") ? "active" : ""
     }`}
     onClick={() => navigate("/class-management")}
     >

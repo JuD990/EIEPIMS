@@ -163,7 +163,7 @@ const ViewScores = () => {
         <div className="view-scores-container">
         <Studentsidebar />
         <UserInfo />
-        <br /><br /><br /><br /><br />
+        <br /><br /><br /><br />
 
         {/* Back Button */}
         <button onClick={navigateToDashboard} className="back-button">
@@ -210,9 +210,18 @@ const ViewScores = () => {
 
         {/* Date & Type Container */}
         <div className="date-type-container">
+        {/* Task Title on Top */}
+        <div className="task-title">Task Title: '{scoreDetails.task_title}'</div>
+
+        {/* Date & Type in a Row */}
+        <div className="date-type-row">
         <span>Date Evaluated: {scoreDetails.date}</span>
         <span>Type: {scoreDetails.type}</span>
         </div>
+        </div>
+
+
+
         {/* Panels Container */}
         <div className="panels-container">
         {["Pronunciation", "Grammar", "Fluency"].map((panel, index) => (
@@ -221,7 +230,7 @@ const ViewScores = () => {
             <span>{panel}</span>
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
             <span></span> {/* Empty to take up space */}
-            <span style={{ color: '#0187F1', fontWeight: 'bold' }}>
+            <span>
             {(scoreDetails[`${panel.toLowerCase()}_average`] || 0).toFixed(2)}
             </span>
             </div>
@@ -237,25 +246,25 @@ const ViewScores = () => {
                 {panel === "Pronunciation" && (
                     <>
                     <p><strong>Consistency:</strong>
-                    <span style={{ color: '#0187F1', marginLeft: '5px' }}>
+                    <span style={{ color: '#DC2626', marginLeft: '5px' }}>
                     {scoreDetails.consistency_rating}
                     </span>
                     {addLineBreaks(scoreDetails.consistency_descriptor)}
                     </p>
                     <p><strong>Clarity:</strong>
-                    <span style={{ color: '#0187F1', marginLeft: '5px' }}>
+                    <span style={{ color: '#DC2626', marginLeft: '5px' }}>
                     {scoreDetails.clarity_rating}
                     </span>
                     {addLineBreaks(scoreDetails.clarity_descriptor)}
                     </p>
                     <p><strong>Articulation:</strong>
-                    <span style={{ color: '#0187F1', marginLeft: '5px' }}>
+                    <span style={{ color: '#DC2626', marginLeft: '5px' }}>
                     {scoreDetails.articulation_rating}
                     </span>
                     {addLineBreaks(scoreDetails.articulation_descriptor)}
                     </p>
                     <p><strong>Intonation and Stress:</strong>
-                    <span style={{ color: '#0187F1', marginLeft: '5px' }}>
+                    <span style={{ color: '#DC2626', marginLeft: '5px' }}>
                     {scoreDetails.intonation_and_stress_rating}
                     </span>
                     {addLineBreaks(scoreDetails.intonation_and_stress_descriptor)}
@@ -265,19 +274,19 @@ const ViewScores = () => {
                 {panel === "Grammar" && (
                     <>
                     <p><strong>Accuracy:</strong>
-                    <span style={{ color: '#0187F1', marginLeft: '5px' }}>
+                    <span style={{ color: '#DC2626', marginLeft: '5px' }}>
                     {scoreDetails.accuracy_rating}
                     </span>
                     {addLineBreaks(scoreDetails.accuracy_descriptor)}
                     </p>
                     <p><strong>Clarity of Thought:</strong>
-                    <span style={{ color: '#0187F1', marginLeft: '5px' }}>
+                    <span style={{ color: '#DC2626', marginLeft: '5px' }}>
                     {scoreDetails.clarity_of_thought_rating}
                     </span>
                     {addLineBreaks(scoreDetails.clarity_of_thought_descriptor)}
                     </p>
                     <p><strong>Syntax:</strong>
-                    <span style={{ color: '#0187F1', marginLeft: '5px' }}>
+                    <span style={{ color: '#DC2626', marginLeft: '5px' }}>
                     {scoreDetails.syntax_rating}
                     </span>
                     {addLineBreaks(scoreDetails.syntax_descriptor)}
@@ -287,13 +296,13 @@ const ViewScores = () => {
                 {panel === "Fluency" && (
                     <>
                     <p><strong>Quality of Response:</strong>
-                    <span style={{ color: '#0187F1', marginLeft: '5px' }}>
+                    <span style={{ color: '#DC2626', marginLeft: '5px' }}>
                     {scoreDetails.quality_of_response_rating}
                     </span>
                     {addLineBreaks(scoreDetails.quality_of_response_descriptor)}
                     </p>
                     <p><strong>Detail of Response:</strong>
-                    <span style={{ color: '#0187F1', marginLeft: '5px' }}>
+                    <span style={{ color: '#DC2626', marginLeft: '5px' }}>
                     {scoreDetails.detail_of_response_rating}
                     </span>
                     {addLineBreaks(scoreDetails.detail_of_response_descriptor)}
@@ -306,6 +315,7 @@ const ViewScores = () => {
         ))}
         </div>
         </div>
+        <br />
         </div>
     );
 };

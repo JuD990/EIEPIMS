@@ -12,7 +12,7 @@ const StudentDashboard = () => {
     <div>
     <Studentsidebar />
     <UserInfo />
-    <br/><br/><br/><br/><br/>
+    <br/><br/><br/><br/>
 
     <h1 className="dashboard-title">Dashboard</h1>
 

@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\ImplementingSubjects;
+use App\Models\EieReport;
 use App\Models\ClassLists;
 use App\Models\CollegePOCs;
 use App\Models\LeadPOCs;
 use App\Models\EIEHeads;
+use App\Models\HistoricalImplementingSubjects;
 use App\Models\EieScorecardClassReport;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ImplementingSubjectController extends Controller
 {
@@ -212,77 +216,32 @@ class ImplementingSubjectController extends Controller
 
         public function getEmployeeDepartment($userType, $employeeId)
         {
-            \Log::info("Received API Request: userType = $userType, employeeId = $employeeId");
-
+            // Define user type mappings to corresponding models
             $userTypeModelMap = [
                 'College POC' => CollegePOCs::class,
                 'Lead EIE POC' => LeadPOCs::class,
                 'Head EIE POC' => EIEHeads::class,
             ];
 
+            // If userType is not in the mapping, return success false (but no error)
             if (!isset($userTypeModelMap[$userType])) {
-                \Log::error("Invalid userType: $userType");
-                return response()->json(['success' => false, 'message' => 'Invalid user type.'], 400);
+                return response()->json(['success' => false, 'message' => 'User type not recognized. Skipping...'], 200);
             }
 
+            // Get the appropriate model
             $model = $userTypeModelMap[$userType];
+
+            // Find employee by ID
             $employee = $model::where('employee_id', $employeeId)->first();
 
+            // If employee not found, log error and return response
             if (!$employee) {
                 \Log::error("Employee not found: ID = $employeeId, Type = $userType");
                 return response()->json(['success' => false, 'message' => 'Employee not found.'], 404);
             }
 
+            // Return department if found
             return response()->json(['success' => true, 'department' => $employee->department]);
-        }
-
-        public function getProgramsForDepartment($department)
-        {
-            // Fetch the programs for the specified department
-            $programs = ImplementingSubjects::where('department', $department)
-            ->whereIn('semester', ['1st Semester', '2nd Semester'])
-            ->get();
-
-            // Categorize the programs by semester and year level
-            $programsBySemester = [
-                '1st Semester' => [
-                    '1st Year' => $programs->filter(fn($program) => $program->semester === '1st Semester' && $program->year_level === '1st Year'),
-                    '2nd Year' => $programs->filter(fn($program) => $program->semester === '1st Semester' && $program->year_level === '2nd Year'),
-                    '3rd Year' => $programs->filter(fn($program) => $program->semester === '1st Semester' && $program->year_level === '3rd Year'),
-                    '4th Year' => $programs->filter(fn($program) => $program->semester === '1st Semester' && $program->year_level === '4th Year'),
-                ],
-                '2nd Semester' => [
-                    '1st Year' => $programs->filter(fn($program) => $program->semester === '2nd Semester' && $program->year_level === '1st Year'),
-                    '2nd Year' => $programs->filter(fn($program) => $program->semester === '2nd Semester' && $program->year_level === '2nd Year'),
-                    '3rd Year' => $programs->filter(fn($program) => $program->semester === '2nd Semester' && $program->year_level === '3rd Year'),
-                    '4th Year' => $programs->filter(fn($program) => $program->semester === '2nd Semester' && $program->year_level === '4th Year'),
-                ],
-            ];
-
-            // Combine all programs into a single collection for each semester
-            $flattenedPrograms = [
-                '1st Semester' => $programsBySemester['1st Semester']['1st Year']
-                ->merge($programsBySemester['1st Semester']['2nd Year'])
-                ->merge($programsBySemester['1st Semester']['3rd Year'])
-                ->merge($programsBySemester['1st Semester']['4th Year']),
-                '2nd Semester' => $programsBySemester['2nd Semester']['1st Year']
-                ->merge($programsBySemester['2nd Semester']['2nd Year'])
-                ->merge($programsBySemester['2nd Semester']['3rd Year'])
-                ->merge($programsBySemester['2nd Semester']['4th Year']),
-            ];
-
-            // Return a response only if there are programs to return
-            if ($flattenedPrograms['1st Semester']->isEmpty() && $flattenedPrograms['2nd Semester']->isEmpty()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'No programs found for the department in the selected semesters.',
-                ]);
-            }
-
-            return response()->json([
-                'success' => true,
-                'programs' => $flattenedPrograms
-            ]);
         }
 
         public function getProgramsWithEnrollmentCountFirstSemester($department)
@@ -378,6 +337,8 @@ class ImplementingSubjectController extends Controller
                     ->orderByDesc('eie_scorecard_class_reports.epgf_average')
                     ->first();
 
+                    Log::info('Champion Query:', ['query' => $champion]);
+
                     // Format full name
                     $championName = 'N/A';
                     if ($champion) {
@@ -401,6 +362,7 @@ class ImplementingSubjectController extends Controller
                 'programs' => $programs,
                 'enrollmentCount' => $enrollmentCount
             ]);
+            Log::info('Enrollment Data Response:', ['enrollmentCount' => $enrollmentCount]);
         }
 
         public function getProgramsWithEnrollmentCountSecondSemester($department)
@@ -455,12 +417,13 @@ class ImplementingSubjectController extends Controller
                     $completionRate = $totalEnrolled > 0 ? (($submittedCount / $totalEnrolled) * 100) : 0;
                     $completionRateExpectation = $completionRate == 100 ? 'Meets Expectation' : 'Below Expectation';
 
-                    // Compute EPGF Average
                     $epgfAverage = EieScorecardClassReport::whereYear('created_at', date('Y'))
                     ->whereMonth('created_at', $month)
                     ->where('program', $programKey)
                     ->where('year_level', $yearLevel)
+                    ->orderByDesc('created_at') // Latest scores first
                     ->avg('epgf_average') ?? 0;
+
 
                     // Determine proficiency level
                     $proficiencyLevels = [
@@ -486,14 +449,15 @@ class ImplementingSubjectController extends Controller
                         }
                     }
 
-                    // Get champion (highest epgf_average student)
                     $champion = ClassLists::select('class_lists.*')
                     ->join('eie_scorecard_class_reports', 'class_lists.student_id', '=', 'eie_scorecard_class_reports.student_id')
                     ->where('class_lists.program', $programKey)
                     ->where('class_lists.year_level', $yearLevel)
+                    ->where('class_lists.status', 'active')
                     ->whereYear('eie_scorecard_class_reports.created_at', date('Y'))
                     ->whereMonth('eie_scorecard_class_reports.created_at', $month)
-                    ->orderByDesc('eie_scorecard_class_reports.epgf_average')
+                    ->orderByDesc('eie_scorecard_class_reports.epgf_average') // Get highest scorer first
+                    ->orderByDesc('eie_scorecard_class_reports.created_at') // Break ties with the most recent entry
                     ->first();
 
                     // Format full name
@@ -563,10 +527,6 @@ class ImplementingSubjectController extends Controller
                 $semesters = ImplementingSubjects::distinct()->pluck('semester');
                 $yearLevels = ImplementingSubjects::distinct()->pluck('year_level');
 
-                \Log::info('Programs: ', $programs->toArray()); // Ensure it's logging the data properly
-                \Log::info('Semesters: ', $semesters->toArray());
-                \Log::info('Year Levels: ', $yearLevels->toArray());
-
                 return response()->json([
                     'programs' => $programs,
                     'semesters' => $semesters,
@@ -595,10 +555,6 @@ class ImplementingSubjectController extends Controller
                 $semesters = ImplementingSubjects::where('department', $department)->distinct()->pluck('semester');
                 $yearLevels = ImplementingSubjects::where('department', $department)->distinct()->pluck('year_level');
 
-                \Log::info('Programs: ', $programs->toArray());
-                \Log::info('Semesters: ', $semesters->toArray());
-                \Log::info('Year Levels: ', $yearLevels->toArray());
-
                 return response()->json([
                     'programs' => $programs,
                     'semesters' => $semesters,
@@ -612,8 +568,26 @@ class ImplementingSubjectController extends Controller
 
         public function getDepartments()
         {
-            $departments = ImplementingSubjects::pluck('department')->unique()->values();
-            return response()->json($departments);
+            $departments = EieReport::pluck('department')->unique()->values();
+
+            // Ensure it's an array before returning
+            return response()->json($departments->toArray());
         }
 
+        public function getSchoolYears()
+        {
+            // Extract unique years from the created_at column
+            $schoolYears = DB::table('eie_reports')
+            ->selectRaw("DISTINCT CONCAT(YEAR(created_at), '/', YEAR(created_at) + 1) AS school_year")
+            ->orderBy('school_year', 'desc')
+            ->pluck('school_year');
+
+            // Fallback if no records are found
+            if ($schoolYears->isEmpty()) {
+                $currentYear = date('Y');
+                $schoolYears = collect(["$currentYear/" . ($currentYear + 1)]);
+            }
+
+            return response()->json($schoolYears);
+        }
 }

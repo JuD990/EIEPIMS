@@ -1,62 +1,46 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import EIEHeadSidebar from '../sidebar/eie-head-sidebar';
 import UserInfo from '@user-info/User-info';
-import Table1 from "./table/head-poc-table-1st-semester";
-import Table2 from "./table/head-poc-table-2nd-semester";
+import TableComponent from "./table/eie-head-dashboard";
+import DashboardDropdown from "./dropdown-button/dropdown-eie-head-dashboard";
 
 const HeadEiePocDashboard = () => {
-  // Determine the current semester
   const currentMonth = new Date().getMonth(); // 0 for January, 11 for December
-  const currentSemester = useMemo(() => {
-    return currentMonth >= 8 && currentMonth <= 12 ? "1st Semester" : "2nd Semester"; // Aug–Dec: 1st, Jan–May: 2nd
-  }, [currentMonth]);
 
-  const [selectedSemester, setSelectedSemester] = useState(currentSemester);
+  // Default values based on logic in DashboardDropdown
+  const defaultSemester = currentMonth >= 8 && currentMonth <= 12 ? "1st Semester" : "2nd Semester";
+  const defaultSchoolYear = `${new Date().getFullYear()}-${new Date().getFullYear() + 1}`;
 
-  // Function to toggle semesters
-  const toggleSemester = () => {
-    setSelectedSemester((prev) => (prev === "1st Semester" ? "2nd Semester" : "1st Semester"));
-  };
+  const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [selectedSchoolYear, setSelectedSchoolYear] = useState(defaultSchoolYear);
+  const [selectedSemester, setSelectedSemester] = useState(defaultSemester);
+
+  useEffect(() => {
+    // You can also manage side-effects here if necessary
+  }, [selectedDepartment, selectedSchoolYear, selectedSemester]);
 
   return (
     <div>
     <EIEHeadSidebar />
     <UserInfo />
-    <br /><br /><br /><br /><br /><br />
-
-    {/* Header Container for Title and Button */}
-    <div style={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      marginLeft: "340px",
-      marginRight: "35px"
-    }}>
-    {/* Title */}
-    <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, color: '#383838' }}>
-    Dashboard - {selectedSemester}
+    <br /><br /><br />
+    <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#383838' }}>
+    Dashboard - {selectedSemester}/{selectedDepartment}-{selectedSchoolYear}
     </h1>
 
-    {/* Semester Toggle Button */}
-    <button
-    onClick={toggleSemester}
-    style={{
-      padding: "8px 16px",
-      backgroundColor: "#DC2626",
-      color: "white",
-      border: "none",
-      borderRadius: "5px",
-      cursor: "pointer",
-      fontSize: "16px",
-      fontWeight: "bold"
-    }}
-    >
-    View {selectedSemester === "1st Semester" ? "2nd Semester" : "1st Semester"}
-    </button>
-    </div>
+    {/* Pass state setters to Dropdown */}
+    <DashboardDropdown
+    setSelectedDepartment={setSelectedDepartment}
+    setSelectedSchoolYear={setSelectedSchoolYear}
+    setSelectedSemester={setSelectedSemester}
+    />
 
-    {selectedSemester === "1st Semester" ? <Table1 /> : <Table2 />}
-    <br />
+    {/* Pass selected values to TableComponent */}
+    <TableComponent
+    department={selectedDepartment}
+    schoolYear={selectedSchoolYear}
+    semester={selectedSemester}
+    />
     </div>
   );
 };

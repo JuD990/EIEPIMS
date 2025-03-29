@@ -16,7 +16,17 @@ const MasterClassList = () => {
     Master Class List
     </h1>
     <br />
-    <div className="eie-head-dropdown-container" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%' }}>
+    <div
+    style={{
+      display: 'flex',
+      justifyContent: 'flex-end',
+      width: '100%',
+      maxWidth: '1200px', /* Adjust based on your layout */
+      margin: '0 auto', /* Center within a max-width */
+      paddingRight: '20px', /* Add some spacing */
+      marginLeft: '705px',
+    }}>
+
     {/* Right side Search Area */}
     <input
     type="text"
@@ -24,16 +34,16 @@ const MasterClassList = () => {
     onChange={(e) => setSearchQuery(e.target.value)}
     placeholder="Search"
     style={{
-      width: '476px',
-      height: '60px',
+      width: '100%',  /* Ensure responsiveness */
+      maxWidth: '400px', /* Prevent exceeding page */
+      height: '50px', /* Adjust height */
       borderRadius: '8px',
-      borderColor: '#333333',
-      paddingLeft: '10px',
+      border: '1px solid #333333',
       fontSize: '16px',
-      marginRight: '385px',
     }}
     />
     </div>
+
     <br />
     <MasterClassListTable searchQuery={searchQuery} />
     <UploadClassListButton />

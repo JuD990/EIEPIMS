@@ -11,7 +11,7 @@ const ImplementingSubjectsTable = ({searchQuery}) => {
   const [isLoadingPocs, setIsLoadingPocs] = useState(true);
   const [formData, setFormData] = useState({
     course_code: "",
-    employeeId: "",
+    employee_id: "",
     assigned_poc: "",
     email: "",
   });
@@ -119,8 +119,8 @@ const ImplementingSubjectsTable = ({searchQuery}) => {
         `/api/update-implementing-subjects/${formData.course_code}`,
         {
           assigned_poc: formData.assigned_poc.trim() || null,
-                                       employee_id: formData.employee_id.trim() || null,
-                                       email: formData.email.trim() || null,
+          employee_id: formData.employee_id.trim() || null,
+          email: formData.email.trim() || null,
         }
       );
       if (response.status === 200) {
@@ -228,116 +228,118 @@ const ImplementingSubjectsTable = ({searchQuery}) => {
         </div>
       )}
 
-                  {/* Modal */}
-                  {showUpdateModal && (
+      {/* Modal */}
+      {showUpdateModal && (
         <div
-          style={{
-            position: "fixed",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "600px",
-            height: "800px",
-            backgroundColor: "#FFFFFF",
-            borderRadius: "5px",
-            border: "1px solid #333333",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-            zIndex: 1000,
-            padding: "20px",
-            overflowY: "auto",
-            fontFamily: "Poppins",
-          }}
+        style={{
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "600px",
+          height: "250px",
+          backgroundColor: "#FFFFFF",
+          borderRadius: "5px",
+          border: "1px solid #333333",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+          zIndex: 1000,
+          padding: "20px",
+          overflowY: "auto",
+          fontFamily: "Poppins",
+        }}
         >
-          <h2
-            style={{
-              fontSize: "32px",
-              fontFamily: "Epilogue, sans-serif",
-              fontWeight: "800",
-              color: "#333333",
-              marginBottom: "20px",
-            }}
-          >
-            Update Credentials
-          </h2>
-          <form onSubmit={handleFormSubmit}>
-          <div style={{ marginBottom: "20px" }}>
-          <label
-          htmlFor="assignedPoc"
-          style={{
-            display: "block",
-            fontSize: "18px",
-            color: "#383838",
-            marginBottom: "8px",
-            fontWeight: "600",
-          }}
-          >
-          Re-Assign POC:
-          </label>
-          <select
-          id="assignedPoc"
-          name="assignedPoc"
-          value={formData.employee_id || ""}
-          onChange={handlePocChange}
-          style={{
-            width: "100%",
-            padding: "12px 14px",
-            borderRadius: "8px",
-            border: "1px solid #ccc",
-            backgroundColor: "#f9f9f9",
-            fontSize: "16px",
-            fontFamily: "Arial, sans-serif",
-            outline: "none",
-            boxSizing: "border-box",
-            transition: "border-color 0.2s",
-          }}
-          aria-label="Select Point of Contact"
-          >
-          <option value="">None</option>
-          {pocs.map((poc) => (
-            <option key={poc.employee_id} value={poc.employee_id}>
-            {poc.firstname} {poc.lastname} ({poc.email})
-            </option>
-          ))}
-          </select>
-          </div>
+        <h2
+        style={{
+          fontSize: "32px",
+          fontFamily: "Epilogue, sans-serif",
+          fontWeight: "800",
+          color: "#333333",
+          marginBottom: "20px",
+        }}
+        >
+        Update Credentials
+        </h2>
+        <form onSubmit={handleFormSubmit}>
+        {/* Assigned POC Selection */}
+        <div style={{ marginBottom: "20px" }}>
+        <label
+        htmlFor="assignedPoc"
+        style={{
+          display: "block",
+          fontSize: "18px",
+          color: "#383838",
+          marginBottom: "8px",
+          fontWeight: "600",
+        }}
+        >
+        Re-Assign POC:
+        </label>
+        <select
+        id="assignedPoc"
+        name="assignedPoc"
+        value={formData.employee_id || ""}
+        onChange={handlePocChange}
+        style={{
+          width: "100%",
+          padding: "12px 14px",
+          borderRadius: "8px",
+          border: "1px solid #ccc",
+          backgroundColor: "#f9f9f9",
+          fontSize: "16px",
+          fontFamily: "Arial, sans-serif",
+          outline: "none",
+          boxSizing: "border-box",
+          transition: "border-color 0.2s",
+        }}
+        aria-label="Select Point of Contact"
+        >
+        <option value="">None</option>
+        {pocs.map((poc) => (
+          <option key={poc.employee_id} value={poc.employee_id}>
+          {poc.firstname} {poc.lastname} ({poc.email})
+          </option>
+        ))}
+        </select>
+        </div>
 
-            {/* Action Buttons */}
-            <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
-              <button
-                type="button"
-                onClick={() => setShowUpdateModal(false)}
-                style={{
-                  padding: "10px 20px",
-                  backgroundColor: "#DE0051",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                  fontSize: "18px",
-                  fontFamily: "Poppins",
-                }}
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                style={{
-                  padding: "10px 20px",
-                  backgroundColor: "#0187f1",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                  fontSize: "18px",
-                  fontFamily: "Poppins",
-                }}
-              >
-                Update
-              </button>
-            </div>
-          </form>
+        {/* Action Buttons */}
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+        <button
+        type="button"
+        onClick={() => setShowUpdateModal(false)}
+        style={{
+          padding: "10px 20px",
+          backgroundColor: "#DE0051",
+          color: "white",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+          fontSize: "18px",
+          fontFamily: "Poppins",
+        }}
+        >
+        Cancel
+        </button>
+        <button
+        type="submit"
+        style={{
+          padding: "10px 20px",
+          backgroundColor: "#6B6D76",
+          color: "white",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+          fontSize: "18px",
+          fontFamily: "Poppins",
+        }}
+        >
+        Update
+        </button>
+        </div>
+        </form>
         </div>
       )}
+
     </div>
   );
 };

@@ -296,40 +296,45 @@ class EpgfRubricController extends Controller
             'fluencies' => $fluencies,
         ]);
     }
-
-    public function updateEpgfRubric(Request $request, $id)
+    public function updatePronunciation(Request $request, $id)
     {
-        // Update Pronunciation
-        $pronunciation = EpgfPronunciation::find($id);
-        if ($pronunciation) {
-            $pronunciation->update([
-                'pronunciation' => $request->input('pronunciation'),
-                                   'descriptor' => $request->input('pronunciationDescriptor'),
-                                   'rating' => $request->input('pronunciationRating'),
-            ]);
-        }
+        $request->validate([
+            'pronunciation' => 'nullable|string',
+            'descriptor' => 'nullable|string',
+            'rating' => 'nullable|numeric',
+        ]);
 
-        // Update Grammar
-        $grammar = EpgfGrammar::find($id);
-        if ($grammar) {
-            $grammar->update([
-                'grammar' => $request->input('grammar'),
-                             'descriptor' => $request->input('grammarDescriptor'),
-                             'rating' => $request->input('grammarRating'),
-            ]);
-        }
+        $pronunciation = EpgfPronunciation::findOrFail($id);
+        $pronunciation->update($request->only(['pronunciation', 'descriptor', 'rating']));
 
-        // Update Fluency
-        $fluency = EpgfFluency::find($id);
-        if ($fluency) {
-            $fluency->update([
-                'fluency' => $request->input('fluency'),
-                             'descriptor' => $request->input('fluencyDescriptor'),
-                             'rating' => $request->input('fluencyRating'),
-            ]);
-        }
-
-        return response()->json(['message' => 'Rubric updated successfully']);
+        return response()->json(['message' => 'Updated successfully', 'data' => $pronunciation]);
     }
 
+    public function updateGrammar(Request $request, $id)
+    {
+        $request->validate([
+            'grammar' => 'nullable|string',
+            'descriptor' => 'nullable|string',
+            'rating' => 'nullable|numeric',
+        ]);
+
+        $grammar = EpgfGrammar::findOrFail($id);
+        $grammar->update($request->only(['grammar', 'descriptor', 'rating']));
+
+        return response()->json(['message' => 'Grammar updated successfully', 'data' => $grammar]);
+    }
+
+    public function updateFluency(Request $request, $id)
+    {
+        $request->validate([
+            'fluency' => 'nullable|string',
+            'descriptor' => 'nullable|string',
+            'rating' => 'nullable|numeric',
+        ]);
+
+        $fluency = EpgfFluency::findOrFail($id);
+        $fluency->update($request->only(['fluency', 'descriptor', 'rating']));
+
+        return response()->json(['message' => 'Fluency updated successfully', 'data' => $fluency]);
+    }
 }

@@ -40,7 +40,8 @@ const CurrentSubjects = () => {
         ) : error ? (
             <p className="error-message">{error}</p>
         ) : (
-            <div>
+            <div className="student-subject-details">
+            <br/><br/>
             <p>Course Code: {subjectData.course_code}</p>
             <p>EPGF Average: {subjectData.epgf_average}</p>
             <p>Course Title: {subjectData.course_title}</p>

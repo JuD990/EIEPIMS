@@ -97,7 +97,7 @@
 .esl-prime-pages > button.active {
   background-color: #DC2626; /* Red */
   color: white;
-  border-radius: 8px;
+  border-radius: 20px;
 }
 
 .esl-prime-pages > button.active p {
@@ -112,7 +112,7 @@
 .extra-buttons-container button.active {
   background-color: #ffadad; /* Light Pink */
   color: black;
-  border-radius: 6px;
+  border-radius: 20px;
 }
 
 .extra-buttons-container button.active p {
@@ -143,7 +143,7 @@
 .esl-eie-reporting-sidebar-button:hover,
 .esl-dashboard-sidebar-button:hover {
   background-color: #DC2626;
-  border-radius: 8px;
+  border-radius: 20px;
 }
 .esl-eie-management-sidebar-button:hover p,
 .esl-eie-diagnostic-sidebar-button:hover p,
@@ -219,7 +219,7 @@
 .certification-button:hover,
 .accounts-button:hover {
   background-color: #FFE6E2; /* Highlight color on hover */
-  border-radius: 8px; /* Rounded corners */
+  border-radius: 20px; /* Rounded corners */
 }
 .diagnosticReports-button:hover p,
 .interview-button:hover p,

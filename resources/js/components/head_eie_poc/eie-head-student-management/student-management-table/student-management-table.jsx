@@ -18,25 +18,55 @@ const StudentManagementTable = ({ searchQuery }) => {
     courseCode: '',
   });
 
-  const filteredStudents = students.filter(student =>
-  `${student.firstname} ${student.lastname}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  (student.course_code?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
-  (student.status?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
-  (student.year_level?.toString() || "").includes(searchQuery)
-  );
+  const filteredStudents = students.filter(student => {
+    if (!student.firstname || !student.lastname) return false; // Ensure names exist
+
+    // Construct full name including middle name (if available)
+    const fullName = `${student.firstname} ${student.middlename ? student.middlename + " " : ""}${student.lastname}`
+    .toLowerCase()
+    .replace(/\s+/g, ' ') // Normalize spaces
+    .trim();
+
+    // Reverse order (Lastname Firstname Middlename) for better search coverage
+    const reversedFullName = `${student.lastname} ${student.firstname} ${student.middlename || ""}`
+    .toLowerCase()
+    .replace(/\s+/g, ' ') // Normalize spaces
+    .trim();
+
+    // Search query formatted
+    const query = (searchQuery || "").toLowerCase().trim();
+
+    console.log(`Checking: "${fullName}" and "${reversedFullName}" against "${query}"`);
+
+    return (
+      fullName.includes(query) ||
+      reversedFullName.includes(query) ||
+      (student.course_code?.toLowerCase() || "").includes(query) ||
+      (student.status?.toLowerCase() || "").includes(query) ||
+      (student.year_level?.toString() || "").includes(query)
+    );
+  });
 
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/class-list")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => setStudents(data))
-      .catch((error) => console.error("Error fetching data:", error.message));
+    const employeeId = localStorage.getItem("employee_id");
+
+    if (!employeeId) {
+      console.error("Employee ID not found in localStorage");
+      return;
+    }
+
+    fetch(`http://localhost:8000/api/class-list?employee_id=${employeeId}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => setStudents(data))
+    .catch((error) => console.error("Error fetching data:", error.message));
   }, []);
+
   
 
   const handleInputChange = (e) => {
@@ -198,6 +228,18 @@ const StudentManagementTable = ({ searchQuery }) => {
         ),
       },
       {
+        Header: "Pronunciation",
+        accessor: "pronunciation",
+      },
+      {
+        Header: "Grammar",
+        accessor: "grammar",
+      },
+      {
+        Header: "Fluency",
+        accessor: "fluency",
+      },
+      {
         Header: "EPGF Average",
         accessor: "epgf_average",
       },
@@ -214,7 +256,7 @@ const StudentManagementTable = ({ searchQuery }) => {
               width: '88px',
               height: '35px',
               borderRadius: '12px',
-              backgroundColor: '#0187F1',
+              backgroundColor: '#6B6D76',
               color: '#FFFFFF',
               fontSize: '15px',
               fontFamily: 'Poppins',
@@ -240,7 +282,7 @@ const StudentManagementTable = ({ searchQuery }) => {
       <div
         style={{
           overflowY: 'auto',
-          height: '500px',
+          height: '600px',
           marginLeft: '350px',
           marginRight: '35px',
           border: '1px solid #ddd',
@@ -465,7 +507,7 @@ const StudentManagementTable = ({ searchQuery }) => {
                 style={{
                   width: '100px',
                   height: '40px',
-                  backgroundColor: '#0187F1',
+                  backgroundColor: '#6B6D76',
                   color: '#FFFFFF',
                   borderRadius: '12px',
                   border: 'none',

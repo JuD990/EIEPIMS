@@ -1,0 +1,138 @@
+/* Rubric Table Styles */
+
+.rubric-table-container {
+    overflow-x: auto;
+    overflow-y: auto;
+    height: 600px;
+    margin-left: 340px;
+    margin-right: 35px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.rubric-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.rubric-header-row {
+    background-color: #F4F7FC;
+    color: #383838;
+    text-align: center;
+    font-family: Poppins;
+}
+
+.rubric-header-cell {
+    background-color: #F4F7FC;
+    color: #383838;
+    padding: 25px 25px;
+    text-align: center;
+    border-bottom: none;
+    font-family: Poppins;
+    font-size: 18px;
+    font-weight: normal;
+}
+
+.epgf-header {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+
+.rubric-table-row:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.rubric-table-cell {
+    padding: 15px 20px;
+    border-bottom: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    font-family: Poppins;
+    font-weight: 500;
+    text-align: left;
+}
+
+.rubric-update-button {
+    background-color: #DC2626;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: Poppins;
+}
+
+.rubric-update-button:hover {
+    background-color: #B22222;
+}
+
+/* Pronunciation Modal Styles */
+.pronunciation-modal-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 560px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    border: 1px solid #333333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    padding: 20px;
+    overflow-y: auto;
+    font-family: "Poppins", sans-serif;
+}
+
+.pronunciation-modal-title {
+    font-size: 32px;
+    font-family: "Epilogue", sans-serif;
+    font-weight: 800;
+    color: #333333;
+    margin-bottom: 20px;
+}
+
+.pronunciation-modal-label {
+    display: block;
+    font-size: 20px;
+    color: #383838;
+    margin-bottom: 5px;
+}
+
+.pronunciation-modal-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #333333;
+    margin-bottom: 20px;
+}
+
+.pronunciation-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.pronunciation-modal-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    font-family: "Poppins", sans-serif;
+}
+
+.pronunciation-cancel-button {
+    background-color: #dc2626;
+    color: white;
+}
+
+.pronunciation-update-button {
+    background-color: #6b6d76;
+    color: white;
+}

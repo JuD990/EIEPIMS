@@ -30,7 +30,7 @@ const TableComponent = () => {
         </tr>
         </thead>
         <tbody>
-        {/* Empty table body for now */}
+        {/* Area for computing year total and grand total */}
         </tbody>
         </table>
         </div>

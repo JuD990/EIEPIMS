@@ -1,5 +1,5 @@
 .epgf-scorecard-page-title {
-    margin-left: 320px;
+    margin-left: 340px;
   }
   
   .epgf-scorecard-subject-details {
@@ -21,16 +21,20 @@
     font-size: 24px;
     margin-bottom: 5px;
   }
+  .back-icon {
+    filter: brightness(0) saturate(100%);
+  }
+
   
   .epgf-scorecard-subject-name{
     margin-top: 5px;
-    color: #0187F1;
     font-size: 28px;
+    color: black;
     font-weight: 800;
   }
   .epgf-scorecard-subject-code {
     margin-top: 5px;
-    color: #0187F1;
+    color: black;
     font-size: 24px;
   }
 
@@ -42,7 +46,7 @@
     justify-content: space-between;
     align-items: center;
     margin-top: 20px;
-    margin-left: 320px;
+    margin-left: 340px;
   }
   
   .input-task-title {
@@ -109,7 +113,7 @@
     border: 1px solid transparent;
     width: 200px;
     height: 50px;
-    background-color: #9ECEF3;
+    background-color: #FFDED6;
     display: flex;
     align-items: center;
     justify-content: center;

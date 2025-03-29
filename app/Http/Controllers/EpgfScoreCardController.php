@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ClassLists;
 use App\Models\ImplementingSubjects;
+use App\Models\HistoricalImplementingSubjects;
 use Illuminate\Http\Request;
 use App\Models\EieScorecardClassReport;
 use App\Models\HistoricalScorecard;
@@ -309,35 +310,40 @@ class EpgfScoreCardController extends Controller
             'active_students' => 'required|integer',
         ]);
 
-        // Find the ImplementingSubject by course_code
-        $subject = ImplementingSubjects::where('course_code', $validated['course_code'])->first();
+        // Find or create ImplementingSubjects
+        $subject = ImplementingSubjects::updateOrCreate(
+            ['course_code' => $validated['course_code']],
+            [
+                'epgf_average' => $validated['average'],
+                'completion_rate' => $validated['completionRate'],
+                'proficiency_level' => $validated['proficiencyLevel'],
+                'enrolled_students' => $validated['enrolled_students'],
+                'active_students' => $validated['active_students'],
+            ]
+        );
 
-        if ($subject) {
-            // Update the existing subject with the new values
-            $subject->update([
+        // Find or create HistoricalImplementingSubjects
+        $historicalSubject = HistoricalImplementingSubjects::updateOrCreate(
+            ['course_code' => $validated['course_code']],
+            [
                 'epgf_average' => $validated['average'],
                 'completion_rate' => $validated['completionRate'],
                 'proficiency_level' => $validated['proficiencyLevel'],
                 'enrolled_students' => $validated['enrolled_students'],
                 'active_students' => $validated['active_students'],
-            ]);
-        } else {
-            // If no record exists, create a new one
-            $subject = ImplementingSubjects::create([
-                'course_code' => $validated['course_code'],
-                'epgf_average' => $validated['average'],
-                'completion_rate' => $validated['completionRate'],
-                'proficiency_level' => $validated['proficiencyLevel'],
-                'enrolled_students' => $validated['enrolled_students'],
-                'active_students' => $validated['active_students'],
-            ]);
-        }
+                'recorded_at' => now(), // Ensure timestamping for tracking
+            ]
+        );
 
         // Return a success response
         return response()->json([
             'success' => true,
             'message' => 'Class data successfully saved or updated!',
-            'data' => $subject,
+            'data' => [
+                'implementing_subject' => $subject,
+                'historical_subject' => $historicalSubject,
+            ],
         ]);
     }
+
 }

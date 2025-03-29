@@ -218,6 +218,18 @@ const StudentManagementTable = ({ searchQuery }) => {
         ),
       },
       {
+        Header: "Pronunciation",
+        accessor: "pronunciation",
+      },
+      {
+        Header: "Grammar",
+        accessor: "grammar",
+      },
+      {
+        Header: "Fluency",
+        accessor: "fluency",
+      },
+      {
         Header: "EPGF Average",
         accessor: "epgf_average",
       },
@@ -487,7 +499,7 @@ const StudentManagementTable = ({ searchQuery }) => {
       style={{
         width: '100px',
         height: '40px',
-        backgroundColor: '#0187F1',
+        backgroundColor: '#6B6D76',
         color: '#FFFFFF',
         borderRadius: '12px',
         border: 'none',

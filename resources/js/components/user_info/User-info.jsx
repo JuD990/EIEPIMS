@@ -61,7 +61,6 @@ const UserInfo = () => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
-  console.log(user); // Check if user.year_level is present
 
   return (
     <div

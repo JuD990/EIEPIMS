@@ -14,6 +14,7 @@ import ImplementingSubjects from "../js/components/head_eie_poc/implementing-sub
 import EIEHeadStudentManagement from "../js/components/head_eie_poc/eie-head-student-management/eie-head-student-management"
 {/* Lead POC Imports*/}
 import LeadEiePocDashboard from "../js/components/lead_eie_poc/LeadEiePocDashboard";
+import LeadPocReporting from "../js/components/lead_eie_poc/lead-poc-eie-reporting/lead-poc-eie-reporting";
 {/* College POC Imports*/}
 import CollegePocDashboard from "../js/components/college_poc/CollegePocDashboard/CollegePocDashboard";
 import CollegePocImplementingSubject from "../js/components/college_poc/CollegePocClassManagement/CollegePocClassManagement";
@@ -73,8 +74,10 @@ const App = () => {
         <Route path="/eie-head-student-management" element={<PrivateRoute><EIEHeadStudentManagement /></PrivateRoute>} />
         <Route path="/eie-head-master-class-list" element={<PrivateRoute><MasterClassList /></PrivateRoute>} />
         <Route path="/implementing-subjects" element={<PrivateRoute><ImplementingSubjects /></PrivateRoute>} />
+
         {/* Lead POC */}
         <Route path="/lead-eie-poc-dashboard" element={<PrivateRoute><LeadEiePocDashboard /></PrivateRoute>} />
+        <Route path="/lead-poc-reporting" element={<PrivateRoute><LeadPocReporting /></PrivateRoute>} />
       </Routes>
     </Router>
   );

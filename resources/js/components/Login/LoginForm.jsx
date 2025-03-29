@@ -68,7 +68,7 @@ const LoginForm = () => {
 
         // Store necessary data in localStorage
         localStorage.setItem("authToken", token);
-        localStorage.setItem("userType", userType); // ✅ Store userType
+        localStorage.setItem("userType", userType);
 
         if (userType === "Student" && student_id) {
           localStorage.setItem("student_id", student_id);
@@ -79,7 +79,15 @@ const LoginForm = () => {
           return;
         }
 
-        console.log("Stored User Type:", localStorage.getItem("userType")); // ✅ Debugging
+        console.log("Stored User Type:", localStorage.getItem("userType"));
+
+        // ✅ Trigger the storeOrUpdatePrograms function after login
+        try {
+          const reportResponse = await apiService.post('/eie-reports/store-or-update');
+          console.log("EIE Reports Updated: ", reportResponse.data);
+        } catch (reportError) {
+          console.error("Failed to update EIE Reports: ", reportError);
+        }
 
         // Navigate based on user type
         switch (userType) {
@@ -97,6 +105,7 @@ const LoginForm = () => {
             break;
           case "ESL Prime":
             navigate("/esl-prime-dashboard");
+            break;
           case "ESL Champion":
             navigate("/esl-champion-dashboard");
             break;
@@ -132,32 +141,37 @@ const LoginForm = () => {
     }
   };
 
+
   return (
     <div
     className="login-container"
     style={{
       backgroundImage: `url(${loginBGimage})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
     }}
     >
-    <div className="logos">
-    <img className="unc-logo-login" src={uncLogo} alt="UNC Logo" />
-    <img className="system-logo" src={systemLogo} alt="System Logo" />
+    <div className="login-logos">
+    <img className="login-unc-logo" src={uncLogo} alt="UNC Logo" />
+    <img className="login-system-logo" src={systemLogo} alt="System Logo" />
     </div>
-    <h1 className="main-title-login">
-    <span className="eie" title="English Immersive Environment">EIE</span>
-    <span className="pims"> Program Implementation Management System</span>
+    <h1 className="login-main-title">
+    <span className="login-eie" title="English Immersive Environment">
+    EIE
+    </span>
+    <span className="login-pims">
+    Program Implementation Management System
+    </span>
     </h1>
 
-    <h2 className="subtitle">Please enter your credentials</h2>
+    <h2 className="login-subtitle">Please enter your credentials</h2>
     <form className="login-form" onSubmit={handleLogin}>
-    {error && <div className="error-message">{error}</div>}
+    {error && <div className="login-error-message">{error}</div>}
 
-    <div className="form-group dropdown-container">
+    <div className="login-form-group login-dropdown-container">
     <label className="login-form-label">Login As:</label>
     <select
-    className="dropdown"
+    className="login-dropdown"
     value={userType}
     onChange={(e) => setUserType(e.target.value)}
     >
@@ -168,36 +182,36 @@ const LoginForm = () => {
     <option value="ESL Prime">ESL Prime</option>
     <option value="ESL Champion">ESL Champion</option>
     </select>
-    <img className="dropdown-logo" src={dropdownLogo} alt="Dropdown Logo" />
+    <img className="login-dropdown-logo" src={dropdownLogo} alt="Dropdown Logo" />
     </div>
 
-    <div className="form-group email-input-container">
-    <label className="email-form-label">Email:</label>
+    <div className="login-form-group login-email-input-container">
+    <label className="login-email-form-label">Email:</label>
     <input
     type="text"
-    className="email-input"
+    className="login-email-input"
     placeholder="Email"
     value={email}
     onChange={(e) => setEmail(e.target.value)}
     />
-    <div className="email-domain">
+    <div className="login-email-domain">
     <span>@unc.edu.ph</span>
-    <img className="user-icon" src={userIcon} alt="User Icon" />
+    <img className="login-user-icon" src={userIcon} alt="User Icon" />
     </div>
     </div>
 
-    <div className="form-group password-input-container">
-    <label className="password-form-label">Password:</label>
-    <div className="password-input-wrapper">
+    <div className="login-form-group login-password-input-container">
+    <label className="login-password-form-label">Password:</label>
+    <div className="login-password-input-wrapper">
     <input
     type={showPassword ? "text" : "password"}
-    className="password-input"
+    className="login-password-input"
     placeholder="Password"
     value={password}
     onChange={(e) => setPassword(e.target.value)}
     />
     <img
-    className="toggle-password-icon"
+    className="login-toggle-password-icon"
     src={showPassword ? eyeOffIcon : eyeIcon}
     alt="Toggle Password Visibility"
     onClick={() => setShowPassword(!showPassword)}
@@ -205,9 +219,8 @@ const LoginForm = () => {
     </div>
     </div>
 
-    <div className="forgot-password-container">
-    <div className="forgot-password">
-    </div>
+    <div className="login-forgot-password-container">
+    <div className="login-forgot-password"></div>
     <button className="login-button" type="submit">
     Login
     </button>

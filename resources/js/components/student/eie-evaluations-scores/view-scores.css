@@ -28,7 +28,7 @@
     margin-top: 18px;
     font-family: "Epilogue", sans-serif;
     font-weight: bold;
-    color: #0187F1;
+    color: black;
 }
 
 /* Main Card */
@@ -51,10 +51,10 @@
     position: absolute;
     top: 20px;
     left: 20px;
-    font-size: 24px;
+    font-size: 30px;
     font-weight: bold;
-    font-family: "Epilogue", sans-serif;
-    color: #0187F1;
+    font-family: "Poppins", sans-serif;
+    color: black;
 }
 
 /* Cards */
@@ -67,7 +67,7 @@
 /* Styles for the top-card container */
 .top-card {
     border: 1px solid black;
-    width: 500px;
+    width: 560px;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -79,7 +79,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr; /* Two equal columns */
     gap: 10px; /* Space between rows */
-    font-size: 18px;
+    font-size: 22px;
     font-family: "Poppins", sans-serif;
 }
 
@@ -105,6 +105,11 @@
     color: white;
 }
 
+.top-card h4{
+    font-weight: bold;
+    font-size: 26px;
+    padding-bottom: 15px;
+}
 
 .top-card p{
     margin-left: 20px;
@@ -112,7 +117,7 @@
 
 .bottom-card {
     border: 1px solid black;
-    width: 500px;
+    width: 560px;
     height: 300px;
     padding: 15px;
     border-radius: 8px;
@@ -124,6 +129,11 @@
     font-size: 20px;
 }
 
+.bottom-card h4{
+    font-size: 26px;
+    font-weight: bold;
+}
+
 /* Date & Type */
 .date-type-container {
     position: absolute;
@@ -131,11 +141,25 @@
     left: 150px;
     width: 700px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column; /* Stack Task Title on top */
     font-size: 20px;
     font-family: "Poppins", sans-serif;
     color: #000;
+    margin-top: -35px;
 }
+
+.task-title{
+    font-size: 30px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+}
+
+/* Keep Date Evaluated & Type in a Row */
+.date-type-row {
+    display: flex;
+    justify-content: space-between;
+}
+
 
 /* Panels */
 .panels-container {
@@ -175,8 +199,8 @@
 }
 
 .panel-score p {
-    font-size: 30px;
-    color: #0187F1;
+    font-size: 40px;
+    color: black;
     margin-top: 18px;
 }
 

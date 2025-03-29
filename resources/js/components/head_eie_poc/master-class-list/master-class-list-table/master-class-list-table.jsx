@@ -161,7 +161,7 @@ const MasterClassListTable = ({searchQuery}) => {
               width: "88px",
               height: "35px",
               borderRadius: "12px",
-              backgroundColor: "#0187F1",
+              backgroundColor: "#DC2626",
               color: "#FFFFFF",
               fontSize: "15px",
               fontFamily: "Poppins",
@@ -456,7 +456,7 @@ const MasterClassListTable = ({searchQuery}) => {
                 style={{
                   width: '100px',
                   height: '40px',
-                  backgroundColor: '#DE0051',
+                  backgroundColor: '#DC2626',
                   color: '#FFFFFF',
                   borderRadius: '12px',
                   border: 'none',
@@ -471,7 +471,7 @@ const MasterClassListTable = ({searchQuery}) => {
                 style={{
                   width: '100px',
                   height: '40px',
-                  backgroundColor: '#0187F1',
+                  backgroundColor: '#6B6D76',
                   color: '#FFFFFF',
                   borderRadius: '12px',
                   border: 'none',

@@ -94,6 +94,7 @@
 /* Header Styling */
 .evaluation-scores-table th {
     font-weight: bold; /* Bold the header text */
+    background: transparent;
 }
 
 /* Add space between rows */

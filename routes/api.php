@@ -11,6 +11,10 @@ use App\Http\Controllers\UserManagement;
 use App\Http\Controllers\HistoricalScorecardController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\EieReportController;
+
+Route::post('/eie-reports/store-or-update', [EieReportController::class, 'storeOrUpdatePrograms']);
+Route::get('/dashboard-report', [EieReportController::class, 'getDashboardReport']);
 
 Route::get('/performance-summary', [StudentController::class, 'getPerformanceSummary']);
 Route::get('/current-subjects/{student_id}', [StudentController::class, 'getCurrentSubjects']);
@@ -26,8 +30,22 @@ Route::get('/get-course-details', [HistoricalScorecardController::class, 'getCou
 Route::get('/students', [UserManagement::class, 'getStudents']);
 Route::put('/students/{student_id}/reset-password', [UserManagement::class, 'resetPassword']);
 Route::post('/store-students', [UserManagement::class, 'storeStudents']);
-Route::put('/students/{student_id}', [UserManagement::class, 'updateStudents']);
-Route::post('/import-students', [UserManagement::class, 'importCSV']);
+Route::post('/store-college-poc', [UserManagement::class, 'storeCollegePOCs']);
+Route::post('/store-lead-poc', [UserManagement::class, 'storeLeadPOCs']);
+Route::post('/store-head-poc', [UserManagement::class, 'storeEIEHeads']);
+Route::put('/update-students/{student_id}', [UserManagement::class, 'updateStudents']);
+Route::put('/update-collge-poc/{employee_id}', [UserManagement::class, 'updateCollegePOCs']);
+Route::put('/update-lead-poc/{employee_id}', [UserManagement::class, 'updateLeadPOCs']);
+Route::put('/update-head-poc/{employee_id}', [UserManagement::class, 'updateHeadPOCs']);
+Route::post('/import-students', [UserManagement::class, 'importStudents']);
+Route::post('/import-college-poc', [UserManagement::class, 'importCollegePOCs']);
+Route::post('/import-lead-poc', [UserManagement::class, 'importLeadPOCs']);
+Route::post('/import-head-poc', [UserManagement::class, 'importHeadPOCs']);
+Route::delete('/delete-students/{student_id}', [UserManagement::class, 'deleteStudent']);
+Route::delete('/delete-college-pocs/{employee_id}', [UserManagement::class, 'deleteCollegePOC']);
+Route::delete('/delete-lead-pocs/{employee_id}', [UserManagement::class, 'deleteLeadPOC']);
+Route::delete('/delete-head-pocs/{employee_id}', [UserManagement::class, 'deleteHeadPOC']);
+
 
 //EPGF Setup
 Route::post('/import', [EpgfRubricController::class, 'import']);
@@ -36,7 +54,11 @@ Route::post('/set-default', [EpgfRubricController::class, 'setDefault']);
 Route::post('/get-rubric-details', [EpgfRubricController::class, 'getRubricDetails']);
 Route::get('/rubric/active-version', [EpgfRubricController::class, 'getActiveVersion']);
 Route::get('/display-epgf-rubric', [EpgfRubricController::class, 'displayEpgfRubric']);
-Route::put('/update-epgf-rubric/{id}', [EpgfRubricController::class, 'updateEpgfRubric']);
+
+//Update EPGF Rubric
+Route::put('/pronunciation/update/{id}', [EpgfRubricController::class, 'updatePronunciation']);
+Route::put('/grammar/update/{id}', [EpgfRubricController::class, 'updateGrammar']);
+Route::put('/fluency/update/{id}', [EpgfRubricController::class, 'updateFluency']);
 
 //Pronunciation
 Route::get('/consistency/{majorVersion}', [EpgfRubricController::class, 'getConsistency']);
@@ -65,7 +87,7 @@ Route::get('/get-evaluated-count', [EpgfScoreCardController::class, 'getEvaluate
 Route::post('/store-class-data', [EpgfScoreCardController::class, 'storeClassData']);
 
 // ClassList routes
-Route::get('/class-list', [ClassListController::class, 'getClassList']);
+Route::get('/class-list', [ClassListController::class, 'getClassListByDepartment']);
 Route::post('/upload-class-list', [ClassListController::class, 'uploadClassList']);
 Route::get('/manage-class-list', [ClassListController::class, 'ManageClassList']);
 Route::put('/update-student/{studentId}', [ClassListController::class, 'updateStudent']);
@@ -82,6 +104,9 @@ Route::get('/employee-department/{userType}/{employeeId}',
            [ImplementingSubjectController::class, 'getEmployeeDepartment']
 )->where('userType', '.*');
 Route::get('/getDepartmentsOptions', [ImplementingSubjectController::class, 'getDepartments']);
+Route::get('/getSchoolYears', [ImplementingSubjectController::class, 'getSchoolYears']);
+Route::get('/getUserDepartment/{employee_id}', [ImplementingSubjectController::class, 'getUserDepartment']);
+
 
 // Route to get the programs for a department
 Route::get('/programs/{department}', [ImplementingSubjectController::class, 'getProgramsForDepartment']);
