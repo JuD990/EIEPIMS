@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import { IoRefresh } from "react-icons/io5";
+import axios from "axios";
 import "./dropdown-esl-reporting.css";
 import apiService from "@services/apiServices";
 
-const ReportingDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSelectedSemester }) => {
+const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSelectedSemester }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [isDepartmentOpen, setIsDepartmentOpen] = useState(false);
@@ -17,38 +18,77 @@ const ReportingDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
     const [schoolYears, setSchoolYears] = useState([]);
     const semesters = ["1st Semester", "2nd Semester"];
 
-    // Predefined departments and school years
-    const predefinedDepartments = ["Department A", "Department B", "Department C"];
-    const predefinedSchoolYears = ["2023/2024", "2024/2025"];
+    const fetchDepartments = async () => {
+        try {
+            const response = await axios.get("http://localhost:8000/api/getDepartmentsOptions");
+            const departmentList = Array.isArray(response.data) ? response.data : [];
+            setDepartments(departmentList);
+
+            const employeeId = localStorage.getItem("employee_id");
+            const userType = localStorage.getItem("userType");
+
+            if (employeeId && userType) {
+                try {
+                    const userDeptResponse = await axios.get(
+                        `http://localhost:8000/api/employee-department/${userType}/${employeeId}`
+                    );
+                    const userDepartment = userDeptResponse.data.department;
+
+                    if (userDeptResponse.data.success && departmentList.includes(userDepartment)) {
+                        setDepartment(userDepartment);
+                        setSelectedDepartment(userDepartment);
+                    } else if (departmentList.length > 0) {
+                        setDepartment(departmentList[0]);
+                        setSelectedDepartment(departmentList[0]);
+                    }
+                } catch (error) {
+                    console.error("Error fetching user department:", error);
+                    if (departmentList.length > 0) {
+                        setDepartment(departmentList[0]);
+                        setSelectedDepartment(departmentList[0]);
+                    }
+                }
+            } else if (departmentList.length > 0) {
+                setDepartment(departmentList[0]);
+                setSelectedDepartment(departmentList[0]);
+            }
+        } catch (error) {
+            console.error("Error fetching departments:", error);
+            setDepartments([]);
+        }
+    };
+
+    const fetchSchoolYears = async (currentMonth) => {
+        try {
+            const response = await axios.get("http://localhost:8000/api/getSchoolYears");
+            const schoolYearList = response.data;
+            setSchoolYears(schoolYearList);
+
+            if (schoolYearList.length > 0) {
+                const selectedYear = schoolYearList[0]; // Use the first fetched school year
+                setSchoolYear(selectedYear);
+                setSelectedSchoolYear(selectedYear);
+
+                const startYear = parseInt(selectedYear.split('/')[0], 10);
+                if (currentMonth >= 8 && currentMonth <= 12) {
+                    setSemester("1st Semester");
+                    setSelectedSemester("1st Semester");
+                } else {
+                    setSemester("2nd Semester");
+                    setSelectedSemester("2nd Semester");
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching school years:", error);
+        }
+    };
 
     useEffect(() => {
-        // Simulate fetching departments and school years
-        setDepartments(predefinedDepartments);
-        setSchoolYears(predefinedSchoolYears);
-
         const currentMonth = new Date().getMonth() + 1;
 
-        // Set initial selections
-        if (predefinedDepartments.length > 0) {
-            setDepartment(predefinedDepartments[0]);
-            setSelectedDepartment(predefinedDepartments[0]);
-        }
-
-        if (predefinedSchoolYears.length > 0) {
-            const selectedYear = predefinedSchoolYears[0];
-            setSchoolYear(selectedYear);
-            setSelectedSchoolYear(selectedYear);
-
-            const startYear = parseInt(selectedYear.split('/')[0], 10);
-            if (currentMonth >= 8 && currentMonth <= 12) {
-                setSemester("1st Semester");
-                setSelectedSemester("1st Semester");
-            } else {
-                setSemester("2nd Semester");
-                setSelectedSemester("2nd Semester");
-            }
-        }
-    }, [setSelectedDepartment, setSelectedSchoolYear, setSelectedSemester]);
+        fetchDepartments(); // Fetch departments first
+        fetchSchoolYears(currentMonth); // Then fetch school years
+    }, []);
 
     const handleRefresh = async () => {
         setLoading(true); // Start the loading state
@@ -59,8 +99,7 @@ const ReportingDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
             const reportResponse = await apiService.post('/eie-reports/store-or-update');
             console.log("EIE Reports Updated: ", reportResponse.data);
 
-            // Optional: Set some state to indicate successful refresh (if needed)
-            // setData(reportResponse.data);
+            window.location.reload();  // Refreshes the page
         } catch (reportError) {
             console.error("Failed to update EIE Reports: ", reportError);
             setError('Failed to update reports');
@@ -161,13 +200,13 @@ const ReportingDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
         onClick={handleRefresh}
         disabled={loading}>
         <IoRefresh className="esl-dashboard-refresh-icon" />
-        {loading ? 'Refreshing...' : 'Refresh'}
+        {loading ? 'Refreshing...' : ''}
         </button>
 
         {error && <p className="error-message">{error}</p>}
+
         </div>
     );
 };
 
-export default ReportingDropdown;
-
+export default DashboardDropdown;

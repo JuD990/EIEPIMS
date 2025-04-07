@@ -310,13 +310,20 @@ class EpgfScoreCardController extends Controller
             'active_students' => 'required|integer',
         ]);
 
+        // Check if epgf_average or completion_rate is 0 and set them to null
+        $epgfAverage = ($validated['average'] == 0) ? null : $validated['average'];
+        $completionRate = ($validated['completionRate'] == 0) ? null : $validated['completionRate'];
+
+        // Check if proficiencyLevel is "beginning" and set it to null
+        $proficiencyLevel = ($validated['proficiencyLevel'] == 'Beginning') ? null : $validated['proficiencyLevel'];
+
         // Find or create ImplementingSubjects
         $subject = ImplementingSubjects::updateOrCreate(
             ['course_code' => $validated['course_code']],
             [
-                'epgf_average' => $validated['average'],
-                'completion_rate' => $validated['completionRate'],
-                'proficiency_level' => $validated['proficiencyLevel'],
+                'epgf_average' => $epgfAverage,
+                'completion_rate' => $completionRate,
+                'proficiency_level' => $proficiencyLevel,
                 'enrolled_students' => $validated['enrolled_students'],
                 'active_students' => $validated['active_students'],
             ]
@@ -326,9 +333,9 @@ class EpgfScoreCardController extends Controller
         $historicalSubject = HistoricalImplementingSubjects::updateOrCreate(
             ['course_code' => $validated['course_code']],
             [
-                'epgf_average' => $validated['average'],
-                'completion_rate' => $validated['completionRate'],
-                'proficiency_level' => $validated['proficiencyLevel'],
+                'epgf_average' => $epgfAverage,
+                'completion_rate' => $completionRate,
+                'proficiency_level' => $proficiencyLevel,
                 'enrolled_students' => $validated['enrolled_students'],
                 'active_students' => $validated['active_students'],
                 'recorded_at' => now(), // Ensure timestamping for tracking

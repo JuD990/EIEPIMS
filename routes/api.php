@@ -15,6 +15,7 @@ use App\Http\Controllers\EieReportController;
 
 Route::post('/eie-reports/store-or-update', [EieReportController::class, 'storeOrUpdatePrograms']);
 Route::get('/dashboard-report', [EieReportController::class, 'getDashboardReport']);
+Route::get('/eie-report', [EieReportController::class, 'getEieReporting']);
 
 Route::get('/performance-summary', [StudentController::class, 'getPerformanceSummary']);
 Route::get('/current-subjects/{student_id}', [StudentController::class, 'getCurrentSubjects']);

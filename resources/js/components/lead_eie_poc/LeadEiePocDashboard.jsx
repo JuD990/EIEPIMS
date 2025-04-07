@@ -23,7 +23,7 @@ const LeadEiePocDashboard = () => {
     <div>
     <LeadSidebar />
     <UserInfo />
-    <br /><br /><br />
+    <br /><br /><br /><br />
     <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#383838' }}>
     Dashboard - {selectedSemester}/{selectedDepartment}-{selectedSchoolYear}
     </h1>

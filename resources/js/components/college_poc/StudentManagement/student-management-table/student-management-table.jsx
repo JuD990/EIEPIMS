@@ -73,7 +73,7 @@ const StudentManagementTable = ({ searchQuery }) => {
     }
 
     // Validate reason for Shift/Drop
-    if ((formData.status === "Dropped" || formData.status === "Shifted") && !formData.reason.trim()) {
+    if ((formData.status === "Dropped") && !formData.reason.trim()) {
       setError("Reason for Shift/Drop is required.");
       return; // Stop form submission
     } else {
@@ -246,7 +246,7 @@ const StudentManagementTable = ({ searchQuery }) => {
             width: '88px',
             height: '35px',
             borderRadius: '12px',
-            backgroundColor: '#6B6D76',
+            backgroundColor: '#DC2626',
             color: '#FFFFFF',
             fontSize: '15px',
             fontFamily: 'Poppins',
@@ -448,7 +448,6 @@ const StudentManagementTable = ({ searchQuery }) => {
       >
       <option value="Active">Active</option>
       <option value="Dropped">Dropped</option>
-      <option value="Shifted">Shifted</option>
       </select>
       </div>
       <div style={{ marginBottom: "20px" }}>

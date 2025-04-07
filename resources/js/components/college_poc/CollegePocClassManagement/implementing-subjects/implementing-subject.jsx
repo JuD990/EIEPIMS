@@ -145,7 +145,7 @@ const ImplementingSubjects = () => {
           <div className="class-performance">
           <div className="eie-averages">
           <div className="pgf-average">
-          <p>{(userClass.epgf_average)}</p>
+          <p>{(userClass.epgf_average || 0.00.toFixed(2))}</p>
           <p>EPGF Average</p>
           </div>
           <div className="completion-rate">

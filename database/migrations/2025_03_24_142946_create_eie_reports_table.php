@@ -16,11 +16,13 @@ return new class extends Migration {
             $table->string('assigned_poc')->nullable();
             $table->string('course_title');
             $table->string('course_code');
-            $table->integer('total_enrolled_students')->nullable();
-            $table->integer('total_active_students')->nullable();
+            $table->integer('enrolled_students')->nullable();
+            $table->integer('active_students')->nullable();
             $table->decimal('completion_rate', 5, 2)->nullable();
+            $table->string('completion_rate_expectation');
             $table->decimal('epgf_average', 4, 2)->nullable();
             $table->string('proficiency_level')->nullable();
+            $table->integer('submitted')->nullable();
             $table->string('champion')->nullable(); // Champion's full name
             $table->integer('champion_id')->nullable();
             $table->string('champion_student_id')->nullable();

@@ -56,11 +56,6 @@
   margin-right: 40px;
 }
 
-.set-default-btn:hover {
-  background-color: #006bbd; /* Darker blue for hover */
-}
-
-
 .student-dropdown-menu,
 .code-dropdown-menu {
   display: flex;
