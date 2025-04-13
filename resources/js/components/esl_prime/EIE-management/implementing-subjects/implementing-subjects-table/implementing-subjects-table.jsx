@@ -3,7 +3,7 @@ import { useTable } from "react-table";
 import axios from "axios";
 import "./implementing-subjects-table.css";
 
-const ImplementingSubjectsTable = ({ searchQuery }) => {
+const ImplementingSubjectsTable = ({ searchQuery, program, yearLevel, semester }) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -17,6 +17,11 @@ const ImplementingSubjectsTable = ({ searchQuery }) => {
     activeStudents: "",
     enrolledStudents: "",
   });
+
+  useEffect(() => {
+    // Fetch data when component mounts or when filters/searchQuery change
+    fetchData();
+  }, [searchQuery, program, yearLevel, semester]);
 
   const employeeId = localStorage.getItem("employee_id");
 
@@ -32,19 +37,27 @@ const ImplementingSubjectsTable = ({ searchQuery }) => {
         headers: { employee_id: employeeId },
       });
 
-      if (searchQuery) {
-        const filteredData = response.data.filter((item) =>
-        item.course_title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      // Filter based on program, yearLevel, semester, and searchQuery
+      const filteredData = response.data.filter((item) => {
+        // Check if item matches the filters (program, yearLevel, semester)
+        const matchesProgram = program ? item.program.toLowerCase() === program.toLowerCase() : true;
+        const matchesYearLevel = yearLevel ? item.year_level.toLowerCase() === yearLevel.toLowerCase() : true;
+        const matchesSemester = semester ? item.semester.toLowerCase() === semester.toLowerCase() : true;
+
+        // Check if item matches the search query
+        const matchesSearchQuery =
+        searchQuery &&
+        (item.course_title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.course_code.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.program.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.semester.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.department.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-        setData(filteredData);
-      } else {
-        setData(response.data);
-      }
+        item.department.toLowerCase().includes(searchQuery.toLowerCase()));
+
+        return matchesProgram && matchesYearLevel && matchesSemester && (!searchQuery || matchesSearchQuery);
+      });
+
+      setData(filteredData);
     } catch (error) {
       console.error("Error fetching data:", error);
       setError("Failed to fetch data. Please try again later.");
@@ -52,10 +65,6 @@ const ImplementingSubjectsTable = ({ searchQuery }) => {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, [searchQuery]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -290,6 +299,5 @@ const ImplementingSubjectsTable = ({ searchQuery }) => {
     </div>
   );
 };
-
 
 export default ImplementingSubjectsTable;

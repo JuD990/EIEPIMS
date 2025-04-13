@@ -16,6 +16,7 @@ const UserManagementTable = ({ searchQuery }) => {
     employee_id: "",
     email: "",
     department: "",
+    full_department: ''
   });
 
   const handleCancel = () => {
@@ -27,6 +28,7 @@ const UserManagementTable = ({ searchQuery }) => {
       employee_id: "",
       email: "",
       department: "",
+      full_department: ''
     });
   };
 
@@ -54,7 +56,7 @@ const UserManagementTable = ({ searchQuery }) => {
       );
       if (!confirmReset) return;
 
-      await axios.put(`/api/head-pocs/${employeeId}/reset-password`);
+      await axios.put(`/api/head-poc/${employeeId}/reset-password`);
       alert("Password reset successfully!");
     } catch (error) {
       console.error("Error resetting password:", error);
@@ -71,6 +73,7 @@ const UserManagementTable = ({ searchQuery }) => {
       employee_id: collegePOC.employee_id,
       email: collegePOC.email,
       department: collegePOC.department,
+      full_department: collegePOC.full_department,
     });
     setShowModal(true);
   };
@@ -131,7 +134,7 @@ const UserManagementTable = ({ searchQuery }) => {
       },
       {
         Header: "Department",
-        accessor: "department",
+        accessor: (row) => `${row.department}${row.full_department ? ` - ${row.full_department}` : ""}`,
       },
       {
         Header: "Email",
@@ -209,7 +212,7 @@ const UserManagementTable = ({ searchQuery }) => {
       <div className="form-container" onClick={(e) => e.stopPropagation()}>
       <h2>Update Credentials</h2>
       <form onSubmit={handleFormSubmit}>
-      {["firstname", "middlename", "lastname", "employee_id", "email", "department"].map(
+      {["firstname", "middlename", "lastname", "employee_id", "email", "department", "full_department"].map(
         (field) => (
           <div key={field} style={{ marginBottom: "5px", display: "flex", flexDirection: "column" }}>
           <label style={{ fontWeight: "bold", marginBottom: "5px", textAlign: "left" }}>

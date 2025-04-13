@@ -53,7 +53,7 @@ const EvaluationScores = () => {
         value={selectedCourse}
         onChange={handleSelectChange}
         >
-        <option value="Select a Course">Select a Course</option>
+        <option value="Select a Course">Select Subject</option>
         {courses.map((course, index) => (
             <option key={index} value={course}>
             {course}

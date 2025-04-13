@@ -15,7 +15,7 @@ const UserManagementDropdown = ({ selectedUserType, setSelectedUserType, searchQ
   // Fetch departments from API
   useEffect(() => {
     axios
-    .get("http://127.0.0.1:8000/api/getDepartmentsOptions")
+    .get("http://127.0.0.1:8000/api/getDepartmentsOptionsForPOCs")
     .then((response) => {
       setDepartments(response.data);
       setSelectedDepartment(response.data[0] || "");

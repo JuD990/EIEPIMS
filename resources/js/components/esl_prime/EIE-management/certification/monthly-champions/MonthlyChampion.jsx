@@ -5,27 +5,26 @@ import { pdf } from "@react-pdf/renderer";
 import Certificate from "./MonthlyCertificate"; // Import the Certificate component
 import "./MonthlyChampion.css";
 
-const MonthlyChampion = ({ searchQuery }) => {
+const MonthlyChampion = () => {
     const [data, setData] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get("/api/class-lists");
-                console.log("📜 Raw API Data:", response.data);
 
                 // Sorting the data from highest to lowest epgf_average
                 const sortedData = response.data.sort((a, b) => b.epgf_average - a.epgf_average);
                 setData(sortedData);
             } catch (error) {
-                console.error("❌ Error fetching data:", error);
+                console.error("Error fetching data:", error);
             }
         };
 
         fetchData();
     }, []);
 
-    // ✅ Filter data based on searchQuery
     const filteredData = data.filter((item) => {
         const fullName = `${item.firstname} ${item.lastname}`.toLowerCase();
         const yearLevel = item.year_level.toString().toLowerCase();
@@ -41,38 +40,37 @@ const MonthlyChampion = ({ searchQuery }) => {
     });
 
     const handleViewCertificate = async (rowData) => {
-        console.log("🖥️ Selected Row Data:", rowData);
+        //console.log("🖥️ Selected Row Data:", rowData);
 
         if (!rowData.class_lists_id) {
-            console.error("❌ ERROR: class_lists_id is missing! Check API response.");
+            console.error("ERROR: class_lists_id is missing! Check API response.");
             return;
         }
 
         try {
             const response = await axios.get(`http://127.0.0.1:8000/api/certificate/${rowData.class_lists_id}`);
-            console.log("📜 API Response:", response.data);
 
             if (!response.data || Object.keys(response.data).length === 0) {
-                console.error("❌ ERROR: Empty API response!");
+                console.error("ERROR: Empty API response!");
                 return;
             }
 
-            const { name, year_level, department, dean_name, month, current_year, next_year, esl_champion } = response.data;
-
-            console.log("✅ Extracted Data:", { name, year_level, department, dean_name, month, current_year, next_year, esl_champion });
+            const studentId = response.data.student_id || rowData.student_id || "N/A";
 
             const certificateData = {
-                name: name ?? "N/A",
-                yearLevel: year_level ?? "N/A",
-                department: department ?? "N/A",
-                deanName: dean_name ?? "N/A",
-                eslChampion: esl_champion ?? "N/A",
-                month: month ?? "N/A",
-                currentYear: current_year ?? "N/A",
-                nextYear: next_year ?? "N/A",
+                studentId: studentId,
+                name: response.data.name ?? "N/A",
+                yearLevel: response.data.year_level ?? "N/A",
+                department: response.data.department ?? "N/A",
+                fullDepartment: response.data.full_department ?? "N/A",
+                deanName: response.data.dean_name ?? "N/A",
+                eslChampion: response.data.esl_champion ?? "N/A",
+                month: response.data.month ?? "N/A",
+                currentYear: response.data.current_year ?? "N/A",
+                nextYear: response.data.next_year ?? "N/A",
             };
 
-            console.log("🖼️ Final Certificate Data:", certificateData);
+            //console.log("Certificate Data to be passed:", certificateData);
 
             // Generate PDF
             const doc = <Certificate {...certificateData} />;
@@ -114,6 +112,18 @@ const MonthlyChampion = ({ searchQuery }) => {
     });
 
     return (
+
+        <div>
+        <div className="monthly-champion-search-container">
+        <input
+        type="text"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder="Search"
+        className="monthly-champion-search-input"
+        />
+        </div>
+
         <div className="monthly-champion-container">
         <div className="monthly-champion-table-container">
         <table {...getTableProps()} className="monthly-champion-table">
@@ -143,6 +153,9 @@ const MonthlyChampion = ({ searchQuery }) => {
         })}
         </tbody>
         </table>
+        </div>
+
+
         </div>
         </div>
     );

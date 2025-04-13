@@ -84,7 +84,7 @@ const UserManagementTable = ({searchQuery}) => {
       program: student.program,
       year_level: student.year_level,
     });
-    setShowModal(true); // Show the modal when clicking "Update"
+    setShowModal(true);
   };
 
   const handleInputChange = (e) => {

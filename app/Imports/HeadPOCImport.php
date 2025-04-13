@@ -12,15 +12,22 @@ class HeadPOCImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
 {
     public function collection(Collection $rows)
     {
+        $successfulImports = 0;
         foreach ($rows as $row) {
             // Ensure required columns exist
-            if (!isset($row['employee_id'], $row['firstname'], $row['middlename'], $row['lastname'], $row['email'], $row['department'])) {
+            if (!isset($row['employee_id'], $row['firstname'], $row['middlename'], $row['lastname'], $row['email'], $row['department'], $row['full_department'])) {
                 \Log::error('CSV missing required columns: ' . json_encode($row));
                 continue; // Skip invalid rows
             }
 
+            // Additional validation (email format check, etc.)
+            if (!filter_var($row['email'], FILTER_VALIDATE_EMAIL)) {
+                \Log::error('Invalid email format for employee_id ' . $row['employee_id']);
+                continue; // Skip invalid rows
+            }
+
             // Insert or update the record
-            EIEHeads::updateOrCreate(
+            $eieHead = EIEHeads::updateOrCreate(
                 ['employee_id' => $row['employee_id']], // Search condition
                 [
                     'firstname' => $row['firstname'],
@@ -28,8 +35,15 @@ class HeadPOCImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                     'lastname' => $row['lastname'],
                     'email' => $row['email'],
                     'department' => $row['department'],
+                    'full_department' => $row['full_department'],
                 ]
             );
+
+            // Track successful imports (optional)
+            $successfulImports++;
         }
+
+        // Log successful imports count
+        \Log::info("Successfully imported $successfulImports records.");
     }
 }

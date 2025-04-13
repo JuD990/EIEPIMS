@@ -26,16 +26,4 @@ class CollegePOCs extends Authenticatable
         'password',
         'role',
     ];
-
-    // Hash password automatically before saving
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = Hash::make($value);
-    }
-
-    // Define the relationship with ImplementingSubject
-    public function implementingSubjects()
-    {
-        return $this->hasMany(ImplementingSubjects::class, 'employee_id');
-    }
 }

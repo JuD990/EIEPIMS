@@ -9,6 +9,7 @@
     align-items: flex-start; /* Align text at the top */
     justify-content: flex-start; /* Align text at the left */
     padding: 20px;
+    font-family: "Poppins";
 }
 
 /* Individual Card Sizes */
@@ -23,9 +24,10 @@
 .card-title-3 {
     font-size: 22px;
     font-weight: bold;
-    font-family: "Poppins";
+    font-family: 'Poppins', sans-serif;
     position: absolute;
     top: 10px;
     left: 15px;
-    margin: 0;
+    margin: 5px;
+    margin-bottom: 15px;
 }

@@ -16,6 +16,7 @@ const UserManagementButtons = () => {
     lastname: '',
     email: '',
     department: '',
+    full_department: '',
   });
 
   const handleFileUpload = async (e) => {
@@ -59,6 +60,7 @@ const UserManagementButtons = () => {
       lastname: '',
       email: '',
       department: '',
+      full_department: '',
     });
   };
 
@@ -123,7 +125,7 @@ const UserManagementButtons = () => {
       <div className="form-container">
       <h2>Add Account</h2>
       <form onSubmit={handleSubmit}>
-      {["firstName", "middleName", "lastName", "employeeId", "email", "department"].map((field) => (
+      {["firstName", "middleName", "lastName", "employeeId", "email", "department", "full_department"].map((field) => (
         <div key={field}>
         <label>{field.replace(/([A-Z])/g, " $1").trim().toUpperCase()}</label>
         <input

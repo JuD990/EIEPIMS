@@ -20,15 +20,12 @@ class MasterClassListImport implements ToModel, WithHeadingRow
             'firstname' => $row['firstname'],
             'middlename' => $row['middlename'],
             'lastname' => $row['lastname'],
-            'status' => $row['status'],
             'email' => $row['email'],
             'department' => $row['department'],
             'program' => $row['program'],
             'year_level' => $row['year_level'],
             'gender' => $row['gender'],
-            'reason_for_shift_or_drop' => $row['reason_for_shift_or_drop'],
             'classification' => $row['classification'],
-            'candidate_for_graduating' => $row['candidate_for_graduating'],
         ]);
     }
 }

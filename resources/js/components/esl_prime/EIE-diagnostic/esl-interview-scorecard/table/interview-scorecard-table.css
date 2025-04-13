@@ -47,6 +47,7 @@
 .esl-interview-scorecard-form-interviewer,
 .esl-interview-scorecard-form-venue,
 .esl-interview-scorecard-form-department,
+.esl-interview-scorecard-form-year-level,
 .esl-interview-scorecard-form-date,
 .esl-interview-scorecard-form-time {
     display: flex;
@@ -76,6 +77,9 @@
 .esl-interview-scorecard-form-time {
     gap: 78px;
 }
+.esl-interview-scorecard-form-year-level{
+    gap: 35px;
+}
 
 /* Labels */
 .esl-interview-scorecard-form-name label,
@@ -83,6 +87,7 @@
 .esl-interview-scorecard-form-venue label,
 .esl-interview-scorecard-form-department label,
 .esl-interview-scorecard-form-date label,
+.esl-interview-scorecard-form-year-level label,
 .esl-interview-scorecard-form-time label {
     font-weight: bold;
     margin-top: 15px;
@@ -91,6 +96,7 @@
 
 /* Input fields */
 .esl-interview-scorecard-input,
+.esl-interview-scorecard-select-year-level,
 .esl-interview-scorecard-select-department {
     padding: 12px;
     border: 1px solid #000000;
@@ -112,7 +118,7 @@
 
 /* Apply max height and scrolling to dropdown */
 .esl-interview-scorecard-select-name {
-    width: 140%;
+    width: 275px;
     font-size: 18px;
     background: white;
     cursor: pointer;
@@ -201,7 +207,7 @@
 /* Average Rating Box */
 .esl-average-rating-box {
     width: 250px;
-    height: 100px;
+    height: 70px;
     border: 1px solid #7B7878;
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);

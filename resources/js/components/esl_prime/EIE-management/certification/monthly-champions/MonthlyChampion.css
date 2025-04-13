@@ -44,3 +44,16 @@
     cursor: pointer;
     border-radius: 4px;
 }
+.monthly-champion-search-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 20px;
+}
+
+.monthly-champion-search-input {
+    width: 476px;
+    height: 60px;
+    border-radius: 8px;
+    border: 1px solid #333333;
+    font-size: 16px;
+}

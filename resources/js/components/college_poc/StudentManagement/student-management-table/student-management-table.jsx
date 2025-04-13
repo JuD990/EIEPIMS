@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useTable } from "react-table";
 
-const StudentManagementTable = ({ searchQuery }) => {
+const StudentManagementTable = ({
+  searchQuery,
+  selectedCode,
+}) => {
   const [students, setStudents] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState("");
@@ -146,17 +149,37 @@ const StudentManagementTable = ({ searchQuery }) => {
   };
 
   // Filter students based on search query
-  const filteredStudents = students.filter((student) =>
-  (student.firstname?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
-  (student.lastname?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
-  (student.student_id?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
-  (student.email?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
-  (student.department?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
-  (student.course_code?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
-  (student.status?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
-  (student.program?.toLowerCase() || "").includes(searchQuery.toLowerCase())
-  );
+  const filteredStudents = students.filter(student => {
+    if (!student.firstname || !student.lastname) return false; // Ensure names exist
 
+    // Construct full name including middle name (if available)
+    const fullName = `${student.firstname} ${student.middlename ? student.middlename + " " : ""}${student.lastname}`
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim();
+
+    // Reverse order (Lastname Firstname Middlename) for better search coverage
+    const reversedFullName = `${student.lastname} ${student.firstname} ${student.middlename || ""}`
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim();
+
+    // Search query formatted
+    const query = (searchQuery || "").toLowerCase().trim();
+
+    // Basic search check
+    const matchesSearch =
+    fullName.includes(query) ||
+    reversedFullName.includes(query) ||
+    (student.course_code?.toLowerCase() || "").includes(query) ||
+    (student.status?.toLowerCase() || "").includes(query) ||
+    (student.year_level?.toString() || "").includes(query);
+
+    // Course code and title filters
+    const matchesCode = selectedCode ? student.course_code === selectedCode : true;
+
+    return matchesSearch && matchesCode;
+  });
 
   const columns = React.useMemo(
     () => [
@@ -273,7 +296,7 @@ const StudentManagementTable = ({ searchQuery }) => {
     <div
     style={{
       overflowY: 'auto',
-      height: '500px',
+      height: '650px',
       marginLeft: '350px',
       marginRight: '35px',
       border: '1px solid #ddd',

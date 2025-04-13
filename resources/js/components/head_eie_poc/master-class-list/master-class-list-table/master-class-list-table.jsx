@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useTable } from "react-table";
 
-const MasterClassListTable = ({searchQuery}) => {
-  const [data, setData] = useState([]); // State to hold the table data
+const MasterClassListTable = ({
+  searchQuery,
+  selectedProgram,
+  selectedYearLevel,
+}) => {
+  const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     middleName: '',
     lastName: '',
+    department: '',
+    program: '',
     classification: '',
     yearLevel: '',
     status: '',
@@ -17,10 +23,12 @@ const MasterClassListTable = ({searchQuery}) => {
 
   // Fetch data from the backend
   useEffect(() => {
-    fetch('/api/master-class-list')
-      .then((response) => response.json())
-      .then((data) => setData(data))
-      .catch((error) => console.error('Error fetching data:', error));
+    const employeeId = localStorage.getItem("employee_id");
+
+    fetch(`/api/master-class-list?employee_id=${employeeId}`)
+    .then((response) => response.json())
+    .then((data) => setData(data))
+    .catch((error) => console.error('Error fetching data:', error));
   }, []);
 
   const handleInputChange = (e) => {
@@ -38,12 +46,14 @@ const MasterClassListTable = ({searchQuery}) => {
   };
 
   const handleUpdateClick = (row) => {
-    // Populate form data with selected row values
-    const rowData = row.original; // Access the original row data
+    const rowData = row.original;
     setFormData({
+      master_class_list_id: rowData.master_class_list_id, // ← include ID
       firstName: rowData.firstname || '',
       middleName: rowData.middlename || '',
       lastName: rowData.lastname || '',
+      department: rowData.department || '',
+      program: rowData.program || '',
       classification: rowData.classification || '',
       yearLevel: rowData.year_level || '',
       status: rowData.status || '',
@@ -53,40 +63,70 @@ const MasterClassListTable = ({searchQuery}) => {
     setShowModal(true);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    fetch(`/api/update-student/${formData.studentId}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error("Failed to update data");
-        return response.json();
-      })
-      .then((updatedData) => {
-        // Update the table data with the updated row
+
+    try {
+      const response = await fetch(`/api/master-class-list/${formData.master_class_list_id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstname: formData.firstName,
+          middlename: formData.middleName,
+          lastname: formData.lastName,
+          department: formData.department,
+          program: formData.program,
+          classification: formData.classification,
+          year_level: formData.yearLevel,
+          status: formData.status,
+          gender: formData.gender,
+          reason_for_shift_or_drop: formData.reason,
+        }),
+      });
+
+      if (response.ok) {
+        const updated = await response.json();
+
+        // Update local state for immediate UI feedback
         setData((prevData) =>
-          prevData.map((item) =>
-            item.master_class_list_id === updatedData.master_class_list_id
-              ? updatedData
-              : item
-          )
+        prevData.map((item) =>
+        item.master_class_list_id === updated.master_class_list_id ? updated : item
+        )
         );
         setShowModal(false);
-      })
-      .catch((error) => console.error("Error updating data:", error));
+      } else {
+        console.error('Failed to update');
+      }
+    } catch (err) {
+      console.error('Error updating data:', err);
+    }
   };
 
   const filteredData = data.filter((row) => {
     const fullName = `${row.firstname} ${row.middlename ? row.middlename + '.' : ''} ${row.lastname}`.toLowerCase();
+
+    const programMatch = selectedProgram
+    ? row.program?.toLowerCase() === selectedProgram.toLowerCase()
+    : true;
+
+    const yearLevelMatch = selectedYearLevel
+    ? row.year_level?.toString().toLowerCase() === selectedYearLevel.toLowerCase()
+    : true;
+
     return (
-      fullName.includes(searchQuery.toLowerCase()) ||
-      (row.status && row.status.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (row.reason_for_shift_or_drop && row.reason_for_shift_or_drop.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (row.classification && row.classification.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (row.email && row.email.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (row.year_level && row.year_level.toString().toLowerCase().includes(searchQuery.toLowerCase()))
+      (
+        fullName.includes(searchQuery.toLowerCase()) ||
+        row.status?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        row.department?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        row.program?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        row.reason_for_shift_or_drop?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        row.classification?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        row.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        row.year_level?.toString().toLowerCase().includes(searchQuery.toLowerCase())
+      ) &&
+      programMatch && yearLevelMatch
     );
   });
 
@@ -99,9 +139,8 @@ const MasterClassListTable = ({searchQuery}) => {
       {
         Header: "Full Name",
         accessor: (row) =>
-          `${row.firstname} ${row.middlename ? row.middlename + '.' : ''} ${
-            row.lastname
-          }`,
+          `${row.firstname} ${row.middlename} ${
+            row.lastname}`,
       },
       {
         Header: "Status",
@@ -112,8 +151,6 @@ const MasterClassListTable = ({searchQuery}) => {
 
           if (status === "Dropped") {
             statusStyle = { color: "#EA0000", fontWeight: "bold" };
-          } else if (status === "Shifted") {
-            statusStyle = { color: "#18A0FB", fontWeight: "bold" };
           }
 
           return <div style={statusStyle}>{status}</div>;
@@ -134,6 +171,14 @@ const MasterClassListTable = ({searchQuery}) => {
           <div style={{ whiteSpace: "nowrap", width: "100%" }}>Year Level</div>
         ),
         accessor: "year_level",
+      },
+      {
+        Header: "Department",
+        accessor: "department",
+      },
+      {
+        Header: "Program",
+        accessor: "program",
       },
       {
         Header: "Classification",
@@ -165,7 +210,7 @@ const MasterClassListTable = ({searchQuery}) => {
               color: "#FFFFFF",
               fontSize: "15px",
               fontFamily: "Poppins",
-              fontWeight: "600", // SemiBold
+              fontWeight: "600",
               border: "none",
               cursor: "pointer",
             }}
@@ -190,7 +235,7 @@ const MasterClassListTable = ({searchQuery}) => {
       <div
         style={{
           overflowY: "auto",
-          height: "500px",
+          height: "550px",
           marginLeft: "350px",
           marginRight: "35px",
           border: "1px solid #ddd",
@@ -364,6 +409,44 @@ const MasterClassListTable = ({searchQuery}) => {
               />
             </div>
             <div style={{ marginBottom: "20px" }}>
+            <label
+            style={{ display: "block", fontSize: "20px", color: "#383838" }}
+            >
+            Department:
+            </label>
+            <input
+            type="text"
+            name="department"
+            value={formData.department}
+            onChange={handleInputChange}
+            style={{
+              width: "100%",
+              padding: "10px",
+              borderRadius: "5px",
+              border: "1px solid #333333",
+            }}
+            />
+            </div>
+            <div style={{ marginBottom: "20px" }}>
+            <label
+            style={{ display: "block", fontSize: "20px", color: "#383838" }}
+            >
+            Program:
+            </label>
+            <input
+            type="text"
+            name="program"
+            value={formData.program}
+            onChange={handleInputChange}
+            style={{
+              width: "100%",
+              padding: "10px",
+              borderRadius: "5px",
+              border: "1px solid #333333",
+            }}
+            />
+            </div>
+            <div style={{ marginBottom: "20px" }}>
               <label
                 style={{ display: "block", fontSize: "20px", color: "#383838" }}
               >
@@ -426,7 +509,6 @@ const MasterClassListTable = ({searchQuery}) => {
               >
                 <option value="Enrolled">Enrolled</option>
                 <option value="Dropped">Dropped</option>
-                <option value="Shifted">Shifted</option>
               </select>
             </div>
             <div style={{ marginBottom: "20px" }}>

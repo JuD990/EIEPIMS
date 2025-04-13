@@ -2,7 +2,7 @@
 .eie-reporting-esl-table-container {
     overflow-x: auto;
     overflow-y: auto;
-    height: 600px;
+    height: 650px;
     margin-left: 340px;
     margin-right: 35px;
     border: 1px solid #ddd;
@@ -14,7 +14,7 @@
 
 .eie-reporting-esl-table-header-colored {
     background-color: #F4F7FC;
-    border: 1px solid #ddd;
+    border: 2px solid #ddd;
     z-index: 2; /* Make sure it stays above the plain header */
     height: 40px;
 }

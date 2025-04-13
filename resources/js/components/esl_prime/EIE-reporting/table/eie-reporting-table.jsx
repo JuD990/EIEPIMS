@@ -79,7 +79,7 @@ const TableComponent = ({ department, schoolYear, semester }) => {
         {Object.keys(tableData).map((yearLevel) => (
             <React.Fragment key={yearLevel}>
             <tr className="eie-reporting-esl-table-body-cell">
-            <td colSpan={6}><strong>{yearLevel}</strong></td>
+            <td style={{ textAlign: 'left' }} colSpan={6}><strong>{yearLevel}</strong></td>
             </tr>
             {Object.values(tableData[yearLevel]).map((programData, rowIndex) => (
                 <tr key={rowIndex}>

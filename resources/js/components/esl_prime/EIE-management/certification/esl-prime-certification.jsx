@@ -7,7 +7,6 @@ import "./esl-prime-certification.css";
 
 const EslCertification = () => {
   const [activeTab, setActiveTab] = useState(1); // Default to Monthly Champion tab
-  const [searchQuery, setSearchQuery] = useState(""); // ✅ Define searchQuery state
 
   return (
     <div>
@@ -35,21 +34,9 @@ const EslCertification = () => {
 
     {/* Divider line */}
     <div className="divider-line"></div>
-
-    {/* Search Input - Positioned at the Bottom of Divider */}
-    <div className="search-container">
-    <input
-    type="text"
-    value={searchQuery}
-    onChange={(e) => setSearchQuery(e.target.value)}
-    placeholder="Search"
-    className="search-input"
-    />
-    </div>
-
     {/* Pass searchQuery as a prop */}
-    {activeTab === 1 && <MonthlyChampion searchQuery={searchQuery} />}
-    {activeTab === 2 && <EIEDiagnostics searchQuery={searchQuery} />}
+    {activeTab === 1 && <MonthlyChampion/>}
+    {activeTab === 2 && <EIEDiagnostics/>}
     </div>
   );
 };

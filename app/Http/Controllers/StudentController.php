@@ -10,10 +10,12 @@ use App\Models\EpgfGrammar;
 use App\Models\EpgfFluency;
 use App\Models\ClassLists;
 use App\Models\ImplementingSubjects;
+use App\Models\HistoricalScorecard;
+use Carbon\Carbon;
 
 class StudentController extends Controller
 {
-    public function getPerformanceSummary()
+    public function getPerformanceSummaryRatings()
     {
         // Get active epgf_rubric_id
         $rubric = EpgfRubric::where('status', 'active')->first();
@@ -36,16 +38,12 @@ class StudentController extends Controller
             return response()->json(['error' => 'No ratings found'], 404);
         }
 
-        // Sort ratings from 4.0 to 0.0
-        $sortedRatings = $allRatings->sortDesc()->values();
+        // Get unique ratings and sort them from 4.0 to 0.0
+        $uniqueRatings = $allRatings->unique()->sortDesc()->values();
 
         return response()->json([
-            'ratings' => $sortedRatings, // Send the sorted ratings
-            'min' => $sortedRatings->last(), // Lowest rating
-            'max' => $sortedRatings->first(), // Highest rating
-            'stepSize' => 0.5, // You can calculate step size if necessary
+            'ratings' => $uniqueRatings, // Send the sorted and unique ratings only
         ]);
-
     }
 
     public function getCurrentSubjects($student_id)
@@ -76,4 +74,107 @@ class StudentController extends Controller
         }
     }
 
+    public function getYearLevelOptions()
+    {
+        // Get unique Year Level values
+        $yearLevels = HistoricalScorecard::pluck('year_level')->unique();
+        return response()->json($yearLevels);
+    }
+
+    public function getMonthlyPerformanceSummary(Request $request)
+    {
+        // Log the incoming request parameters for debugging
+        Log::info('Incoming Request Parameters:', $request->all());
+
+        $studentId = $request->query('student_id');
+        $yearLevel = $request->query('year_level');
+        $semester = $request->query('semester');
+
+        // Determine the months based on the semester
+        if ($semester === '1st Semester') {
+            $months = ['August', 'September', 'October', 'November', 'December'];
+            $semesterStartMonth = 8;  // August
+            $semesterEndMonth = 12;   // December
+        } elseif ($semester === '2nd Semester') {
+            $months = ['January', 'February', 'March', 'April', 'May'];
+            $semesterStartMonth = 1;  // January
+            $semesterEndMonth = 5;    // May
+        } else {
+            return response()->json(['error' => 'Invalid semester'], 400);
+        }
+
+        // Initialize array to store monthly performance data
+        $performanceData = [];
+
+        // Loop through each month to get the data
+        foreach ($months as $index => $month) {
+            $monthNumber = $semesterStartMonth + $index;  // Get the actual month number for query
+
+            // Fetch data for the current month
+            $data = HistoricalScorecard::where('year_level', $yearLevel)
+            ->where('student_id', $studentId)
+            ->whereMonth('created_at', '=', $monthNumber)
+            ->get();
+
+            // If no data is found, set the month to null, else calculate the average epgf
+            $epgfAverage = $data->isEmpty() ? null : $data->avg('epgf_average');
+
+            // Add the data for this month
+            $performanceData[$month] = [
+                'epgf_average' => $epgfAverage
+            ];
+        }
+
+        // Prepare the final response data
+        $response = [
+            'student_id' => $studentId,
+            'semester' => $semester,
+            'year_level' => $yearLevel,
+            'months' => $performanceData
+        ];
+
+        return response()->json($response);
+    }
+
+    public function getPerformanceSummary(Request $request)
+    {
+        // Log the incoming request parameters for debugging
+        Log::info('Incoming Request Parameters:', $request->all());
+
+        $studentId = $request->query('student_id');  // Fetch the student_id from the request
+
+        if (!$studentId) {
+            return response()->json(['error' => 'Student ID is required'], 400);
+        }
+
+        // Define the year levels
+        $yearLevels = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
+
+        // Initialize the performance summary array
+        $performanceSummary = [];
+
+        // Loop through each year level and calculate the average epgf_average
+        foreach ($yearLevels as $yearLevel) {
+            // Fetch all data for the selected student and year level
+            $data = HistoricalScorecard::where('year_level', $yearLevel)
+            ->where('student_id', $studentId)
+            ->get();
+
+            // If no data is found, set the epgf_average to null
+            $epgfAverage = $data->isEmpty() ? null : $data->avg('epgf_average');
+
+            // Add the data for this year level
+            $performanceSummary[$yearLevel] = [
+                'epgf_average' => $epgfAverage
+            ];
+        }
+
+        // Prepare the response data
+        $response = [
+            'student_id' => $studentId,
+            'performance_summary' => $performanceSummary
+        ];
+
+        return response()->json($response);
+    }
 }

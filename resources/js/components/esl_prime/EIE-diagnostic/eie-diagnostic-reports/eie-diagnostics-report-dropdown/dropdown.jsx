@@ -23,7 +23,7 @@ const DiagnosticsDropdown = ({
     useEffect(() => {
         const fetchDepartments = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/api/getDepartmentsOptions");
+                const response = await axios.get("http://localhost:8000/api/master-class-list-department");
                 const departmentList = Array.isArray(response.data) ? response.data : [];
                 setDepartments(departmentList);
 
@@ -37,7 +37,7 @@ const DiagnosticsDropdown = ({
 
         const fetchSchoolYears = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/api/getSchoolYears");
+                const response = await axios.get("http://localhost:8000/api/master-class-list-school-year");
                 const schoolYearList = response.data;
                 setSchoolYearList(schoolYearList);
 

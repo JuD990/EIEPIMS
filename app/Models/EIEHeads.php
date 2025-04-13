@@ -5,13 +5,10 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Hash;
 
 class EIEHeads extends Authenticatable
 {
-    use HasApiTokens;
-    use HasFactory;
+    use HasApiTokens, HasFactory;
 
     protected $table = 'eie_heads';
     protected $primaryKey = 'id';
@@ -23,12 +20,8 @@ class EIEHeads extends Authenticatable
         'lastname',
         'email',
         'department',
+        'full_department',
         'password',
         'role',
     ];
-
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = Hash::make($value);
-    }
 }

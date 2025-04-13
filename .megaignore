@@ -1,4 +1,4 @@
-﻿-:Thumbs.db
+-:Thumbs.db
 -:desktop.ini
 -:~*
 -:.*
@@ -6,3 +6,5 @@
 -:*.crdownload
 -:*.sb-????????-??????
 -:*.tmp
+-pG:node_modules/esbuild/bin/esbuild
+-pG:node_modules/@esbuild/linux-x64/bin/esbuild

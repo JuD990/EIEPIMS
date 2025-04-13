@@ -10,6 +10,9 @@
     width: 100%;
     overflow-x: auto;
     margin-left: 340px;
+    height: 550px;
+    border: 2px solid #ddd;
+    border-top: none;
 }
 
 .monthly-champion-table {
@@ -19,6 +22,7 @@
     border: 2px solid #ddd;
     font-family: 'Poppins', sans-serif; /* Unified font */
     border-radius: 8px; /* Optional: for rounded corners */
+    border-left: none;
 }
 
 .monthly-champion-th {
@@ -26,7 +30,7 @@
     padding: 12px;
     text-align: center;
     border-bottom: 2px solid #ddd;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold; /* Adding bold text to headers */
 }
 
@@ -35,6 +39,7 @@
     border-bottom: 1px solid #ddd;
     border: 2px solid #ddd;
     text-align: center; /* Aligning data to center */
+    border-left: none;
 }
 
 .monthly-champion-action-btn {

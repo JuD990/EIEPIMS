@@ -21,9 +21,4 @@ class ClassLists extends Model
         'grammar', 'fluency', 'epgf_average',
         'proficiency_level', 'course_code'
     ];
-
-    public function implementingSubjectClassLists()
-    {
-        return $this->hasMany(ImplementingSubjectClassList::class);
-    }
 }

@@ -62,7 +62,6 @@ class EpgfScoreCardController extends Controller
 
     public function storeStudentDataReports(Request $request)
     {
-        // Validate incoming request data
         $validatedData = $request->validate([
             'course_code' => 'required|string',
             'epgf_rubric_id' => 'required|integer',
@@ -107,99 +106,31 @@ class EpgfScoreCardController extends Controller
         ]);
 
         try {
-            // Step 1: Store the scorecard data in the EieScorecardClassReport
-            $scorecard = EieScorecardClassReport::create([
-                'course_code' => $validatedData['course_code'],
-                'epgf_rubric_id' => $validatedData['epgf_rubric_id'],
+            $identifier = [
                 'student_id' => $validatedData['student_id'],
-                'department' => $validatedData['department'],
-                'task_title' => $validatedData['task_title'],
-                'type' => $validatedData['type'],
-                'comment' => $validatedData['comment'] ?? 'No Comment',
-                'epgf_average' => $validatedData['epgf_average'],
-                'proficiency_level' => $validatedData['proficiency_level'],
-                'program' => $validatedData['program'],
-                'active_students' => $validatedData['active_students'],
-                'course_title' => $validatedData['course_title'],
-                'year_level' => $validatedData['year_level'],
-                'pronunciation_average' => $validatedData['pronunciation_average'] ?? null,
-                'grammar_average' => $validatedData['grammar_average'] ?? null,
-                'fluency_average' => $validatedData['fluency_average'] ?? null,
+                'course_code' => $validatedData['course_code']
+            ];
 
-                // Pronunciation
-                'consistency_descriptor' => $validatedData['consistency_descriptor'] ?? null,
-                'consistency_rating' => $validatedData['consistency_rating'] ?? null,
-                'clarity_descriptor' => $validatedData['clarity_descriptor'] ?? null,
-                'clarity_rating' => $validatedData['clarity_rating'] ?? null,
-                'articulation_descriptor' => $validatedData['articulation_descriptor'] ?? null,
-                'articulation_rating' => $validatedData['articulation_rating'] ?? null,
-                'intonation_and_stress_descriptor' => $validatedData['intonation_and_stress_descriptor'] ?? null,
-                'intonation_and_stress_rating' => $validatedData['intonation_and_stress_rating'] ?? null,
+            // Scorecard: create or update
+            $scorecard = EieScorecardClassReport::updateOrCreate(
+                $identifier,
+                array_merge($validatedData, [
+                    'comment' => $validatedData['comment'] ?? 'No Comment',
+                ])
+            );
 
-                // Grammar
-                'accuracy_descriptor' => $validatedData['accuracy_descriptor'] ?? null,
-                'accuracy_rating' => $validatedData['accuracy_rating'] ?? null,
-                'clarity_of_thought_descriptor' => $validatedData['clarity_of_thought_descriptor'] ?? null,
-                'clarity_of_thought_rating' => $validatedData['clarity_of_thought_rating'] ?? null,
-                'syntax_descriptor' => $validatedData['syntax_descriptor'] ?? null,
-                'syntax_rating' => $validatedData['syntax_rating'] ?? null,
+            // Historical Scorecard: create or update
+            $historicalScorecard = HistoricalScorecard::updateOrCreate(
+                $identifier,
+                array_merge($validatedData, [
+                    'comment' => $validatedData['comment'] ?? 'No Comment',
+                ])
+            );
 
-                // Fluency
-                'quality_of_response_descriptor' => $validatedData['quality_of_response_descriptor'] ?? null,
-                'quality_of_response_rating' => $validatedData['quality_of_response_rating'] ?? null,
-                'detail_of_response_descriptor' => $validatedData['detail_of_response_descriptor'] ?? null,
-                'detail_of_response_rating' => $validatedData['detail_of_response_rating'] ?? null,
-            ]);
-
-            // Step 2: Store the scorecard data in the HistoricalScorecard
-            $historicalScorecard = HistoricalScorecard::create([
-                'course_code' => $validatedData['course_code'],
-                'epgf_rubric_id' => $validatedData['epgf_rubric_id'],
-                'student_id' => $validatedData['student_id'],
-                'department' => $validatedData['department'],
-                'task_title' => $validatedData['task_title'],
-                'type' => $validatedData['type'],
-                'comment' => $validatedData['comment'] ?? 'No Comment',
-                'epgf_average' => $validatedData['epgf_average'],
-                'proficiency_level' => $validatedData['proficiency_level'],
-                'program' => $validatedData['program'],
-                'active_students' => $validatedData['active_students'],
-                'course_title' => $validatedData['course_title'],
-                'year_level' => $validatedData['year_level'],
-                'pronunciation_average' => $validatedData['pronunciation_average'] ?? null,
-                'grammar_average' => $validatedData['grammar_average'] ?? null,
-                'fluency_average' => $validatedData['fluency_average'] ?? null,
-
-                // Pronunciation
-                'consistency_descriptor' => $validatedData['consistency_descriptor'] ?? null,
-                'consistency_rating' => $validatedData['consistency_rating'] ?? null,
-                'clarity_descriptor' => $validatedData['clarity_descriptor'] ?? null,
-                'clarity_rating' => $validatedData['clarity_rating'] ?? null,
-                'articulation_descriptor' => $validatedData['articulation_descriptor'] ?? null,
-                'articulation_rating' => $validatedData['articulation_rating'] ?? null,
-                'intonation_and_stress_descriptor' => $validatedData['intonation_and_stress_descriptor'] ?? null,
-                'intonation_and_stress_rating' => $validatedData['intonation_and_stress_rating'] ?? null,
-
-                // Grammar
-                'accuracy_descriptor' => $validatedData['accuracy_descriptor'] ?? null,
-                'accuracy_rating' => $validatedData['accuracy_rating'] ?? null,
-                'clarity_of_thought_descriptor' => $validatedData['clarity_of_thought_descriptor'] ?? null,
-                'clarity_of_thought_rating' => $validatedData['clarity_of_thought_rating'] ?? null,
-                'syntax_descriptor' => $validatedData['syntax_descriptor'] ?? null,
-                'syntax_rating' => $validatedData['syntax_rating'] ?? null,
-
-                // Fluency
-                'quality_of_response_descriptor' => $validatedData['quality_of_response_descriptor'] ?? null,
-                'quality_of_response_rating' => $validatedData['quality_of_response_rating'] ?? null,
-                'detail_of_response_descriptor' => $validatedData['detail_of_response_descriptor'] ?? null,
-                'detail_of_response_rating' => $validatedData['detail_of_response_rating'] ?? null,
-            ]);
-
-            // Step 2: Store the summary data in the ClassLists table
+            // ClassLists: update or create
             $classList = ClassLists::where('student_id', $validatedData['student_id'])
             ->where('course_code', $validatedData['course_code'])
             ->first();
-
 
             if ($classList) {
                 $classList->update([
@@ -210,8 +141,9 @@ class EpgfScoreCardController extends Controller
                     'proficiency_level' => $validatedData['proficiency_level'],
                 ]);
             } else {
-                // If the ClassLists entry does not exist, create a new one
                 $classList = ClassLists::create([
+                    'student_id' => $validatedData['student_id'],
+                    'course_code' => $validatedData['course_code'],
                     'pronunciation' => $validatedData['pronunciation_average'] ?? null,
                     'grammar' => $validatedData['grammar_average'] ?? null,
                     'fluency' => $validatedData['fluency_average'] ?? null,
@@ -221,21 +153,19 @@ class EpgfScoreCardController extends Controller
             }
 
             return response()->json([
-                'message' => 'Scorecard and Class data successfully stored',
+                'message' => 'Scorecard and Class data successfully stored or updated',
                 'historicalScorecard' => $historicalScorecard,
                 'scorecard' => $scorecard,
                 'classList' => $classList
-            ], 201); // 201 status code for resource creation
+            ], 201);
 
         } catch (\Exception $e) {
-            // Log the error for debugging
-            \Log::error('Error storing scorecard and class data', ['error' => $e->getMessage()]);
+            \Log::error('Error storing or updating scorecard and class data', ['error' => $e->getMessage()]);
 
-            // Return a 500 error with the exception message
             return response()->json([
-                'message' => 'Failed to store scorecard and class data',
+                'message' => 'Failed to store or update scorecard and class data',
                 'error' => $e->getMessage()
-            ], 500); // 500 status code for server errors
+            ], 500);
         }
     }
 

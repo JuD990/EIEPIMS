@@ -17,15 +17,14 @@ return new class extends Migration
             $table->string('firstname');
             $table->string('middlename')->nullable();
             $table->string('lastname');
-            $table->string('status');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('department');
             $table->string('program');
-            $table->integer('year_level');
+            $table->string('year_level');
             $table->string('gender');
-            $table->string('reason_for_shift_or_drop')->nullable();
             $table->string('classification');
-            $table->string('candidate_for_graduating');
+            $table->string('status')->default("No Show");
+
             $table->timestamps(); // Adds created_at and updated_at columns
         });
     }

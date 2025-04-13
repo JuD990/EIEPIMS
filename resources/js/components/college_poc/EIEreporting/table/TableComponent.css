@@ -2,7 +2,7 @@
 .eie-reporting-esl-table-container {
     overflow-x: auto;
     overflow-y: auto;
-    height: 600px;
+    height: 650px;
     margin-left: 340px;
     margin-right: 35px;
     border: 1px solid #ddd;
@@ -24,9 +24,8 @@
     position: sticky;
     top: 0; /* Keep it at the top of the viewport */
     z-index: 1; /* Make sure it is below the colored header */
-    border-top: 2px solid #F4F7FC; /* Border to separate the two rows */
+    border: 2px solid #ddd; /* Border to separate the two rows */
     height: 40px;
-    border: 1px solid #ddd;
 }
 
 .eie-reporting-esl-table-header-cell {
@@ -45,17 +44,6 @@
     width: 100%;
     border-spacing: 0; /* Ensure cells are spaced */
     border: 1px solid #ddd; /* Global table border */
-}
-
-.eie-reporting-esl-table-header-colored,
-.eie-reporting-esl-table-header-plain,
-.eie-reporting-esl-table-header-cell,
-.eie-reporting-esl-table-body-cell,
-.eie-reporting-esl-table-header-header-cell {
-    border-left: 1px solid #ddd; /* Add left vertical borders */
-    border-right: 1px solid #ddd; /* Add right vertical borders */
-    text-align: center;
-
 }
 
 /* Optional: Add specific styling for the body rows */

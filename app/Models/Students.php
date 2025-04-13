@@ -29,10 +29,4 @@ class Students extends Model
         'program', 
         'role'
     ];
-
-    // Password mutator to hash the password before saving
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = Hash::make($value);
-    }
 }

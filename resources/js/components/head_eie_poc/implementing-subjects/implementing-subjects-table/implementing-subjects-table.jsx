@@ -3,7 +3,12 @@ import { useTable } from "react-table";
 import axios from "axios";
 import "./implementing-subjects-table.css";
 
-const ImplementingSubjectsTable = ({searchQuery}) => {
+const ImplementingSubjectsTable = ({
+  searchQuery,
+  selectedProgram,
+  selectedYearLevel,
+  selectedSemester,
+}) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,6 +25,11 @@ const ImplementingSubjectsTable = ({searchQuery}) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const employeeId = localStorage.getItem("employee_id");
 
+  console.log("Search:", searchQuery);
+  console.log("Program:", selectedProgram);
+  console.log("Year Level:", selectedYearLevel);
+  console.log("Semester:", selectedSemester);
+
   const fetchData = async () => {
     if (!employeeId) {
       setError("Employee ID is required.");
@@ -32,21 +42,27 @@ const ImplementingSubjectsTable = ({searchQuery}) => {
         headers: { employee_id: employeeId },
       });
 
-      const filteredData = searchQuery
-      ? response.data.filter((item) =>
-      [
-        item.course_title,
-        item.code,
-        item.course_code,
-        item.assigned_poc,
-        item.program,
-        item.semester,
-        item.department,
-      ]
-      .map((field) => field.toLowerCase())
-      .some((field) => field.includes(searchQuery.toLowerCase()))
-      )
-      : response.data;
+      const filteredData = response.data.filter((item) => {
+        const matchesSearch = searchQuery
+        ? [
+          item.course_title,
+          item.code,
+          item.course_code,
+          item.assigned_poc,
+          item.program,
+          item.semester,
+          item.department,
+        ]
+        .map((field) => field?.toLowerCase() || "")
+        .some((field) => field.includes(searchQuery.toLowerCase()))
+        : true;
+
+        const matchesProgram = selectedProgram ? item.program === selectedProgram : true;
+        const matchesYear = selectedYearLevel ? item.year_level === selectedYearLevel : true;
+        const matchesSemester = selectedSemester ? item.semester === selectedSemester : true;
+
+        return matchesSearch && matchesProgram && matchesYear && matchesSemester;
+      });
 
       setData(filteredData);
     } catch (error) {
@@ -77,7 +93,7 @@ const ImplementingSubjectsTable = ({searchQuery}) => {
 
   useEffect(() => {
     fetchData();
-  }, [searchQuery]);
+  }, [searchQuery, selectedProgram, selectedYearLevel, selectedSemester]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

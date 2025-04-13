@@ -1,158 +1,84 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";  // Import axios
 import './grad-table.css';
-
-// Sample data
-const data = [
-    {
-        Name: 'Lebron James',
-        DateOfInterview: '2025-04-01',
-        TimeOfInterview: '10:00 AM',
-        Venue: 'Room 101',
-        Department: 'Engineering',
-        Interviewer: 'Jane Smith',
-        Consistency: 'Good',
-        Clarity: 'Excellent',
-        Articulation: 'Average',
-        IntonationAndStress: 'Good',
-        AverageInPronunciation: '80%',
-        Accuracy: '90%',
-        ClarityOfThought: 'Excellent',
-        Syntax: 'Good',
-        AverageInGrammar: '85%',
-        QualityOfResponse: 'Excellent',
-        DetailOfResponse: 'Good',
-        AverageInFluency: '80%',
-        AveragePGFRating: '4.5',
-        PGFSpecificRemarks: 'Needs improvement in clarity.',
-        SchoolYearHighlight: 'Top of class.',
-        SchoolYearLowlight: 'Missed some assignments.',
-        SPARKHighlight: 'Excellent teamwork.',
-        SPARKLowlight: 'Struggled with group work.',
-        UsageInSchoolOnline: 'Regular use during online classes.',
-        UsageOffline: 'Occasionally uses tech at home.',
-        SupportNeeded: 'No additional support needed.',
-        ShowStatus: 'Showed Up',
-    },
-    {
-        Name: 'Dwight Howard',
-        DateOfInterview: '2025-04-01',
-        TimeOfInterview: '10:00 AM',
-        Venue: 'Room 101',
-        Department: 'Engineering',
-        Interviewer: 'Jane Smith',
-        Consistency: 'Good',
-        Clarity: 'Excellent',
-        Articulation: 'Average',
-        IntonationAndStress: 'Good',
-        AverageInPronunciation: '80%',
-        Accuracy: '90%',
-        ClarityOfThought: 'Excellent',
-        Syntax: 'Good',
-        AverageInGrammar: '85%',
-        QualityOfResponse: 'Excellent',
-        DetailOfResponse: 'Good',
-        AverageInFluency: '80%',
-        AveragePGFRating: '4.5',
-        PGFSpecificRemarks: 'Needs improvement in clarity.',
-        SchoolYearHighlight: 'Top of class.',
-        SchoolYearLowlight: 'Missed some assignments.',
-        SPARKHighlight: 'Excellent teamwork.',
-        SPARKLowlight: 'Struggled with group work.',
-        UsageInSchoolOnline: 'Regular use during online classes.',
-        UsageOffline: 'Occasionally uses tech at home.',
-        SupportNeeded: 'No additional support needed.',
-        ShowStatus: 'Showed Up',
-    },
-    {
-        Name: 'Steph Curry',
-        DateOfInterview: '2025-04-01',
-        TimeOfInterview: '10:00 AM',
-        Venue: 'Room 101',
-        Department: 'Engineering',
-        Interviewer: 'Jane Smith',
-        Consistency: 'Good',
-        Clarity: 'Excellent',
-        Articulation: 'Average',
-        IntonationAndStress: 'Good',
-        AverageInPronunciation: '80%',
-        Accuracy: '90%',
-        ClarityOfThought: 'Excellent',
-        Syntax: 'Good',
-        AverageInGrammar: '85%',
-        QualityOfResponse: 'Excellent',
-        DetailOfResponse: 'Good',
-        AverageInFluency: '80%',
-        AveragePGFRating: '4.5',
-        PGFSpecificRemarks: 'Needs improvement in clarity.',
-        SchoolYearHighlight: 'Top of class.',
-        SchoolYearLowlight: 'Missed some assignments.',
-        SPARKHighlight: 'Excellent teamwork.',
-        SPARKLowlight: 'Struggled with group work.',
-        UsageInSchoolOnline: 'Regular use during online classes.',
-        UsageOffline: 'Occasionally uses tech at home.',
-        SupportNeeded: 'No additional support needed.',
-        ShowStatus: 'Showed Up',
-    },
-// Add more sample rows as needed
-];
-
-const columns = [
-    'Name', 'Date of Interview', 'Time of Interview', 'Venue', 'Department', 'Interviewer',
-'Consistency', 'Clarity', 'Articulation', 'Intonation and Stress', 'Average in Pronunciation',
-'Accuracy', 'Clarity of Thought', 'Syntax', 'Average in Grammar', 'Quality of Response',
-'Detail of Response', 'Average in Fluency', 'Average PGF Rating', 'PGF Specific Remarks',
-'School Year Highlight', 'School Year Lowlight', 'SPARK Highlight', 'SPARK Lowlight',
-'Usage in School/Online (When in School)', 'Usage Offline (Home or Outside)', 'Support Needed', 'Show Status'
-];
 
 // Mapping column names to data object keys
 const columnToKeyMapping = {
-    'Name': 'Name',
-    'Date of Interview': 'DateOfInterview',
-    'Time of Interview': 'TimeOfInterview',
-    'Venue': 'Venue',
-    'Department': 'Department',
-    'Interviewer': 'Interviewer',
-    'Consistency': 'Consistency',
-    'Clarity': 'Clarity',
-    'Articulation': 'Articulation',
-    'Intonation and Stress': 'IntonationAndStress',
-    'Average in Pronunciation': 'AverageInPronunciation',
-    'Accuracy': 'Accuracy',
-    'Clarity of Thought': 'ClarityOfThought',
-    'Syntax': 'Syntax',
-    'Average in Grammar': 'AverageInGrammar',
-    'Quality of Response': 'QualityOfResponse',
-    'Detail of Response': 'DetailOfResponse',
-    'Average in Fluency': 'AverageInFluency',
-    'Average PGF Rating': 'AveragePGFRating',
-    'PGF Specific Remarks': 'PGFSpecificRemarks',
-    'School Year Highlight': 'SchoolYearHighlight',
-    'School Year Lowlight': 'SchoolYearLowlight',
-    'SPARK Highlight': 'SPARKHighlight',
-    'SPARK Lowlight': 'SPARKLowlight',
-    'Usage in School/Online (When in School)': 'UsageInSchoolOnline',
-    'Usage Offline (Home or Outside)': 'UsageOffline',
-    'Support Needed': 'SupportNeeded',
-    'Show Status': 'ShowStatus'
+    'Name': 'name',
+    'Date of Interview': 'date_of_interview',
+    'Time of Interview': 'time_of_interview',
+    'Venue': 'venue',
+    'Department': 'department',
+    'Interviewer': 'interviewer',
+    'Consistency': 'consistency_descriptor',
+    'Clarity': 'clarity_descriptor',
+    'Articulation': 'articulation_descriptor',
+    'Intonation and Stress': 'intonation_and_stress_descriptor',
+    'Average in Pronunciation': 'pronunciation_average',
+    'Accuracy': 'accuracy_descriptor',
+    'Clarity of Thought': 'clarity_of_thought_descriptor',
+    'Syntax': 'syntax_descriptor',
+    'Average in Grammar': 'grammar_average',
+    'Quality of Response': 'quality_of_response_descriptor',
+    'Detail of Response': 'detail_of_response_descriptor',
+    'Average in Fluency': 'fluency_average',
+    'Average PGF Rating': 'average_pgf_rating',
+    'PGF Specific Remarks': 'pgf_specific_remarks',
+    'School Year Highlight': 'school_year_highlight',
+    'School Year Lowlight': 'school_year_lowlight',
+    'SPARK Highlight': 'spark_highlight',
+    'SPARK Lowlight': 'spark_lowlight',
+    'Usage in School/Online (When in School)': 'usage_in_school_online',
+    'Usage Offline (Home or Outside)': 'usage_offline',
+    'Support Needed': 'support_needed',
+    'Show Status': 'show_status'
 };
 
 const Table = ({ department, attendance, schoolYear, searchQuery }) => {
-
-    // Filter data based on searchQuery
-    const filteredData = data.filter(row => {
-        return columns.some(column => {
-            const key = columnToKeyMapping[column];
-            return row[key] && row[key].toString().toLowerCase().includes(searchQuery.toLowerCase());
-        });
-    });
+    const [data, setData] = useState([]);
 
     useEffect(() => {
-        console.log("Department:", department);
-        console.log("Attendance:", attendance);
-        console.log("School Year:", schoolYear);
-        // You can filter or fetch data here based on department/attendance
-    }, [department, attendance, schoolYear, searchQuery]);
+        console.log('Department:', department);
+        console.log('Attendance:', attendance);
+        console.log('School Year:', schoolYear);
+    }, [department, attendance, schoolYear]);
+
+    useEffect(() => {
+        if (department && attendance && schoolYear) {
+            fetchReports();
+        }
+    }, [department, attendance, schoolYear]);
+
+
+    const fetchReports = async () => {
+        try {
+            const response = await axios.get('http://localhost:8000/api/reports/fourth-year-diagnostic-report', {
+                params: {
+                    department,
+                    status: attendance,
+                    school_year: schoolYear
+                }
+            });
+
+            // Log the response data to check its structure
+            console.log("Response Data:", response.data);
+
+            // Ensure the response data is an array before setting state
+            if (Array.isArray(response.data)) {
+                setData(response.data);  // Set the fetched data
+            } else {
+                console.error("Expected an array, but got:", response.data);
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+    const filteredData = Array.isArray(data) ? data.filter(row => {
+        return Object.keys(row).some(key => {
+            return row[key] && row[key].toString().toLowerCase().includes(searchQuery.toLowerCase());
+        });
+    }) : [];
 
     return (
         <div className="freshmen-table-container">
@@ -199,14 +125,157 @@ const Table = ({ department, attendance, schoolYear, searchQuery }) => {
         <tbody>
         {filteredData.map((row, rowIndex) => (
             <tr key={rowIndex}>
-            {columns.map((column, colIndex) => (
-                <td
-                key={colIndex}
-                className={colIndex === 0 ? "freshmen-sticky-col" : ""}
-                >
-                {row[columnToKeyMapping[column]]}
-                </td>
+            {/* Displaying Basic Info */}
+            <td className="freshmen-sticky-col">{row.name}</td>
+            <td>{row.date_of_interview}</td>
+            <td>{row.time_of_interview}</td>
+            <td>{row.venue}</td>
+            <td>{row.department}</td>
+            <td>{row.interviewer}</td>
+
+            {/* Displaying Consistency */}
+            <td>
+            {/* Display rating at the top with increased font size */}
+            {row.consistency_rating && <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{row.consistency_rating}</div>}
+
+            {row.consistency_descriptor && row.consistency_descriptor.split('-').map((part, index, arr) => (
+                <span key={index}>
+                {part}
+                {index !== arr.length - 1 && <br />} {/* Add line break between parts */}
+                </span>
             ))}
+            </td>
+
+            {/* Displaying Clarity */}
+            <td>
+            {/* Display rating at the top with increased font size */}
+            {row.clarity_rating && <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{row.clarity_rating}</div>}
+
+            {row.clarity_descriptor && row.clarity_descriptor.split('-').map((part, index, arr) => (
+                <span key={index}>
+                {part}
+                {index !== arr.length - 1 && <br />} {/* Add line break between parts */}
+                </span>
+            ))}
+            </td>
+
+            {/* Displaying Articulation */}
+            <td>
+            {/* Display rating at the top with increased font size */}
+            {row.articulation_rating && <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{row.articulation_rating}</div>}
+
+            {row.articulation_descriptor && row.articulation_descriptor.split('-').map((part, index, arr) => (
+                <span key={index}>
+                {part}
+                {index !== arr.length - 1 && <br />} {/* Add line break between parts */}
+                </span>
+            ))}
+            </td>
+
+            {/* Displaying Intonation and Stress */}
+            <td>
+            {/* Display rating at the top with increased font size */}
+            {row.intonation_and_stress_rating && <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{row.intonation_and_stress_rating}</div>}
+
+            {row.intonation_and_stress_descriptor && row.intonation_and_stress_descriptor.split('-').map((part, index, arr) => (
+                <span key={index}>
+                {part}
+                {index !== arr.length - 1 && <br />} {/* Add line break between parts */}
+                </span>
+            ))}
+            </td>
+
+            {/* Displaying Pronunciation Average */}
+            <td>
+            {row.pronunciation_average || ''} {/* Display the average or empty if null */}
+            </td>
+
+            {/* Displaying Accuracy */}
+            <td>
+            {/* Display rating at the top with increased font size */}
+            {row.accuracy_rating && <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{row.accuracy_rating}</div>}
+
+            {row.accuracy_descriptor && row.accuracy_descriptor.split('-').map((part, index, arr) => (
+                <span key={index}>
+                {part}
+                {index !== arr.length - 1 && <br />} {/* Add line break between parts */}
+                </span>
+            ))}
+            </td>
+
+            {/* Displaying Clarity of Thought */}
+            <td>
+            {/* Display rating at the top with increased font size */}
+            {row.clarity_of_thought_rating && <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{row.clarity_of_thought_rating}</div>}
+
+            {row.clarity_of_thought_descriptor && row.clarity_of_thought_descriptor.split('-').map((part, index, arr) => (
+                <span key={index}>
+                {part}
+                {index !== arr.length - 1 && <br />} {/* Add line break between parts */}
+                </span>
+            ))}
+            </td>
+
+            {/* Displaying Syntax */}
+            <td>
+            {/* Display rating at the top with increased font size */}
+            {row.syntax_rating && <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{row.syntax_rating}</div>}
+
+            {row.syntax_descriptor && row.syntax_descriptor.split('-').map((part, index, arr) => (
+                <span key={index}>
+                {part}
+                {index !== arr.length - 1 && <br />} {/* Add line break between parts */}
+                </span>
+            ))}
+            </td>
+
+            {/* Displaying Grammar Average */}
+            <td>
+            {row.grammar_average || ''} {/* Display the average or empty if null */}
+            </td>
+
+            {/* Displaying Quality of Response */}
+            <td>
+            {/* Display rating at the top with increased font size */}
+            {row.quality_of_response_rating && <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{row.quality_of_response_rating}</div>}
+
+            {row.quality_of_response_descriptor && row.quality_of_response_descriptor.split('-').map((part, index, arr) => (
+                <span key={index}>
+                {part}
+                {index !== arr.length - 1 && <br />} {/* Add line break between parts */}
+                </span>
+            ))}
+            </td>
+
+            {/* Displaying Detail of Response */}
+            <td>
+            {/* Display rating at the top with increased font size */}
+            {row.detail_of_response_rating && <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{row.detail_of_response_rating}</div>}
+
+            {row.detail_of_response_descriptor && row.detail_of_response_descriptor.split('-').map((part, index, arr) => (
+                <span key={index}>
+                {part}
+                {index !== arr.length - 1 && <br />} {/* Add line break between parts */}
+                </span>
+            ))}
+            </td>
+
+            {/* Displaying Fluency Average */}
+            <td>
+            {row.fluency_average || ''} {/* Display the average or empty if null */}
+            </td>
+
+
+            <td>{row.average_pgf_rating}</td>
+            <td>{row.pgf_specific_remarks}</td>
+            <td>{row.school_year_highlight}</td>
+            <td>{row.school_year_lowlight}</td>
+            <td>{row.spark_highlight}</td>
+            <td>{row.spark_lowlight}</td>
+            <td>{row.usage_in_school_online}</td>
+            <td>{row.usage_offline}</td>
+            <td>{row.support_needed}</td>
+            <td>{row.show_status}</td>
             </tr>
         ))}
         </tbody>

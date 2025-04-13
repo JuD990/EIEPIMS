@@ -7,6 +7,9 @@ import Dropdown from "./dropdown-button/implementing-subjects-dropdown";
 
 const EIEHeadImplementingSubjects = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedProgram, setSelectedProgram] = useState("");
+  const [selectedYearLevel, setSelectedYearLevel] = useState("");
+  const [selectedSemester, setSelectedSemester] = useState("");
 
   const handleFileUpload = (file) => {
     console.log("Uploaded file:", file);
@@ -16,7 +19,7 @@ const EIEHeadImplementingSubjects = () => {
     <div>
     <EIEHeadSidebar />
     <UserInfo />
-    <br /><br /><br /><br /><br />
+    <br /><br /><br /><br />
     <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '350px', color: '#383838' }}>Implementing Subjects</h1>
     <div style={{
       display: 'flex',
@@ -35,7 +38,15 @@ const EIEHeadImplementingSubjects = () => {
       gap: '430px'
     }}>
     {/* Dropdown */}
-    <Dropdown />
+    <Dropdown
+    selectedProgram={selectedProgram}
+    setSelectedProgram={setSelectedProgram}
+    selectedYearLevel={selectedYearLevel}
+    setSelectedYearLevel={setSelectedYearLevel}
+    selectedSemester={selectedSemester}
+    setSelectedSemester={setSelectedSemester}
+    setSearchQuery={setSearchQuery}
+    />
 
     {/* Search Input */}
     <input
@@ -44,7 +55,7 @@ const EIEHeadImplementingSubjects = () => {
     onChange={(e) => setSearchQuery(e.target.value)}
     placeholder="Search"
     style={{
-      width: '476px',
+      width: '375px',
       height: '60px',
       borderRadius: '8px',
       borderColor: '#333333',
@@ -56,7 +67,12 @@ const EIEHeadImplementingSubjects = () => {
     </div>
     </div>
 
-    <ImplementingSubjectsTable searchQuery={searchQuery} />
+    <ImplementingSubjectsTable
+    searchQuery={searchQuery}
+    selectedProgram={selectedProgram}
+    selectedYearLevel={selectedYearLevel}
+    selectedSemester={selectedSemester}
+    />
     <br />
     </div>
   );

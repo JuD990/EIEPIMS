@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ImplementingSubjects;
 use App\Models\EieReport;
 use App\Models\ClassLists;
+use App\Models\Students;
 use App\Models\CollegePOCs;
 use App\Models\LeadPOCs;
 use App\Models\EIEHeads;
@@ -244,248 +245,6 @@ class ImplementingSubjectController extends Controller
             return response()->json(['success' => true, 'department' => $employee->department]);
         }
 
-        public function getProgramsWithEnrollmentCountFirstSemester($department)
-        {
-            $programs = ImplementingSubjects::where('department', $department)
-            ->where('semester', '1st Semester')
-            ->get();
-
-            if ($programs->isEmpty()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'No programs found for this department in the selected semester.',
-                    'enrollmentCount' => []
-                ]);
-            }
-
-            // Initialize enrollment count structure
-            $enrollmentCount = [];
-
-            foreach ($programs as $program) {
-                $programKey = $program->program;
-                $yearLevel = $program->year_level;
-
-                if (!isset($enrollmentCount[$yearLevel][$programKey])) {
-                    $enrollmentCount[$yearLevel][$programKey] = [
-                        'total_enrolled' => 0,
-                        'course_titles' => []
-                    ];
-                }
-
-                // Add total enrolled students
-                $enrollmentCount[$yearLevel][$programKey]['total_enrolled'] += $program->enrolled_students;
-
-                // Add unique course titles
-                if (!in_array($program->course_title, $enrollmentCount[$yearLevel][$programKey]['course_titles'])) {
-                    $enrollmentCount[$yearLevel][$programKey]['course_titles'][] = $program->course_title;
-                }
-
-                // Monthly data from January to May
-                for ($month = 1; $month <= 5; $month++) {
-                    $monthName = date("F", mktime(0, 0, 0, $month, 1));
-
-                    // Get submitted count
-                    $submittedCount = EieScorecardClassReport::whereYear('created_at', date('Y'))
-                    ->whereMonth('created_at', $month)
-                    ->where('program', $programKey)
-                    ->where('year_level', $yearLevel)
-                    ->count();
-
-                    // Compute completion rate
-                    $totalEnrolled = $enrollmentCount[$yearLevel][$programKey]['total_enrolled'];
-                    $completionRate = $totalEnrolled > 0 ? (($submittedCount / $totalEnrolled) * 100) : 0;
-                    $completionRateExpectation = $completionRate == 100 ? 'Meets Expectation' : 'Below Expectation';
-
-                    // Compute EPGF Average
-                    $epgfAverage = EieScorecardClassReport::whereYear('created_at', date('Y'))
-                    ->whereMonth('created_at', $month)
-                    ->where('program', $programKey)
-                    ->where('year_level', $yearLevel)
-                    ->avg('epgf_average') ?? 0;
-
-                    // Determine proficiency level
-                    $proficiencyLevels = [
-                        ["threshold" => 0.00, "level" => "Beginning"],
-                        ["threshold" => 0.50, "level" => "Low Acquisition"],
-                        ["threshold" => 0.75, "level" => "High Acquisition"],
-                        ["threshold" => 1.00, "level" => "Emerging"],
-                        ["threshold" => 1.25, "level" => "Low Developing"],
-                        ["threshold" => 1.50, "level" => "High Developing"],
-                        ["threshold" => 1.75, "level" => "Low Proficient"],
-                        ["threshold" => 2.00, "level" => "Proficient"],
-                        ["threshold" => 2.25, "level" => "High Proficient"],
-                        ["threshold" => 2.50, "level" => "Advanced"],
-                        ["threshold" => 3.00, "level" => "High Advanced"],
-                        ["threshold" => 4.00, "level" => "Native/Bilingual"]
-                    ];
-
-                    $proficiencyLevel = "Unknown";
-                    foreach ($proficiencyLevels as $current) {
-                        if ($epgfAverage <= $current["threshold"]) {
-                            $proficiencyLevel = $current["level"];
-                            break;
-                        }
-                    }
-
-                    // Get champion (highest epgf_average student)
-                    $champion = ClassLists::select('class_lists.*')
-                    ->join('eie_scorecard_class_reports', 'class_lists.student_id', '=', 'eie_scorecard_class_reports.student_id')
-                    ->where('class_lists.program', $programKey)
-                    ->where('class_lists.year_level', $yearLevel)
-                    ->whereYear('eie_scorecard_class_reports.created_at', date('Y'))
-                    ->whereMonth('eie_scorecard_class_reports.created_at', $month)
-                    ->orderByDesc('eie_scorecard_class_reports.epgf_average')
-                    ->first();
-
-                    Log::info('Champion Query:', ['query' => $champion]);
-
-                    // Format full name
-                    $championName = 'N/A';
-                    if ($champion) {
-                        $middlename = $champion->middlename ? strtoupper(substr($champion->middlename, 0, 1)) . '.' : '';
-                        $championName = trim("{$champion->firstname} $middlename {$champion->lastname}");
-                    }
-
-                    $enrollmentCount[$yearLevel][$programKey][$monthName] = [
-                        'submitted' => $submittedCount,
-                        'completion_rate' => round($completionRate, 2) . '%',
-                        'completion_rate_expectation' => $completionRateExpectation,
-                        'epgf_average' => round($epgfAverage, 2),
-                        'proficiency_level' => $proficiencyLevel,
-                        'champion' => $championName,
-                    ];
-                }
-            }
-
-            return response()->json([
-                'success' => true,
-                'programs' => $programs,
-                'enrollmentCount' => $enrollmentCount
-            ]);
-            Log::info('Enrollment Data Response:', ['enrollmentCount' => $enrollmentCount]);
-        }
-
-        public function getProgramsWithEnrollmentCountSecondSemester($department)
-        {
-            $programs = ImplementingSubjects::where('department', $department)
-            ->where('semester', '2nd Semester')
-            ->get();
-
-            if ($programs->isEmpty()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'No programs found for this department in the selected semester.',
-                    'enrollmentCount' => []
-                ]);
-            }
-
-            // Initialize enrollment count structure
-            $enrollmentCount = [];
-
-            foreach ($programs as $program) {
-                $programKey = $program->program;
-                $yearLevel = $program->year_level;
-
-                if (!isset($enrollmentCount[$yearLevel][$programKey])) {
-                    $enrollmentCount[$yearLevel][$programKey] = [
-                        'total_enrolled' => 0,
-                        'course_titles' => []
-                    ];
-                }
-
-                // Add total enrolled students
-                $enrollmentCount[$yearLevel][$programKey]['total_enrolled'] += $program->enrolled_students;
-
-                // Add unique course titles
-                if (!in_array($program->course_title, $enrollmentCount[$yearLevel][$programKey]['course_titles'])) {
-                    $enrollmentCount[$yearLevel][$programKey]['course_titles'][] = $program->course_title;
-                }
-
-                // Monthly data from January to May
-                for ($month = 1; $month <= 5; $month++) {
-                    $monthName = date("F", mktime(0, 0, 0, $month, 1));
-
-                    // Get submitted count
-                    $submittedCount = EieScorecardClassReport::whereYear('created_at', date('Y'))
-                    ->whereMonth('created_at', $month)
-                    ->where('program', $programKey)
-                    ->where('year_level', $yearLevel)
-                    ->count();
-
-                    // Compute completion rate
-                    $totalEnrolled = $enrollmentCount[$yearLevel][$programKey]['total_enrolled'];
-                    $completionRate = $totalEnrolled > 0 ? (($submittedCount / $totalEnrolled) * 100) : 0;
-                    $completionRateExpectation = $completionRate == 100 ? 'Meets Expectation' : 'Below Expectation';
-
-                    $epgfAverage = EieScorecardClassReport::whereYear('created_at', date('Y'))
-                    ->whereMonth('created_at', $month)
-                    ->where('program', $programKey)
-                    ->where('year_level', $yearLevel)
-                    ->orderByDesc('created_at') // Latest scores first
-                    ->avg('epgf_average') ?? 0;
-
-
-                    // Determine proficiency level
-                    $proficiencyLevels = [
-                        ["threshold" => 0.00, "level" => "Beginning"],
-                        ["threshold" => 0.50, "level" => "Low Acquisition"],
-                        ["threshold" => 0.75, "level" => "High Acquisition"],
-                        ["threshold" => 1.00, "level" => "Emerging"],
-                        ["threshold" => 1.25, "level" => "Low Developing"],
-                        ["threshold" => 1.50, "level" => "High Developing"],
-                        ["threshold" => 1.75, "level" => "Low Proficient"],
-                        ["threshold" => 2.00, "level" => "Proficient"],
-                        ["threshold" => 2.25, "level" => "High Proficient"],
-                        ["threshold" => 2.50, "level" => "Advanced"],
-                        ["threshold" => 3.00, "level" => "High Advanced"],
-                        ["threshold" => 4.00, "level" => "Native/Bilingual"]
-                    ];
-
-                    $proficiencyLevel = "Unknown";
-                    foreach ($proficiencyLevels as $current) {
-                        if ($epgfAverage <= $current["threshold"]) {
-                            $proficiencyLevel = $current["level"];
-                            break;
-                        }
-                    }
-
-                    $champion = ClassLists::select('class_lists.*')
-                    ->join('eie_scorecard_class_reports', 'class_lists.student_id', '=', 'eie_scorecard_class_reports.student_id')
-                    ->where('class_lists.program', $programKey)
-                    ->where('class_lists.year_level', $yearLevel)
-                    ->where('class_lists.status', 'active')
-                    ->whereYear('eie_scorecard_class_reports.created_at', date('Y'))
-                    ->whereMonth('eie_scorecard_class_reports.created_at', $month)
-                    ->orderByDesc('eie_scorecard_class_reports.epgf_average') // Get highest scorer first
-                    ->orderByDesc('eie_scorecard_class_reports.created_at') // Break ties with the most recent entry
-                    ->first();
-
-                    // Format full name
-                    $championName = 'N/A';
-                    if ($champion) {
-                        $middlename = $champion->middlename ? strtoupper(substr($champion->middlename, 0, 1)) . '.' : '';
-                        $championName = trim("{$champion->firstname} $middlename {$champion->lastname}");
-                    }
-
-                    $enrollmentCount[$yearLevel][$programKey][$monthName] = [
-                        'submitted' => $submittedCount,
-                        'completion_rate' => round($completionRate, 2) . '%',
-                        'completion_rate_expectation' => $completionRateExpectation,
-                        'epgf_average' => round($epgfAverage, 2),
-                        'proficiency_level' => $proficiencyLevel,
-                        'champion' => $championName,
-                    ];
-                }
-            }
-
-            return response()->json([
-                'success' => true,
-                'programs' => $programs,
-                'enrollmentCount' => $enrollmentCount
-            ]);
-        }
-
-
         public function updateImplementingSubject(Request $request, $courseCode)
         {
             $subject = ImplementingSubjects::where('course_code', $courseCode)->first();
@@ -526,10 +285,12 @@ class ImplementingSubjectController extends Controller
                 $programs = ImplementingSubjects::distinct()->pluck('program');
                 $semesters = ImplementingSubjects::distinct()->pluck('semester');
                 $yearLevels = ImplementingSubjects::distinct()->pluck('year_level');
+                $departments = ImplementingSubjects::distinct()->pluck('department');
 
                 return response()->json([
                     'programs' => $programs,
                     'semesters' => $semesters,
+                    'departments' => $departments,
                     'year_levels' => $yearLevels,
                 ]);
             } catch (\Exception $e) {
@@ -574,11 +335,27 @@ class ImplementingSubjectController extends Controller
             return response()->json($departments->toArray());
         }
 
+        public function getDepartmentForStudents()
+        {
+            $departments = Students::pluck('department')->unique()->values();
+
+            // Ensure it's an array before returning
+            return response()->json($departments->toArray());
+        }
+
+
+        public function getDepartmentForPOCs()
+        {
+            $departments = EIEHeads::pluck('department')->unique()->values();
+
+            // Ensure it's an array before returning
+            return response()->json($departments->toArray());
+        }
+
         public function getSchoolYears()
         {
-            // Extract unique years from the created_at column
-            $schoolYears = DB::table('eie_reports')
-            ->selectRaw("DISTINCT CONCAT(YEAR(created_at), '/', YEAR(created_at) + 1) AS school_year")
+            // Extract unique years from the created_at column using Eloquent
+            $schoolYears = EieReport::selectRaw("DISTINCT CONCAT(YEAR(created_at), '/', YEAR(created_at) + 1) AS school_year")
             ->orderBy('school_year', 'desc')
             ->pluck('school_year');
 

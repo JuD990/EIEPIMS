@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useTable } from "react-table";
 
-const StudentManagementTable = ({ searchQuery }) => {
+const StudentManagementTable = ({
+  searchQuery ,
+  selectedCode,
+}) => {
   const [students, setStudents] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState("");
@@ -24,29 +27,31 @@ const StudentManagementTable = ({ searchQuery }) => {
     // Construct full name including middle name (if available)
     const fullName = `${student.firstname} ${student.middlename ? student.middlename + " " : ""}${student.lastname}`
     .toLowerCase()
-    .replace(/\s+/g, ' ') // Normalize spaces
+    .replace(/\s+/g, ' ')
     .trim();
 
     // Reverse order (Lastname Firstname Middlename) for better search coverage
     const reversedFullName = `${student.lastname} ${student.firstname} ${student.middlename || ""}`
     .toLowerCase()
-    .replace(/\s+/g, ' ') // Normalize spaces
+    .replace(/\s+/g, ' ')
     .trim();
 
     // Search query formatted
     const query = (searchQuery || "").toLowerCase().trim();
 
-    console.log(`Checking: "${fullName}" and "${reversedFullName}" against "${query}"`);
+    // Basic search check
+    const matchesSearch =
+    fullName.includes(query) ||
+    reversedFullName.includes(query) ||
+    (student.course_code?.toLowerCase() || "").includes(query) ||
+    (student.status?.toLowerCase() || "").includes(query) ||
+    (student.year_level?.toString() || "").includes(query);
 
-    return (
-      fullName.includes(query) ||
-      reversedFullName.includes(query) ||
-      (student.course_code?.toLowerCase() || "").includes(query) ||
-      (student.status?.toLowerCase() || "").includes(query) ||
-      (student.year_level?.toString() || "").includes(query)
-    );
+    // Course code and title filters
+    const matchesCode = selectedCode ? student.course_code === selectedCode : true;
+
+    return matchesSearch && matchesCode;
   });
-
 
   useEffect(() => {
     const employeeId = localStorage.getItem("employee_id");
@@ -117,7 +122,7 @@ const StudentManagementTable = ({ searchQuery }) => {
     }
 
     // ✅ Validate reason for Shift/Drop
-    if ((formData.status === "Dropped" || formData.status === "Shifted") && !formData.reason.trim()) {
+    if ((formData.status === "Dropped" ) && !formData.reason.trim()) {
       setError("Reason for Shift/Drop is required.");
       return; // Stop form submission
     } else {
@@ -282,7 +287,7 @@ const StudentManagementTable = ({ searchQuery }) => {
       <div
         style={{
           overflowY: 'auto',
-          height: '600px',
+          height: '650px',
           marginLeft: '350px',
           marginRight: '35px',
           border: '1px solid #ddd',
@@ -457,7 +462,6 @@ const StudentManagementTable = ({ searchQuery }) => {
               >
                 <option value="Active">Active</option>
                 <option value="Dropped">Dropped</option>
-                <option value="Shifted">Shifted</option>
               </select>
             </div>
             <div style={{ marginBottom: "20px" }}>

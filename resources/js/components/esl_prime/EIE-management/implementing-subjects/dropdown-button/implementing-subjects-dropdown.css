@@ -4,7 +4,6 @@
   align-items: center;
   justify-content: flex-start; /* Align items to the left */
   margin-left: 350px; /* Adjust as needed */
-  margin-right: auto; /* Push everything to the left */
 }
 
 .eie-head-dropdown-wrapper {

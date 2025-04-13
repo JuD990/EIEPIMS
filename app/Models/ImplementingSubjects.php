@@ -18,17 +18,4 @@ class ImplementingSubjects extends Model
         'epgf_average', 'completion_rate', 'proficiency_level',
         'active_students', 'enrolled_students',
     ];
-    
-
-    // Relationship with ImplementingSubjectClassList (1 to many)
-    public function implementingSubjectClassLists()
-    {
-        return $this->hasMany(ImplementingSubjectClassList::class);
-    }
-
-    // Relationship with Employee (College POC)
-    public function employee()
-    {
-        return $this->belongsTo(CollegePOCs::class, 'employee_id');
-    }
 }

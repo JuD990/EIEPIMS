@@ -46,9 +46,9 @@ const TableComponent = ({ department, schoolYear, semester }) => {
         <table className="dashboard-esl-table unique-bordered-table">
         <thead>
         <tr>
-        <th rowSpan="2">Year Level</th>
+        <th rowSpan="2">Academic Level</th>
         <th rowSpan="2">Program</th>
-        <th rowSpan="2">Expected Submissions</th>
+        <th rowSpan="2">Expected Submission(s)</th>
         <th rowSpan="2">Target</th>
         <th rowSpan="2">Course Title</th>
         {months.map(month => <th key={month} colSpan="4">{month}</th>)}

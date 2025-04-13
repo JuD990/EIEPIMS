@@ -8,8 +8,8 @@ import InterviewScorecardButtons from "./interview-scorecard-buttons/interview-s
 
 const eslPrimeDiagnostics = () => {
     const [version, setVersion] = useState(null);
-    const [students, setStudents] = useState([]); // Store students
-    const [loading, setLoading] = useState(true); // Loading state
+    const [loading, setLoading] = useState(true);
+    const [categoryAverages, setCategoryAverages] = useState({});
     const [options, setOptions] = useState({
         consistency: [],
         clarity: [],
@@ -22,20 +22,57 @@ const eslPrimeDiagnostics = () => {
         detailOfResponse: []
     });
 
-    useEffect(() => {
-        // Load saved state from localStorage
-        const savedStates = localStorage.getItem('submittedRows');
-        if (savedStates) {
-            setStudents(JSON.parse(savedStates));
-        }
-    }, []);
+    const [ratings, setRatings] = useState({});
+    const [overallAverage, setOverallAverage] = useState("0.00");
+    const [dropdownValues, setDropdownValues] = useState({
+        consistency: "",
+        clarity: "",
+        articulation: "",
+        intonationAndStress: "",
+        accuracy: "",
+        clarityOfThought: "",
+        syntax: "",
+        qualityOfResponse: "",
+        detailOfResponse: "",
+    });
 
-    useEffect(() => {
-        // Save states to localStorage
-        localStorage.setItem('submittedRows', JSON.stringify(students));
-    }, [students]);
+    const [remarks, setRemarks] = useState({
+        "PGF Specific Remarks": "",
+        "School Year Highlight": "",
+        "School Year Lowlight": "",
+        "SPARK Highlight": "",
+        "SPARK Lowlight": "",
+        "Usage in School/Online (When in School)": "",
+                                           "Usage Offline (Home or Outside)": "",
+                                           "Support Needed": ""
+    });
 
-    // Fetch version and options data for each category
+    const handleClear = () => {
+        setRatings({});
+        setOverallAverage("0.00");
+        setDropdownValues({
+            consistency: "",
+            clarity: "",
+            articulation: "",
+            intonationAndStress: "",
+            accuracy: "",
+            clarityOfThought: "",
+            syntax: "",
+            qualityOfResponse: "",
+            detailOfResponse: "",
+        });
+        setRemarks({
+            "PGF Specific Remarks": "",
+            "School Year Highlight": "",
+            "School Year Lowlight": "",
+            "SPARK Highlight": "",
+            "SPARK Lowlight": "",
+            "Usage in School/Online (When in School)": "",
+                   "Usage Offline (Home or Outside)": "",
+                   "Support Needed": ""
+        });
+    };
+
     useEffect(() => {
         const fetchVersionAndOptions = async () => {
             try {
@@ -69,7 +106,6 @@ const eslPrimeDiagnostics = () => {
             const newOptions = {};
 
             try {
-                // Fetch all categories in parallel
                 await Promise.all(
                     categories.map(async (category) => {
                         const response = await axios.get(`/api/${category}/${version}`);
@@ -86,10 +122,10 @@ const eslPrimeDiagnostics = () => {
                     })
                 );
 
-                setOptions(newOptions); // Update options in state
-                setLoading(false); // Set loading to false once data is fetched
+                setOptions(newOptions);
             } catch (error) {
                 console.error("Error fetching options:", error);
+            } finally {
                 setLoading(false);
             }
         };
@@ -99,47 +135,51 @@ const eslPrimeDiagnostics = () => {
         }
     }, [version]);
 
-    const calculateAverage = (category, student) => {
-        const selectedOptions = options[category]?.find(option => option.id === student[category]);
-        return selectedOptions ? parseFloat(selectedOptions.rating.replace(',', '.')) : 0;
+    const handleOverallAverageChange = (avg) => {
+        setOverallAverage(avg);
     };
 
-    const calculateProficiency = (pronunciationAvg, grammarAvg, fluencyAvg) => {
-        const epgfAverage = (pronunciationAvg + grammarAvg + fluencyAvg) / 3;
-        const proficiencyLevels = [
-            { threshold: 0.0, level: 'Beginning', color: '#E23F44' },
-            { threshold: 0.5, level: 'Low Acquisition', color: '#E23F44' },
-            { threshold: 0.75, level: 'High Acquisition', color: '#E23F44' },
-            { threshold: 1.0, level: 'Emerging', color: '#FFCD56' },
-            { threshold: 1.25, level: 'Low Developing', color: '#FFCD56' },
-            { threshold: 1.5, level: 'High Developing', color: '#FFCD56' },
-            { threshold: 1.75, level: 'Low Proficient', color: '#FFCD56' },
-            { threshold: 2.0, level: 'Proficient', color: 'green' },
-            { threshold: 2.25, level: 'High Proficient', color: 'green' },
-            { threshold: 2.5, level: 'Advanced', color: 'green' },
-            { threshold: 3.0, level: 'High Advanced', color: '#00008B' },
-            { threshold: 4.0, level: 'Native/Bilingual', color: '#00008B' },
-        ];
-
-        const matchedLevel = proficiencyLevels.find(entry => epgfAverage <= entry.threshold);
-        return matchedLevel ? { level: matchedLevel.level, color: matchedLevel.color } : { level: 'Unknown', color: 'black' };
+    const handleCategoryAveragesChange = (averages) => {
+        setCategoryAverages(averages);
     };
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
 
     return (
         <div>
         <Sidebar />
         <UserInfo />
         <br /><br /><br /><br /><br />
-        <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#383838' }}>EIE Diagnostics</h1>
-        <div className="esl-interview-scorecard-container">
-        <InterviewScorecardButtons />
-        <Table />
-        </div>
+        <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#383838' }}>
+        EIE Diagnostics
+        </h1>
 
+        <div className="esl-interview-scorecard-container">
+        {loading && (
+            <div style={{ textAlign: "center", padding: "10px", color: "#888" }}>
+            No EPGF Rubric data...
+            </div>
+        )}
+
+        <InterviewScorecardButtons
+        onClear={handleClear}
+        overallAverage={overallAverage}
+        ratings={ratings}
+        remarks={remarks}
+        categoryAverages={categoryAverages}
+        />
+
+        <Table
+        options={options}
+        onOverallAverageChange={handleOverallAverageChange}
+        onClear={handleClear}
+        ratings={ratings}
+        setRatings={setRatings}
+        dropdownValues={dropdownValues}
+        setDropdownValues={setDropdownValues}
+        onCategoryAveragesChange={handleCategoryAveragesChange}
+        remarks={remarks}
+        setRemarks={setRemarks}
+        />
+        </div>
         </div>
     );
 };

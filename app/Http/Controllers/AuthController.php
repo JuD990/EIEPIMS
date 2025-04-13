@@ -29,60 +29,83 @@ class AuthController extends Controller
                 'user_type' => 'required|string|in:students,college_pocs,lead_pocs,eie_heads,esl_prime,esl_champion',
             ]);
 
-            // Retrieve input data
             $email = $request->input('email');
-            $password = $request->input('password');
+            $password = trim($request->input('password'));
             $userType = $request->input('user_type');
 
-            // Get the user based on the type and email
             $user = $this->getUserByType($userType, $email);
 
-            // Log the login attempt
             Log::debug("Login attempt: Email - " . $email . " User Type - " . $userType);
 
-            // If no user is found, log and return an error
             if (!$user) {
                 Log::warning("Login failed: User not found for email: $email and user type: $userType");
                 return response()->json(['error' => 'User not found'], 404);
             }
 
-            // Check the user's password (use Hash::check for hashed passwords)
+            Log::debug("Entered Password (trimmed): " . $password);
+            Log::debug("Stored Hashed Password: " . $user->password);
+            Log::debug('Generated Hash for "password123"": ' . bcrypt('password123'));
+
             if (!$this->checkPassword($user, $password)) {
-                Log::warning("Login failed: Invalid credentials for user type: $userType with email: $email", [
+                Log::warning("Login failed: Invalid credentials", [
                     'email' => $email,
-                    'user_type' => $userType
+                    'user_type' => $userType,
                 ]);
-                Log::warning("Expected password", ['password' => $password]); // Log the password securely if needed (avoid this in production)
                 return response()->json(['error' => 'Invalid credentials'], 401);
             }
 
-
-            // Create a token for the authenticated user
             $token = $user->createToken('authToken')->plainTextToken;
 
-            // Create a session record
-            $sessionId = Str::uuid(); // Generate a unique session ID
+            $sessionId = Str::uuid();
             Session::create([
                 'id' => $sessionId,
                 'user_id' => $user->id,
                 'ip_address' => $request->ip(),
-                            'user_agent' => $request->userAgent(),
-                            'payload' => json_encode($user),
-                            'last_activity' => time(),
+                'user_agent' => $request->userAgent(),
+                'payload' => json_encode($user),
+                'last_activity' => time(),
             ]);
 
-            // Return employee_id or student_id along with token and user info
             return response()->json([
                 'token' => $token,
                 'user' => $user,
                 'session_id' => $sessionId,
-                'employee_id' => $user->employee_id ?? null, // For non-students
-                'student_id' => $user->student_id ?? null,   // For students, if available
+                'employee_id' => $user->employee_id ?? null,
+                'student_id' => $user->student_id ?? null,
             ], 200);
         } catch (\Exception $e) {
             Log::error("Login Error: " . $e->getMessage());
             return response()->json(['error' => 'Internal Server Error'], 500);
         }
+    }
+
+    /**
+     * Check if the provided password is correct.
+     */
+    private function checkPassword($user, $password)
+    {
+        // If the user has a password, check it against the hash
+        if (!empty($user->password)) {
+            $isMatch = Hash::check($password, $user->password);
+            Log::debug("Password match? " . ($isMatch ? 'YES' : 'NO'));
+            return $isMatch;
+        }
+
+        // If the password field is empty, use student_id or employee_id for fallback
+        if (empty($user->password)) {
+            if (isset($user->student_id) && trim($user->student_id) === trim($password)) {
+                Log::debug("Password match with student_id? YES");
+                return true;
+            }
+
+            if (isset($user->employee_id) && trim($user->employee_id) === trim($password)) {
+                Log::debug("Password match with employee_id? YES");
+                return true;
+            }
+        }
+
+        // If no match, return false
+        return false;
     }
 
     /**
@@ -106,24 +129,6 @@ class AuthController extends Controller
             default:
                 return null;
         }
-    }
-
-    /**
-     * Check if the provided password is correct.
-     */
-    private function checkPassword($user, $password)
-    {
-        // If the user has a hashed password, check using Hash::check
-        if (!empty($user->password)) {
-            return Hash::check($password, $user->password); // Compare hashed password
-        }
-
-        // If the password column is empty, compare the password with the student_id
-        if (empty($user->password) && isset($user->student_id)) {
-            return trim($user->student_id) === trim($password); // Compare with student_id if no password is set
-        }
-
-        return false; // Return false if password is not valid or not found
     }
 
     /**

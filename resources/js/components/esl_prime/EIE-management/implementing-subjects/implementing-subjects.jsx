@@ -8,6 +8,11 @@ import Dropdown from "./dropdown-button/implementing-subjects-dropdown";
 const EIEHeadImplementingSubjects = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Dropdown state lifted here
+  const [selectedProgram, setSelectedProgram] = useState("");
+  const [selectedYearLevel, setSelectedYearLevel] = useState("");
+  const [selectedSemester, setSelectedSemester] = useState("");
+
   const handleFileUpload = (file) => {
     console.log("Uploaded file:", file);
   };
@@ -22,33 +27,27 @@ const EIEHeadImplementingSubjects = () => {
     </h1>
 
     {/* Container for UploadingButton, Dropdown, and Search Input */}
-    <div
-    style={{
-      display: 'flex',
-      alignItems: 'center',
-      width: '100%',
-    }}
-    >
+    <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+    {/* Pass down state and setters to dropdown */}
+    <Dropdown
+    selectedProgram={selectedProgram}
+    setSelectedProgram={setSelectedProgram}
+    selectedYearLevel={selectedYearLevel}
+    setSelectedYearLevel={setSelectedYearLevel}
+    selectedSemester={selectedSemester}
+    setSelectedSemester={setSelectedSemester}
+    />
 
-    <div
-    style={{
-      display: 'flex',
-      alignItems: 'center',
-    }}
-    >
-    {/* Dropdown */}
-    <Dropdown />
-    {/* Uploading Button */}
     <UploadingButton onFileUpload={handleFileUpload} />
 
-    {/* Search Input */}
     <input
     type="text"
     value={searchQuery}
     onChange={(e) => setSearchQuery(e.target.value)}
     placeholder="Search"
     style={{
-      width: '400px',
+      width: '295px',
       borderRadius: '8px',
       fontSize: '16px',
       border: '2px solid #6B6D76',
@@ -57,11 +56,16 @@ const EIEHeadImplementingSubjects = () => {
     </div>
     </div>
 
-    <ImplementingSubjectsTable searchQuery={searchQuery} />
+    {/* Pass dropdown selections to table */}
+    <ImplementingSubjectsTable
+    searchQuery={searchQuery}
+    program={selectedProgram}
+    yearLevel={selectedYearLevel}
+    semester={selectedSemester}
+    />
     <br />
     </div>
   );
-
 };
 
 export default EIEHeadImplementingSubjects;

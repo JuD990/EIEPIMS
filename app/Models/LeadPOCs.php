@@ -26,10 +26,4 @@ class LeadPOCs extends Authenticatable
         'department',
         'role',
     ];
-
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = Hash::make($value);
-    }
-
 }

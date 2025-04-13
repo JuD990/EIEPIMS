@@ -10,6 +10,7 @@
     align-items: center; /* Center the content horizontally */
     justify-content: flex-start; /* Align text at the top */
     padding: 20px;
+    font-family: 'Poppins', sans-serif;
 }
 
 /* Individual Card Sizes */
@@ -25,7 +26,7 @@
     font-weight: bold;
     font-family: "Poppins";
     position: absolute;
-    top: 25px;
+    top: 35px;
     left: 15px;
     margin: 0;
 }
@@ -47,17 +48,18 @@
     overflow-y: auto; /* Allows for scrolling if needed */
     padding-top: 0; /* Removed any padding at the top */
     margin-top: 0; /* Ensures there’s no extra space */
+    text-align: center;
 }
 
 table {
     width: 100%; /* Maximizes the table width to fit the card */
     border-collapse: collapse;
-    margin-bottom: 0; /* Remove any margin at the top */
+    margin-bottom: 30px; /* Remove any margin at the top */
 }
 
 th, td {
     padding: 8px;
-    text-align: left;
+    text-align: center;
     border-bottom: 1px solid #ddd; /* Optional: Adds a thin border between rows */
 }
 

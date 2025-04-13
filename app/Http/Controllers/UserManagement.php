@@ -7,6 +7,7 @@ use App\Models\Students;
 use App\Models\CollegePOCs;
 use App\Models\LeadPOCs;
 use App\Models\EIEHeads;
+use App\Models\ESLadmins;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
@@ -14,6 +15,9 @@ use App\Imports\StudentsImport;
 use App\Imports\LeadPOCImport;
 use App\Imports\HeadPOCImport;
 use App\Imports\CollegePOCImport;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
 
 class UserManagement extends Controller
 {
@@ -41,6 +45,78 @@ class UserManagement extends Controller
 
         // Log the current password for debugging purposes (optional)
         Log::info("Reset Password for Student {$student_id}: Current password will be deleted.");
+
+        // Delete the password (set it to null)
+        $student->password = null;
+        $student->save();
+
+        return response()->json([
+            'message' => 'Password successfully deleted for the student.'
+        ], 200);
+    }
+
+    public function resetPasswordCollegePOC($employee_id)
+    {
+        // Find the student by student_id
+        $student = CollegePOCs::where('employee_id', $employee_id)->first();
+
+        // Check if the student exists
+        if (!$student) {
+            return response()->json([
+                'message' => 'College POC not found'
+            ], 404);
+        }
+
+        // Log the current password for debugging purposes (optional)
+        Log::info("Reset Password for CollegePOC {$employee_id}: Current password will be deleted.");
+
+        // Delete the password (set it to null)
+        $student->password = null;
+        $student->save();
+
+        return response()->json([
+            'message' => 'Password successfully deleted for the student.'
+        ], 200);
+    }
+
+    public function resetPasswordLeadPOC($employee_id)
+    {
+        // Find the student by student_id
+        $student = LeadPOCs::where('employee_id', $employee_id)->first();
+
+        // Check if the student exists
+        if (!$student) {
+            return response()->json([
+                'message' => 'LeadPOC not found'
+            ], 404);
+        }
+
+        // Log the current password for debugging purposes (optional)
+        Log::info("Reset Password for LeadPOC {$employee_id}: Current password will be deleted.");
+
+        // Delete the password (set it to null)
+        $student->password = null;
+        $student->save();
+
+        return response()->json([
+            'message' => 'Password successfully deleted for the student.'
+        ], 200);
+    }
+
+    public function resetPasswordEIEHeadPOC($employee_id)
+    {
+        // Find the student by student_id
+        $student = EIEHeads::where('employee_id', $employee_id)->first();
+
+        // Check if the student exists
+        if (!$student) {
+            return response()->json([
+                'message' => 'EIE Head not found'
+            ], 404);
+        }
+
+        // Log the current password for debugging purposes (optional)
+        Log::info("Reset Password for EIE Head {$employee_id}: Current password will be deleted.");
 
         // Delete the password (set it to null)
         $student->password = null;
@@ -191,6 +267,7 @@ class UserManagement extends Controller
                 'lastName' => 'required|string|max:255',
                 'email' => 'required|email|unique:eie_heads,email',
                 'department' => 'required|string|max:255',
+                'full_department' => 'required|string|max:255',
             ]);
 
             // Create and save the new student record
@@ -201,6 +278,7 @@ class UserManagement extends Controller
             $student->lastname = $validated['lastName'];
             $student->email = $validated['email'];
             $student->department = $validated['department'];
+            $student->full_department = $validated['full_department'];
             $student->save();
 
             return response()->json([
@@ -308,6 +386,7 @@ class UserManagement extends Controller
             'lastname' => 'required|string|max:255',
             'email' => 'required|email',  // No unique check here
             'department' => 'required|string|max:255',
+            'full_department' => 'required|string|max:255',
         ]);
 
         // Find by employee_id
@@ -460,4 +539,328 @@ class UserManagement extends Controller
         }
     }
 
+    public function fetchUserProfile(Request $request)
+    {
+
+        $request->validate([
+            'role' => 'required|string',
+            'student_id' => 'nullable|string',
+            'employee_id' => 'nullable|string',
+        ]);
+
+        $role = $request->role;
+        $studentId = $request->student_id;
+        $employeeId = $request->employee_id;
+
+        $user = null;
+
+        switch ($role) {
+            case 'Student':
+                if (!$studentId) {
+                    Log::warning("student_id missing for role Student");
+                    return response()->json(['error' => 'student_id is required'], 400);
+                }
+                $user = Students::where('student_id', $studentId)
+                ->where('role', 'Student')
+                ->first();
+                break;
+
+            case 'College POC':
+                if (!$employeeId) {
+                    Log::warning("employee_id missing for role College POC");
+                    return response()->json(['error' => 'employee_id is required'], 400);
+                }
+                $user = CollegePOCs::where('employee_id', $employeeId)
+                ->where('role', 'College POC')
+                ->first();
+                break;
+
+            case 'Lead POC':
+                if (!$employeeId) {
+                    Log::warning("employee_id missing for role Lead POC");
+                    return response()->json(['error' => 'employee_id is required'], 400);
+                }
+                $user = LeadPOCs::where('employee_id', $employeeId)
+                ->where('role', 'Lead POC')
+                ->first();
+                break;
+
+            case 'EIE Head':
+                if (!$employeeId) {
+                    Log::warning("employee_id missing for role EIE Head");
+                    return response()->json(['error' => 'employee_id is required'], 400);
+                }
+                $user = EIEHeads::where('employee_id', $employeeId)
+                ->where('role', 'EIE Head')
+                ->first();
+                break;
+
+            case 'ESL Prime':
+            case 'ESL Champion':
+                if (!$employeeId) {
+                    Log::warning("employee_id missing for role {$role}");
+                    return response()->json(['error' => 'employee_id is required'], 400);
+                }
+                $user = ESLadmins::where('employee_id', $employeeId)
+                ->where('role', $role)
+                ->first();
+                break;
+
+            default:
+                Log::error("Invalid role provided: {$role}");
+                return response()->json(['error' => 'Invalid role'], 400);
+        }
+
+        if (!$user) {
+            Log::warning("User not found for role: {$role}, ID: " . ($studentId ?? $employeeId));
+            return response()->json(['error' => 'User not found'], 404);
+        }
+
+        return response()->json(['data' => $user]);
+    }
+
+    public function uploadProfilePicture(Request $request)
+    {
+
+        $request->validate([
+          'profile_picture' => 'required|image|mimes:png|max:10240',
+
+        ], [
+            'profile_picture.required' => 'No file received.',
+            'profile_picture.image' => 'File is not an image.',
+            'profile_picture.mimes' => 'File must be a PNG.',
+            'profile_picture.max' => 'File size exceeds 5MB.',
+        ]);
+
+        Log::info('Uploaded file info:', [
+            'exists' => $request->hasFile('profile_picture'),
+                  'original_name' => $request->file('profile_picture')?->getClientOriginalName(),
+                  'mime_type' => $request->file('profile_picture')?->getMimeType(),
+                  'size' => $request->file('profile_picture')?->getSize(),
+        ]);
+
+        $user = auth()->user();
+
+        if (!$user) {
+            Log::warning('uploadProfilePicture - Unauthorized access attempt.');
+            return response()->json(['message' => 'Unauthorized.'], 401);
+        }
+
+        $userId = $user->role === 'Student' ? $user->student_id : $user->employee_id;
+        $filename = "{$userId}.png";
+        $directory = public_path("assets/user_profile_pics/");
+        $filePath = $directory . $filename;
+
+        // Ensure directory exists
+        if (!File::exists($directory)) {
+            try {
+                File::makeDirectory($directory, 0775, true);
+                Log::info("uploadProfilePicture - Created directory: {$directory}");
+            } catch (\Exception $e) {
+                Log::error('uploadProfilePicture - Failed to create directory: ' . $e->getMessage());
+                return response()->json(['message' => 'Error creating directory.'], 500);
+            }
+        }
+
+        // Delete old profile picture
+        if (File::exists($filePath)) {
+            File::delete($filePath);
+            Log::info("uploadProfilePicture - Deleted old profile picture: {$filePath}");
+        }
+
+        // Move new file
+        try {
+            $request->file('profile_picture')->move($directory, $filename);
+            Log::info("uploadProfilePicture - Uploaded new profile picture: {$filePath}");
+        } catch (\Exception $e) {
+            Log::error('uploadProfilePicture - Failed to move file: ' . $e->getMessage());
+            return response()->json(['message' => 'Error uploading file.'], 500);
+        }
+
+        $publicPath = asset("assets/user_profile_pics/{$filename}");
+
+        Log::info("uploadProfilePicture - Response: ", [
+            'message' => 'Profile picture uploaded successfully.',
+            'filepath' => $publicPath
+        ]);
+
+        return response()->json([
+            'message' => 'Profile picture uploaded successfully.',
+            'filepath' => $publicPath,
+        ]);
+    }
+
+    public function uploadProfileDepartment(Request $request)
+    {
+        // Log the incoming request data
+        Log::info('Upload Profile Department Request:', [
+            'department' => $request->user()->department, // Log the department
+        ]);
+
+        $request->validate([
+            'profile_department' => 'required|image|mimes:png|max:2048',
+        ]);
+
+        $user = auth()->user();
+        $department = $user->department;
+
+        if (!$department) {
+            return response()->json(['message' => 'Department not found for user.'], 404);
+        }
+
+        // Convert department name to lowercase and remove spaces (optional)
+        $filename = strtolower(str_replace(' ', '_', $department)) . '_department.png';
+        $directory = public_path("assets/department_logo/");
+
+        // Create the directory if it doesn't exist
+        if (!File::exists($directory)) {
+            File::makeDirectory($directory, 0775, true);
+        }
+
+        $filePath = $directory . $filename;
+
+        // Delete existing department profile picture if it exists
+        if (File::exists($filePath)) {
+            File::delete($filePath);
+        }
+
+        // Move the uploaded file
+        $request->file('profile_department')->move($directory, $filename);
+
+        // Log successful upload
+        Log::info('Department profile picture uploaded successfully.', [
+            'user_id' => auth()->id(),
+                  'filename' => $filename,
+                  'filepath' => asset("assets/department_logo/{$filename}")
+        ]);
+
+        return response()->json([
+            'message' => 'Department profile picture uploaded successfully.',
+            'filepath' => asset("assets/department_logo/{$filename}"),
+        ]);
+    }
+
+    public function updateUser(Request $request)
+    {
+        // Validate the incoming request data
+        $request->validate([
+            'role' => 'required|string',
+            'student_id' => 'nullable|string',
+            'employee_id' => 'nullable|string',
+            'password' => 'nullable|string|min:6',
+            'firstname' => 'nullable|string',
+            'middlename' => 'nullable|string',
+            'lastname' => 'nullable|string',
+            'email' => 'nullable|email',
+        ]);
+
+        $role = $request->role;
+        $studentId = $request->student_id;
+        $employeeId = $request->employee_id;
+
+        $user = null;
+
+        // Retrieve the user based on role and ID
+        switch ($role) {
+            case 'Student':
+                if (!$studentId) {
+                    Log::warning("student_id missing for role Student");
+                    return response()->json(['error' => 'student_id is required'], 400);
+                }
+                $user = Students::where('student_id', $studentId)
+                ->where('role', 'Student')
+                ->first();
+                break;
+
+            case 'College POC':
+                if (!$employeeId) {
+                    Log::warning("employee_id missing for role College POC");
+                    return response()->json(['error' => 'employee_id is required'], 400);
+                }
+                $user = CollegePOCs::where('employee_id', $employeeId)
+                ->where('role', 'College POC')
+                ->first();
+                break;
+
+            case 'Lead POC':
+                if (!$employeeId) {
+                    Log::warning("employee_id missing for role Lead POC");
+                    return response()->json(['error' => 'employee_id is required'], 400);
+                }
+                $user = LeadPOCs::where('employee_id', $employeeId)
+                ->where('role', 'Lead POC')
+                ->first();
+                break;
+
+            case 'EIE Head':
+                if (!$employeeId) {
+                    Log::warning("employee_id missing for role EIE Head");
+                    return response()->json(['error' => 'employee_id is required'], 400);
+                }
+                $user = EIEHeads::where('employee_id', $employeeId)
+                ->where('role', 'EIE Head')
+                ->first();
+                break;
+
+            case 'ESL Prime':
+            case 'ESL Champion':
+                if (!$employeeId) {
+                    Log::warning("employee_id missing for role {$role}");
+                    return response()->json(['error' => 'employee_id is required'], 400);
+                }
+                $user = ESLadmins::where('employee_id', $employeeId)
+                ->where('role', $role)
+                ->first();
+                break;
+
+            default:
+                Log::error("Invalid role provided: {$role}");
+                return response()->json(['error' => 'Invalid role'], 400);
+        }
+
+        if (!$user) {
+            Log::warning("User not found for role: {$role}, ID: " . ($studentId ?? $employeeId));
+            return response()->json(['error' => 'User not found'], 404);
+        }
+
+        // Log incoming request
+        Log::info("Request data: ", $request->all());
+
+        if (!empty($request->password)) {
+            $newPassword = trim($request->password);
+            $idToCheck = $role === 'Student' ? $studentId : $employeeId;
+
+            if ($newPassword === $idToCheck) {
+                return response()->json(['error' => 'New password cannot be the same as your ID.'], 400);
+            }
+
+            if (!empty($user->password) && Hash::check($newPassword, $user->password)) {
+                return response()->json(['error' => 'Same as current password. Pick a new one!'], 400);
+            }
+
+            $hashed = Hash::make($newPassword);
+            Log::info("Hash being saved for {$user->email}: $hashed");
+
+            $user->password = $hashed;
+        }
+
+        // Update other user details if provided
+        if ($request->has('firstname')) {
+            $user->firstname = $request->firstname;
+        }
+        if ($request->has('middlename')) {
+            $user->middlename = $request->middlename;
+        }
+        if ($request->has('lastname')) {
+            $user->lastname = $request->lastname;
+        }
+        if ($request->has('email')) {
+            $user->email = $request->email;
+        }
+
+        // Save the updated user information
+        $user->save();
+
+        return response()->json($user, 200);
+    }
 }

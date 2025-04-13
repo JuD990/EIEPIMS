@@ -9,87 +9,85 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 const PerformanceSummary = () => {
     const [ratings, setRatings] = useState([]);
     const [chartData, setChartData] = useState(null);
-    const [yAxisConfig, setYAxisConfig] = useState({});
+    const [performanceSummary, setPerformanceSummary] = useState(null);
+
+    const studentId = localStorage.getItem("student_id");
 
     useEffect(() => {
-        axios.get("http://127.0.0.1:8000/api/performance-summary")
-        .then((response) => {
-            const data = response.data;
+        if (studentId) {
+            // Fetch performance summary
+            axios.get(`http://127.0.0.1:8000/api/get-performance-summary?student_id=${studentId}`)
+            .then((response) => {
+                const data = response.data.performance_summary;
+                const yearLabels = Object.keys(data); // ['1st Year', '2nd Year', '3rd Year', '4th Year']
 
-            setRatings(data.ratings);
+                // Map rating values, replacing null with 0
+                const ratingValues = yearLabels.map(year => {
+                    const epgfAverage = data[year].epgf_average;
+                    return epgfAverage === null ? 0 : parseFloat(parseFloat(epgfAverage).toFixed(2));
+                });
 
-            setChartData({
-                labels: ["1st Year", "2nd Year", "3rd Year", "4th Year"],
-                datasets: [
-                    {
-                        label: "1st Year",
-                        data: data["1st_year"],
-                        borderColor: "rgba(255, 99, 132, 1)",
-                         backgroundColor: "rgba(255, 99, 132, 0.2)",
-                         fill: true,
-                    },
-                    {
-                        label: "2nd Year",
-                        data: data["2nd_year"],
-                        borderColor: "rgba(54, 162, 235, 1)",
-                         backgroundColor: "rgba(54, 162, 235, 0.2)",
-                         fill: true,
-                    },
-                    {
-                        label: "3rd Year",
-                        data: data["3rd_year"],
-                        borderColor: "rgba(255, 206, 86, 1)",
-                         backgroundColor: "rgba(255, 206, 86, 0.2)",
-                         fill: true,
-                    },
-                    {
-                        label: "4th Year",
-                        data: data["4th_year"],
-                        borderColor: "rgba(75, 192, 192, 1)",
-                         backgroundColor: "rgba(75, 192, 192, 0.2)",
-                         fill: true,
-                    },
-                ],
-            });
+                setPerformanceSummary(data);
 
-            // Set Y-axis configuration using the unique ratings
-            setYAxisConfig({
-                min: Math.min(...data.ratings), // Set min as the lowest rating
-                max: Math.max(...data.ratings), // Set max as the highest rating
-            });
-        })
-        .catch((error) => console.error("Error fetching data:", error));
-    }, []);
+                // Fetch ratings summary
+                axios.get(`http://127.0.0.1:8000/api/performance-summary-rating`)
+                .then((ratingsResponse) => {
+                    const ratingsData = ratingsResponse.data.ratings;
+                    setRatings(ratingsData);
 
-    const options = {
-        responsive: true,
-        scales: {
-            y: {
-                min: yAxisConfig.min,
-                max: yAxisConfig.max,
-                ticks: {
-                    stepSize: yAxisConfig.stepSize,
-                    callback: function(value) {
-                        if (typeof value === 'number') {
-                            return value.toFixed(2);
-                        }
-                        return value;
-                    }
-                }
-            },
-        },
-        plugins: {
-            legend: {
-                position: "top",
-            },
-        },
-    };
+                    // Calculate the min and max rating from the ratingsData
+                    const ratingValuesFromRatings = ratingsData.map(rating => parseFloat(rating)); // Ensure ratings are numbers
+                    const minRating = Math.min(...ratingValuesFromRatings);
+                    const maxRating = Math.max(...ratingValuesFromRatings);
+
+                    // Set chart data and options with dynamic min and max values
+                    setChartData({
+                        labels: yearLabels, // Use only year labels (no "Average" label)
+                    datasets: [
+                        {
+                            label: "Performance Summary",
+                            data: ratingValues, // Use the rating values without the "Average" value
+                            borderColor: "#DC2626",
+                                 backgroundColor: "#DC2626",
+                                 fill: true,
+                        },
+                    ],
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                min: minRating,
+                                max: maxRating,
+                                ticks: {
+                                    callback: function (value) {
+                                        if (typeof value === 'number') {
+                                            return value.toFixed(2);
+                                        }
+                                        return value;
+                                    }
+                                }
+                            },
+                        },
+                        plugins: {
+                            legend: {
+                                position: "top",
+                            },
+                        },
+                    },
+                    });
+                })
+                .catch((error) => console.error("Error fetching ratings data:", error));
+
+            })
+            .catch((error) => console.error("Error fetching performance summary:", error));
+        }
+    }, [studentId]);
 
     return (
         <div className="student-dashboard-card-3 card-3" style={{ display: "flex", flexDirection: "column", alignItems: "left" }}>
-        <h2 className="card-title" style={{ marginBottom: "20px" }}>EIE Performance Summary</h2>
-        <div style={{ width: "100%" }}>
-        {chartData ? <Line data={chartData} options={options} /> : <p>Loading...</p>}
+        <h2 className="card-title-3" style={{ marginBottom: "20px" }}>EIE Performance Summary</h2>
+        <div style={{ width: "100%", paddingTop: '40px' }}>
+        {chartData ? <Line data={chartData} options={chartData.options} /> : <p>Loading...</p>}
         </div>
         </div>
     );

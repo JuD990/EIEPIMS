@@ -54,7 +54,7 @@ const UserManagementTable = ({ searchQuery }) => {
       );
       if (!confirmReset) return;
 
-      await axios.put(`/api/lead-pocs/${employeeId}/reset-password`);
+      await axios.put(`/api/lead-poc/${employeeId}/reset-password`);
       alert("Password reset successfully!");
     } catch (error) {
       console.error("Error resetting password:", error);

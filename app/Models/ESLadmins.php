@@ -25,9 +25,4 @@ class ESLadmins extends Authenticatable
         'email',
         'role',
     ];
-
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = Hash::make($value);
-    }
 }

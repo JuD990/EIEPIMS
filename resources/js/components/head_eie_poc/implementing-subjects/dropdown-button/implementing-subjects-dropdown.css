@@ -1,6 +1,5 @@
 .eie-head-dropdown-container {
   display: flex;
-  gap: 20px;
   align-items: center;
   justify-content: flex-start; /* Align items to the left */
   margin-left: 350px; /* Adjust as needed */

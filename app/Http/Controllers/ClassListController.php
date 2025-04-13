@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Imports\ClassListImport;
 use App\Models\ClassLists;
 use App\Models\EIEHeads;
+use App\Models\CollegePOCs;
 use App\Models\ImplementingSubjects;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -214,5 +215,74 @@ class ClassListController extends Controller
 
         return response()->json($classLists);
     }
+    public function getCoursesByDepartment(Request $request)
+    {
+        $employeeId = $request->header('employee_id');
 
+        if (!$employeeId) {
+            return response()->json(['error' => 'Employee ID is required'], 400);
+        }
+
+        $user = EIEHeads::where('employee_id', $employeeId)->first();
+
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+
+        $department = $user->department;
+
+        // Step 1: Get distinct course_codes from ClassLists
+        $courseCodes = ClassLists::where('department', $department)
+        ->select('course_code')
+        ->distinct()
+        ->pluck('course_code');
+
+        // Step 2: Get matching course_titles from ImplementingSubjects
+        $courses = ImplementingSubjects::whereIn('course_code', $courseCodes)
+        ->where('department', $department)
+        ->select('course_code', 'course_title')
+        ->distinct()
+        ->get();
+
+        // Optional: group by course_title if you want same structure as before
+        $groupedCourses = $courses->groupBy('course_title')->map(function ($group) {
+            return $group->pluck('course_code')->unique()->values();
+        })->toArray();
+
+        return response()->json($groupedCourses);
+    }
+
+
+    public function getCoursesPOC(Request $request)
+    {
+        // Get the employee_id from the request header
+        $employeeId = $request->header('employee_id');
+
+        if (!$employeeId) {
+            return response()->json(['error' => 'Employee ID is required'], 400);
+        }
+
+        // Find the user by employee_id
+        $user = CollegePOCs::where('employee_id', $employeeId)->first();
+
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+
+        // Get the department of the user
+        $department = $user->department;
+
+        // Fetch courses related to the user's department and employee_id
+        $courses = ImplementingSubjects::where('department', $department)
+        ->where('employee_id', $employeeId)
+        ->select('course_title', 'course_code', 'department')
+        ->get();
+
+        // Optional: group by course_title if you want same structure as before
+        $groupedCourses = $courses->groupBy('course_title')->map(function ($group) {
+            return $group->pluck('course_code')->unique()->values();
+        })->toArray();
+
+        return response()->json($groupedCourses);
+    }
 }

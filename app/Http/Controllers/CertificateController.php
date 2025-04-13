@@ -5,7 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ClassLists;
 use App\Models\EIEHeads;
+use App\Models\EieDiagnosticReport;
+use App\Models\MasterClassList;
 use App\Models\ESLadmins;
+use App\Models\EpgfRubric;
+use App\Models\EpgfPronunciation;
+use App\Models\EpgfGrammar;
+use App\Models\EpgfFluency;
+
 use Illuminate\Support\Facades\Log;
 
 class CertificateController extends Controller
@@ -24,7 +31,13 @@ class CertificateController extends Controller
 
         Log::info("✅ Student found: " . json_encode($student));
 
-        // 🏫 Find the Dean based on the student's department
+        // 🏫 Find the full department from EIEHeads based on the student's department
+        $departmentHead = EIEHeads::where('department', $student->department)->first();
+        $fullDepartment = $departmentHead ? $departmentHead->full_department : "Unknown Department";
+
+        Log::info("✅ Full Department found: " . $fullDepartment);
+
+        // 🏫 Find the Dean based on the student's department (EIEHeads)
         $dean = EIEHeads::where('department', $student->department)
         ->where('role', 'EIE Head')
         ->first();
@@ -37,7 +50,6 @@ class CertificateController extends Controller
 
         // 🏆 Find the ESL Champion
         $eslChampion = ESLadmins::where('role', 'ESL Champion')->first();
-
         $eslChampionName = $eslChampion
         ? trim("{$eslChampion->firstname} {$eslChampion->middlename} {$eslChampion->lastname}")
         : "Unknown ESL Champion";
@@ -49,11 +61,13 @@ class CertificateController extends Controller
 
         // 📜 Prepare JSON response
         $data = [
-            'name' => $fullName ?? "N/A",
-            'year_level' => $student->year_level ?? "N/A",
-            'department' => $student->department ?? "N/A",
-            'dean_name' => $deanName ?? "N/A",
-            'esl_champion' => $eslChampionName ?? "N/A", // Include ESL Champion
+            'student_id' => $student->id, // Student ID
+            'name' => $fullName ?: "N/A",
+            'year_level' => $student->year_level ?: "N/A",
+            'department' => $student->department ?: "Unknown Department",
+            'full_department' => $fullDepartment, // Full department name
+            'dean_name' => $deanName,
+            'esl_champion' => $eslChampionName, // Include ESL Champion
             'month' => now()->format('F'),
             'current_year' => now()->format('Y'),
             'next_year' => now()->addYear()->format('Y')
@@ -64,4 +78,75 @@ class CertificateController extends Controller
         return response()->json($data);
     }
 
+    public function getDiagnosticsStudents(Request $request)
+    {
+        $query = EieDiagnosticReport::query();
+
+        // Filter by search query (name)
+        if ($request->has('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Filter by department
+        if ($request->has('department')) {
+            $department = $request->department;
+            $query->where('department', $department);
+        }
+
+        // Filter by year level
+        if ($request->has('year_level')) {
+            $query->where('year_level', $request->year_level);
+        }
+
+        // Filter by school year (expects "2025/2026")
+        if ($request->has('school_year')) {
+            $years = explode('/', $request->school_year);
+
+            if (count($years) === 2) {
+                $startYear = (int) $years[0];
+                $endYear = (int) $years[1];
+
+                $query->whereYear('date_of_interview', '>=', $startYear)
+                ->whereYear('date_of_interview', '<=', $endYear);
+            }
+        }
+
+        // Filter by show status (Showed Up)
+        if ($request->has('show_status')) {
+            $query->where('show_status', 'Showed Up');
+        }
+
+        // Fetch filtered results
+        $reports = $query->get();
+
+        // Fetch the full department for each department listed in the reports
+        foreach ($reports as $report) {
+            $head = EIEHeads::where('department', $report->department)->first();
+            if ($head) {
+                $report->full_department = $head->full_department;
+            }
+        }
+
+        // Fetch employee full name based on employee_id from ESLadmins
+        if ($request->has('employee_id')) {
+            $employee_id = $request->employee_id;
+
+            $employee = ESLadmins::where('employee_id', $employee_id)->first();
+
+            if ($employee) {
+                $fullName = trim("{$employee->firstname} {$employee->lastname}");
+                $employeeName = $fullName ?? "Unknown Evaluator";
+            } else {
+                $employeeName = "Employee Not Found";
+            }
+
+            // Optionally, you can add the employee's full name to the response
+            return response()->json([
+                'reports' => $reports,
+                'employee_name' => $employeeName
+            ]);
+        }
+
+        return response()->json($reports);
+    }
 }

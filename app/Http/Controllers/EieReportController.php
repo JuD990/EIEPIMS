@@ -366,9 +366,20 @@ class EieReportController extends Controller
                 foreach ($programReports as $report) {
                     $monthName = \Carbon\Carbon::parse($report->created_at)->format('F');
                     if (in_array($monthName, $months)) {
-                        $monthData[$monthName]['submitted'] += $report->submitted;
-                        $monthData[$monthName]['completionRate'] += $report->completion_rate;
-                        $monthData[$monthName]['epgfAverage'] += $report->epgf_average;
+                        $monthData[$monthName]['submitted'] =
+                        is_null($monthData[$monthName]['submitted'])
+                        ? $report->submitted
+                        : $monthData[$monthName]['submitted'] + $report->submitted;
+
+                        $monthData[$monthName]['completionRate'] =
+                        is_null($monthData[$monthName]['completionRate'])
+                        ? $report->completion_rate
+                        : $monthData[$monthName]['completionRate'] + $report->completion_rate;
+
+                        $monthData[$monthName]['epgfAverage'] =
+                        is_null($monthData[$monthName]['epgfAverage'])
+                        ? $report->epgf_average
+                        : $monthData[$monthName]['epgfAverage'] + $report->epgf_average;
                         $monthData[$monthName]['proficiencyLevel'] = $this->determineProficiencyLevel($report->epgf_average);
 
                         if ($report->champion_epgf_average > $monthData[$monthName]['champion_epgf_average']) {

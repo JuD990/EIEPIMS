@@ -11,7 +11,7 @@
     justify-content: flex-start; /* Start from the top */
     padding: 20px;
     width: 600px;
-    height: 400px; /* Card height */
+    height: 520px; /* Card height */
     background-color: white;
     justify-self: end;
     margin-right: 25px;
@@ -57,17 +57,17 @@
 .evaluation-scores-dropdown-icon {
     position: absolute;
     right: 10px;
-    color: blue;
+    color: grey;
     pointer-events: none; /* Prevents clicking on the icon */
 }
 
 /* Ensure Dropdown Width Adjusts Based on Text */
 .evaluation-scores-custom-dropdown option {
     font-family: "Poppins", sans-serif;
+    margin-top: 35px;
     font-size: 14px;
 }
 
-/* Table Styling */
 /* Table Styling */
 .evaluation-scores-table {
     margin-top: 20px; /* Add space between dropdown and table */
@@ -84,11 +84,16 @@
     border-bottom: 1px solid #ddd; /* Adds a light border below each row */
 }
 
+.evaluation-scores-table td{
+     font-size: 14px;
+}
+
 /* Make sure cells inside the rows don't have borders */
 .evaluation-scores-table th,
 .evaluation-scores-table td {
     padding: 1px; /* Add some padding to make the table look better */
     border: none; /* Remove borders from cells */
+    white-space: nowrap;
 }
 
 /* Header Styling */

@@ -1,0 +1,31 @@
+/* Styling for the dropdown */
+.student-dropdown1 {
+    background-color: #fbf7f7;
+    font-family: 'Poppins', sans-serif;
+    border-color: #e5e5e5;
+    border-radius: 8px;
+    border-width: 2px;
+    font-size: 14px;
+    width: 150px;
+    margin-left: 180px;
+    padding: 8px;
+}
+
+.student-dropdown2 {
+    background-color: #fbf7f7;
+    font-family: 'Poppins', sans-serif;
+    border-color: #e5e5e5;
+    border-radius: 8px;
+    padding: 8px;
+    border-width: 1px;
+    font-size: 14px;
+    width: 150px;
+}
+
+/* Flex container for the dropdowns */
+.student-dropdown-container {
+    display: flex;
+    gap: 10px; /* Adds space between the dropdowns */
+    justify-content: flex-end; /* Aligns both dropdowns to the left */
+    align-items: right; /* Vertically center the items in the row */
+}

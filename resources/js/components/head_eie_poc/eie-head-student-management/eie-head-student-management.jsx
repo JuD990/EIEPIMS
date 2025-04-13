@@ -6,6 +6,17 @@ import StudentManagementTable from './student-management-table/student-managemen
 
 const EIEHeadStudentManagement = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTitle, setSelectedTitle] = useState(null);
+  const [selectedCode, setSelectedCode] = useState(null);
+
+  // Handle title and code selection change
+  const handleTitleChange = (title) => {
+    setSelectedTitle(title);
+  };
+
+  const handleCodeChange = (code) => {
+    setSelectedCode(code);
+  };
 
   return (
     <div>
@@ -23,7 +34,12 @@ const EIEHeadStudentManagement = () => {
       margin: '20px 35px',
       width: '100%',
     }}>
-    <StudentManagementDropdown />
+    <StudentManagementDropdown
+    selectedTitle={selectedTitle}
+    onTitleChange={handleTitleChange}
+    selectedCode={selectedCode}
+    onCodeChange={handleCodeChange}
+    />
     <input
     type="text"
     value={searchQuery}
@@ -40,7 +56,11 @@ const EIEHeadStudentManagement = () => {
     />
     </div>
 
-    <StudentManagementTable searchQuery={searchQuery} />
+    <StudentManagementTable
+    searchQuery={searchQuery}
+    selectedTitle={selectedTitle}
+    selectedCode={selectedCode}
+    />
     <br />
     </div>
   );
