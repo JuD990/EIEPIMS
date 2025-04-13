@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('password')->nullable();
             $table->string('email', 50)->unique();
             $table->string('department', 20);
-            $table->string('full_department', 20);
+            $table->string('full_department', 50);
             $table->string('role')->default('EIE Head');
             $table->timestamps();
         });

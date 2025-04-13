@@ -4,7 +4,7 @@ import { useTable } from "react-table";
 import "./student-table.css";
 import UserManagementButtons from "../../user-management-buttons-students/user-management-button";
 
-const UserManagementTable = ({searchQuery}) => {
+const UserManagementTable = ({ searchQuery, selectedDepartment, selectedUserType }) => {
   const [students, setStudents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -121,15 +121,27 @@ const UserManagementTable = ({searchQuery}) => {
 
 
   // Filter students based on search query
-  const filteredStudents = students.filter((student) =>
-  student.firstname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  student.lastname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  student.student_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  student.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  student.department.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  student.year_level.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  student.program.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredStudents = students.filter((student) => {
+    const matchesSearch = [
+      student.firstname,
+      student.lastname,
+      student.student_id,
+      student.email,
+      student.department,
+      student.year_level,
+      student.program
+    ].some((field) => field?.toLowerCase().includes(searchQuery.toLowerCase()));
+
+    const matchesDepartment = selectedDepartment
+    ? student.department === selectedDepartment
+    : true;
+
+    const matchesUserType = selectedUserType
+    ? student.user_type === selectedUserType
+    : true;
+
+    return matchesSearch && matchesDepartment && matchesUserType;
+  });
 
   // Define columns for the table
   const columns = React.useMemo(

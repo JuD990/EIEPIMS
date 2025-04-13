@@ -154,8 +154,8 @@ const eslPrimeDiagnostics = () => {
 
         <div className="esl-interview-scorecard-container">
         {loading && (
-            <div style={{ textAlign: "center", padding: "10px", color: "#888" }}>
-            No EPGF Rubric data...
+            <div style={{ textAlign: "center", padding: "5px", color: "#888" }}>
+            EPGF Rubric version not set.
             </div>
         )}
 

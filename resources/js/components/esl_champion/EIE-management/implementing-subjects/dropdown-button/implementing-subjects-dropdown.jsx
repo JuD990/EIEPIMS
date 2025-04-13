@@ -3,15 +3,18 @@ import axios from "axios";  // Import Axios
 import "./implementing-subjects-dropdown.css";
 import { FaChevronDown } from "react-icons/fa";
 
-const ImplementingSubjectDropdown = () => {
+const ImplementingSubjectDropdown = ({
+  selectedProgram,
+  setSelectedProgram,
+  selectedYearLevel,
+  setSelectedYearLevel,
+  selectedSemester,
+  setSelectedSemester,
+  setSearchQuery, // Function to set search query (if used for search)
+}) => {
   const [isProgramOpen, setIsProgramOpen] = useState(false);
-  const [selectedProgram, setSelectedProgram] = useState(""); // Removed default "BSIT"
-
   const [isYearLevelOpen, setIsYearLevelOpen] = useState(false);
-  const [selectedYearLevel, setSelectedYearLevel] = useState(""); // Removed default "1st Year"
-
   const [isSemesterOpen, setIsSemesterOpen] = useState(false);
-  const [selectedSemester, setSelectedSemester] = useState(""); // Removed default "1st Semester"
 
   const [programs, setPrograms] = useState([]);
   const [yearLevels, setYearLevels] = useState([]);
@@ -25,7 +28,6 @@ const ImplementingSubjectDropdown = () => {
 
         if (response.status === 200) {
           const data = response.data;
-
           setPrograms(data.programs || []);
           setYearLevels(data.year_levels || []);
           setSemesters(data.semesters || []);
@@ -37,6 +39,14 @@ const ImplementingSubjectDropdown = () => {
 
     fetchData();
   }, []);
+
+  // Function to reset filters and view all data
+  const handleResetFilters = () => {
+    setSelectedProgram("");
+    setSelectedYearLevel("");
+    setSelectedSemester("");
+    setSearchQuery(""); // Optionally clear search query if you use one
+  };
 
   return (
     <div
@@ -80,7 +90,7 @@ const ImplementingSubjectDropdown = () => {
     className="eie-head-dropdown-btn"
     onClick={() => setIsYearLevelOpen((prev) => !prev)}
     >
-    {selectedYearLevel || "Select Year Level"} {/* Display default text if no year level selected */}
+    {selectedYearLevel || "Select Year Level"}
     <FaChevronDown className={`eie-head-dropdown-arrow ${isYearLevelOpen ? "open" : ""}`} />
     </button>
     {isYearLevelOpen && (
@@ -107,7 +117,7 @@ const ImplementingSubjectDropdown = () => {
     className="eie-head-dropdown-btn"
     onClick={() => setIsSemesterOpen((prev) => !prev)}
     >
-    {selectedSemester || "Select Semester"} {/* Display default text if no semester selected */}
+    {selectedSemester || "Select Semester"}
     <FaChevronDown className={`eie-head-dropdown-arrow ${isSemesterOpen ? "open" : ""}`} />
     </button>
     {isSemesterOpen && (
@@ -127,6 +137,24 @@ const ImplementingSubjectDropdown = () => {
       </div>
     )}
     </div>
+
+    {/* Reset Filter Link */}
+    <a
+    href="#"
+    onClick={(e) => {
+      e.preventDefault();
+      handleResetFilters();
+    }}
+    style={{
+      textDecoration: "underline",
+      color: "black",
+      cursor: "pointer",
+      fontSize: "16px",
+      whiteSpace: "nowrap",
+    }}
+    >
+    Reset Filter
+    </a>
     </div>
   );
 };

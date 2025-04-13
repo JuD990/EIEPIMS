@@ -4,7 +4,7 @@ import { useTable } from "react-table";
 import "./lead-poc-table.css";
 import UserManagementButtons from "../../user-management-buttons-lead-poc/user-management-button";
 
-const UserManagementTable = ({ searchQuery }) => {
+const UserManagementTable = ({ searchQuery, selectedDepartment }) => {
   const [collegePOCs, setCollegePOCs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -107,11 +107,14 @@ const UserManagementTable = ({ searchQuery }) => {
     }
   };
 
-  // Filter Lead POCs based on search query
-  const filteredCollegePOCs = (collegePOCs || []).filter((poc) =>
-  [poc.firstname, poc.lastname, poc.employee_id, poc.email, poc.department]
-  .some((field) => field?.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  const filteredCollegePOCs = (collegePOCs || []).filter((poc) => {
+    const matchesSearch = [poc.firstname, poc.lastname, poc.employee_id, poc.email, poc.department]
+    .some((field) => field?.toLowerCase().includes(searchQuery.toLowerCase()));
+
+    const matchesDepartment = selectedDepartment === "" || poc.department === selectedDepartment;
+
+    return matchesSearch && matchesDepartment;
+  });
 
   // Define columns for the table
   const columns = React.useMemo(

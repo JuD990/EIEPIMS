@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useTable } from "react-table";
 import "./eie-head-poc-table.css";
+import UserManagementButtons from "../../user-management-buttons-eie-head/user-management-button";
 
-const UserManagementTable = ({ searchQuery }) => {
+const UserManagementTable = ({ searchQuery, selectedDepartment }) => {
   const [collegePOCs, setCollegePOCs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -15,6 +16,7 @@ const UserManagementTable = ({ searchQuery }) => {
     employee_id: "",
     email: "",
     department: "",
+    full_department: ''
   });
 
   const handleCancel = () => {
@@ -26,6 +28,7 @@ const UserManagementTable = ({ searchQuery }) => {
       employee_id: "",
       email: "",
       department: "",
+      full_department: ''
     });
   };
 
@@ -53,7 +56,7 @@ const UserManagementTable = ({ searchQuery }) => {
       );
       if (!confirmReset) return;
 
-      await axios.put(`/api/college-pocs/${employeeId}/reset-password`);
+      await axios.put(`/api/head-poc/${employeeId}/reset-password`);
       alert("Password reset successfully!");
     } catch (error) {
       console.error("Error resetting password:", error);
@@ -70,6 +73,7 @@ const UserManagementTable = ({ searchQuery }) => {
       employee_id: collegePOC.employee_id,
       email: collegePOC.email,
       department: collegePOC.department,
+      full_department: collegePOC.full_department,
     });
     setShowModal(true);
   };
@@ -88,29 +92,32 @@ const UserManagementTable = ({ searchQuery }) => {
 
     try {
       const response = await axios.put(
-        `/api/college-pocs/${formData.employee_id}`,
+        `/api/update-head-poc/${formData.employee_id}`,
         formData
       );
       if (response.status === 200) {
-        alert("College POC data updated successfully!");
+        alert("EIE Head POC data updated successfully!");
         setShowModal(false);
         window.location.reload();
       } else {
-        alert("Failed to update College POC data.");
+        alert("Failed to update EIE Head POC data.");
       }
     } catch (error) {
-      console.error("Error updating College POC data:", error);
+      console.error("Error updating EIE Head POC data:", error);
       alert("An unexpected error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Filter College POCs based on search query
-  const filteredCollegePOCs = (collegePOCs || []).filter((poc) =>
-  [poc.firstname, poc.lastname, poc.employee_id, poc.email, poc.department]
-  .some((field) => field?.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  const filteredCollegePOCs = (collegePOCs || []).filter((poc) => {
+    const matchesSearch = [poc.firstname, poc.lastname, poc.employee_id, poc.email, poc.department]
+    .some((field) => field?.toLowerCase().includes(searchQuery.toLowerCase()));
+
+    const matchesDepartment = selectedDepartment === "" || poc.department === selectedDepartment;
+
+    return matchesSearch && matchesDepartment;
+  });
 
   // Define columns for the table
   const columns = React.useMemo(
@@ -130,7 +137,7 @@ const UserManagementTable = ({ searchQuery }) => {
       },
       {
         Header: "Department",
-        accessor: "department",
+        accessor: (row) => `${row.department}${row.full_department ? ` - ${row.full_department}` : ""}`,
       },
       {
         Header: "Email",
@@ -170,6 +177,7 @@ const UserManagementTable = ({ searchQuery }) => {
   }
 
   return (
+    <div>
     <div className="table-container">
     <table {...getTableProps()} className="non-sticky-table">
     <thead>
@@ -194,6 +202,12 @@ const UserManagementTable = ({ searchQuery }) => {
     })}
     </tbody>
     </table>
+    </div>
+
+    {/* User Management Buttons Outside and Below the Table */}
+    <div className="user-management-container">
+    <UserManagementButtons />
+    </div>
 
     {/* Modal */}
     {showModal && (
@@ -201,20 +215,28 @@ const UserManagementTable = ({ searchQuery }) => {
       <div className="form-container" onClick={(e) => e.stopPropagation()}>
       <h2>Update Credentials</h2>
       <form onSubmit={handleFormSubmit}>
-      {["firstname", "middlename", "lastname", "employee_id", "email", "department",].map(
+      {["firstname", "middlename", "lastname", "employee_id", "email", "department", "full_department"].map(
         (field) => (
-          <div key={field} style={{ marginBottom: "20px" }}>
-          <label>{field.replace("_", " ").toUpperCase()}:</label>
+          <div key={field} style={{ marginBottom: "5px", display: "flex", flexDirection: "column" }}>
+          <label style={{ fontWeight: "bold", marginBottom: "5px", textAlign: "left" }}>
+          {field.replace("_", " ").toUpperCase()}:
+          </label>
           <input
           type="text"
           name={field}
           value={formData[field]}
           onChange={handleInputChange}
+          style={{
+            width: "100%",
+            padding: "8px",
+            borderRadius: "5px",
+            border: "1px solid #ccc",
+          }}
           />
           </div>
         )
       )}
-      <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+      <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "55px" }}>
       <button
       type="button"
       style={{
@@ -237,7 +259,7 @@ const UserManagementTable = ({ searchQuery }) => {
       style={{
         width: "100px",
         height: "40px",
-        backgroundColor: isSubmitting ? "#B0B0B0" : "#0187F1",
+        backgroundColor: isSubmitting ? "#B0B0B0" : "#6B6D76",
         color: "#FFFFFF",
         borderRadius: "12px",
         border: "none",
@@ -246,10 +268,10 @@ const UserManagementTable = ({ searchQuery }) => {
         transition: "background-color 0.3s ease", // Smooth color transition
       }}
       onMouseOver={(e) => {
-        if (!isSubmitting) e.target.style.backgroundColor = "#0171D3"; // Darker blue on hover
+        if (!isSubmitting) e.target.style.backgroundColor = "#6B6D76"; // Darker blue on hover
       }}
       onMouseOut={(e) => {
-        if (!isSubmitting) e.target.style.backgroundColor = "#0187F1"; // Default color
+        if (!isSubmitting) e.target.style.backgroundColor = "#6B6D76"; // Default color
       }}
       >
       {isSubmitting ? "Updating..." : "Update"}

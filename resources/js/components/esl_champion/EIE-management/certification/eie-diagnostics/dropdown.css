@@ -1,0 +1,99 @@
+.certification-diagnostics-dropdown-container {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: flex-start;
+    margin-left: 355px;
+    margin-right: auto;
+    white-space: nowrap;
+    padding: 8px;
+    flex-wrap: wrap;
+}
+
+.diagnostics-dropdown-wrapper {
+    position: relative;
+}
+
+.diagnostics-dropdown-btn {
+    padding: 10px 20px;
+    background-color: #FBF7F7;
+    color: black;
+    border: 1px solid black;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 200px;
+    height: 50px;
+}
+
+.diagnostics-dropdown-btn .diagnostics-dropdown-arrow {
+    margin-left: auto;
+}
+
+.diagnostics-dropdown-menu {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    border-radius: 12px;
+    width: 100%;
+    visibility: visible;
+    opacity: 1;
+}
+
+.diagnostics-dropdown-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.diagnostics-dropdown-item:hover {
+    background-color: #f0f0f0;
+}
+
+.diagnostics-dropdown-item.diagnostics-dropdown-selected {
+    font-weight: bold;
+    background-color: #e0e0e0;
+}
+
+/* Search Input Styles */
+.diagnostics-search-input-container {
+    display: flex;
+    align-items: center;
+    margin-left: 535px;
+
+}
+
+.diagnostics-search-input {
+    padding: 10px 20px;
+    color: black;
+    border: 1px solid black;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 350px;
+    height: 50px;
+    outline: none;
+}
+.certification-search-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-left: 400px;
+}
+
+.certification-search-input {
+    width: 476px;
+    height: 60px;
+    border-radius: 8px;
+    border: 1px solid #333333;
+    padding-left: 10px;
+    font-size: 16px;
+}

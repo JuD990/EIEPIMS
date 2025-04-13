@@ -1,0 +1,36 @@
+/* EIEDiagnostics.css */
+.eie-diagnostics-container {
+    display: flex;
+    flex-direction: column;  /* Stack the cards vertically */
+    justify-content: flex-start;  /* Align items to the top */
+    align-items: center;
+    gap: 20px;  /* Optional: adds space between the cards */
+    margin-left: 340px;
+    overflow-y: auto;  /* Enables vertical scrolling */
+    height: 100vh; /* Full viewport height to allow scrolling */
+    padding-bottom: 20px; /* Optional: adds space below */
+}
+
+.eie-diagnostics-card {
+    width: 1400px;  /* Adjust the width of each card */
+    height: 650px; /* Adjust the height of each card */
+    border: 2px solid black;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Optional: For a subtle shadow effect */
+}
+
+.eie-diagnostics-image {
+    width: 1450px;  /* Make sure the image fills the card width */
+    height: 600px; /* Maintain aspect ratio */
+}
+
+.eie-diagnostics-card h3 {
+    font-size: 18px;
+    text-align: center;
+    color: #333; /* Optional: text color */
+}

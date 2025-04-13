@@ -41,17 +41,3 @@
   margin-left: 365px;
   margin-right: auto;
 }
-.search-container {
-  display: flex;
-  justify-content: flex-end; /* Push input to the right */
-  margin-top: 10px; /* Add space below the divider */
-}
-
-.search-input {
-  width: 476px;
-  height: 60px;
-  border-radius: 8px;
-  border: 1px solid #333333;
-  padding-left: 10px;
-  font-size: 16px;
-}

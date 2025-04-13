@@ -40,9 +40,9 @@ const UploadingButton = () => {
   };
 
   return (
-    <div className="upload-buttons-container">
+    <div className="esl-upload-buttons-container">
     {/* Upload Subject Button */}
-    <button onClick={handleSubjectButtonClick} className="implementing-subjects-upload-button">
+    <button onClick={handleSubjectButtonClick} className="esl-implementing-subjects-upload-button">
     {subjectLoading ? (
       <span>Uploading...</span>
     ) : (

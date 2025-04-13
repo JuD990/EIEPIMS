@@ -3,27 +3,33 @@ import axios from "axios";
 import "./esl-prime-account-management-dropdown.css";
 import { FaChevronDown } from "react-icons/fa";
 
-const UserManagementDropdown = ({ selectedUserType, setSelectedUserType, searchQuery, setSearchQuery }) => {
+const UserManagementDropdown = ({
+  selectedUserType,
+  setSelectedUserType,
+  searchQuery,
+  setSearchQuery,
+  selectedDepartment,
+  setSelectedDepartment
+}) => {
   const [isUserTypeOpen, setIsUserTypeOpen] = useState(false);
   const [localSelectedUserType, setLocalSelectedUserType] = useState("Student"); // Default to "Student"
   const [isDepartmentOpen, setIsDepartmentOpen] = useState(false);
-  const [selectedDepartment, setSelectedDepartment] = useState("");
   const [departments, setDepartments] = useState([]);
 
   const userType = ["Student", "College POC", "Lead POC", "EIE Head POC"];
 
-  // Fetch departments from API
+  // In your useEffect - remove setting the first department by default
   useEffect(() => {
     axios
     .get("http://127.0.0.1:8000/api/getDepartmentsOptionsForPOCs")
     .then((response) => {
       setDepartments(response.data);
-      setSelectedDepartment(response.data[0] || "");
     })
     .catch((error) => {
       console.error("Error fetching departments:", error);
     });
   }, []);
+
 
   // Sync with parent state and localStorage when mounted
   useEffect(() => {
@@ -42,11 +48,11 @@ const UserManagementDropdown = ({ selectedUserType, setSelectedUserType, searchQ
 
   return (
     <div className="student-dropdown-container">
-    <div className="dropdowns-wrapper" style={{ display: "flex", gap: "20px" }}>
+    <div className="dropdowns-wrapper" style={{ display: "flex", alignItems: "center" }}>
     {/* User Type Dropdown */}
     <div className="student-dropdown-wrapper">
     <button className="student-dropdown-btn" onClick={() => setIsUserTypeOpen((prev) => !prev)}>
-    {localSelectedUserType || "Student"} {/* Ensure default value */}
+    {localSelectedUserType || "Student"}
     <FaChevronDown className={`dropdown-arrow ${isUserTypeOpen ? "open" : ""}`} />
     </button>
     {isUserTypeOpen && (
@@ -65,7 +71,7 @@ const UserManagementDropdown = ({ selectedUserType, setSelectedUserType, searchQ
     </div>
 
     {/* Department Dropdown */}
-    <div className="student-dropdown-wrapper">
+    <div className="student-dropdown-wrapper" style={{ position: "relative" }}>
     <button className="student-dropdown-btn" onClick={() => setIsDepartmentOpen((prev) => !prev)}>
     {selectedDepartment || "Select Department"}
     <FaChevronDown className={`dropdown-arrow ${isDepartmentOpen ? "open" : ""}`} />
@@ -87,13 +93,26 @@ const UserManagementDropdown = ({ selectedUserType, setSelectedUserType, searchQ
       </div>
     )}
     </div>
+
+    {/* Reset Filter (non-button text) */}
+    <p
+    style={{
+      cursor: "pointer",
+      fontWeight: 500,
+      color: "#007bff",
+      marginTop: "20px"
+    }}
+    onClick={() => setSelectedDepartment("")}
+    >
+    Reset Filter
+    </p>
     </div>
 
-    {/* Right side Search Area */}
+    {/* Search Bar */}
     <input
     type="text"
     value={searchQuery}
-    onChange={(e) => setSearchQuery(e.target.value)} // Updates parent component
+    onChange={(e) => setSearchQuery(e.target.value)}
     placeholder="Search"
     style={{
       width: "476px",

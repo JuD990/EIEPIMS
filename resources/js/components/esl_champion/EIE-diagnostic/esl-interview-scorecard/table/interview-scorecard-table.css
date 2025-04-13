@@ -1,0 +1,297 @@
+.esl-interview-scorecard-container {
+    display: flex; /* Make the container a flexbox */
+    justify-content: space-between; /* Space out the form and button sections */
+    padding: 20px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
+    border-radius: 5px;
+    background: white;
+    margin-left: 340px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    flex-direction: column;
+    gap: 50px;
+    font-family: 'Poppins';
+}
+
+.esl-interview-scorecard-container h2 {
+    font-family: 'Poppins';
+    text-align: left;
+    margin: 35px 25px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    order: 1; /* Ensure the title stays at the top */
+}
+
+/* Form layout */
+.esl-interview-scorecard-form-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 100px;
+    margin: 0;
+    margin-left: 150px;
+    flex: 1;  /* Allow the form container to take up remaining space */
+    order: 2; /* Place the form container in second position */
+}
+
+/* Columns */
+.esl-interview-scorecard-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Form groups */
+.esl-interview-scorecard-form-name,
+.esl-interview-scorecard-form-interviewer,
+.esl-interview-scorecard-form-venue,
+.esl-interview-scorecard-form-department,
+.esl-interview-scorecard-form-year-level,
+.esl-interview-scorecard-form-date,
+.esl-interview-scorecard-form-time {
+    display: flex;
+    flex-direction: row;
+}
+
+.esl-interview-scorecard-form-name {
+    gap: 64px;
+}
+
+.esl-interview-scorecard-form-interviewer {
+    gap: 20px;
+}
+
+.esl-interview-scorecard-form-venue {
+    gap: 60px;
+}
+
+.esl-interview-scorecard-form-department {
+    gap: 20px;
+}
+
+.esl-interview-scorecard-form-date {
+    gap: 81px;
+}
+
+.esl-interview-scorecard-form-time {
+    gap: 78px;
+}
+.esl-interview-scorecard-form-year-level{
+    gap: 35px;
+}
+
+/* Labels */
+.esl-interview-scorecard-form-name label,
+.esl-interview-scorecard-form-interviewer label,
+.esl-interview-scorecard-form-venue label,
+.esl-interview-scorecard-form-department label,
+.esl-interview-scorecard-form-date label,
+.esl-interview-scorecard-form-year-level label,
+.esl-interview-scorecard-form-time label {
+    font-weight: bold;
+    margin-top: 15px;
+    color: #000000;
+}
+
+/* Input fields */
+.esl-interview-scorecard-input,
+.esl-interview-scorecard-select-year-level,
+.esl-interview-scorecard-select-department {
+    padding: 12px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    font-size: 18px;
+    background: white;
+    cursor: pointer;
+    width: 275px;
+    box-sizing: border-box;
+}
+
+/* Dropdown Styling */
+.esl-dropdown-container {
+    position: relative;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Apply max height and scrolling to dropdown */
+.esl-interview-scorecard-select-name {
+    width: 275px;
+    font-size: 18px;
+    background: white;
+    cursor: pointer;
+    padding: 12px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+}
+
+/* Input fields with icons */
+.esl-interview-scorecard-input-icon {
+    position: relative;
+    width: 100%;
+}
+
+.esl-interview-scorecard-input-icon input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.esl-interview-scorecard-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: gray;
+    pointer-events: none;
+}
+
+/* Buttons Row */
+.esl-interview-scorecard-buttons-row {
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px 40px;
+    font-weight: bold;
+    gap: 40px;
+}
+
+/* No Show Button */
+.esl-no-show-button {
+    font-weight: bold;
+    font-family: "Poppins", sans-serif;
+    background-color: #CC0000;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-right: 32px;
+}
+
+.esl-no-show-button:hover {
+    background-color: #990000;
+}
+
+/* Clear Button */
+.esl-clear-button {
+    background-color: #171C26;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 10px;
+}
+
+.esl-clear-button:hover {
+    background-color: #0F131B;
+}
+
+/* Save Button */
+.esl-save-button {
+    background-color: #6B6D76;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 10px;
+}
+
+.esl-save-button:hover {
+    background-color: #006FCC;
+}
+
+/* Average Rating Box */
+.esl-average-rating-box {
+    width: 250px;
+    height: 70px;
+    border: 1px solid #7B7878;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
+    margin-right: 18px;
+}
+
+.esl-average-rating-box label{
+    font-size: 18px;
+    font-weight: bold;
+    padding-left: 20px;
+}
+
+/* Buttons Rating Section */
+.esl-buttons-rating {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    justify-content: flex-start;
+    align-items: flex-end; /* Align buttons to the right */
+    margin-left: 40px; /* Add some space between the form and buttons */
+    gap: 5px;
+    order: 3; /* Place the buttons section after the form container */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .esl-interview-scorecard-container {
+        flex-direction: column; /* Stack form and button sections vertically */
+    }
+
+    .esl-interview-scorecard-form-container {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .esl-interview-scorecard-input,
+    .esl-interview-scorecard-select {
+        width: 100%;
+    }
+
+    .esl-interview-scorecard-buttons-row {
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 0;
+    }
+
+    .esl-buttons-rating {
+        margin-left: 0;
+        align-items: center;
+        order: 2; /* Move buttons section below the form */
+    }
+}
+
+.vertical-header {
+    writing-mode: vertical-rl;
+    text-align: center;
+    font-weight: bold;
+    background: #f4f4f4;
+    height: 120px;
+    padding: 15px;
+
+}
+
+.vertical-text {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-weight: bold;
+    text-align: center;
+    background: #f4f4f4;
+}
+/* Value elements */
+.value {
+    margin-right: 15px;
+}
+
+/* Dropdown styling */
+select {
+    width: 100%;
+    background-color: transparent;
+}
+
+.esl-scorecard-table th:first-child {
+    background-color: #F4F7FC;
+}
+
+.esl-scorecard-table-container{
+    width: 100%;
+}

@@ -37,14 +37,23 @@
 }
 
 .monthly-champion-action-btn {
-    background-color: #007bff;
+    background-color: #DC2626;
     color: white;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
     border-radius: 4px;
 }
+.monthly-champion-search-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 20px;
+}
 
-.monthly-champion-action-btn:hover {
-    background-color: #0056b3;
+.monthly-champion-search-input {
+    width: 476px;
+    height: 60px;
+    border-radius: 8px;
+    border: 1px solid #333333;
+    font-size: 16px;
 }

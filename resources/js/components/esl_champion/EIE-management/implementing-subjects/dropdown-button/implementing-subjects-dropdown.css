@@ -4,7 +4,6 @@
   align-items: center;
   justify-content: flex-start; /* Align items to the left */
   margin-left: 350px; /* Adjust as needed */
-  margin-right: auto; /* Push everything to the left */
 }
 
 .eie-head-dropdown-wrapper {
@@ -30,33 +29,40 @@
   margin-left: auto;
 }
 
-.eie-head-dropdown-menu {
+.esl-dashboard-dropdown-menu {
   display: flex;
   flex-direction: column;
   position: absolute;
-  top: 100%; /* Ensure menu is directly below the button */
+  top: 100%;
   left: 0;
   background-color: white;
   border: 1px solid #ccc;
   padding: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
+  z-index: 9999;
   border-radius: 5px;
-  width: 100%; /* Matches button width */
+  width: 100%;
+
+  /* Scroll if options exceed 200px height */
+  max-height: 200px;
+  overflow-y: auto;
 }
 
-.eie-head-dropdown-item {
-  margin: 0;
-  padding: 8px 12px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+/* Style the scrollbar */
+.esl-dashboard-dropdown-menu::-webkit-scrollbar {
+  width: 8px;
 }
 
-.eie-head-dropdown-item:hover {
-  background-color: #f0f0f0;
+.esl-dashboard-dropdown-menu::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
 }
 
-.eie-head-dropdown-item.eie-head-selected {
-  font-weight: bold;
-  background-color: #e0e0e0;
+.esl-dashboard-dropdown-menu::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+.esl-dashboard-dropdown-menu::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

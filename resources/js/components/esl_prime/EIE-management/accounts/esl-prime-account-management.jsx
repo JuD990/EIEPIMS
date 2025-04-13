@@ -13,6 +13,7 @@ const EslPrimeAccountManagement = () => {
         localStorage.getItem("selectedUserType") || "Student"
     );
     const [searchQuery, setSearchQuery] = useState("");
+    const [selectedDepartment, setSelectedDepartment] = useState("");
 
     // Update localStorage whenever selectedUserType changes
     useEffect(() => {
@@ -21,17 +22,19 @@ const EslPrimeAccountManagement = () => {
 
     // Function to render the correct table based on userType
     const renderTable = () => {
+        const tableProps = { searchQuery, selectedUserType, selectedDepartment };
+
         switch (selectedUserType) {
             case "Student":
-                return <UserStudentTable searchQuery={searchQuery} />;
+                return <UserStudentTable {...tableProps} />;
             case "College POC":
-                return <UserCollegePocTable searchQuery={searchQuery} />;
+                return <UserCollegePocTable {...tableProps} />;
             case "Lead POC":
-                return <UserLeadPocTable searchQuery={searchQuery} />;
+                return <UserLeadPocTable {...tableProps} />;
             case "EIE Head POC":
-                return <UserEieHeadPocTable searchQuery={searchQuery} />;
+                return <UserEieHeadPocTable {...tableProps} />;
             default:
-                return <UserStudentTable searchQuery={searchQuery} />;
+                return <UserStudentTable {...tableProps} />;
         }
     };
 
@@ -46,8 +49,11 @@ const EslPrimeAccountManagement = () => {
 
         <UserManagementDropdown
         setSelectedUserType={setSelectedUserType}
+        selectedUserType={selectedUserType}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        selectedDepartment={selectedDepartment}
+        setSelectedDepartment={setSelectedDepartment}
         />
 
         {renderTable()} {/* Dynamically render table */}

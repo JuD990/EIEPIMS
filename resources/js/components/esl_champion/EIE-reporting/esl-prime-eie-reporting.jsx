@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import Sidebar from '../sidebar/esl-sidebar';
 import UserInfo from '@user-info/User-info';
 import "./esl-prime-eie-reporting.css";
-import Table1 from "./table/eie-reporting-table-1st-sem";
-import Table2 from "./table/eie-reporting-table-2nd-sem";
+import Reporting from "./table/eie-reporting-table";
+import ReportingDropdown from "./dropdown-button/dropdown-esl-reporting";
 
 const eslPrimeEieReporting = () => {
 
   const [dropdownOpen, setDropdownOpen] = useState(false); // State to handle dropdown visibility
+  const [selectedDepartment, setSelectedDepartment] = useState(""); // Department state
+  const [selectedSchoolYear, setSelectedSchoolYear] = useState(""); // School Year state
+  const [selectedSemester, setSelectedSemester] = useState(""); // Semester state
 
   const currentMonth = new Date().getMonth(); // 0 for January, 11 for December
 
@@ -15,16 +18,25 @@ const eslPrimeEieReporting = () => {
   const isSecondSemester = currentMonth >= 7 && currentMonth <= 11; // August to December
   const isFirstSemester = currentMonth >= 0 && currentMonth <= 4; // January to May
 
-
-return(
+  return (
     <div>
-      <Sidebar />
-      <UserInfo />
-          <br/><br/><br/><br/><br/>
-          <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#383838' }}>EIE Reporting</h1>
-      {isSecondSemester ? <Table1 /> : isFirstSemester ? <Table2 /> : null}
+    <Sidebar />
+    <UserInfo />
+    <br /><br /><br /><br /><br />
+    <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#383838' }}>EIE Reporting - {selectedSemester}/{selectedDepartment}-{selectedSchoolYear}</h1>
+    <ReportingDropdown
+    setSelectedDepartment={setSelectedDepartment}
+    setSelectedSchoolYear={setSelectedSchoolYear}
+    setSelectedSemester={setSelectedSemester}
+    />
+    <Reporting
+    department={selectedDepartment}
+    schoolYear={selectedSchoolYear}
+    semester={selectedSemester}
+    />
+
     </div>
-    );
+  );
 };
 
 export default eslPrimeEieReporting;
