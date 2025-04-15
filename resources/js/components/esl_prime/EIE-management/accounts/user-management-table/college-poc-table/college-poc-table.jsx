@@ -65,6 +65,7 @@ const UserManagementTable = ({ searchQuery, selectedDepartment }) => {
   // Handle modal open with selected row data
   const handleUpdateClick = (collegePOC) => {
     setFormData({
+      id: collegePOC.id,
       firstname: collegePOC.firstname,
       middlename: collegePOC.middlename || "",
       lastname: collegePOC.lastname,
@@ -89,7 +90,7 @@ const UserManagementTable = ({ searchQuery, selectedDepartment }) => {
 
     try {
       const response = await axios.put(
-        `/api/update-collge-poc/${formData.employee_id}`,
+        `/api/update-collge-poc/${formData.id}`,
         formData
       );
       if (response.status === 200) {

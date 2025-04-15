@@ -1,8 +1,8 @@
-.student-dropdown-container {
+.epgf-rubric-student-dropdown-container {
   display: flex;
   gap: 20px;
   justify-content: flex-start;
-  margin-left: 350px;
+  margin-left: 340px;
   margin-top: 20px;
 }
 
@@ -17,7 +17,7 @@
   position: relative;
 }
 
-.student-dropdown-btn,
+.epgf-rubric-student-dropdown-btn,
 .set-default-btn,
 .code-dropdown-btn {
   padding: 10px 20px;
@@ -29,12 +29,11 @@
   font-size: 16px;
   display: flex;
   align-items: center;
-  gap: 8px;
   width: 220px;
   height: 50px;
 }
 
-.student-dropdown-btn .dropdown-arrow,
+.epgf-rubric-student-dropdown-btn .dropdown-arrow,
 .code-dropdown-btn .dropdown-arrow {
   margin-left: auto;
 }
@@ -91,7 +90,7 @@
   background-color: #e0e0e0; /* Highlight selected item */
 }
 
-.student-dropdown-btn:disabled,
+.epgf-rubric-student-dropdown-btn:disabled,
 .set-default-btn:disabled {
   background-color: #f0f0f0;
   cursor: not-allowed;

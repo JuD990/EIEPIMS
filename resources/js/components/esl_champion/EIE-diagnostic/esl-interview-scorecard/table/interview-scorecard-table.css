@@ -42,6 +42,84 @@
     gap: 20px;
 }
 
+/* Dropdown wrapper inside table for better layout */
+.esl-table-dropdown-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* Clean consistent dropdown style in table */
+.esl-table-dropdown {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #999;
+    border-radius: 5px;
+    background-color: white;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+.custom-dropdown {
+    position: relative;
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+}
+
+.custom-dropdown-selected {
+    padding: 12px;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    cursor: pointer;
+    background: white;
+}
+
+.custom-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.custom-dropdown-search {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    outline: none;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.custom-dropdown-options {
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.custom-dropdown-option {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.custom-dropdown-option:hover {
+    background-color: #f0f0f0;
+}
+
+.custom-dropdown-option.disabled {
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+
 /* Form groups */
 .esl-interview-scorecard-form-name,
 .esl-interview-scorecard-form-interviewer,

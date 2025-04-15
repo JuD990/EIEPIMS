@@ -66,6 +66,8 @@
     font-family: "Poppins", sans-serif;
     margin-top: 35px;
     font-size: 14px;
+    max-height: 200px;         /* 👈 Set the height */
+    overflow-y: auto;          /* 👈 Enable scrolling */
 }
 
 /* Table Styling */

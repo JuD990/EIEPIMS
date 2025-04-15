@@ -39,18 +39,22 @@ Route::get('/get-course-details', [HistoricalScorecardController::class, 'getCou
 
 // User Management
 Route::get('/students', [UserManagement::class, 'getStudents']);
+Route::get('/esl-admins', [UserManagement::class, 'getESLadmins']);
 Route::post('/store-students', [UserManagement::class, 'storeStudents']);
 Route::post('/store-college-poc', [UserManagement::class, 'storeCollegePOCs']);
 Route::post('/store-lead-poc', [UserManagement::class, 'storeLeadPOCs']);
 Route::post('/store-head-poc', [UserManagement::class, 'storeEIEHeads']);
-Route::put('/update-students/{student_id}', [UserManagement::class, 'updateStudents']);
-Route::put('/update-collge-poc/{employee_id}', [UserManagement::class, 'updateCollegePOCs']);
-Route::put('/update-lead-poc/{employee_id}', [UserManagement::class, 'updateLeadPOCs']);
-Route::put('/update-head-poc/{employee_id}', [UserManagement::class, 'updateHeadPOCs']);
+Route::post('/store-esl-admins', [UserManagement::class, 'storeESLadmins']);
+Route::put('/update-students/{id}', [UserManagement::class, 'updateStudents']);
+Route::put('/update-collge-poc/{id}', [UserManagement::class, 'updateCollegePOCs']);
+Route::put('/update-lead-poc/{id}', [UserManagement::class, 'updateLeadPOCs']);
+Route::put('/update-head-poc/{id}', [UserManagement::class, 'updateHeadPOCs']);
+Route::put('/update-esl-admins/{id}', [UserManagement::class, 'updateEslAdmin']);
 Route::post('/import-students', [UserManagement::class, 'importStudents']);
 Route::post('/import-college-poc', [UserManagement::class, 'importCollegePOCs']);
 Route::post('/import-lead-poc', [UserManagement::class, 'importLeadPOCs']);
 Route::post('/import-head-poc', [UserManagement::class, 'importHeadPOCs']);
+Route::post('/import-esl-admins', [UserManagement::class, 'importESLadmins']);
 Route::delete('/delete-students/{student_id}', [UserManagement::class, 'deleteStudent']);
 Route::delete('/delete-college-pocs/{employee_id}', [UserManagement::class, 'deleteCollegePOC']);
 Route::delete('/delete-lead-pocs/{employee_id}', [UserManagement::class, 'deleteLeadPOC']);
@@ -66,6 +70,7 @@ Route::put('/students/{student_id}/reset-password', [UserManagement::class, 'res
 Route::put('/college-poc/{employee_id}/reset-password', [UserManagement::class, 'resetPasswordCollegePOC']);
 Route::put('/lead-poc/{employee_id}/reset-password', [UserManagement::class, 'resetPasswordLeadPOC']);
 Route::put('/head-poc/{employee_id}/reset-password', [UserManagement::class, 'resetPasswordEIEHeadPOC']);
+Route::put('/esl-admins/{employee_id}/reset-password', [UserManagement::class, 'resetPasswordEslAdmin']);
 
 //EPGF Setup
 Route::post('/import', [EpgfRubricController::class, 'import']);
@@ -80,18 +85,18 @@ Route::put('/pronunciation/update/{id}', [EpgfRubricController::class, 'updatePr
 Route::put('/grammar/update/{id}', [EpgfRubricController::class, 'updateGrammar']);
 Route::put('/fluency/update/{id}', [EpgfRubricController::class, 'updateFluency']);
 
-//Pronunciation
+// Fetch Pronunciation
 Route::get('/consistency/{majorVersion}', [EpgfRubricController::class, 'getConsistency']);
 Route::get('/clarity/{majorVersion}', [EpgfRubricController::class, 'getClarity']);
 Route::get('/articulation/{majorVersion}', [EpgfRubricController::class, 'getArticulation']);
 Route::get('/intonationStress/{majorVersion}', [EpgfRubricController::class, 'getIntonationStress']);
 
-//Grammar
+// Fetch Grammar
 Route::get('/accuracy/{majorVersion}', [EpgfRubricController::class, 'getAccuracy']);
 Route::get('/clarityOfThought/{majorVersion}', [EpgfRubricController::class, 'getClarityOfThought']);
 Route::get('/syntax/{majorVersion}', [EpgfRubricController::class, 'getSyntax']);
 
-//Fluency
+// Fetch Fluency
 Route::get('/qualityOfResponse/{majorVersion}', [EpgfRubricController::class, 'getQualityOfResponse']);
 Route::get('/detailOfResponse/{majorVersion}', [EpgfRubricController::class, 'getDetailOfResponse']);
 

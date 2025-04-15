@@ -108,8 +108,8 @@ const Table = ({
             "SPARK Highlight": "",
             "SPARK Lowlight": "",
             "Usage in School/Online (When in School)": "",
-            "Usage Offline (Home or Outside)": "",
-            "Support Needed": ""
+                   "Usage Offline (Home or Outside)": "",
+                   "Support Needed": ""
         });
 
         // Call the parent's onClear function if it exists
@@ -170,10 +170,11 @@ const Table = ({
                         {descriptor}
                         </td>
                         <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                        <div className="esl-table-dropdown-wrapper">
                         <select
+                        className="esl-table-dropdown"
                         value={selectedDescriptor || ""}
                         onChange={(e) => handleDescriptorChange(descriptor, e.target.value)}
-                        style={{ marginLeft: "10px", width: "100%" }}
                         >
                         <option value="">Select</option>
                         {options[optionKey]?.map((option) => (
@@ -182,6 +183,7 @@ const Table = ({
                             </option>
                         ))}
                         </select>
+                        </div>
                         </td>
                         <td style={{ border: "1px solid #ddd", padding: "8px" }}>
                         {ratings[descriptor]?.rating || "N/A"}

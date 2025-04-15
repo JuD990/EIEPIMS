@@ -18,6 +18,6 @@ class EpgfRubric extends Model
         'epgf_grammar_id',
         'epgf_fluency_id',
         'version',
-        'status'
+        'status',
     ];
 }

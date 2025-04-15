@@ -48,6 +48,8 @@
     width: 100%;
     visibility: visible;
     opacity: 1;
+    max-height: 200px;         /* 👈 Set the height */
+    overflow-y: auto;          /* 👈 Enable scrolling */
 }
 
 .diagnostics-dropdown-item {

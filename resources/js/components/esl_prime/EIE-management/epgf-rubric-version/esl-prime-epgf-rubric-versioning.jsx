@@ -64,8 +64,6 @@ const EslPrimeEPGFRubricVersion = () => {
     <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#383838' }}>
     EPGF Rubric Version
     </h1>
-
-    <br />
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: '20px' }}>
     <EPGFrubricVersionDropdown />
     <div style={{ marginRight: '35px', marginBottom: '60px' }} >

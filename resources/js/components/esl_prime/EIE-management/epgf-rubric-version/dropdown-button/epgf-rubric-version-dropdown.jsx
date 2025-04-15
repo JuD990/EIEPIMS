@@ -103,11 +103,11 @@ const EPGFrubricVersionDropdown = () => {
 
 
   return (
-    <div className="student-dropdown-container">
+    <div className="epgf-rubric-student-dropdown-container">
     <div className="dropdown-button-wrapper">
     <div className="student-dropdown-wrapper">
     <button
-    className="student-dropdown-btn"
+    className="epgf-rubric-student-dropdown-btn"
     onClick={() => setIsSubjectOpen((prev) => !prev)}
     >
     <span>

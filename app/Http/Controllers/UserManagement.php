@@ -14,6 +14,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\StudentsImport;
 use App\Imports\LeadPOCImport;
 use App\Imports\HeadPOCImport;
+use App\Imports\EslImport;
 use App\Imports\CollegePOCImport;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
@@ -29,6 +30,40 @@ class UserManagement extends Controller
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to fetch students', 'error' => $e->getMessage()], 500);
         }
+    }
+
+    public function getESLadmins()
+    {
+        try {
+            $students = ESLadmins::all(); // Fetch all ESLadmins
+            return response()->json(['data' => $students], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to fetch students', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function resetPasswordEslAdmin($employee_id)
+    {
+        // Find the ESL admin by employee_id
+        $student = ESLadmins::where('employee_id', $employee_id)->first();
+
+        // Check if the ESL admin exists
+        if (!$student) {
+            return response()->json([
+                'message' => 'ESL not found'
+            ], 404);
+        }
+
+        // Log the reset for debugging (optional)
+        Log::info("Reset Password for ESL {$employee_id}: Current password will be deleted.");
+
+        // Set the password to null
+        $student->password = null;
+        $student->save();
+
+        return response()->json([
+            'message' => 'Password successfully deleted for the ESL.'
+        ], 200);
     }
 
     public function resetPassword($student_id)
@@ -300,21 +335,84 @@ class UserManagement extends Controller
         }
     }
 
-    public function updateStudents(Request $request, $student_id)
+    public function storeESLadmins(Request $request)
+    {
+        try {
+            // Validate the incoming request using snake_case
+            $validated = $request->validate([
+                'employee_id' => 'required|unique:esl_admins,employee_id',
+                'firstname' => 'required|string|max:255',
+                'middlename' => 'nullable|string|max:255',
+                'lastname' => 'required|string|max:255',
+                'email' => 'required|email|unique:esl_admins,email',
+                'role' => 'required|string|max:255',
+            ]);
+
+            // Create and save the new ESL admin
+            $student = new ESLadmins();
+            $student->employee_id = $validated['employee_id'];
+            $student->firstname = $validated['firstname'];
+            $student->middlename = $validated['middlename'] ?? null;
+            $student->lastname = $validated['lastname'];
+            $student->email = $validated['email'];
+            $student->role = $validated['role'];
+            $student->save();
+
+            return response()->json([
+                'message' => 'ESL added successfully',
+            ], 201);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Exception $e) {
+            Log::error("Error adding ESL: " . $e->getMessage());
+            return response()->json([
+                'message' => 'An error occurred',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function updateEslAdmin (Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'firstname' => 'required|string|max:255',
+            'middlename' => 'nullable|string|max:255',
+            'lastname' => 'required|string|max:255',
+            'employee_id' => 'required|string|max:255',
+            'email' => 'required|email',
+            'role' => 'required|string|max:255',
+        ]);
+
+        $collegePOC = ESLadmins::find($id);
+
+        if (!$collegePOC) {
+            return response()->json(['message' => 'ESL not found'], 404);
+        }
+
+        $collegePOC->update($validatedData);
+
+        return response()->json(['message' => 'ESL data updated successfully']);
+    }
+
+    public function updateStudents(Request $request, $id)
     {
         // Validate the incoming data without the unique constraint for email
         $validatedData = $request->validate([
             'firstname' => 'required|string|max:255',
             'middlename' => 'nullable|string|max:255',
             'lastname' => 'required|string|max:255',
-            'email' => 'required|email',  // No unique check here
+            'email' => 'required|email',
+            'student_id' => 'required|string|max:255',
             'department' => 'required|string|max:255',
             'program' => 'required|string|max:255',
             'year_level' => 'required|string|max:255',
         ]);
 
         // Find the student by student_id
-        $student = Students::where('student_id', $student_id)->first();
+        $student = Students::find($id);
 
         if (!$student) {
             return response()->json(['message' => 'Student not found'], 404);
@@ -327,44 +425,42 @@ class UserManagement extends Controller
         return response()->json(['message' => 'Student data updated successfully']);
     }
 
-    public function updateCollegePOCs(Request $request, $employee_id)
+    public function updateCollegePOCs(Request $request, $id)
     {
-        // Validate the incoming data without the unique constraint for email
         $validatedData = $request->validate([
             'firstname' => 'required|string|max:255',
             'middlename' => 'nullable|string|max:255',
             'lastname' => 'required|string|max:255',
-            'email' => 'required|email',  // No unique check here
+            'employee_id' => 'required|string|max:255',
+            'email' => 'required|email',
             'department' => 'required|string|max:255',
         ]);
 
-        // Find by employee_id
-        $collegePOC = CollegePOCs::where('employee_id', $employee_id)->first();
+        $collegePOC = CollegePOCs::find($id);
 
         if (!$collegePOC) {
             return response()->json(['message' => 'College POC not found'], 404);
         }
 
-        // Update the data
         $collegePOC->update($validatedData);
 
-        // Return a success response
         return response()->json(['message' => 'College POC data updated successfully']);
     }
 
-    public function updateLeadPOCs(Request $request, $employee_id)
+    public function updateLeadPOCs(Request $request, $id)
     {
         // Validate the incoming data without the unique constraint for email
         $validatedData = $request->validate([
             'firstname' => 'required|string|max:255',
             'middlename' => 'nullable|string|max:255',
             'lastname' => 'required|string|max:255',
-            'email' => 'required|email',  // No unique check here
+            'email' => 'required|email',
+            'employee_id' => 'required|string|max:255',
             'department' => 'required|string|max:255',
         ]);
 
         // Find by employee_id
-        $leadPOC = LeadPOCs::where('employee_id', $employee_id)->first();
+        $leadPOC = LeadPOCs::find($id);
 
         if (!$leadPOC) {
             return response()->json(['message' => 'Lead not POC found'], 404);
@@ -377,20 +473,21 @@ class UserManagement extends Controller
         return response()->json(['message' => 'Lead POC data updated successfully']);
     }
 
-    public function updateHeadPOCs(Request $request, $employee_id)
+    public function updateHeadPOCs(Request $request, $id)
     {
         // Validate the incoming data without the unique constraint for email
         $validatedData = $request->validate([
             'firstname' => 'required|string|max:255',
             'middlename' => 'nullable|string|max:255',
             'lastname' => 'required|string|max:255',
-            'email' => 'required|email',  // No unique check here
+            'email' => 'required|email',
+            'employee_id' => 'required|string|max:255',
             'department' => 'required|string|max:255',
             'full_department' => 'required|string|max:255',
         ]);
 
         // Find by employee_id
-        $headPOC = EIEHeads::where('employee_id', $employee_id)->first();
+        $headPOC = EIEHeads::find($id);
 
         if (!$headPOC) {
             return response()->json(['message' => 'EIE Head not found'], 404);
@@ -531,6 +628,24 @@ class UserManagement extends Controller
             \Log::info('Validating file...');
             // Import the CSV using the HeadPOCImport class
             Excel::import(new HeadPOCImport, $request->file('csv_file'));
+            \Log::info('CSV import completed successfully');
+            return response()->json(['message' => 'CSV Imported Successfully'], 200);
+        } catch (\Exception $e) {
+            \Log::error('CSV Import Error: ' . $e->getMessage());
+            return response()->json(['message' => 'Error importing CSV: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function importESLadmins(Request $request)
+    {
+        $request->validate([
+            'csv_file' => 'required|mimes:csv,txt|max:10240',
+        ]);
+
+        try {
+            \Log::info('Validating file...');
+            // Import the CSV using the EslImport class
+            Excel::import(new EslImport, $request->file('csv_file'));
             \Log::info('CSV import completed successfully');
             return response()->json(['message' => 'CSV Imported Successfully'], 200);
         } catch (\Exception $e) {

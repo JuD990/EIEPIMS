@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Imports\MasterClassListImport;
 use App\Models\MasterClassList;
 use App\Models\EIEHeads;
+use App\Models\EieDiagnosticReport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class MasterClassListController extends Controller
@@ -72,7 +73,7 @@ class MasterClassListController extends Controller
     public function getSchoolYears()
     {
         // Extract unique years from the created_at column using Eloquent
-        $schoolYears = MasterClassList::selectRaw("DISTINCT CONCAT(YEAR(created_at), '/', YEAR(created_at) + 1) AS school_year")
+        $schoolYears = EieDiagnosticReport::selectRaw("DISTINCT CONCAT(YEAR(created_at), '/', YEAR(created_at) + 1) AS school_year")
         ->orderBy('school_year', 'desc')
         ->pluck('school_year');
 

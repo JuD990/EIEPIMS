@@ -20,11 +20,13 @@ const ImplementingSubjectDropdown = ({
   const [yearLevels, setYearLevels] = useState([]);
   const [semesters, setSemesters] = useState([]);
 
-  // Fetch data from the backend when the component mounts
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/implementing-subjects/dropdown');
+        const employeeId = localStorage.getItem('employee_id');
+        const response = await axios.get(`http://127.0.0.1:8000/api/implementing-subjects/specific-dropdown`, {
+          params: { employee_id: employeeId }
+        });
 
         if (response.status === 200) {
           const data = response.data;

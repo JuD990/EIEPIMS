@@ -16,7 +16,7 @@ const UserManagementDropdown = ({
   const [isDepartmentOpen, setIsDepartmentOpen] = useState(false);
   const [departments, setDepartments] = useState([]);
 
-  const userType = ["Student", "College POC", "Lead POC", "EIE Head POC"];
+  const userType = ["Student", "College POC", "Lead POC", "EIE Head POC", "ESL Admins"];
 
   // In your useEffect - remove setting the first department by default
   useEffect(() => {

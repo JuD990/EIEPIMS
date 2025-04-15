@@ -13,6 +13,8 @@ const InterviewScorecardButtons = ({
     const [currentDate, setCurrentDate] = useState("");
     const [currentTime, setCurrentTime] = useState("");
     const [departments, setDepartments] = useState([]);
+    const [nameSearch, setNameSearch] = useState("");
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [students, setStudents] = useState([]);
     const [formData, setFormData] = useState({
         name: "",
@@ -25,6 +27,17 @@ const InterviewScorecardButtons = ({
         date: currentDate,
         time: currentTime,
     });
+
+    const filteredStudents = students.filter((student) => {
+        const fullName = `${student.firstname} ${student.middlename || ""} ${student.lastname}`.toLowerCase();
+        return fullName.includes(nameSearch.toLowerCase());
+    });
+
+    const handleStudentSelect = (name) => {
+        setFormData((prev) => ({ ...prev, name }));
+        setIsDropdownOpen(false);
+        setNameSearch("");
+    };
 
     useEffect(() => {
         const fetchStudents = async () => {
@@ -246,23 +259,40 @@ const InterviewScorecardButtons = ({
         {/* Name Dropdown */}
         <div className="esl-interview-scorecard-form-name">
         <label>Name:</label>
-        <div className="esl-dropdown-container-name">
-        <select
-        className="esl-interview-scorecard-select-name"
-        name="name"
-        value={formData.name}
-        onChange={handleStudentChange}  // Use the new handleStudentChange function
-        >
-        <option value="">Select Name</option>
-        {students.map((student, idx) => {
-            const fullName = `${student.firstname} ${student.middlename ? student.middlename : ""} ${student.lastname}`.trim();
-            return (
-                <option key={idx} value={fullName}>
-                {fullName}
-                </option>
-            );
-        })}
-        </select>
+        <div className="custom-dropdown">
+        <div className="custom-dropdown-selected" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+        {formData.name || "Select Name"}
+        </div>
+
+        {isDropdownOpen && (
+            <div className="custom-dropdown-menu">
+            <input
+            type="text"
+            className="custom-dropdown-search"
+            placeholder="Search name..."
+            value={nameSearch}
+            onChange={(e) => setNameSearch(e.target.value)}
+            />
+            <div className="custom-dropdown-options">
+            {filteredStudents.length > 0 ? (
+                filteredStudents.map((student, idx) => {
+                    const fullName = `${student.firstname} ${student.middlename || ""} ${student.lastname}`.trim();
+                    return (
+                        <div
+                        key={idx}
+                        className="custom-dropdown-option"
+                        onClick={() => handleStudentSelect(fullName)}
+                        >
+                        {fullName}
+                        </div>
+                    );
+                })
+            ) : (
+                <div className="custom-dropdown-option disabled">No students found</div>
+            )}
+            </div>
+            </div>
+        )}
         </div>
         </div>
 

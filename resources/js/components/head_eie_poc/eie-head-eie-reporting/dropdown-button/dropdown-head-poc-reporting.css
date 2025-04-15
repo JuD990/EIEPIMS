@@ -47,6 +47,8 @@
     width: 100%;
     visibility: visible; /* Ensure visibility */
     opacity: 1; /* Ensure it’s fully visible */
+    max-height: 200px;         /* 👈 Set the height */
+    overflow-y: auto;          /* 👈 Enable scrolling */
 }
 
 .esl-dashboard-dropdown-item {
