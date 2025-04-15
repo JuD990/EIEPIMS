@@ -99,8 +99,10 @@ const UserManagementDropdown = ({
     style={{
       cursor: "pointer",
       fontWeight: 500,
-      color: "#007bff",
-      marginTop: "20px"
+      color: "black",
+      marginTop: "20px",
+      textDecoration: 'underline',
+      whiteSpace: 'nowrap',
     }}
     onClick={() => setSelectedDepartment("")}
     >

@@ -75,6 +75,7 @@ const UserManagementTable = ({ searchQuery, selectedDepartment, selectedUserType
   // Handle modal open with selected row data
   const handleUpdateClick = (student) => {
     setFormData({
+      id: student.id,
       firstname: student.firstname,
       middlename: student.middlename || "",
       lastname: student.lastname,
@@ -100,7 +101,7 @@ const UserManagementTable = ({ searchQuery, selectedDepartment, selectedUserType
     setIsSubmitting(true);
 
     try {
-      const response = await axios.put(`/api/update-students/${formData.student_id}`, formData);
+      const response = await axios.put(`/api/update-students/${formData.id}`, formData);
       if (response.status === 200) {
         setStudents((prevStudents) =>
         prevStudents.map((student) =>

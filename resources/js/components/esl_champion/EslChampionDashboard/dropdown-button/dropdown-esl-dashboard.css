@@ -1,0 +1,96 @@
+.esl-dashboard-dropdown-container {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: flex-start;
+    margin-left: 340px;
+    margin-right: auto;
+    white-space: nowrap;
+    padding: 8px;
+}
+
+.esl-dashboard-dropdown-wrapper {
+    position: relative;
+}
+
+.esl-dashboard-dropdown-btn {
+    padding: 10px 20px;
+    background-color: #FBF7F7;
+    color: black;
+    border: 1px solid black;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 200px;
+    height: 50px;
+}
+
+.esl-dashboard-dropdown-btn .esl-dashboard-dropdown-arrow {
+    margin-left: auto;
+}
+
+.esl-dashboard-dropdown-menu {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 9999; /* Ensure it appears above other elements */
+    border-radius: 12px;
+    width: 100%;
+    visibility: visible; /* Ensure visibility */
+    opacity: 1; /* Ensure it’s fully visible */
+    max-height: 200px;         /* 👈 Set the height */
+    overflow-y: auto;          /* 👈 Enable scrolling */
+}
+
+.esl-dashboard-dropdown-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.esl-dashboard-dropdown-item:hover {
+    background-color: #f0f0f0;
+}
+
+.esl-dashboard-dropdown-item.esl-dashboard-selected {
+    font-weight: bold;
+    background-color: #e0e0e0;
+}
+
+.esl-dashboard-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.esl-dashboard-refresh-btn {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: #DC2626;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 35px;
+}
+
+.esl-dashboard-refresh-btn:hover {
+    background-color: #FF474A;
+}
+
+.esl-dashboard-refresh-icon {
+    margin-left: 15px;
+    font-size: 16px;
+}
+

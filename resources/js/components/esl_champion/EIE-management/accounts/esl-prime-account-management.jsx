@@ -6,6 +6,7 @@ import UserStudentTable from "./user-management-table/students-table/student-tab
 import UserCollegePocTable from "./user-management-table/college-poc-table/college-poc-table";
 import UserLeadPocTable from "./user-management-table/lead-poc-table/lead-poc-table";
 import UserEieHeadPocTable from "./user-management-table/eie-head-poc-table/eie-head-poc-table";
+import UserEslAdminTable from "./user-management-table/esl-admins-table/esl-admins-table";
 
 const EslPrimeAccountManagement = () => {
     // Retrieve from localStorage or default to "Student"
@@ -33,6 +34,8 @@ const EslPrimeAccountManagement = () => {
                 return <UserLeadPocTable {...tableProps} />;
             case "EIE Head POC":
                 return <UserEieHeadPocTable {...tableProps} />;
+            case "ESL Admins":
+                return <UserEslAdminTable {...tableProps} />;
             default:
                 return <UserStudentTable {...tableProps} />;
         }

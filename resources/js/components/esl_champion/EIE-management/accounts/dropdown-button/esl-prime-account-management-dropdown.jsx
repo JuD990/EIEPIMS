@@ -16,7 +16,7 @@ const UserManagementDropdown = ({
   const [isDepartmentOpen, setIsDepartmentOpen] = useState(false);
   const [departments, setDepartments] = useState([]);
 
-  const userType = ["Student", "College POC", "Lead POC", "EIE Head POC"];
+  const userType = ["Student", "College POC", "Lead POC", "EIE Head POC", "ESL Admins"];
 
   // In your useEffect - remove setting the first department by default
   useEffect(() => {
@@ -99,8 +99,10 @@ const UserManagementDropdown = ({
     style={{
       cursor: "pointer",
       fontWeight: 500,
-      color: "#007bff",
-      marginTop: "20px"
+      color: "black",
+      marginTop: "20px",
+      textDecoration: 'underline',
+      whiteSpace: 'nowrap',
     }}
     onClick={() => setSelectedDepartment("")}
     >

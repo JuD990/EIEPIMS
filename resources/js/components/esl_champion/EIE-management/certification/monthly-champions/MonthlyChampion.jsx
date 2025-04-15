@@ -3,11 +3,15 @@ import { useTable } from "react-table";
 import axios from "axios";
 import { pdf } from "@react-pdf/renderer";
 import Certificate from "./MonthlyCertificate"; // Import the Certificate component
+import MonthlyChampionDropdown from "./dropdown/dropdown-monthly-champs";
 import "./MonthlyChampion.css";
 
 const MonthlyChampion = () => {
     const [data, setData] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
+    const [selectedProgram, setSelectedProgram] = useState("");
+    const [selectedYearLevel, setSelectedYearLevel] = useState("");
+    const [selectedDepartment, setSelectedDepartment] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -32,10 +36,10 @@ const MonthlyChampion = () => {
         const department = item.department.toLowerCase();
 
         return (
-            fullName.includes(searchQuery.toLowerCase()) ||
-            yearLevel.includes(searchQuery.toLowerCase()) ||
-            program.includes(searchQuery.toLowerCase()) ||
-            department.includes(searchQuery.toLowerCase())
+            fullName.includes(searchQuery.toLowerCase()) &&
+            (selectedProgram ? program === selectedProgram.toLowerCase() : true) &&
+            (selectedYearLevel ? yearLevel === selectedYearLevel.toLowerCase() : true) &&
+            (selectedDepartment ? department === selectedDepartment.toLowerCase() : true)
         );
     });
 
@@ -108,13 +112,21 @@ const MonthlyChampion = () => {
 
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
         columns,
-        data: filteredData, // ✅ Use filtered data
+        data: filteredData,
     });
 
     return (
 
         <div>
         <div className="monthly-champion-search-container">
+        <MonthlyChampionDropdown
+        selectedProgram={selectedProgram}
+        setSelectedProgram={setSelectedProgram}
+        selectedYearLevel={selectedYearLevel}
+        setSelectedYearLevel={setSelectedYearLevel}
+        selectedDepartment={selectedDepartment}
+        setSelectedDepartment={setSelectedDepartment}
+        />
         <input
         type="text"
         value={searchQuery}
