@@ -3,6 +3,7 @@ import axios from "axios";
 import { useTable } from "react-table";
 import "./student-table.css";
 import UserManagementButtons from "../../user-management-buttons-students/user-management-button";
+import DeleteIcon from "@assets/delete-icon.png";
 
 const UserManagementTable = ({ searchQuery, selectedDepartment, selectedUserType }) => {
   const [students, setStudents] = useState([]);
@@ -39,14 +40,14 @@ const UserManagementTable = ({ searchQuery, selectedDepartment, selectedUserType
     const fetchStudents = async () => {
       try {
         const response = await axios.get("/api/students");
+        console.log("Fetched students:", response.data);
         setStudents(response.data.data);
       } catch (error) {
-        console.error("Error fetching students:", error);
+        console.error("Error fetching students:", error.response?.data || error.message);
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchStudents();
   }, []);
 
@@ -123,38 +124,56 @@ const UserManagementTable = ({ searchQuery, selectedDepartment, selectedUserType
 
   // Filter students based on search query
   const filteredStudents = students.filter((student) => {
+    // Create a full name by merging the firstname, middlename, and lastname
+    const fullName = `${student.firstname} ${student.middlename ? student.middlename + ' ' : ''}${student.lastname}`;
+
+    // Check if any of the fields, including the full name, match the search query
     const matchesSearch = [
-      student.firstname,
-      student.lastname,
+      fullName,   // Use the combined full name
       student.student_id,
       student.email,
       student.department,
       student.year_level,
-      student.program
+      student.program,
     ].some((field) => field?.toLowerCase().includes(searchQuery.toLowerCase()));
 
     const matchesDepartment = selectedDepartment
     ? student.department === selectedDepartment
     : true;
 
-    const matchesUserType = selectedUserType
-    ? student.user_type === selectedUserType
-    : true;
-
-    return matchesSearch && matchesDepartment && matchesUserType;
+    return matchesSearch && matchesDepartment;
   });
+
+
+  const handleDeleteStudent = async (student_id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this student?");
+    if (!confirmDelete) return;
+
+    try {
+      await axios.delete(`/api/delete-students/${student_id}`);
+      setStudents((prevStudents) =>
+      prevStudents.filter((student) => student.student_id !== student_id)
+      );
+      alert("Student deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting student:", error);
+      alert("Failed to delete student.");
+    }
+  };
 
   // Define columns for the table
   const columns = React.useMemo(
     () => [
       {
         Header: "No.",
-        accessor: (_, index) => index + 1,
+        accessor: (_row, index) => index + 1,
+                                id: "rowNumber",
       },
       {
         Header: "Name",
         accessor: (row) =>
         `${row.firstname} ${row.middlename ? row.middlename + " " : ""}${row.lastname}`,
+        id: "fullName",
       },
       {
         Header: "Student ID",
@@ -179,6 +198,7 @@ const UserManagementTable = ({ searchQuery, selectedDepartment, selectedUserType
       {
         Header: "Actions",
         accessor: "actions",
+        id: "actions",
         Cell: ({ row }) => (
           <div className="action-buttons">
           <button
@@ -193,6 +213,18 @@ const UserManagementTable = ({ searchQuery, selectedDepartment, selectedUserType
           >
           Update
           </button>
+          <button
+          className="umt-delete-button"
+          onClick={() => handleDeleteStudent(row.original.student_id)}
+          title="Delete"
+          >
+          <img
+          src={DeleteIcon}
+          alt="Delete"
+          style={{ width: "40px", height: "100%" }}
+          />
+          </button>
+
           </div>
         ),
       },
@@ -246,7 +278,7 @@ const UserManagementTable = ({ searchQuery, selectedDepartment, selectedUserType
 
     {/* User Management Buttons Outside and Below the Table */}
     <div className="user-management-container">
-    <UserManagementButtons />
+    <UserManagementButtons department={selectedDepartment} />
     </div>
 
     {/* Modal */}

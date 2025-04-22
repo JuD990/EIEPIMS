@@ -10,7 +10,6 @@ const ImplementingSubjectDropdown = ({
   setSelectedYearLevel,
   selectedSemester,
   setSelectedSemester,
-  setSearchQuery, // Function to set search query (if used for search)
 }) => {
   const [isProgramOpen, setIsProgramOpen] = useState(false);
   const [isYearLevelOpen, setIsYearLevelOpen] = useState(false);
@@ -45,7 +44,6 @@ const ImplementingSubjectDropdown = ({
     setSelectedProgram("");
     setSelectedYearLevel("");
     setSelectedSemester("");
-    setSearchQuery(""); // Optionally clear search query if you use one
   };
 
   return (

@@ -61,7 +61,6 @@
     color: #FFFFFF;
     background-color: #6B6D76;
     border: none;
-    margin-right: 10px; /* Adjust margin if necessary */
   }
 
   /* Modal Container */
@@ -159,5 +158,4 @@
   background-color: #b0b0b0;
   cursor: not-allowed;
 }
-
   

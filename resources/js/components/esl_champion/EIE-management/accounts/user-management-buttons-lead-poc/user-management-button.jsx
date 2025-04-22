@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './user-management-buttons.css';
 
@@ -15,7 +15,7 @@ const UserManagementButtons = () => {
     email: '',
     department: '',
   });
-
+  const [departments, setDepartments] = useState([]);
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
@@ -98,6 +98,17 @@ const UserManagementButtons = () => {
     }
   };
 
+  useEffect(() => {
+    axios
+    .get("http://127.0.0.1:8000/api/getDepartmentsOptionsForPOCs")
+    .then((response) => {
+      setDepartments(response.data);
+    })
+    .catch((error) => {
+      console.error("Error fetching departments:", error);
+    });
+  }, []);
+
   return (
     <div className="user-management-buttons-container">
     <div className="user-management-buttons">
@@ -126,7 +137,7 @@ const UserManagementButtons = () => {
       <div className="form-container">
       <h2>Add Account</h2>
       <form onSubmit={handleSubmit}>
-      {["firstname", "middlename", "lastname", "employee_id", "email", "department"].map((field) => (
+      {["firstname", "middlename", "lastname", "employee_id", "email"].map((field) => (
         <div key={field}>
         <label>{field.replace(/([A-Z])/g, " $1").trim().toUpperCase()}</label>
         <input
@@ -134,10 +145,24 @@ const UserManagementButtons = () => {
         name={field}
         value={formData[field] || ''} // Ensure the value is never undefined
         onChange={handleChange}
-        required={field !== "middleName"}
+        required={field !== "middlename"}
         />
         </div>
       ))}
+      <label>Department</label>
+      <select
+      name="department"
+      value={formData.department}
+      onChange={handleChange}
+      required
+      >
+      <option value="">Select Department</option>
+      {departments.map((dept, index) => (
+        <option key={index} value={dept}>
+        {dept}
+        </option>
+      ))}
+      </select>
       <div className="form-buttons">
       <button type="button" className="cancel-button" onClick={handleCloseModal}>
       Cancel

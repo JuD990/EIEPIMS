@@ -24,6 +24,12 @@ class ImplementingSubjectController extends Controller
         return response()->json($subjects);
     }
 
+    public function archived()
+    {
+        $subjects = HistoricalImplementingSubjects::all();
+        return response()->json($subjects);
+    }
+
     public function update(Request $request, $courseCode)
     {
         // Validate incoming data
@@ -34,6 +40,7 @@ class ImplementingSubjectController extends Controller
             'semester' => 'required|string|max:50',
             'department' => 'required|string|max:100',
             'program' => 'required|string|max:100',
+            'yearLevel' => 'required|string|max:100',
             'activeStudents' => 'nullable|integer',
             'enrolledStudents' => 'nullable|integer',
         ]);
@@ -53,6 +60,45 @@ class ImplementingSubjectController extends Controller
             'semester' => $validated['semester'],
             'department' => $validated['department'],
             'program' => $validated['program'],
+            'year_level' => $validated['yearLevel'],
+            'active_students' => $validated['activeStudents'] ?? $subject->active_students,
+            'enrolled_students' => $validated['enrolledStudents'] ?? $subject->enrolled_students,
+        ]);
+
+        return response()->json(['message' => 'Subject updated successfully', 'subject' => $subject]);
+    }
+
+    public function updateArchive(Request $request, $courseCode)
+    {
+        // Validate incoming data
+        $validated = $request->validate([
+            'courseTitle' => 'required|string|max:255',
+            'code' => 'required|string|max:50',
+            'courseCode' => 'required|string|max:50',
+            'semester' => 'required|string|max:50',
+            'department' => 'required|string|max:100',
+            'program' => 'required|string|max:100',
+            'yearLevel' => 'required|string|max:100',
+            'activeStudents' => 'nullable|integer',
+            'enrolledStudents' => 'nullable|integer',
+        ]);
+
+        // Find the subject by courseCode
+        $subject = HistoricalImplementingSubjects::where('course_code', $courseCode)->first();
+
+        if (!$subject) {
+            return response()->json(['message' => 'Subject not found'], 404);
+        }
+
+        // Update the subject
+        $subject->update([
+            'course_title' => $validated['courseTitle'],
+            'code' => $validated['code'],
+            'course_code' => $validated['courseCode'],
+            'semester' => $validated['semester'],
+            'department' => $validated['department'],
+            'program' => $validated['program'],
+            'year_level' => $validated['yearLevel'],
             'active_students' => $validated['activeStudents'] ?? $subject->active_students,
             'enrolled_students' => $validated['enrolledStudents'] ?? $subject->enrolled_students,
         ]);
@@ -112,7 +158,7 @@ class ImplementingSubjectController extends Controller
                 // Skip the header row
                 $header = fgetcsv($handle);
 
-                // Expected CSV columns (excluding the removed ones)
+                // Expected CSV columns
                 $expectedColumns = [
                     'course_code', 'code', 'course_title',
                     'semester', 'year_level', 'program',
@@ -125,9 +171,8 @@ class ImplementingSubjectController extends Controller
                     return response()->json(['message' => 'Invalid CSV format.'], 400);
                 }
 
-                // Read each row and insert into both ImplementingSubjects and HistoricalImplementingSubjects tables
+                // Read each row and insert only into ImplementingSubjects
                 while (($row = fgetcsv($handle)) !== false) {
-                    // Insert into ImplementingSubjects table
                     ImplementingSubjects::create([
                         'course_code'       => $row[0],
                         'code'              => $row[1],
@@ -140,22 +185,6 @@ class ImplementingSubjectController extends Controller
                         'assigned_poc'      => $row[8],
                         'email'             => $row[9],
                         'enrolled_students' => $row[10],
-                    ]);
-
-                    // Insert into HistoricalImplementingSubjects table
-                    HistoricalImplementingSubjects::create([
-                        'course_code'       => $row[0],
-                        'code'              => $row[1],
-                        'course_title'      => $row[2],
-                        'semester'          => $row[3],
-                        'year_level'        => $row[4],
-                        'program'           => $row[5],
-                        'department'        => $row[6],
-                        'employee_id'       => $row[7],
-                        'assigned_poc'      => $row[8],
-                        'email'             => $row[9],
-                        'enrolled_students' => $row[10],
-                        // You can add more historical-specific fields if needed
                     ]);
                 }
 
@@ -284,7 +313,14 @@ class ImplementingSubjectController extends Controller
             try {
                 $programs = ImplementingSubjects::distinct()->pluck('program');
                 $semesters = ImplementingSubjects::distinct()->pluck('semester');
-                $yearLevels = ImplementingSubjects::distinct()->pluck('year_level');
+
+                // Order the year levels manually and convert to array
+                $yearLevels = ImplementingSubjects::distinct()->pluck('year_level')->toArray();
+                usort($yearLevels, function ($a, $b) {
+                    $order = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
+                    return array_search($a, $order) - array_search($b, $order);
+                });
+
                 $departments = ImplementingSubjects::distinct()->pluck('department');
 
                 return response()->json([
@@ -314,7 +350,17 @@ class ImplementingSubjectController extends Controller
                 // Fetch programs, semesters, and year levels based on the department
                 $programs = ImplementingSubjects::where('department', $department)->distinct()->pluck('program');
                 $semesters = ImplementingSubjects::where('department', $department)->distinct()->pluck('semester');
-                $yearLevels = ImplementingSubjects::where('department', $department)->distinct()->pluck('year_level');
+
+                // Order the year levels manually and convert to array
+                $yearLevels = ImplementingSubjects::where('department', $department)
+                ->distinct()
+                ->pluck('year_level')
+                ->toArray();
+
+                usort($yearLevels, function ($a, $b) {
+                    $order = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
+                    return array_search($a, $order) - array_search($b, $order);
+                });
 
                 return response()->json([
                     'programs' => $programs,
@@ -346,7 +392,7 @@ class ImplementingSubjectController extends Controller
 
         public function getDepartmentForPOCs()
         {
-            $departments = EIEHeads::pluck('department')->unique()->values();
+            $departments = ImplementingSubjects::pluck('department')->unique()->values();
 
             // Ensure it's an array before returning
             return response()->json($departments->toArray());
@@ -366,5 +412,88 @@ class ImplementingSubjectController extends Controller
             }
 
             return response()->json($schoolYears);
+        }
+
+        public function archiveSubjects(Request $request)
+        {
+            // Get the selected subjects from the request
+            $subjects = $request->input('subjects');
+
+            // Loop through each subject and archive it
+            foreach ($subjects as $subject) {
+                // Archive the subject
+                $archivedSubject = new HistoricalImplementingSubjects();
+                $archivedSubject->course_title = $subject['course_title'];
+                $archivedSubject->code = $subject['code'];
+                $archivedSubject->course_code = $subject['course_code'];
+                $archivedSubject->semester = $subject['semester'];
+                $archivedSubject->year_level = $subject['year_level'];
+                $archivedSubject->program = $subject['program'];
+                $archivedSubject->department = $subject['department'];
+                $archivedSubject->assigned_poc = $subject['assigned_poc'];
+                $archivedSubject->employee_id = $subject['employee_id'];
+                $archivedSubject->email = $subject['email'];
+                $archivedSubject->epgf_average = $subject['epgf_average'];
+                $archivedSubject->completion_rate = $subject['completion_rate'];
+                $archivedSubject->proficiency_level = $subject['proficiency_level'];
+                $archivedSubject->active_students = $subject['active_students'];
+                $archivedSubject->enrolled_students = $subject['enrolled_students'];
+
+                // Save to the archived table
+                $archivedSubject->save();
+
+                // After archiving, delete from the original table
+                ImplementingSubjects::where('course_code', $subject['course_code'])->delete();
+            }
+
+            return response()->json(['message' => 'Subjects archived and deleted successfully']);
+        }
+
+        public function restoreSubjects(Request $request)
+        {
+            // Get the selected archived subjects from the request
+            $subjects = $request->input('subjects');
+
+            // Loop through each subject and restore it
+            foreach ($subjects as $subject) {
+                // Restore the subject to the original table
+                $restoredSubject = new ImplementingSubjects();
+                $restoredSubject->course_title = $subject['course_title'];
+                $restoredSubject->code = $subject['code'];
+                $restoredSubject->course_code = $subject['course_code'];
+                $restoredSubject->semester = $subject['semester'];
+                $restoredSubject->year_level = $subject['year_level'];
+                $restoredSubject->program = $subject['program'];
+                $restoredSubject->department = $subject['department'];
+                $restoredSubject->assigned_poc = $subject['assigned_poc'];
+                $restoredSubject->employee_id = $subject['employee_id'];
+                $restoredSubject->email = $subject['email'];
+                $restoredSubject->epgf_average = $subject['epgf_average'];
+                $restoredSubject->completion_rate = $subject['completion_rate'];
+                $restoredSubject->proficiency_level = $subject['proficiency_level'];
+                $restoredSubject->active_students = $subject['active_students'];
+                $restoredSubject->enrolled_students = $subject['enrolled_students'];
+
+                // Save to the original table
+                $restoredSubject->save();
+
+                // After restoring, delete from the archive table
+                HistoricalImplementingSubjects::where('course_code', $subject['course_code'])->delete();
+            }
+
+            return response()->json(['message' => 'Subjects restored successfully']);
+        }
+
+        public function deleteSubjects(Request $request)
+        {
+            // Get the selected subjects from the request
+            $subjects = $request->input('subjects');
+
+            // Loop through each subject and permanently delete it
+            foreach ($subjects as $subject) {
+                HistoricalImplementingSubjects::where('course_code', $subject['course_code'])->delete();
+            }
+
+            return response()->json(['message' => 'Subjects permanently deleted']);
         }
 }

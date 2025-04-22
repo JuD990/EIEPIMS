@@ -8,6 +8,7 @@ use App\Models\CollegePOCs;
 use App\Models\LeadPOCs;
 use App\Models\EIEHeads;
 use App\Models\ESLadmins;
+use App\Models\ClassLists;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
@@ -174,7 +175,7 @@ class UserManagement extends Controller
                 'email' => 'required|email|unique:students,email',
                 'department' => 'required|string|max:255',
                 'program' => 'required|string|max:255',
-                'yearLevel' => 'required|string|max:255', // Added yearLevel validation
+                'yearLevel' => 'required|string|max:255',
             ]);
 
             // Create and save the new student record
@@ -186,21 +187,30 @@ class UserManagement extends Controller
             $student->email = $validated['email'];
             $student->department = $validated['department'];
             $student->program = $validated['program'];
-            $student->year_level = $validated['yearLevel']; // Save the yearLevel
+            $student->year_level = $validated['yearLevel'];
             $student->save();
 
+            // Also store into Classlists table
+            $classlist = new Classlists();
+            $classlist->student_id = $student->student_id;
+            $classlist->firstname = $student->firstname;
+            $classlist->middlename = $student->middlename;
+            $classlist->lastname = $student->lastname;
+            $classlist->department = $student->department;
+            $classlist->program = $student->program;
+            $classlist->year_level = $student->year_level;
+            $classlist->save();
+
             return response()->json([
-                'message' => 'Student added successfully',
+                'message' => 'Student and classlist record added successfully',
             ], 201);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            // Return validation errors
             return response()->json([
                 'message' => 'Validation failed',
                 'errors' => $e->errors(),
             ], 422);
         } catch (\Exception $e) {
-            // Log and return any other exception
-            Log::error("Error adding student: " . $e->getMessage());
+            Log::error("Error adding student and classlist: " . $e->getMessage());
             return response()->json([
                 'message' => 'An error occurred',
                 'error' => $e->getMessage(),
@@ -411,18 +421,35 @@ class UserManagement extends Controller
             'year_level' => 'required|string|max:255',
         ]);
 
-        // Find the student by student_id
+        // Find the student by ID
         $student = Students::find($id);
 
         if (!$student) {
             return response()->json(['message' => 'Student not found'], 404);
         }
 
-        // Update the student data
+        // Update the student data in the Students table
         $student->update($validatedData);
 
+        // Update related data in the Classlists table
+        $classlist = Classlists::where('student_id', $student->student_id)->first();
+
+        if ($classlist) {
+            // Update all relevant fields in the Classlists table
+            $classlist->update([
+                'firstname' => $validatedData['firstname'],
+                'middlename' => $validatedData['middlename'],
+                'lastname' => $validatedData['lastname'],
+                'email' => $validatedData['email'],
+                'student_id' => $validatedData['student_id'],
+                'department' => $validatedData['department'],
+                'program' => $validatedData['program'],
+                'year_level' => $validatedData['year_level'],
+            ]);
+        }
+
         // Return a success response
-        return response()->json(['message' => 'Student data updated successfully']);
+        return response()->json(['message' => 'Student and classlist data updated successfully']);
     }
 
     public function updateCollegePOCs(Request $request, $id)
@@ -552,6 +579,22 @@ class UserManagement extends Controller
     {
         // Find the record by employee_id
         $headPOC = EIEHeads::where('employee_id', $employee_id)->first();
+
+        if (!$headPOC) {
+            return response()->json(['message' => 'EIE Head not found'], 404);
+        }
+
+        // Delete the record
+        $headPOC->delete();
+
+        // Return a success response
+        return response()->json(['message' => 'EIE Head deleted successfully']);
+    }
+
+    public function deleteEslAdmin($employee_id)
+    {
+        // Find the record by employee_id
+        $headPOC = ESLadmins::where('employee_id', $employee_id)->first();
 
         if (!$headPOC) {
             return response()->json(['message' => 'EIE Head not found'], 404);

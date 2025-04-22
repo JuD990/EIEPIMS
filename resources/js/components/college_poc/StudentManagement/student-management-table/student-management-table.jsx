@@ -475,7 +475,7 @@ const StudentManagementTable = ({
       </div>
       <div style={{ marginBottom: "20px" }}>
       <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-      Reason for Shift/Drop:
+      Reason for Dropping:
       </label>
       <textarea
       name="reason"

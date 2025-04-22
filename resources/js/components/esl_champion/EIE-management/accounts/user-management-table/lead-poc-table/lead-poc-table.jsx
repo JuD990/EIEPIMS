@@ -3,6 +3,7 @@ import axios from "axios";
 import { useTable } from "react-table";
 import "./lead-poc-table.css";
 import UserManagementButtons from "../../user-management-buttons-lead-poc/user-management-button";
+import DeleteIcon from "@assets/delete-icon.png";
 
 const UserManagementTable = ({ searchQuery, selectedDepartment }) => {
   const [collegePOCs, setCollegePOCs] = useState([]);
@@ -117,6 +118,22 @@ const UserManagementTable = ({ searchQuery, selectedDepartment }) => {
     return matchesSearch && matchesDepartment;
   });
 
+  const handleDeleteLeadPOC = async (employee_id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this POC?");
+    if (!confirmDelete) return;
+
+    try {
+      await axios.delete(`/api/delete-lead-pocs/${employee_id}`);
+      setCollegePOCs((prevPOCs) =>
+      prevPOCs.filter((poc) => poc.employee_id !== employee_id)
+      );
+      alert("POC deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting POC:", error);
+      alert("Failed to delete POC.");
+    }
+  };
+
   // Define columns for the table
   const columns = React.useMemo(
     () => [
@@ -157,6 +174,17 @@ const UserManagementTable = ({ searchQuery, selectedDepartment }) => {
           onClick={() => handleUpdateClick(row.original)}
           >
           Update
+          </button>
+          <button
+          className="umt-delete-button"
+          onClick={() => handleDeleteLeadPOC(row.original.employee_id)}
+          title="Delete"
+          >
+          <img
+          src={DeleteIcon}
+          alt="Delete"
+          style={{ width: "40px", height: "100%" }}
+          />
           </button>
           </div>
         ),

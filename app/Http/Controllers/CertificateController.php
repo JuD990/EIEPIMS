@@ -149,4 +149,27 @@ class CertificateController extends Controller
 
         return response()->json($reports);
     }
+
+    public function uploadDepartmentLogo(Request $request)
+    {
+        if (!$request->hasFile('file')) {
+            return response()->json(['error' => 'No file uploaded'], 400);
+        }
+
+        $file = $request->file('file');
+        $filename = $file->getClientOriginalName();
+
+        // Define path
+        $path = public_path('assets/department_logo');
+
+        // Ensure the directory exists
+        if (!file_exists($path)) {
+            mkdir($path, 0755, true);
+        }
+
+        // Move and overwrite if file exists
+        $file->move($path, $filename);
+
+        return response()->json(['success' => true, 'filename' => $filename]);
+    }
 }

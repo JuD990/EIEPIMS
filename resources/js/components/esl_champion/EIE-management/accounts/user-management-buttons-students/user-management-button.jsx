@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './user-management-buttons.css';
 
@@ -16,6 +16,8 @@ const UserManagementButtons = () => {
     program: '',
     yearLevel: '',
   });
+
+  const [departments, setDepartments] = useState([]);
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
@@ -91,6 +93,17 @@ const UserManagementButtons = () => {
     }
   };
 
+  useEffect(() => {
+    axios
+    .get("http://127.0.0.1:8000/api/getDepartmentsOptionsForPOCs")
+    .then((response) => {
+      setDepartments(response.data);
+    })
+    .catch((error) => {
+      console.error("Error fetching departments:", error);
+    });
+  }, []);
+
   return (
     <div className="user-management-buttons-container">
     <div className="user-management-buttons">
@@ -106,7 +119,6 @@ const UserManagementButtons = () => {
     />
     <label htmlFor="csv-upload">Upload CSV</label>
     </div>
-
     {/* Add Account Button */}
     <button className="add-account-button" onClick={handleOpenModal}>
     Add Account
@@ -163,13 +175,18 @@ const UserManagementButtons = () => {
       />
 
       <label>Year Level</label>
-      <input
-      type="text"
+      <select
       name="yearLevel"
       value={formData.yearLevel}
       onChange={handleChange}
       required
-      />
+      >
+      <option value="">Select Year Level</option>
+      <option value="1st Year">1st Year</option>
+      <option value="2nd Year">2nd Year</option>
+      <option value="3rd Year">3rd Year</option>
+      <option value="4th Year">4th Year</option>
+      </select>
 
       <label>Email</label>
       <input
@@ -183,13 +200,19 @@ const UserManagementButtons = () => {
       />
 
       <label>Department</label>
-      <input
-      type="text"
+      <select
       name="department"
       value={formData.department}
       onChange={handleChange}
       required
-      />
+      >
+      <option value="">Select Department</option>
+      {departments.map((dept, index) => (
+        <option key={index} value={dept}>
+        {dept}
+        </option>
+      ))}
+      </select>
 
       <label>Program</label>
       <input

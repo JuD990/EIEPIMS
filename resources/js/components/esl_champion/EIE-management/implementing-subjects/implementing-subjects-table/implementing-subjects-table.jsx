@@ -8,6 +8,7 @@ const ImplementingSubjectsTable = ({ searchQuery, program, yearLevel, semester }
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [selectedRows, setSelectedRows] = useState({});
   const [formData, setFormData] = useState({
     courseTitle: "",
     code: "",
@@ -107,6 +108,22 @@ const ImplementingSubjectsTable = ({ searchQuery, program, yearLevel, semester }
 
   const columns = React.useMemo(
     () => [
+      {
+        Header: "Select",
+        accessor: "select",
+        Cell: ({ row }) => (
+          <input
+          type="checkbox"
+          checked={selectedRows[row.id] || false}
+          onChange={() =>
+            setSelectedRows((prev) => ({
+              ...prev,
+              [row.id]: !prev[row.id],
+            }))
+          }
+          />
+        ),
+      },
       { Header: "Course Title", accessor: "course_title" },
       { Header: "Code", accessor: "code" },
       { Header: "Course Code", accessor: "course_code" },
@@ -126,7 +143,7 @@ const ImplementingSubjectsTable = ({ searchQuery, program, yearLevel, semester }
         ),
       },
     ],
-    []
+    [selectedRows]
   );
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
@@ -156,8 +173,16 @@ const ImplementingSubjectsTable = ({ searchQuery, program, yearLevel, semester }
         return (
           <tr {...row.getRowProps()}>
           {row.cells.map((cell) => (
-            <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+            <td
+            {...cell.getCellProps()}
+            style={{
+              textAlign: cell.column.id === "course_title" ? "left" : "center",
+            }}
+            >
+            {cell.render("Cell")}
+            </td>
           ))}
+
           </tr>
         );
       })}

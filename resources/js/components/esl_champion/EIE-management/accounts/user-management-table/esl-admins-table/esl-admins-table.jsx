@@ -3,6 +3,7 @@ import axios from "axios";
 import { useTable } from "react-table";
 import "./esl-admins-table.css";
 import UserManagementButtons from "../../user-management-buttons-esl-admins/user-management-button";
+import DeleteIcon from "@assets/delete-icon.png";
 
 const UserManagementTable = ({ searchQuery, selectedDepartment }) => {
   const [collegePOCs, setCollegePOCs] = useState([]);
@@ -124,6 +125,22 @@ const UserManagementTable = ({ searchQuery, selectedDepartment }) => {
     return matchesSearch && matchesDepartment;
   });
 
+  const handleDeleteEslAdmin = async (employee_id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this ESL?");
+    if (!confirmDelete) return;
+
+    try {
+      await axios.delete(`/api/delete-esl-admins/${employee_id}`);
+      setCollegePOCs((prevPOCs) =>
+      prevPOCs.filter((poc) => poc.employee_id !== employee_id)
+      );
+      alert("ESL deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting ESL:", error);
+      alert("Failed to delete ESL.");
+    }
+  };
+
   // Define columns for the table
   const columns = React.useMemo(
     () => [
@@ -164,6 +181,17 @@ const UserManagementTable = ({ searchQuery, selectedDepartment }) => {
           onClick={() => handleUpdateClick(row.original)}
           >
           Update
+          </button>
+          <button
+          className="umt-delete-button"
+          onClick={() => handleDeleteEslAdmin(row.original.employee_id)}
+          title="Delete"
+          >
+          <img
+          src={DeleteIcon}
+          alt="Delete"
+          style={{ width: "40px", height: "100%" }}
+          />
           </button>
           </div>
         ),

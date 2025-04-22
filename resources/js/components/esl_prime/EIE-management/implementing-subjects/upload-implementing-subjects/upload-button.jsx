@@ -2,8 +2,9 @@ import React, { useRef, useState } from "react";
 import axios from "axios";
 import "./UploadImplementingSubjectsButton.css";
 import uploadLogo from "@assets/Upload.png";
+import archiveLogo from "@assets/Archive.png";
 
-const UploadingButton = () => {
+const UploadingButton = ({ onArchiveClick }) => {
   const subjectFileInputRef = useRef(null);
   const [subjectLoading, setSubjectLoading] = useState(false);
 
@@ -39,9 +40,14 @@ const UploadingButton = () => {
     }
   };
 
+  // Handle button click for archived subjects (you can replace with actual logic)
+  const handleArchivedSubjectsButtonClick = () => {
+    if (onArchiveClick) onArchiveClick();
+  };
+
   return (
     <div className="esl-upload-buttons-container">
-    {/* Upload Subject Button */}
+    {/* Upload Button (unchanged) */}
     <button onClick={handleSubjectButtonClick} className="esl-implementing-subjects-upload-button">
     {subjectLoading ? (
       <span>Uploading...</span>

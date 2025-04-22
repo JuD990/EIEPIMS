@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\Models\ImplementingSubjects; // Correct model import
+use App\Models\ImplementingSubjects;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -15,7 +15,6 @@ class ImplementingSubjectsImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
-        // Import the necessary fields and set default values for excluded fields
         return new ImplementingSubjects([
             'course_code' => $row['course_code'],
             'code' => $row['code'],

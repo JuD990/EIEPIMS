@@ -58,7 +58,6 @@ const LoginForm = () => {
       });
 
       if (response.status === 200) {
-        console.log("Login Successful: ", response.data);
         const { token, employee_id, student_id } = response.data;
 
         if (!employee_id && !student_id) {
@@ -78,8 +77,6 @@ const LoginForm = () => {
           setError("Employee ID or Student ID not found.");
           return;
         }
-
-        console.log("Stored User Type:", localStorage.getItem("userType"));
 
         // ✅ Trigger the storeOrUpdatePrograms function after login
         try {

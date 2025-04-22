@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useTable } from "react-table";
+import { useTable, useRowSelect } from "react-table";
 import axios from "axios";
 import "./implementing-subjects-table.css";
 
@@ -8,6 +8,11 @@ const ImplementingSubjectsTable = ({ searchQuery, program, yearLevel, semester }
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [customSelectedRowIds, setCustomSelectedRowIds] = useState({});
+  const [selectedData, setSelectedData] = useState([]);
+  console.log(customSelectedRowIds);
+  console.log(selectedData);
+
   const [formData, setFormData] = useState({
     courseTitle: "",
     code: "",
@@ -16,10 +21,10 @@ const ImplementingSubjectsTable = ({ searchQuery, program, yearLevel, semester }
     program: "",
     activeStudents: "",
     enrolledStudents: "",
+    yearLevel: "",
   });
 
   useEffect(() => {
-    // Fetch data when component mounts or when filters/searchQuery change
     fetchData();
   }, [searchQuery, program, yearLevel, semester]);
 
@@ -37,14 +42,11 @@ const ImplementingSubjectsTable = ({ searchQuery, program, yearLevel, semester }
         headers: { employee_id: employeeId },
       });
 
-      // Filter based on program, yearLevel, semester, and searchQuery
       const filteredData = response.data.filter((item) => {
-        // Check if item matches the filters (program, yearLevel, semester)
         const matchesProgram = program ? item.program.toLowerCase() === program.toLowerCase() : true;
         const matchesYearLevel = yearLevel ? item.year_level.toLowerCase() === yearLevel.toLowerCase() : true;
         const matchesSemester = semester ? item.semester.toLowerCase() === semester.toLowerCase() : true;
 
-        // Check if item matches the search query
         const matchesSearchQuery =
         searchQuery &&
         (item.course_title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -84,6 +86,7 @@ const ImplementingSubjectsTable = ({ searchQuery, program, yearLevel, semester }
       program: values.program,
       activeStudents: values.active_students,
       enrolledStudents: values.enrolled_students,
+      yearLevel: values.year_level,
     });
     setShowUpdateModal(true);
   };
@@ -105,12 +108,67 @@ const ImplementingSubjectsTable = ({ searchQuery, program, yearLevel, semester }
     }
   };
 
+  const archiveSelectedSubjects = async () => {
+    if (selectedData.length === 0) {
+      alert("Please select subjects to archive.");
+      return;
+    }
+
+    try {
+      // Sending selected data to the backend for archiving
+      const response = await axios.post("/api/archive-implementing-subjects", {
+        subjects: selectedData,
+      });
+
+      if (response.status === 200) {
+        alert("Selected subjects archived successfully.");
+        // Optionally refresh data
+        fetchData();
+
+        // After archiving, remove the row IDs from customSelectedRowIds and reset selectedData
+        setCustomSelectedRowIds({});  // Clear all selected rows
+        setSelectedData([]);  // Clear selected data, unchecking all checkboxes
+      }
+    } catch (error) {
+      console.error("Error archiving subjects:", error);
+      alert("Failed to archive subjects. Please try again later.");
+    }
+  };
+
   const columns = React.useMemo(
     () => [
+      {
+        Header: "Select",
+        accessor: "select",
+        Cell: ({ row }) => (
+          <input
+          type="checkbox"
+          checked={customSelectedRowIds[row.id] || false}
+          onChange={() => {
+            setCustomSelectedRowIds((prev) => ({
+              ...prev,
+              [row.id]: !prev[row.id],
+            }));
+
+            setSelectedData((prevSelected) => {
+              const isSelected = customSelectedRowIds[row.id];
+              if (isSelected) {
+                return prevSelected.filter(
+                  (item) => item.course_code !== row.original.course_code
+                );
+              } else {
+                return [...prevSelected, row.original];
+              }
+            });
+          }}
+          />
+        ),
+      },
       { Header: "Course Title", accessor: "course_title" },
       { Header: "Code", accessor: "code" },
       { Header: "Course Code", accessor: "course_code" },
       { Header: "Semester", accessor: "semester" },
+      { Header: "Year Level", accessor: "year_level" },
       { Header: "Department", accessor: "department" },
       { Header: "Program", accessor: "program" },
       { Header: "Assigned POC", accessor: "assigned_poc" },
@@ -126,11 +184,18 @@ const ImplementingSubjectsTable = ({ searchQuery, program, yearLevel, semester }
         ),
       },
     ],
-    []
+    [customSelectedRowIds]
   );
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-  useTable({ columns, data });
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    state: { selectedRowIds }, // This is from react-table (ok now, since no conflict)
+    getToggleAllRowsSelectedProps,
+  } = useTable({ columns, data }, useRowSelect);
 
   return (
     <div style={{ margin: "20px" }}>
@@ -156,7 +221,14 @@ const ImplementingSubjectsTable = ({ searchQuery, program, yearLevel, semester }
         return (
           <tr {...row.getRowProps()}>
           {row.cells.map((cell) => (
-            <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+            <td
+            {...cell.getCellProps()}
+            style={{
+              textAlign: cell.column.id === "course_title" ? "left" : "center",
+            }}
+            >
+            {cell.render("Cell")}
+            </td>
           ))}
           </tr>
         );
@@ -165,6 +237,30 @@ const ImplementingSubjectsTable = ({ searchQuery, program, yearLevel, semester }
       </table>
       </div>
     )}
+
+    {selectedData.length > 0 && (
+      <div style={{ marginTop: "10px" }}>
+      <button
+      onClick={archiveSelectedSubjects}
+      style={{
+        position: "fixed",
+        bottom: "30px",
+        right: "20px",
+        padding: "10px 20px",
+        backgroundColor: "#2563EB",
+        color: "white",
+        border: "none",
+        borderRadius: "5px",
+        cursor: "pointer",
+        fontSize: "16px",
+        fontFamily: "Poppins"
+      }}
+      >
+      Archive Selected Subject(s) ({selectedData.length})
+      </button>
+      </div>
+    )}
+
     {/* Modal */}
     {showUpdateModal && (
       <div
@@ -233,17 +329,50 @@ const ImplementingSubjectsTable = ({ searchQuery, program, yearLevel, semester }
       style={{ width: "100%", padding: "10px", borderRadius: "5px", border: "1px solid #333333" }}
       />
       </div>
+
+      {/* Semester Dropdown */}
       <div style={{ marginBottom: "20px" }}>
       <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
       Semester:
       </label>
-      <input
-      type="text"
+      <select
       name="semester"
-      value={formData.semester}
+      value={formData.semester || ""}
       onChange={handleInputChange}
-      style={{ width: "100%", padding: "10px", borderRadius: "5px", border: "1px solid #333333" }}
-      />
+      style={{
+        width: "100%",
+        padding: "10px",
+        borderRadius: "5px",
+        border: "1px solid #333333",
+      }}
+      >
+      <option value="1st Semester">1st Semester</option>
+      <option value="2nd Semester">2nd Semester</option>
+      </select>
+      </div>
+
+      {/* Year Level Dropdown */}
+      <div style={{ marginBottom: "20px" }}>
+      <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
+      Year Level:
+      </label>
+      <select
+      name="yearLevel"
+      value={formData.yearLevel}
+      onChange={handleInputChange}
+      style={{
+        width: "100%",
+        padding: "10px",
+        borderRadius: "5px",
+        border: "1px solid #333333",
+      }}
+      >
+
+      <option value="1st Year">1st Year</option>
+      <option value="2nd Year">2nd Year</option>
+      <option value="3rd Year">3rd Year</option>
+      <option value="4th Year">4th Year</option>
+      </select>
       </div>
 
       <div style={{ marginBottom: "20px" }}>

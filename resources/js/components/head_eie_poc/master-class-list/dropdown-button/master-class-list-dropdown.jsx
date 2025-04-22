@@ -20,7 +20,7 @@ const MasterClassListDropdown = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/implementing-subjects/dropdown');
+        const response = await axios.get('http://127.0.0.1:8000/api/implementing-subjects/specific-dropdown');
         if (response.status === 200) {
           const data = response.data;
           setPrograms(data.programs || []);

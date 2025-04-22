@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTable } from "react-table";
+import axios from "axios";
+import { FaChevronDown } from "react-icons/fa";
 
 const StudentManagementTable = ({
   searchQuery ,
@@ -8,6 +10,9 @@ const StudentManagementTable = ({
   const [students, setStudents] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [courses, setCourses] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState({
     classListsId: '',
     studentId: '',
@@ -19,7 +24,12 @@ const StudentManagementTable = ({
     status: '',
     reason: '',
     courseCode: '',
+    gender: '',
   });
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
+  };
 
   const filteredStudents = students.filter(student => {
     if (!student.firstname || !student.lastname) return false; // Ensure names exist
@@ -72,7 +82,7 @@ const StudentManagementTable = ({
     .catch((error) => console.error("Error fetching data:", error.message));
   }, []);
 
-  
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -96,6 +106,7 @@ const StudentManagementTable = ({
   const handleUpdateClick = (row) => {
     setFormData({
       classListsId: row.original.class_lists_id,  // Assign class_lists_id
+      studentId: row.original.student_id || '',
       firstName: row.original.firstname || '',
       middleName: row.original.middlename || '',
       lastName: row.original.lastname || '',
@@ -104,12 +115,12 @@ const StudentManagementTable = ({
       status: row.original.status || '',
       reason: row.original.reason_for_shift_or_drop || '',
       courseCode: row.original.course_code || '',
+      gender: row.original.gender || '',
     });
 
     console.log("Updated formData:", formData); // Debugging
     setShowModal(true);
   };
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -121,14 +132,15 @@ const StudentManagementTable = ({
       return;
     }
 
-    // ✅ Validate reason for Shift/Drop
-    if ((formData.status === "Dropped" ) && !formData.reason.trim()) {
+    // Validate reason for Shift/Drop when status is "Dropped"
+    if (formData.status === "Dropped" && !formData.reason.trim()) {
       setError("Reason for Shift/Drop is required.");
       return; // Stop form submission
     } else {
       setError(""); // Clear error if input is valid
     }
 
+    // Make the API call to update the student record
     fetch(`http://localhost:8000/api/update-student/${formData.classListsId}`, {
       method: "PUT",
       headers: {
@@ -143,35 +155,75 @@ const StudentManagementTable = ({
         yearLevel: formData.yearLevel,
         status: formData.status,
         reason: formData.reason,
-        courseCode: formData.courseCode
+        courseCode: formData.courseCode,
+        gender: formData.gender,
       }),
     })
     .then((response) => {
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        return response.json().then((errorData) => {
+          console.error("Error response:", errorData);
+          throw new Error(`HTTP error! Status: ${response.status} - ${errorData.message || errorData}`);
+        });
       }
       return response.json();
     })
     .then((data) => {
       console.log("Update Success:", data);
 
-      // ✅ Fetch updated student list
-      return fetch(`http://localhost:8000/api/class-list`);
+      // Re-fetch the updated students list
+      fetch(`http://localhost:8000/api/class-list?employee_id=${storedEmployeeId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setStudents(data); // Update state with the new students list
+      })
+      .catch((error) => {
+        console.error("Error fetching updated data:", error.message);
+      });
+
+      // Close the modal after the update
+      setShowModal(false);
     })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log("Refetched Data:", data);
-      setStudents(data);
-      setShowModal(false); // ✅ Close modal only on success
-    })
-    .catch((error) => console.error("Error:", error.message));
+    .catch((error) => {
+      console.error("Error:", error.message);
+      setError("Failed to update student. Please try again.");
+    });
   };
 
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const employeeId = localStorage.getItem("employee_id");
+        const response = await axios.get("/api/get-courses-by-department-student", {
+          headers: { employee_id: employeeId },
+        });
+
+        if (response.data && typeof response.data === "object") {
+          const flattenedCourses = [];
+          Object.entries(response.data).forEach(([title, codes]) => {
+            if (Array.isArray(codes)) {
+              codes.forEach((code) => {
+                flattenedCourses.push({ title, code });
+              });
+            }
+          });
+
+          if (flattenedCourses.length === 0) {
+            setError("No courses available for your department.");
+          } else {
+            setCourses(flattenedCourses);  // Ensure courses are set here
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching courses:", err);
+        setError("Failed to load courses. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
 
   const columns = React.useMemo(
     () => [
@@ -189,13 +241,13 @@ const StudentManagementTable = ({
         Cell: ({ cell }) => {
           const status = cell.value;
           let statusStyle = {};
-          
+
           if (status === "Dropped") {
             statusStyle = { color: '#EA0000', fontWeight: 'bold' };
           } else if (status === "Shifted") {
             statusStyle = { color: '#18A0FB', fontWeight: 'bold' };
           }
-  
+
           return (
             <div style={statusStyle}>
               {status}
@@ -416,16 +468,100 @@ const StudentManagementTable = ({
                 style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #333333' }}
               />
             </div>
-            <div style={{ marginBottom: '20px' }}>
-            <label style={{ display: 'block', fontSize: '20px', color: '#383838' }}>Subject:</label>
-            <input
-            type="text"
-            name="courseCode"
-            value={formData.courseCode}
-            onChange={handleInputChange}
-            style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #333333' }}
-            />
-            </div>
+            <div style={{ marginBottom: '20px', position: 'relative' }}>
+            <label style={{ display: 'block', fontSize: '20px', color: '#383838', marginBottom: '8px' }}>
+            Subject:
+            </label>
+
+            <button
+            type="button"
+            onClick={toggleDropdown}
+            style={{
+              width: '100%',
+              padding: '10px',
+              borderRadius: '5px',
+              border: '1px solid #333333',
+              backgroundColor: '#fff',
+              textAlign: 'left',
+              fontSize: '16px',
+              position: 'relative',
+              cursor: 'pointer',
+            }}
+            >
+            {formData.courseCode
+              ? `${courses.find(c => c.code === formData.courseCode)?.title || 'Select Subject'} - ${formData.courseCode}`
+              : 'Select Subject'}
+              <FaChevronDown
+              style={{
+                position: 'absolute',
+                right: '10px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                     pointerEvents: 'none',
+              }}
+              />
+              </button>
+
+              {isDropdownOpen && (
+                <div
+                style={{
+                  position: 'absolute',
+                  top: '100%',
+                  left: 0,
+                  right: 0,
+                  backgroundColor: '#fff',
+                  border: '1px solid #333333',
+                  borderRadius: '5px',
+                  maxHeight: '200px',
+                  overflowY: 'auto',
+                  zIndex: 10,
+                  marginTop: '5px',
+                }}
+                >
+                {courses.length === 0 ? (
+                  <p style={{ padding: '10px', color: '#999' }}>No courses available</p>
+                ) : (
+                  courses.map((course, index) => (
+                    <p
+                    key={index}
+                    onClick={() => {
+                      setFormData(prev => ({
+                        ...prev,
+                        courseCode: course.code,
+                      }));
+                      setIsDropdownOpen(false);
+                    }}
+                    style={{
+                      padding: '10px',
+                      margin: 0,
+                      cursor: 'pointer',
+                      backgroundColor: formData.courseCode === course.code ? '#f0f0f0' : '#fff',
+                      fontWeight: formData.courseCode === course.code ? 'bold' : 'normal',
+                      borderBottom: '1px solid #eee',
+                    }}
+                    >
+                    {course.title} - {course.code}
+                    </p>
+                  ))
+                )}
+                </div>
+              )}
+              </div>
+
+              <div style={{ marginBottom: '20px' }}>
+              <label style={{ display: 'block', fontSize: '20px', color: '#383838' }}>Gender:</label>
+              <select
+              name="gender"
+              value={formData.gender}
+              onChange={handleInputChange}
+              style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #333333' }}
+              >
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+              </select>
+              </div>
+
             <div style={{ marginBottom: '20px' }}>
               <label style={{ display: 'block', fontSize: '20px', color: '#383838' }}>Classification:</label>
               <select
@@ -466,7 +602,7 @@ const StudentManagementTable = ({
             </div>
             <div style={{ marginBottom: "20px" }}>
             <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
-            Reason for Shift/Drop:
+            Reason for Dropping:
             </label>
             <textarea
             name="reason"

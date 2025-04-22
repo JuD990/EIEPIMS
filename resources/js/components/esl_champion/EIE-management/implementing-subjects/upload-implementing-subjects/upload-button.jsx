@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import axios from "axios";
 import "./UploadImplementingSubjectsButton.css";
 import uploadLogo from "@assets/Upload.png";
+import archiveLogo from "@assets/Archive.png"; // Assuming you have an archive icon
 
 const UploadingButton = () => {
   const subjectFileInputRef = useRef(null);
@@ -39,6 +40,12 @@ const UploadingButton = () => {
     }
   };
 
+  // Handle button click for archived subjects (you can replace with actual logic)
+  const handleArchivedSubjectsButtonClick = () => {
+    // Implement your logic for showing archived subjects, e.g., navigate to an archive page or open a modal
+    alert("Archived Subjects button clicked!");
+  };
+
   return (
     <div className="esl-upload-buttons-container">
     {/* Upload Subject Button */}
@@ -59,6 +66,15 @@ const UploadingButton = () => {
     onChange={handleSubjectFileChange}
     style={{ display: "none" }}
     />
+
+    {/* Archived Subjects Button */}
+    <button
+    onClick={handleArchivedSubjectsButtonClick}
+    className="esl-archived-subjects-button"
+    >
+    <img src={archiveLogo} alt="Archive Icon" className="archive-icon" />
+    <span className="archive-label">Archived Subjects</span>
+    </button>
     </div>
   );
 };

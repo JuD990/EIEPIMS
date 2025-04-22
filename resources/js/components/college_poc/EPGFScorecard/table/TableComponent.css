@@ -42,3 +42,7 @@
     font-weight: 400;
     background: #fff;
 }
+
+.epgf-scorecard-table select {
+    border: none;
+}

@@ -164,9 +164,10 @@ class ClassListController extends Controller
                 'firstName' => 'required|string|max:255',
                 'middleName' => 'nullable|string|max:255',
                 'lastName' => 'required|string|max:255',
-                'classification' => 'required|string',
+                'classification' => 'nullable|string',
                 'yearLevel' => 'required|string',
                 'status' => 'required|string',
+                'gender' => 'nullable|string',
                 'reason' => 'nullable|string',
                 'courseCode' => 'nullable|string',
             ]);
@@ -184,6 +185,7 @@ class ClassListController extends Controller
             $student->lastname = $request->input('lastName');
             $student->classification = $request->input('classification');
             $student->year_level = $request->input('yearLevel');
+            $student->gender = $request->input('gender');
             $student->status = $request->input('status');
             $student->reason_for_shift_or_drop = $request->input('reason');
             $student->course_code = $request->input('courseCode');
@@ -245,6 +247,38 @@ class ClassListController extends Controller
         ->get();
 
         // Optional: group by course_title if you want same structure as before
+        $groupedCourses = $courses->groupBy('course_title')->map(function ($group) {
+            return $group->pluck('course_code')->unique()->values();
+        })->toArray();
+
+        return response()->json($groupedCourses);
+    }
+
+
+    public function getCoursesByDepartmentStudent(Request $request)
+    {
+        $employeeId = $request->header('employee_id');
+
+        if (!$employeeId) {
+            return response()->json(['error' => 'Employee ID is required'], 400);
+        }
+
+        // Step 1: Find the employee's department
+        $employee = EIEHeads::where('employee_id', $employeeId)->first();
+
+        if (!$employee) {
+            return response()->json(['error' => 'Employee not found'], 404);
+        }
+
+        $department = $employee->department;
+
+        // Step 2: Get all distinct course_codes and course_titles filtered by department
+        $courses = ImplementingSubjects::select('course_code', 'course_title')
+        ->where('department', $department)
+        ->distinct()
+        ->get();
+
+        // Step 3: Group by course_title (optional, for dropdown)
         $groupedCourses = $courses->groupBy('course_title')->map(function ($group) {
             return $group->pluck('course_code')->unique()->values();
         })->toArray();

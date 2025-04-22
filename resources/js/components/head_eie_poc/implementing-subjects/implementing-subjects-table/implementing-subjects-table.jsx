@@ -173,7 +173,7 @@ const ImplementingSubjectsTable = ({
               className="action-button"
               onClick={() => handleUpdate(row.values)}
             >
-              Update
+              Assign
             </button>
           </div>
         ),
@@ -273,7 +273,7 @@ const ImplementingSubjectsTable = ({
           marginBottom: "20px",
         }}
         >
-        Update Credentials
+        Assigning College POC
         </h2>
         <form onSubmit={handleFormSubmit}>
         {/* Assigned POC Selection */}
@@ -349,7 +349,7 @@ const ImplementingSubjectsTable = ({
           fontFamily: "Poppins",
         }}
         >
-        Update
+        Assign
         </button>
         </div>
         </form>

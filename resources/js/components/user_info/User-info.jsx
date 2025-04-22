@@ -82,7 +82,6 @@ const UserInfo = () => {
           },
         });
         setUser(response.data.data);
-        console.log(response.data.data)
       } catch (err) {
         console.error("Error fetching detailed user info:", err);
       }

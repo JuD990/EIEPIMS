@@ -31,6 +31,7 @@ Route::get('/get-performance-summary', [StudentController::class, 'getPerformanc
 
 Route::get('/certificate/{id}', [CertificateController::class, 'getCertificateData']);
 Route::get('/diagnostics-students', [CertificateController::class, 'getDiagnosticsStudents']);
+Route::post('/upload-department-logo', [CertificateController::class, 'uploadDepartmentLogo']);
 
 //Student
 Route::get('/get-courses', [HistoricalScorecardController::class, 'getCoursesByStudent']);
@@ -55,10 +56,13 @@ Route::post('/import-college-poc', [UserManagement::class, 'importCollegePOCs'])
 Route::post('/import-lead-poc', [UserManagement::class, 'importLeadPOCs']);
 Route::post('/import-head-poc', [UserManagement::class, 'importHeadPOCs']);
 Route::post('/import-esl-admins', [UserManagement::class, 'importESLadmins']);
+
+//Delete Accounts
 Route::delete('/delete-students/{student_id}', [UserManagement::class, 'deleteStudent']);
 Route::delete('/delete-college-pocs/{employee_id}', [UserManagement::class, 'deleteCollegePOC']);
 Route::delete('/delete-lead-pocs/{employee_id}', [UserManagement::class, 'deleteLeadPOC']);
 Route::delete('/delete-head-pocs/{employee_id}', [UserManagement::class, 'deleteHeadPOC']);
+Route::delete('/delete-esl-admins/{employee_id}', [UserManagement::class, 'deleteEslAdmin']);
 
 // User Management (Profile Management)
 Route::get('/get-user', [UserManagement::class, 'fetchUserProfile']);
@@ -119,12 +123,16 @@ Route::put('/update-student/{studentId}', [ClassListController::class, 'updateSt
 Route::get('/class-lists', [ClassListController::class, 'fetchMonthlyChamps']);
 Route::get('/get-courses-by-department', [ClassListController::class, 'getCoursesByDepartment']);
 Route::get('/get-courses-by-department-poc', [ClassListController::class, 'getCoursesPOC']);
+Route::get('/get-courses-by-department-student', [ClassListController::class, 'getCoursesByDepartmentStudent']);
+
 
 // ImplementingSubject routes
 Route::get('/implementing-subject/{employee_id}', [ImplementingSubjectController::class, 'getClassData']);
 Route::post('/upload-subjects', [ImplementingSubjectController::class, 'upload'])->name('subjects.upload');
 Route::get('/esl-implementing-subjects', [ImplementingSubjectController::class, 'index']);
+Route::get('/esl-archived-implementing-subjects', [ImplementingSubjectController::class, 'archived']);
 Route::put('/esl-update-implementing-subjects/{courseCode}', [ImplementingSubjectController::class, 'update']);
+Route::put('/esl-update-archived-implementing-subjects/{courseCode}', [ImplementingSubjectController::class, 'updateArchive']);
 Route::get('/implementing-subjects', [ImplementingSubjectController::class, 'fetchImplementingSubjects']);
 Route::put('/update-implementing-subjects/{courseCode}', [ImplementingSubjectController::class, 'updateImplementingSubject'])->name('subjects.updateImplementingSubject');
 Route::get('/employee-department/{userType}/{employeeId}',
@@ -134,6 +142,9 @@ Route::get('/getDepartmentsOptions', [ImplementingSubjectController::class, 'get
 Route::get('/getDepartmentsOptionsForPOCs', [ImplementingSubjectController::class, 'getDepartmentForPOCs']);
 Route::get('/getSchoolYears', [ImplementingSubjectController::class, 'getSchoolYears']);
 Route::get('/getUserDepartment/{employee_id}', [ImplementingSubjectController::class, 'getUserDepartment']);
+Route::post('/archive-implementing-subjects', [ImplementingSubjectController::class, 'archiveSubjects']);
+Route::post('/restore-implementing-subjects', [ImplementingSubjectController::class, 'restoreSubjects']);
+Route::post('/delete-implementing-subjects', [ImplementingSubjectController::class, 'deleteSubjects']);
 
 
 // Route to get the programs for a department
