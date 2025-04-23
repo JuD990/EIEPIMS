@@ -96,8 +96,6 @@ const InterviewScorecardButtons = ({
 
     const handleStudentChange = (e) => {
         const selectedName = e.target.value;
-        console.log("Selected Student Name:", selectedName);  // Log the selected name
-
         const selectedStudent = students.find(
             (student) => `${student.firstname} ${student.middlename ? student.middlename : ""} ${student.lastname}`.trim() === selectedName
         );

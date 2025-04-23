@@ -140,8 +140,8 @@ class EieReportController extends Controller
         $grandTotals = [
             'expectedSubmissions' => 0,
             'submitted' => array_fill_keys($months, 0),
-            'completionRate' => array_fill_keys($months, null), // Ensure null for missing values
-            'epgfAverage' => array_fill_keys($months, null), // Ensure null for missing values
+            'completionRate' => array_fill_keys($months, null),
+            'epgfAverage' => array_fill_keys($months, null),
             'proficiencyLevel' => array_fill_keys($months, null),
             'champion' => array_fill_keys($months, null),
         ];
@@ -150,10 +150,10 @@ class EieReportController extends Controller
             $yearTotals = [
                 'expectedSubmissions' => 0,
                 'submitted' => array_fill_keys($months, 0),
-                                                            'completionRate' => array_fill_keys($months, null), // Ensure null for missing values
-                                                            'epgfAverage' => array_fill_keys($months, null), // Ensure null for missing values
-                                                            'proficiencyLevel' => array_fill_keys($months, null),
-                                                            'champion' => array_fill_keys($months, null),
+                'completionRate' => array_fill_keys($months, null),
+                'epgfAverage' => array_fill_keys($months, null),
+                'proficiencyLevel' => array_fill_keys($months, null),
+                'champion' => array_fill_keys($months, null),
             ];
 
             $yearLevelData = $yearLevelReports->groupBy('program')->map(function ($programReports) use ($months, &$yearTotals, &$grandTotals) {
@@ -258,7 +258,7 @@ class EieReportController extends Controller
             ? round(array_sum($grandTotals['epgfAverage'][$month]) / count($grandTotals['epgfAverage'][$month]), 2)
             : null;
 
-            // 🛠 Compute proficiency level for grand totals
+            //Compute proficiency level for grand totals
             $grandTotals['proficiencyLevel'][$month] = $this->determineProficiencyLevel($grandTotals['epgfAverage'][$month]);
 
             // Determine Grand Champion
@@ -311,12 +311,6 @@ class EieReportController extends Controller
         $department = $request->input('department');
         $semester = $request->input('semester');
         $schoolYear = $request->input('schoolYear');
-
-        \Log::info('EIE Report Request:', [
-            'department' => $request->input('department'),
-                   'semester' => $request->input('semester'),
-                   'schoolYear' => $request->input('schoolYear')
-        ]);
 
         if (!$department || !$semester || !$schoolYear) {
             return response()->json(['success' => false, 'message' => 'Invalid parameters'], 400);

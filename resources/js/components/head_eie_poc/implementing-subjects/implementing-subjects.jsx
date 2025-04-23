@@ -23,8 +23,8 @@ const EIEHeadImplementingSubjects = () => {
     <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '350px', color: '#383838' }}>Implementing Subjects</h1>
     <div style={{
       display: 'flex',
-      flexDirection: 'column', // Stack items vertically
-      alignItems: 'flex-end', // Align items to the right
+      flexDirection: 'column',
+      alignItems: 'flex-end',
       margin: '20px 35px',
       gap: '10px',
       width: '100%',

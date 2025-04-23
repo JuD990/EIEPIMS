@@ -25,11 +25,6 @@ const ImplementingSubjectsTable = ({
   const [isUpdating, setIsUpdating] = useState(false);
   const employeeId = localStorage.getItem("employee_id");
 
-  console.log("Search:", searchQuery);
-  console.log("Program:", selectedProgram);
-  console.log("Year Level:", selectedYearLevel);
-  console.log("Semester:", selectedSemester);
-
   const fetchData = async () => {
     if (!employeeId) {
       setError("Employee ID is required.");
@@ -140,7 +135,6 @@ const ImplementingSubjectsTable = ({
         }
       );
       if (response.status === 200) {
-        console.log("✅ Successfully updated assigned POC.");
         setShowUpdateModal(false);
         fetchData();
       }

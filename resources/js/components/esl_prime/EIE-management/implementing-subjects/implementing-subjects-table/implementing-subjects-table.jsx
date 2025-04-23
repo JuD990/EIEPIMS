@@ -10,9 +10,6 @@ const ImplementingSubjectsTable = ({ searchQuery, program, yearLevel, semester }
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [customSelectedRowIds, setCustomSelectedRowIds] = useState({});
   const [selectedData, setSelectedData] = useState([]);
-  console.log(customSelectedRowIds);
-  console.log(selectedData);
-
   const [formData, setFormData] = useState({
     courseTitle: "",
     code: "",
@@ -99,7 +96,6 @@ const ImplementingSubjectsTable = ({ searchQuery, program, yearLevel, semester }
         formData
       );
       if (response.status === 200) {
-        console.log("✅ Successfully updated subject.");
         setShowUpdateModal(false);
         fetchData();
       }

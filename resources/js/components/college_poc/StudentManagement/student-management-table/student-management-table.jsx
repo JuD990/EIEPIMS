@@ -29,8 +29,6 @@ const StudentManagementTable = ({
       return;
     }
 
-    console.log("Stored Employee ID:", storedEmployeeId);
-
     fetch(`http://localhost:8000/api/manage-class-list?employee_id=${storedEmployeeId}`)
     .then((response) => {
       if (!response.ok) {
@@ -39,7 +37,6 @@ const StudentManagementTable = ({
       return response.json();
     })
     .then((data) => {
-      console.log("Filtered Data:", data); // Debugging filtered data
       setStudents(data);
     })
     .catch((error) => console.error("Error fetching data:", error.message));
@@ -85,9 +82,6 @@ const StudentManagementTable = ({
 
     const studentId = formData.studentId;
 
-    console.log("Submitting student update for studentId:", studentId);
-    console.log("Form Data being submitted:", formData);
-
     fetch(`http://localhost:8000/api/update-student/${formData.classListsId}`, {
       method: "PUT",
       headers: {
@@ -112,7 +106,6 @@ const StudentManagementTable = ({
       return response.json();
     })
     .then((data) => {
-      console.log("Update Success:", data);
       return fetch(`http://localhost:8000/api/manage-class-list?employee_id=${storedEmployeeId}`);
     })
     .then((response) => {
@@ -122,7 +115,6 @@ const StudentManagementTable = ({
       return response.json();
     })
     .then((data) => {
-      console.log("Refetched Data:", data);
       setStudents(data);
       setShowModal(false);
     })
@@ -130,8 +122,6 @@ const StudentManagementTable = ({
   };
 
   const handleUpdateClick = (row) => {
-    console.log("Row data:", row.original); // Debugging - check if class_lists_id exists
-
     setFormData({
       classListsId: row.original.class_lists_id,  // Assign class_lists_id
       firstName: row.original.firstname || '',
@@ -143,8 +133,6 @@ const StudentManagementTable = ({
       reason: row.original.reason_for_shift_or_drop || '',
       courseCode: row.original.course_code || '',
     });
-
-    console.log("Updated formData:", formData); // Debugging
     setShowModal(true);
   };
 

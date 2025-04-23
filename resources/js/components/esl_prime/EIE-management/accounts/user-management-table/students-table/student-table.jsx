@@ -40,7 +40,6 @@ const UserManagementTable = ({ searchQuery, selectedDepartment, selectedUserType
     const fetchStudents = async () => {
       try {
         const response = await axios.get("/api/students");
-        console.log("Fetched students:", response.data);
         setStudents(response.data.data);
       } catch (error) {
         console.error("Error fetching students:", error.response?.data || error.message);

@@ -28,7 +28,6 @@ const UploadingButton = () => {
         },
       });
       alert("Class List uploaded successfully!");
-      console.log(response.data);
       window.location.reload(); // Refresh the page
     } catch (error) {
       console.error("Error uploading class list:", error.response?.data || error.message);

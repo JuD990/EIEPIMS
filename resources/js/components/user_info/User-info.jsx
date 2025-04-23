@@ -114,11 +114,9 @@ const UserInfo = () => {
         if (!user.password) {
           // No password set — fallback to ID as default password
           passwordMatches = trimmedInput === idToMatch;
-          console.log("Fallback to ID (no password set). Match result:", passwordMatches);
         } else {
           // Password exists — must match bcrypt hash
           passwordMatches = await bcrypt.compare(trimmedInput, user.password);
-          console.log("Password match result (hashed):", passwordMatches);
         }
 
         if (passwordMatches) {
@@ -179,7 +177,6 @@ const UserInfo = () => {
       });
 
       if (response.status === 200) {
-        console.log("User info updated successfully:", response.data);
         setUser(response.data); // Update local state
       }
     } catch (error) {
@@ -218,7 +215,6 @@ const UserInfo = () => {
         );
 
         if (response.status === 200) {
-          console.log("Profile picture uploaded successfully:", response.data);
           location.reload(); // Optional: refresh to reflect changes
         }
       } catch (error) {

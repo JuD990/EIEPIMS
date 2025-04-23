@@ -8,7 +8,6 @@ import UploadCSVButton from "./buttons/upload-csv-button";
 const EslPrimeEPGFRubricVersion = () => {
 
   const handleFileUpload = (file, fileType) => {
-    console.log(`Uploaded File (${fileType}):`, file);
 
     const formData = new FormData();
     formData.append("file", file); // Append the file to the form data
@@ -28,7 +27,6 @@ const EslPrimeEPGFRubricVersion = () => {
       return response.json();
     })
     .then((data) => {
-      console.log(`${fileType} uploaded successfully:`, data);
       showToast(`${fileType} uploaded successfully!`, "success");
 
       // Refresh the page after successful upload

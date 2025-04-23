@@ -50,7 +50,6 @@ const InterviewScorecardButtons = ({
                         }
                     });
                     const studentsList = response.data;  // Array of students returned from backend
-                    console.log(studentsList);
                     setStudents(studentsList);  // Update the students state
                 } catch (error) {
                     console.error("Error fetching students:", error);
@@ -96,15 +95,11 @@ const InterviewScorecardButtons = ({
 
     const handleStudentChange = (e) => {
         const selectedName = e.target.value;
-        console.log("Selected Student Name:", selectedName);  // Log the selected name
-
         const selectedStudent = students.find(
             (student) => `${student.firstname} ${student.middlename ? student.middlename : ""} ${student.lastname}`.trim() === selectedName
         );
 
         if (selectedStudent) {
-            console.log("Selected Student Object:", selectedStudent);  // Log the selected student object
-
             setFormData((prev) => {
                 const updatedFormData = {
                     ...prev,
@@ -113,11 +108,8 @@ const InterviewScorecardButtons = ({
                     program: selectedStudent.program,
                     year_level: selectedStudent.year_level,
                 };
-                console.log("Updated Form Data:", updatedFormData);  // Log the updated form data
                 return updatedFormData;
             });
-        } else {
-            console.log("No student found with the selected name.");
         }
     };
 
@@ -199,11 +191,8 @@ const InterviewScorecardButtons = ({
                     show_status: 'Showed Up', // Default value for show_status
                 };
 
-                console.log('Data to be sent to backend:', collectedData);
-
                 try {
                     const response = await axios.post('/api/eie-diagnostic-reports', collectedData);
-                    console.log('Saved:', response.data);
                     alert("Data has been successfully saved!");  // Success alert
                 } catch (error) {
                     console.error('Error saving:', error.response?.data || error);
@@ -241,7 +230,6 @@ const InterviewScorecardButtons = ({
 
         try {
             const response = await axios.post('/api/eie-diagnostic-reports', collectedData);
-            console.log('No Show tagged:', response.data);
             alert("No Show has been successfully tagged!");  // Add success alert here
         } catch (error) {
             console.error('Error tagging No Show:', error.response?.data || error);

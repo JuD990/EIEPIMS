@@ -81,7 +81,6 @@ const LoginForm = () => {
         // ✅ Trigger the storeOrUpdatePrograms function after login
         try {
           const reportResponse = await apiService.post('/eie-reports/store-or-update');
-          console.log("EIE Reports Updated: ", reportResponse.data);
         } catch (reportError) {
           console.error("Failed to update EIE Reports: ", reportError);
         }

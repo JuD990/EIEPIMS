@@ -127,9 +127,6 @@ class ImplementingSubjectController extends Controller
         // Get the department of the employee
         $department = $employee->department;
 
-        // Log the department to verify it's correct
-        Log::info("Employee found. Department: $department");
-
         // Filter the implementing subjects based on the department
         $subjects = ImplementingSubjects::where('department', $department)->get();
 
@@ -139,7 +136,6 @@ class ImplementingSubjectController extends Controller
 
     public function upload(Request $request)
     {
-        Log::info('File upload attempt:', ['files' => $request->files]);
 
         // Validate the file
         $request->validate([
@@ -148,7 +144,6 @@ class ImplementingSubjectController extends Controller
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            Log::info('File details:', ['file_name' => $file->getClientOriginalName(), 'file_size' => $file->getSize()]);
 
             // Store the file
             $path = $file->storeAs('uploads', $file->getClientOriginalName());

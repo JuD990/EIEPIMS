@@ -19,5 +19,7 @@ class EpgfRubric extends Model
         'epgf_fluency_id',
         'version',
         'status',
+        'uploaded_by',
+        'updated_by',
     ];
 }

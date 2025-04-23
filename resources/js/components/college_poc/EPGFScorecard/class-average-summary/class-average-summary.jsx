@@ -53,7 +53,6 @@ const ClassAverageSummary = ({ course_code, average, studentCount, evaluatedCoun
           enrolled_students: studentCount,
           active_students: studentCountActive,
         });
-        console.log("Data sent to backend:", response.data);
       } catch (error) {
         console.error("Error sending data to backend:", error.response ? error.response.data : error.message);
       }

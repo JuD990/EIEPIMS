@@ -14,7 +14,6 @@ const LeadSidebar = () => {
   const [activePage, setActivePage] = useState("");
 
   useEffect(() => {
-    console.log("Current Path:", location.pathname); // Debugging
     setActivePage(location.pathname);
   }, [location.pathname]);
 

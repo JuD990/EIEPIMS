@@ -86,7 +86,6 @@ class EieDiagnosticReportController extends Controller
     public function getFirstYearReports(Request $request)
     {
         try {
-            \Log::info('Received request:', $request->all());
 
             [$startYear, $endYear] = explode('/', $request->school_year);
             $startDate = Carbon::createFromDate($startYear, 1, 1)->startOfDay();
@@ -106,8 +105,6 @@ class EieDiagnosticReportController extends Controller
                 }
             });
 
-            \Log::info('Fetched reports:', $reports->toArray());
-
             return response()->json($reports);
         } catch (\Throwable $e) {
             \Log::error('Error fetching reports:', ['message' => $e->getMessage()]);
@@ -120,7 +117,6 @@ class EieDiagnosticReportController extends Controller
     public function getFourthYearReports(Request $request)
     {
         try {
-            \Log::info('Received request:', $request->all());
 
             [$startYear, $endYear] = explode('/', $request->school_year);
             $startDate = Carbon::createFromDate($startYear, 1, 1)->startOfDay();
@@ -139,8 +135,6 @@ class EieDiagnosticReportController extends Controller
                     $report->time_of_interview = Carbon::parse($report->time_of_interview)->format('g:i A');
                 }
             });
-
-            \Log::info('Fetched reports:', $reports->toArray());
 
             return response()->json($reports);
         } catch (\Throwable $e) {

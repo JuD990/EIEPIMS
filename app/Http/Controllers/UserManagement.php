@@ -55,9 +55,6 @@ class UserManagement extends Controller
             ], 404);
         }
 
-        // Log the reset for debugging (optional)
-        Log::info("Reset Password for ESL {$employee_id}: Current password will be deleted.");
-
         // Set the password to null
         $student->password = null;
         $student->save();
@@ -78,9 +75,6 @@ class UserManagement extends Controller
                 'message' => 'Student not found'
             ], 404);
         }
-
-        // Log the current password for debugging purposes (optional)
-        Log::info("Reset Password for Student {$student_id}: Current password will be deleted.");
 
         // Delete the password (set it to null)
         $student->password = null;
@@ -103,9 +97,6 @@ class UserManagement extends Controller
             ], 404);
         }
 
-        // Log the current password for debugging purposes (optional)
-        Log::info("Reset Password for CollegePOC {$employee_id}: Current password will be deleted.");
-
         // Delete the password (set it to null)
         $student->password = null;
         $student->save();
@@ -127,9 +118,6 @@ class UserManagement extends Controller
             ], 404);
         }
 
-        // Log the current password for debugging purposes (optional)
-        Log::info("Reset Password for LeadPOC {$employee_id}: Current password will be deleted.");
-
         // Delete the password (set it to null)
         $student->password = null;
         $student->save();
@@ -150,9 +138,6 @@ class UserManagement extends Controller
                 'message' => 'EIE Head not found'
             ], 404);
         }
-
-        // Log the current password for debugging purposes (optional)
-        Log::info("Reset Password for EIE Head {$employee_id}: Current password will be deleted.");
 
         // Delete the password (set it to null)
         $student->password = null;
@@ -614,7 +599,6 @@ class UserManagement extends Controller
         ]);
 
         try {
-            \Log::info('Validating file...');
             // Import the CSV using the StudentsImport class
             Excel::import(new StudentsImport, $request->file('csv_file'));
             \Log::info('CSV import completed successfully');
@@ -836,11 +820,6 @@ class UserManagement extends Controller
         }
 
         $publicPath = asset("assets/user_profile_pics/{$filename}");
-
-        Log::info("uploadProfilePicture - Response: ", [
-            'message' => 'Profile picture uploaded successfully.',
-            'filepath' => $publicPath
-        ]);
 
         return response()->json([
             'message' => 'Profile picture uploaded successfully.',

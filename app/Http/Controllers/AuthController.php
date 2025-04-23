@@ -42,10 +42,6 @@ class AuthController extends Controller
                 return response()->json(['error' => 'User not found'], 404);
             }
 
-            Log::debug("Entered Password (trimmed): " . $password);
-            Log::debug("Stored Hashed Password: " . $user->password);
-            Log::debug('Generated Hash for "password123"": ' . bcrypt('password123'));
-
             if (!$this->checkPassword($user, $password)) {
                 Log::warning("Login failed: Invalid credentials", [
                     'email' => $email,
@@ -87,19 +83,16 @@ class AuthController extends Controller
         // If the user has a password, check it against the hash
         if (!empty($user->password)) {
             $isMatch = Hash::check($password, $user->password);
-            Log::debug("Password match? " . ($isMatch ? 'YES' : 'NO'));
             return $isMatch;
         }
 
         // If the password field is empty, use student_id or employee_id for fallback
         if (empty($user->password)) {
             if (isset($user->student_id) && trim($user->student_id) === trim($password)) {
-                Log::debug("Password match with student_id? YES");
                 return true;
             }
 
             if (isset($user->employee_id) && trim($user->employee_id) === trim($password)) {
-                Log::debug("Password match with employee_id? YES");
                 return true;
             }
         }
@@ -155,7 +148,6 @@ class AuthController extends Controller
 
             if ($classList) {
                 $yearLevel = $classList->year_level;
-                Log::info("✅ Year Level Found in ClassLists", ['student_id' => $studentId, 'year_level' => $yearLevel]);
             }
 
             // If ClassLists does not have year_level, fetch from Students
@@ -173,10 +165,10 @@ class AuthController extends Controller
         return response()->json([
             'name' => $user->firstname . ' ' . $user->lastname,
             'role' => $user->role ?? $request->input('user_type'),
-                                'employee_id' => $user->employee_id,
-                                'department' => $user->department ?? '',
-                                'student_id' => $studentId,
-                                'year_level' => $yearLevel ?? '', // Change this to check response
+            'employee_id' => $user->employee_id,
+            'department' => $user->department ?? '',
+            'student_id' => $studentId,
+            'year_level' => $yearLevel ?? '',
         ]);
     }
 

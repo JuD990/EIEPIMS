@@ -19,12 +19,6 @@ class ClassListController extends Controller
             $courseCode = $request->query('course_code');
             $employeeId = $request->query('employee_id');
 
-            // Log the received values
-            Log::info('Received filter request:', [
-                'course_code' => $courseCode,
-                'employee_id' => $employeeId,
-            ]);
-
             // Validate if course_code and employee_id are provided
             if (!$courseCode || !$employeeId) {
                 return response()->json(['error' => 'Course code and employee ID are required.'], 400);

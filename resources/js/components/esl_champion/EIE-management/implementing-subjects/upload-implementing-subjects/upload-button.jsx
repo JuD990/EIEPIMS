@@ -2,9 +2,9 @@ import React, { useRef, useState } from "react";
 import axios from "axios";
 import "./UploadImplementingSubjectsButton.css";
 import uploadLogo from "@assets/Upload.png";
-import archiveLogo from "@assets/Archive.png"; // Assuming you have an archive icon
+import archiveLogo from "@assets/Archive.png";
 
-const UploadingButton = () => {
+const UploadingButton = ({ onArchiveClick }) => {
   const subjectFileInputRef = useRef(null);
   const [subjectLoading, setSubjectLoading] = useState(false);
 
@@ -29,7 +29,6 @@ const UploadingButton = () => {
         },
       });
       alert("Subject file uploaded successfully!");
-      console.log(response.data);
       window.location.reload(); // Refresh the page
     } catch (error) {
       console.error("Error uploading subject file:", error.response?.data || error.message);
@@ -42,13 +41,12 @@ const UploadingButton = () => {
 
   // Handle button click for archived subjects (you can replace with actual logic)
   const handleArchivedSubjectsButtonClick = () => {
-    // Implement your logic for showing archived subjects, e.g., navigate to an archive page or open a modal
-    alert("Archived Subjects button clicked!");
+    if (onArchiveClick) onArchiveClick();
   };
 
   return (
     <div className="esl-upload-buttons-container">
-    {/* Upload Subject Button */}
+    {/* Upload Button (unchanged) */}
     <button onClick={handleSubjectButtonClick} className="esl-implementing-subjects-upload-button">
     {subjectLoading ? (
       <span>Uploading...</span>
@@ -66,15 +64,6 @@ const UploadingButton = () => {
     onChange={handleSubjectFileChange}
     style={{ display: "none" }}
     />
-
-    {/* Archived Subjects Button */}
-    <button
-    onClick={handleArchivedSubjectsButtonClick}
-    className="esl-archived-subjects-button"
-    >
-    <img src={archiveLogo} alt="Archive Icon" className="archive-icon" />
-    <span className="archive-label">Archived Subjects</span>
-    </button>
     </div>
   );
 };

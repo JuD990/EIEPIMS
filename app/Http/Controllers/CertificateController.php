@@ -12,15 +12,12 @@ use App\Models\EpgfRubric;
 use App\Models\EpgfPronunciation;
 use App\Models\EpgfGrammar;
 use App\Models\EpgfFluency;
-
 use Illuminate\Support\Facades\Log;
 
 class CertificateController extends Controller
 {
     public function getCertificateData($id)
     {
-        Log::info("✅ Fetching student with ID: " . $id);
-
         // Fetch student details
         $student = ClassLists::find($id);
 
@@ -29,15 +26,11 @@ class CertificateController extends Controller
             return response()->json(['error' => 'Student not found'], 404);
         }
 
-        Log::info("✅ Student found: " . json_encode($student));
-
-        // 🏫 Find the full department from EIEHeads based on the student's department
+        //Find the full department from EIEHeads based on the student's department
         $departmentHead = EIEHeads::where('department', $student->department)->first();
         $fullDepartment = $departmentHead ? $departmentHead->full_department : "Unknown Department";
 
-        Log::info("✅ Full Department found: " . $fullDepartment);
-
-        // 🏫 Find the Dean based on the student's department (EIEHeads)
+        //Find the Dean based on the student's department (EIEHeads)
         $dean = EIEHeads::where('department', $student->department)
         ->where('role', 'EIE Head')
         ->first();
@@ -46,20 +39,16 @@ class CertificateController extends Controller
         ? trim("{$dean->firstname} {$dean->middlename} {$dean->lastname}")
         : "Unknown Dean";
 
-        Log::info("✅ Dean found: " . $deanName);
-
-        // 🏆 Find the ESL Champion
+        // Find the ESL Champion
         $eslChampion = ESLadmins::where('role', 'ESL Champion')->first();
         $eslChampionName = $eslChampion
         ? trim("{$eslChampion->firstname} {$eslChampion->middlename} {$eslChampion->lastname}")
         : "Unknown ESL Champion";
 
-        Log::info("✅ ESL Champion found: " . $eslChampionName);
-
-        // 👩‍🎓 Combine student's full name
+        // Combine student's full name
         $fullName = trim("{$student->firstname} {$student->middlename} {$student->lastname}");
 
-        // 📜 Prepare JSON response
+        //Prepare JSON response
         $data = [
             'student_id' => $student->id, // Student ID
             'name' => $fullName ?: "N/A",

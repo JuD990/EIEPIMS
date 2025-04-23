@@ -43,8 +43,8 @@ const eslPrimeDiagnostics = () => {
         "SPARK Highlight": "",
         "SPARK Lowlight": "",
         "Usage in School/Online (When in School)": "",
-                                           "Usage Offline (Home or Outside)": "",
-                                           "Support Needed": ""
+        "Usage Offline (Home or Outside)": "",
+        "Support Needed": ""
     });
 
     const handleClear = () => {

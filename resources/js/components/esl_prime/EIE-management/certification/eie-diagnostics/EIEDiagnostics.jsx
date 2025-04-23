@@ -100,9 +100,6 @@ const EIEDiagnostics = () => {
                 };
             });
 
-            // Log the formatted data to verify
-            console.log("Formatted Data:", formattedData);
-
             setDiagnosticData(formattedData);
         } catch (error) {
             console.error("Failed to fetch diagnostics:", error);

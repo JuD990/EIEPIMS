@@ -21,10 +21,4 @@ class EpgfPronunciation extends Model
         'descriptor',
         'rating'
     ];
-
-    // Relationship to EpgfRubric
-    public function rubrics()
-    {
-        return $this->hasMany(EpgfRubric::class, 'epgf_pronunciation_id');
-    }
 }

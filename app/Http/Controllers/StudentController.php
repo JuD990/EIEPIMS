@@ -83,8 +83,6 @@ class StudentController extends Controller
 
     public function getMonthlyPerformanceSummary(Request $request)
     {
-        // Log the incoming request parameters for debugging
-        Log::info('Incoming Request Parameters:', $request->all());
 
         $studentId = $request->query('student_id');
         $yearLevel = $request->query('year_level');
@@ -138,10 +136,7 @@ class StudentController extends Controller
 
     public function getPerformanceSummary(Request $request)
     {
-        // Log the incoming request parameters for debugging
-        Log::info('Incoming Request Parameters:', $request->all());
-
-        $studentId = $request->query('student_id');  // Fetch the student_id from the request
+        $studentId = $request->query('student_id');
 
         if (!$studentId) {
             return response()->json(['error' => 'Student ID is required'], 400);

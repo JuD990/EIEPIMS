@@ -18,7 +18,6 @@ const EPGFrubricVersionDropdown = () => {
       try {
         const response = await fetch("http://127.0.0.1:8000/api/rubric-versions");
         const data = await response.json();
-        console.log("Fetched rubric versions:", data); // Log the response data
         setRubricVersions(data.map((item) => item.version)); // Extract the version field
         if (data.length > 0) {
           const activeVersion = data.find((item) => item.version.includes("*"));
@@ -52,7 +51,6 @@ const EPGFrubricVersionDropdown = () => {
       const contentType = response.headers.get('Content-Type');
       if (contentType && contentType.includes('application/json')) {
         const data = await response.json();
-        console.log('Rubric details:', data);
       } else {
         console.error('Expected JSON response but received:', contentType);
       }
@@ -67,9 +65,6 @@ const EPGFrubricVersionDropdown = () => {
     setIsSubjectOpen(false);
     const cleanedVersion = subject.replace("EPGF Rubric ", "").replace("*", "");
     fetchRubricDetails(cleanedVersion);
-
-    // Log both the version and id (if available)
-    console.log("Selected Rubric Version ID:", cleanedVersion);
   };
 
   const handleSetDefault = async () => {

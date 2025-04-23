@@ -117,8 +117,6 @@ const StudentManagementTable = ({
       courseCode: row.original.course_code || '',
       gender: row.original.gender || '',
     });
-
-    console.log("Updated formData:", formData); // Debugging
     setShowModal(true);
   };
 
@@ -169,7 +167,6 @@ const StudentManagementTable = ({
       return response.json();
     })
     .then((data) => {
-      console.log("Update Success:", data);
 
       // Re-fetch the updated students list
       fetch(`http://localhost:8000/api/class-list?employee_id=${storedEmployeeId}`)

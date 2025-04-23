@@ -43,7 +43,6 @@ const DropdownStudent = ({ onYearLevelChange, onSemesterChange }) => {
             const value = e.target.value;
             setCurrentYearLevel(value);
             onYearLevelChange(value);
-            console.log("Year Level Changed:", value);
         }}
         >
         {loading ? (
@@ -62,9 +61,8 @@ const DropdownStudent = ({ onYearLevelChange, onSemesterChange }) => {
         value={currentSemester}
         onChange={(e) => {
             const value = e.target.value;
-            setCurrentSemester(value);       // let user change
-            onSemesterChange(value);         // notify parent
-            console.log("Semester Changed:", value);
+            setCurrentSemester(value);
+            onSemesterChange(value);
         }}
         >
         <option value="1st Semester">1st Semester</option>

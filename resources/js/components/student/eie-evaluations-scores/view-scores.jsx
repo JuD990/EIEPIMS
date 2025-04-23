@@ -60,7 +60,6 @@ const getCEFRLevel = (epgfAverage) => {
 
 const ViewScores = () => {
     const { historicalScorecardId } = useParams();
-    console.log("Passed historicalScorecardId:", historicalScorecardId);
     const navigate = useNavigate();
     const [openPanel, setOpenPanel] = useState(null);
     const [scoreDetails, setScoreDetails] = useState(null);

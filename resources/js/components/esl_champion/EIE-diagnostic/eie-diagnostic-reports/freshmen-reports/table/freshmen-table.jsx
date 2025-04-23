@@ -38,9 +38,6 @@ const Table = ({ department, attendance, schoolYear, searchQuery }) => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        console.log('Department:', department);
-        console.log('Attendance:', attendance);
-        console.log('School Year:', schoolYear);
     }, [department, attendance, schoolYear]);
 
     useEffect(() => {
@@ -59,9 +56,6 @@ const Table = ({ department, attendance, schoolYear, searchQuery }) => {
                     school_year: schoolYear
                 }
             });
-
-            // Log the response data to check its structure
-            console.log("Response Data:", response.data);
 
             // Ensure the response data is an array before setting state
             if (Array.isArray(response.data)) {

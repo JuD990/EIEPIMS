@@ -20,8 +20,6 @@ class ClassController extends Controller
                 return response()->json(['error' => 'Unauthenticated'], 401);
             }
 
-            Log::info('API Request for classes', ['user' => $request->user()]);
-
             $employeeId = $request->user()->id;
 
             // Fetch implementing subjects for this employee
@@ -29,11 +27,6 @@ class ClassController extends Controller
 
             if ($implementingSubjects->isEmpty()) {
                 return response()->json(['message' => 'No Class Available'], 404);
-            }
-
-            // Log the course_code for each class (if needed)
-            foreach ($implementingSubjects as $subject) {
-                Log::info('Course Code:', ['course_code' => $subject->course_code]);
             }
 
             // Return the data as JSON

@@ -60,7 +60,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
         try {
           const response = await axios.get(`/api/consistency/${version}`);
           if (response.status === 200 && Array.isArray(response.data)) {
-            console.log('Consistency options:', response.data);
             const filteredConsistency = response.data.map(item => ({
               id: item.id,
               pronunciation: item.pronunciation,
@@ -85,7 +84,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
       if (version) {
         try {
           const response = await axios.get(`/api/clarity/${version}`);
-          console.log("API Response:", response); // Log the response data to see its structure
 
           if (response.status === 200 && Array.isArray(response.data)) {
             const filteredClarity = response.data.map(item => ({
@@ -112,7 +110,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
       if (version) {
         try {
           const response = await axios.get(`/api/articulation/${version}`);
-          console.log("API Response:", response); // Log the response data to see its structure
 
           if (response.status === 200 && Array.isArray(response.data)) {
             const filteredArticulation = response.data.map(item => ({
@@ -139,7 +136,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
       if (version) {
         try {
           const response = await axios.get(`/api/intonationStress/${version}`);
-          console.log("API Response:", response);  // Check the API response
+
           if (response.status === 200 && Array.isArray(response.data)) {
             const filteredIntonationAndStress = response.data.map(item => ({
               id: item.id,
@@ -148,7 +145,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
               descriptor: item.descriptor,
             }));
             setIntonationAndStressOptions(filteredIntonationAndStress);
-            console.log("Updated Options:", filteredIntonationAndStress);  // Verify the options
+
           } else {
             console.error("No Intonation and Stress options found or response data is not an array");
           }
@@ -166,7 +163,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
       if (version) {
         try {
           const response = await axios.get(`/api/accuracy/${version}`);
-          console.log("API Response:", response);  // Check the API response
+
           if (response.status === 200 && Array.isArray(response.data)) {
             const filteredAccuracy = response.data.map(item => ({
               id: item.id,
@@ -175,7 +172,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
               descriptor: item.descriptor,
             }));
             setAccuracyOptions(filteredAccuracy);
-            console.log("Updated Options:", filteredAccuracy);  // Verify the options
+
           } else {
             console.error("No Accuracy options found or response data is not an array");
           }
@@ -193,7 +190,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
       if (version) {
         try {
           const response = await axios.get(`/api/clarityOfThought/${version}`);
-          console.log("API Response:", response);  // Check the API response
           if (response.status === 200 && Array.isArray(response.data)) {
             const filteredClarityOfThought = response.data.map(item => ({
               id: item.id,
@@ -202,7 +198,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
               descriptor: item.descriptor,
             }));
             setClarityOfThoughtOptions(filteredClarityOfThought);
-            console.log("Updated Options:", filteredClarityOfThought);  // Verify the options
           } else {
             console.error("No Clarity Of Thought options found or response data is not an array");
           }
@@ -220,7 +215,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
       if (version) {
         try {
           const response = await axios.get(`/api/syntax/${version}`);
-          console.log("API Response:", response);  // Check the API response
           if (response.status === 200 && Array.isArray(response.data)) {
             const filteredSyntax = response.data.map(item => ({
               id: item.id,
@@ -229,7 +223,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
               descriptor: item.descriptor,
             }));
             setSyntaxOptions(filteredSyntax);
-            console.log("Updated Options:", filteredSyntax);  // Verify the options
           } else {
             console.error("No Syntax options found or response data is not an array");
           }
@@ -247,7 +240,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
       if (version) {
         try {
           const response = await axios.get(`/api/qualityOfResponse/${version}`);
-          console.log("API Response:", response);  // Check the API response
           if (response.status === 200 && Array.isArray(response.data)) {
             const filteredQualityOfResponse = response.data.map(item => ({
               id: item.id,
@@ -256,7 +248,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
               descriptor: item.descriptor,
             }));
             setQualityOfResponseOptions(filteredQualityOfResponse);
-            console.log("Updated Options:", filteredQualityOfResponse);  // Verify the options
           } else {
             console.error("No Quality Of Response options found or response data is not an array");
           }
@@ -275,7 +266,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
       if (version) {
         try {
           const response = await axios.get(`/api/detailOfResponse/${version}`);
-          console.log("API Response:", response);  // Check the API response
           if (response.status === 200 && Array.isArray(response.data)) {
             const filteredDetailOfResponse = response.data.map(item => ({
               id: item.id,
@@ -284,7 +274,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
               descriptor: item.descriptor,
             }));
             setDetailOfResponseOptions(filteredDetailOfResponse);
-            console.log("Updated Options:", filteredDetailOfResponse);  // Verify the options
           } else {
             console.error("No Detail Of Response options found or response data is not an array");
           }
@@ -307,13 +296,11 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
           console.error("No version found in the response", response.data);
           return;
         }
-        console.log("Fetched version string:", versionString);
         // Extract the major version using regex
         const versionMatch = versionString.match(/^v(\d+)/);
         if (versionMatch) {
           const majorVersion = versionMatch[1]; // The major version will be in the first capture group
           setVersion(majorVersion);  // Set the major version to state
-          console.log("Extracted major version:", majorVersion);
         } else {
           console.error("Version string doesn't match the expected format:", versionString);
         }
@@ -595,7 +582,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
           }
         }
 
-        console.log('Sending data:', studentData);  // Log the data being sent
         try {
           const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
           const response = await fetch('/api/eie-scorecard-class-reports', {
@@ -609,12 +595,10 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
           });
 
           const text = await response.text(); // Get the raw response text
-          console.log('Raw response:', text);  // Log raw response for debugging
 
           if (response.ok) {
             try {
               const result = JSON.parse(text); // Attempt to parse the response
-              console.log('Server response:', result);
               window.location.reload();
             } catch (parseError) {
               console.error('Failed to parse JSON:', parseError);  // Handle JSON parsing errors
@@ -682,7 +666,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
           if (selectedOption) {
             // Update consistency state
             updateData(rowIndex, 'consistency', selectedId); // Store the ID, not the descriptor string
-            console.log('Selected Option:', selectedOption);
             // Now update the displayed rating directly below the select
             updateData(rowIndex, 'consistencyRating', selectedOption.rating); // Assuming you want to update the rating as well
           }
@@ -774,9 +757,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
             // Update articulation state (Store the ID)
             updateData(rowIndex, 'articulation', selectedId);
 
-            // Log the selected option's rating (for debugging)
-            console.log('Selected Option:', selectedOption);
-
             // Now update the rating directly below the select dropdown
             updateData(rowIndex, 'articulationRating', selectedOption.rating); // Store the rating in the row
           }
@@ -844,9 +824,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
           if (selectedOption) {
             // Update intonation_and_stress state (Store the ID)
             updateData(rowIndex, 'intonation_and_stress', selectedId);
-
-            // Log the selected option's rating (for debugging)
-            console.log('Selected Option:', selectedOption);
 
             // Now update the rating directly below the select dropdown
             updateData(rowIndex, 'intonationAndStressRating', selectedOption.rating); // Store the rating in the row
@@ -922,9 +899,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
             // Update accuracy state (Store the ID)
             updateData(rowIndex, 'accuracy', selectedId);
 
-            // Log the selected option's rating (for debugging)
-            console.log('Selected Option:', selectedOption);
-
             // Now update the rating directly below the select dropdown
             updateData(rowIndex, 'accuracyRating', selectedOption.rating); // Store the rating in the row
           }
@@ -991,9 +965,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
             // Update clarity_of_thought state (Store the ID)
             updateData(rowIndex, 'clarity_of_thought', selectedId);
 
-            // Log the selected option's rating (for debugging)
-            console.log('Selected Option:', selectedOption);
-
             // Now update the rating directly below the select dropdown
             updateData(rowIndex, 'clarity_of_thought_rating', selectedOption.rating); // Store the rating in the row
           }
@@ -1058,9 +1029,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
           if (selectedOption) {
             // Update syntax state (Store the ID)
             updateData(rowIndex, 'syntax', selectedId);
-
-            // Log the selected option's rating (for debugging)
-            console.log('Selected Option:', selectedOption);
 
             // Now update the rating directly below the select dropdown
             updateData(rowIndex, 'syntaxRating', selectedOption.rating); // Store the rating in the row
@@ -1134,9 +1102,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
             // Update Quality Of Response state (Store the ID)
             updateData(rowIndex, 'quality_of_response', selectedId);
 
-            // Log the selected option's rating (for debugging)
-            console.log('Selected Option:', selectedOption);
-
             // Now update the rating directly below the select dropdown
             updateData(rowIndex, 'qualityOfResponseRating', selectedOption.rating); // Store the rating in the row
           }
@@ -1201,9 +1166,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
           if (selectedOption) {
             // Update Quality Of Response state (Store the ID)
             updateData(rowIndex, 'detail_of_response', selectedId);
-
-            // Log the selected option's rating (for debugging)
-            console.log('Selected Option:', selectedOption);
 
             // Now update the rating directly below the select dropdown
             updateData(rowIndex, 'detailOfResponseRating', selectedOption.rating); // Store the rating in the row

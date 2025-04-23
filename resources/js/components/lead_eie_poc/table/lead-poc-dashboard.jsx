@@ -25,7 +25,6 @@ const TableComponent = ({ department, schoolYear, semester }) => {
 
             if (response.data.success) {
                 setTableData(response.data.data);
-                console.log(response.data.data);
                 setGrandTotals(response.data.grandTotals);
             } else {
                 setTableData({});
