@@ -213,7 +213,7 @@ class ClassListController extends Controller
     }
     public function getCoursesByDepartment(Request $request)
     {
-        $employeeId = $request->header('employee_id');
+        $employeeId = $request->header('X-Employee-ID');
 
         if (!$employeeId) {
             return response()->json(['error' => 'Employee ID is required'], 400);
@@ -284,7 +284,7 @@ class ClassListController extends Controller
     public function getCoursesPOC(Request $request)
     {
         // Get the employee_id from the request header
-        $employeeId = $request->header('employee_id');
+        $employeeId = $request->header('X-Employee-ID');
 
         if (!$employeeId) {
             return response()->json(['error' => 'Employee ID is required'], 400);

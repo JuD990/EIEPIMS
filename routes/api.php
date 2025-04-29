@@ -24,10 +24,10 @@ Route::get('/dashboard-report', [EieReportController::class, 'getDashboardReport
 Route::get('/eie-report', [EieReportController::class, 'getEieReporting']);
 
 // Delete Data Settings
-Route::delete('/delete-classlists/{id}', [EieReportController::class, 'destroy']);
-Route::delete('/delete-student-scores/{id}', [EieReportController::class, 'nullifyScores']);
-Route::delete('/delete-subject-scores/{id}', [EieReportController::class, 'nullifyScores']);
-Route::delete('/delete-scorecard/{id}', [EieReportController::class, 'destroy']);
+Route::delete('/data-settings/class-lists', [EieReportController::class, 'deleteClassLists']);
+Route::put('/data-settings/class-lists/nullify-scores', [EieReportController::class, 'nullifyClassListScores']);
+Route::put('/data-settings/implementing-subjects/nullify-scores', [EieReportController::class, 'nullifyImplementingSubjectScores']);
+Route::delete('/data-settings/scorecard', [EieReportController::class, 'deleteScorecard']);
 
 
 Route::get('/performance-summary-rating', [StudentController::class, 'getPerformanceSummaryRatings']);

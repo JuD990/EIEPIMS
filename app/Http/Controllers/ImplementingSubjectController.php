@@ -106,32 +106,48 @@ class ImplementingSubjectController extends Controller
         return response()->json(['message' => 'Subject updated successfully', 'subject' => $subject]);
     }
 
-
     public function fetchImplementingSubjects(Request $request)
     {
-        // Get employee_id from the request headers
-        $employeeId = $request->header('employee_id');
+        try {
+            // Log all incoming headers for debugging
+            Log::info("Received headers:", $request->headers->all());
 
-        if (!$employeeId) {
-            return response()->json(['error' => 'Employee ID is required'], 400);
+            // Get employee_id from the request headers
+            $employeeId = $request->header('X-Employee-ID');
+
+            if (!$employeeId) {
+                return response()->json(['error' => 'Employee ID is required'], 400);
+            }
+
+            // Log received employee_id to help with debugging
+            Log::info("Received employee_id: $employeeId");
+
+            // Find the employee using the employee_id to get the department
+            $employee = EIEHeads::where('employee_id', $employeeId)->first();
+
+            if (!$employee) {
+                Log::warning("Employee not found for employee_id: $employeeId");
+                return response()->json(['error' => 'Employee not found'], 404);
+            }
+
+            // Get the department of the employee
+            $department = $employee->department;
+
+            // Filter the implementing subjects based on the department
+            $subjects = ImplementingSubjects::where('department', $department)->get();
+
+            if ($subjects->isEmpty()) {
+                Log::warning("No subjects found for department: $department");
+                return response()->json(['error' => 'No subjects found for this department'], 404);
+            }
+
+            Log::info("Fetched subjects for department: $department", ['subjects' => $subjects]);
+
+            return response()->json($subjects);
+        } catch (\Exception $e) {
+            Log::error("Error fetching implementing subjects: " . $e->getMessage());
+            return response()->json(['error' => 'An unexpected error occurred. Please try again later.'], 500);
         }
-
-        // Find the employee using the employee_id to get the department
-        $employee = EIEHeads::where('employee_id', $employeeId)->first();
-
-        if (!$employee) {
-            Log::warning("Employee not found for employee_id: $employeeId");
-            return response()->json(['error' => 'Employee not found'], 404);
-        }
-
-        // Get the department of the employee
-        $department = $employee->department;
-
-        // Filter the implementing subjects based on the department
-        $subjects = ImplementingSubjects::where('department', $department)->get();
-
-        // Return the filtered subjects
-        return response()->json($subjects);
     }
 
     public function upload(Request $request)

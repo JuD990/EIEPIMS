@@ -42,7 +42,7 @@ const UserInfo = () => {
 
         setToken(token); // Store token in state
 
-        const response = await apiService.get("/user-info", {
+        const response = await apiService.get("/api/user-info", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -74,7 +74,7 @@ const UserInfo = () => {
 
     const fetchUserDetails = async () => {
       try {
-        const response = await apiService.get("/get-user", {
+        const response = await apiService.get("/api/get-user", {
           params: {
             role,
             student_id: role === "Student" ? userId : null,
@@ -170,7 +170,7 @@ const UserInfo = () => {
     };
 
     try {
-      const response = await apiService.put("/update-user", updatedUserData, {
+      const response = await apiService.put("/api/update-user", updatedUserData, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },

@@ -427,6 +427,52 @@ class EieReportController extends Controller
         return response()->json(['message' => 'Student scores nullified.']);
     }
 
+    // Method to delete class lists
+    public function deleteClassLists()
+    {
+        try {
+            // Logic to delete class lists (e.g., deleting from the database)
+            // Example: ClassList::delete();
+            return response()->json(['message' => 'Class lists deleted successfully.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to delete class lists.'], 500);
+        }
+    }
 
+    // Method to nullify class list scores
+    public function nullifyClassListScores()
+    {
+        try {
+            // Logic to nullify class list scores
+            // Example: ClassList::update(['score' => null]);
+            return response()->json(['message' => 'Student score columns nullified successfully.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to nullify student scores.'], 500);
+        }
+    }
+
+    // Method to nullify implementing subject scores
+    public function nullifyImplementingSubjectScores()
+    {
+        try {
+            // Logic to nullify implementing subject scores
+            // Example: ImplementingSubject::update(['score' => null]);
+            return response()->json(['message' => 'Implementing subject scores nullified successfully.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to nullify subject scores.'], 500);
+        }
+    }
+
+    // Method to delete scorecards
+    public function deleteScorecard()
+    {
+        try {
+            // Logic to delete scorecards (e.g., deleting from the database)
+            // Example: Scorecard::delete();
+            return response()->json(['message' => 'Scorecards deleted successfully.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to delete scorecards.'], 500);
+        }
+    }
 
 }

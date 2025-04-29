@@ -1,13 +1,14 @@
 /* Wrapper for table with horizontal scroll */
-.table-wrapper {
+.table-wrapper-eie-head {
     max-width: 100%;
     overflow-x: auto;
     overflow-y: auto;
     border: 1px solid #ddd;
     border-radius: 5px;
-    margin-left: 330px;
+    margin-left: 350px;
     white-space: nowrap;
     height: 600px;
+    margin-right: 20px;
     box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 8px 0px, rgba(0, 0, 0, 0.19) 0px 6px 20px 0px;
   }
   

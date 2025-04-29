@@ -51,7 +51,7 @@ const LoginForm = () => {
     try {
       await getCsrfToken();
 
-      const response = await apiService.post(`/login`, {
+      const response = await apiService.post(`/api/login`, {
         email: `${email}@unc.edu.ph`,
         password: password,
         user_type: table,
@@ -80,7 +80,7 @@ const LoginForm = () => {
 
         // ✅ Trigger the storeOrUpdatePrograms function after login
         try {
-          const reportResponse = await apiService.post('/eie-reports/store-or-update');
+          const reportResponse = await apiService.post('/api/eie-reports/store-or-update');
         } catch (reportError) {
           console.error("Failed to update EIE Reports: ", reportError);
         }

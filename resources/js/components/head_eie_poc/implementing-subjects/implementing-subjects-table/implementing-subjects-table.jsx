@@ -24,17 +24,22 @@ const ImplementingSubjectsTable = ({
   const [csvErrors, setCsvErrors] = useState([]);
   const [isUpdating, setIsUpdating] = useState(false);
   const employeeId = localStorage.getItem("employee_id");
-
   const fetchData = async () => {
+    const employeeId = localStorage.getItem("employee_id");
     if (!employeeId) {
       setError("Employee ID is required.");
+      setData([]);
+      setIsLoading(false);
       return;
     }
-
     setIsLoading(true);
+    setError(null); // Reset previous error
     try {
       const response = await axios.get("/api/implementing-subjects", {
-        headers: { employee_id: employeeId },
+        headers: {
+          'X-Employee-ID': employeeId,
+          'Accept': 'application/json', // Ensure we're sending JSON
+        },
       });
 
       const filteredData = response.data.filter((item) => {
@@ -52,21 +57,33 @@ const ImplementingSubjectsTable = ({
         .some((field) => field.includes(searchQuery.toLowerCase()))
         : true;
 
-        const matchesProgram = selectedProgram ? item.program === selectedProgram : true;
-        const matchesYear = selectedYearLevel ? item.year_level === selectedYearLevel : true;
-        const matchesSemester = selectedSemester ? item.semester === selectedSemester : true;
+        const matchesProgram = selectedProgram
+        ? item.program === selectedProgram
+        : true;
+        const matchesYear = selectedYearLevel
+        ? item.year_level === selectedYearLevel
+        : true;
+        const matchesSemester = selectedSemester
+        ? item.semester === selectedSemester
+        : true;
 
         return matchesSearch && matchesProgram && matchesYear && matchesSemester;
       });
 
       setData(filteredData);
     } catch (error) {
-      console.error("Error fetching data:", error);
-      setError("Failed to fetch data. Please try again later.");
+      console.error("❌ Error fetching data:", error);
+
+      // Log full error response for better debugging
+      console.error("Error Response:", error.response?.data);
+
+      setError(error.response?.data?.error || "Failed to fetch data.");
+      setData([]); // Prevent crash: ensure empty array
     } finally {
       setIsLoading(false);
     }
   };
+
 
   useEffect(() => {
     const fetchFilteredPocs = async () => {
@@ -176,55 +193,63 @@ const ImplementingSubjectsTable = ({
     []
   );
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
+    columns,
+    data: data || [], // Prevent undefined crash
+  });
 
   return (
-    <div style={{ margin: "20px" }}>
-      {isLoading ? (
-        <p>Loading data...</p>
-      ) : error ? (
-        <p style={{ color: "red" }}>{error}</p>
+    <div>
+    {isLoading ? (
+      <p>Loading data...</p>
+    ) : (
+      <div>
+      {error && <p style={{ color: "red", marginBottom: "-25px" }}>{error}</p>}
+      <div className="table-wrapper-eie-head">
+      <table {...getTableProps()} className="data-table">
+      <thead className="sticky-header">
+      {headerGroups.map((headerGroup) => (
+        <tr {...headerGroup.getHeaderGroupProps()}>
+        {headerGroup.headers.map((column) => (
+          <th
+          {...column.getHeaderProps()}
+          className={column.id === "course_title" ? "sticky-column" : ""}
+          >
+          {column.render("Header")}
+          </th>
+        ))}
+        </tr>
+      ))}
+      </thead>
+      <tbody {...getTableBodyProps()}>
+      {data.length === 0 ? (
+        <tr>
+        <td colSpan={columns.length} style={{ textAlign: "center", padding: "20px" }}>
+        No data available.
+        </td>
+        </tr>
       ) : (
-        <div className="table-wrapper">
-          <table {...getTableProps()} className="data-table">
-            <thead className="sticky-header">
-              {headerGroups.map((headerGroup) => (
-                <tr {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map((column) => (
-                    <th
-                      {...column.getHeaderProps()}
-                      className={
-                        column.id === "course_title" ? "sticky-column" : ""
-                      }
-                    >
-                      {column.render("Header")}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody {...getTableBodyProps()}>
-              {rows.map((row) => {
-                prepareRow(row);
-                return (
-                  <tr {...row.getRowProps()}>
-                    {row.cells.map((cell) => (
-                      <td
-                        {...cell.getCellProps()}
-                        className={
-                          cell.column.id === "course_title" ? "sticky-column" : ""
-                        }
-                      >
-                        {cell.render("Cell")}
-                      </td>
-                    ))}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+        rows.map((row) => {
+          prepareRow(row);
+          return (
+            <tr {...row.getRowProps()}>
+            {row.cells.map((cell) => (
+              <td
+              {...cell.getCellProps()}
+              className={cell.column.id === "course_title" ? "sticky-column" : ""}
+              >
+              {cell.render("Cell")}
+              </td>
+            ))}
+            </tr>
+          );
+        })
       )}
+      </tbody>
+      </table>
+      </div>
+      </div>
+    )}
 
       {/* Show CSV upload errors */}
       {csvErrors.length > 0 && (

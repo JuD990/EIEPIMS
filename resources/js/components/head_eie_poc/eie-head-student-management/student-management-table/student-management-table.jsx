@@ -187,41 +187,6 @@ const StudentManagementTable = ({
     });
   };
 
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const employeeId = localStorage.getItem("employee_id");
-        const response = await axios.get("/api/get-courses-by-department-student", {
-          headers: { employee_id: employeeId },
-        });
-
-        if (response.data && typeof response.data === "object") {
-          const flattenedCourses = [];
-          Object.entries(response.data).forEach(([title, codes]) => {
-            if (Array.isArray(codes)) {
-              codes.forEach((code) => {
-                flattenedCourses.push({ title, code });
-              });
-            }
-          });
-
-          if (flattenedCourses.length === 0) {
-            setError("No courses available for your department.");
-          } else {
-            setCourses(flattenedCourses);  // Ensure courses are set here
-          }
-        }
-      } catch (err) {
-        console.error("Error fetching courses:", err);
-        setError("Failed to load courses. Please try again.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchCourses();
-  }, []);
-
   const columns = React.useMemo(
     () => [
       {

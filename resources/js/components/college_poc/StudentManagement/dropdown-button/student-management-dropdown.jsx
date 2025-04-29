@@ -14,7 +14,7 @@ const StudentManagementDropdown = ({ selectedTitle, selectedCode, onTitleChange,
       try {
         const employeeId = localStorage.getItem("employee_id");
         const response = await axios.get("/api/get-courses-by-department-poc", {
-          headers: { employee_id: employeeId },
+          headers: { 'X-Employee-ID': employeeId, },
         });
 
         if (response.data && typeof response.data === "object") {

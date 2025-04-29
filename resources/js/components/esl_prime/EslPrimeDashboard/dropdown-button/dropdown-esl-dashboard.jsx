@@ -117,33 +117,58 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
         setShowModal(false);
     };
 
-    // Handle Delete ClassLists
-    const handleDeleteClassLists = () => {
-        // Logic for deleting class lists but not affecting the accounts
-        console.log("Deleting class lists...");
-        // Call API or update state to delete class lists here
+    const handleDeleteClassLists = async () => {
+        const isConfirmed = window.confirm("Are you sure you want to delete the class lists?");
+        if (!isConfirmed) return; // If user cancels, don't proceed
+
+        try {
+            await axios.delete("http://localhost:8000/api/data-settings/class-lists");
+            alert("Class lists deleted successfully.");
+        } catch (error) {
+            console.error("Error deleting class lists:", error);
+            alert("Failed to delete class lists.");
+        }
     };
 
-    // Handle Turn Null Columns for Student Scores
-    const handleTurnNullColumns = () => {
-        // Logic to nullify the student score columns
-        console.log("Nullifying columns for student scores...");
-        // Update relevant columns in the database or state
+    const handleTurnNullColumns = async () => {
+        const isConfirmed = window.confirm("Are you sure you want to nullify the student score columns?");
+        if (!isConfirmed) return; // If user cancels, don't proceed
+
+        try {
+            await axios.put("http://localhost:8000/api/data-settings/class-lists/nullify-scores");
+            alert("Student score columns nullified successfully.");
+        } catch (error) {
+            console.error("Error nullifying student scores:", error);
+            alert("Failed to nullify student scores.");
+        }
     };
 
-    // Handle Nullify Implementing Subjects Scores
-    const handleNullifySubjectScores = () => {
-        // Logic to nullify the implementing subject scores columns
-        console.log("Nullifying columns for implementing subjects...");
-        // Update the necessary columns in the database or state
+    const handleNullifySubjectScores = async () => {
+        const isConfirmed = window.confirm("Are you sure you want to nullify the implementing subject scores?");
+        if (!isConfirmed) return; // If user cancels, don't proceed
+
+        try {
+            await axios.put("http://localhost:8000/api/data-settings/implementing-subjects/nullify-scores");
+            alert("Implementing subject scores nullified successfully.");
+        } catch (error) {
+            console.error("Error nullifying subject scores:", error);
+            alert("Failed to nullify subject scores.");
+        }
     };
 
-    // Handle Delete Scorecard
-    const handleDeleteScorecard = () => {
-        // Logic for deleting the scorecard but keeping the subject scores intact
-        console.log("Deleting scorecard...");
-        // Call API or update state to delete the scorecard here
+    const handleDeleteScorecard = async () => {
+        const isConfirmed = window.confirm("Are you sure you want to delete the scorecards?");
+        if (!isConfirmed) return; // If user cancels, don't proceed
+
+        try {
+            await axios.delete("http://localhost:8000/api/data-settings/scorecard");
+            alert("Scorecards deleted successfully.");
+        } catch (error) {
+            console.error("Error deleting scorecards:", error);
+            alert("Failed to delete scorecards.");
+        }
     };
+
 
     return (
         <div className="esl-dashboard-controls">
@@ -293,7 +318,7 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
             {/* Delete ClassLists Section */}
             <div style={{ marginBottom: "20px" }}>
             <h3>Delete ClassLists</h3>
-            <p>This action will delete the entire class list but will not affect student accounts.</p>
+            <p>This action will delete the entire ClassList but will not affect student accounts.</p>
             <button
             type="button"
             onClick={handleDeleteClassLists}
@@ -313,7 +338,7 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
             {/* Nullify Student Scores Columns Section */}
             <div style={{ marginBottom: "20px" }}>
             <h3>Nullify Student Scores Columns</h3>
-            <p>This will nullify the following student score columns: pronunciation, grammar, fluency, epgf_average, and proficiency_level.</p>
+            <p>This will nullify the following student score columns in the ClassLists: pronunciation, grammar, fluency, epgf_average, and proficiency_level only.</p>
             <button
             type="button"
             onClick={handleTurnNullColumns}
@@ -333,7 +358,7 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
             {/* Nullify Implementing Subjects Average Scores Section */}
             <div style={{ marginBottom: "20px" }}>
             <h3>Nullify Implementing Subjects Scores</h3>
-            <p>This will nullify the following columns in implementing subjects: epgf_average, proficiency_level, and completion_rate.</p>
+            <p>This will nullify the following columns in ImplementingSubjects: epgf_average, proficiency_level, and completion_rate only.</p>
             <button
             type="button"
             onClick={handleNullifySubjectScores}
@@ -353,7 +378,7 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
             {/* Delete Scorecard Section */}
             <div style={{ marginBottom: "20px" }}>
             <h3>Delete Scorecard</h3>
-            <p>This action will delete the entire scorecard but will not affect the individual scores in implementing subjects.</p>
+            <p>This action will delete the entire scorecard but will not affect the individual scores in ImplementingSubjects.</p>
             <button
             type="button"
             onClick={handleDeleteScorecard}
@@ -377,15 +402,15 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
             onClick={handleClose}
             style={{
                 marginRight: "-10px",
-                backgroundColor: "#DC2626",  // Darker red for cancel button
+                backgroundColor: "grey",
                 color: "#fff",
-                border: "1px solid #b91c1c",
+                border: "1px solid grey",
                 borderRadius: "6px",
                 padding: "6px 12px",
                 cursor: "pointer",
             }}
             >
-            Cancel
+            Done
             </button>
             </div>
             </form>
