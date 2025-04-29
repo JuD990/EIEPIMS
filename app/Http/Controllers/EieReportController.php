@@ -431,48 +431,62 @@ class EieReportController extends Controller
     public function deleteClassLists()
     {
         try {
-            // Logic to delete class lists (e.g., deleting from the database)
-            // Example: ClassList::delete();
+            // Assumes ClassList model is not directly tied to the User accounts
+            ClassLists::truncate(); // or ->delete() if you need to preserve some constraints
+
             return response()->json(['message' => 'Class lists deleted successfully.'], 200);
         } catch (\Exception $e) {
+            \Log::error("Error deleting class lists: " . $e->getMessage());
             return response()->json(['error' => 'Failed to delete class lists.'], 500);
         }
     }
 
-    // Method to nullify class list scores
+    // Nullify specific score columns in ClassLists
     public function nullifyClassListScores()
     {
         try {
-            // Logic to nullify class list scores
-            // Example: ClassList::update(['score' => null]);
+            ClassLists::query()->update([
+                'pronunciation' => null,
+                'grammar' => null,
+                'fluency' => null,
+                'epgf_average' => null,
+                'proficiency_level' => null,
+            ]);
+
             return response()->json(['message' => 'Student score columns nullified successfully.'], 200);
         } catch (\Exception $e) {
+            \Log::error("Error nullifying class list scores: " . $e->getMessage());
             return response()->json(['error' => 'Failed to nullify student scores.'], 500);
         }
     }
 
-    // Method to nullify implementing subject scores
+    // Nullify specific score columns in Implementing Subjects
     public function nullifyImplementingSubjectScores()
     {
         try {
-            // Logic to nullify implementing subject scores
-            // Example: ImplementingSubject::update(['score' => null]);
+            ImplementingSubjects::query()->update([
+                'epgf_average' => null,
+                'proficiency_level' => null,
+                'completion_rate' => null,
+            ]);
+
             return response()->json(['message' => 'Implementing subject scores nullified successfully.'], 200);
         } catch (\Exception $e) {
+            \Log::error("Error nullifying implementing subject scores: " . $e->getMessage());
             return response()->json(['error' => 'Failed to nullify subject scores.'], 500);
         }
     }
 
-    // Method to delete scorecards
+    // Delete all Scorecard entries without affecting Implementing Subject scores
     public function deleteScorecard()
     {
         try {
-            // Logic to delete scorecards (e.g., deleting from the database)
-            // Example: Scorecard::delete();
+            EieScorecardClassReport::truncate(); // Only clears the scorecards table
+
             return response()->json(['message' => 'Scorecards deleted successfully.'], 200);
         } catch (\Exception $e) {
+            \Log::error("Error deleting scorecards: " . $e->getMessage());
             return response()->json(['error' => 'Failed to delete scorecards.'], 500);
         }
     }
-
 }

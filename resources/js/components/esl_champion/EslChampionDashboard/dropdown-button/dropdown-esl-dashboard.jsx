@@ -4,6 +4,7 @@ import { IoRefresh } from "react-icons/io5";
 import axios from "axios";
 import "./dropdown-esl-dashboard.css";
 import apiService from "@services/apiServices";
+import settingsIcon from "@assets/settings.png";
 
 const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSelectedSemester }) => {
     const [loading, setLoading] = useState(false);
@@ -17,6 +18,8 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
     const [departments, setDepartments] = useState([]);
     const [schoolYears, setSchoolYears] = useState([]);
     const semesters = ["1st Semester", "2nd Semester"];
+    const [showModal, setShowModal] = useState(false);
+
 
     const fetchDepartments = async () => {
         try {
@@ -96,7 +99,7 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
 
         try {
             // Call API to refresh data
-            const reportResponse = await apiService.post('/eie-reports/store-or-update');
+            const reportResponse = await apiService.post('/api/eie-reports/store-or-update');
             window.location.reload();  // Refreshes the page
         } catch (reportError) {
             console.error("Failed to update EIE Reports: ", reportError);
@@ -105,6 +108,67 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
             setLoading(false); // Ensure loading state is reset after the process completes
         }
     };
+
+    const handleClick = () => {
+        setShowModal(true);
+    };
+
+    const handleClose = () => {
+        setShowModal(false);
+    };
+
+    const handleDeleteClassLists = async () => {
+        const isConfirmed = window.confirm("Are you sure you want to delete the class lists?");
+        if (!isConfirmed) return; // If user cancels, don't proceed
+
+        try {
+            await axios.delete("http://localhost:8000/api/data-settings/class-lists");
+            alert("Class lists deleted successfully.");
+        } catch (error) {
+            console.error("Error deleting class lists:", error);
+            alert("Failed to delete class lists.");
+        }
+    };
+
+    const handleTurnNullColumns = async () => {
+        const isConfirmed = window.confirm("Are you sure you want to nullify the student score columns?");
+        if (!isConfirmed) return; // If user cancels, don't proceed
+
+        try {
+            await axios.put("http://localhost:8000/api/data-settings/class-lists/nullify-scores");
+            alert("Student score columns nullified successfully.");
+        } catch (error) {
+            console.error("Error nullifying student scores:", error);
+            alert("Failed to nullify student scores.");
+        }
+    };
+
+    const handleNullifySubjectScores = async () => {
+        const isConfirmed = window.confirm("Are you sure you want to nullify the implementing subject scores?");
+        if (!isConfirmed) return; // If user cancels, don't proceed
+
+        try {
+            await axios.put("http://localhost:8000/api/data-settings/implementing-subjects/nullify-scores");
+            alert("Implementing subject scores nullified successfully.");
+        } catch (error) {
+            console.error("Error nullifying subject scores:", error);
+            alert("Failed to nullify subject scores.");
+        }
+    };
+
+    const handleDeleteScorecard = async () => {
+        const isConfirmed = window.confirm("Are you sure you want to delete the scorecards?");
+        if (!isConfirmed) return; // If user cancels, don't proceed
+
+        try {
+            await axios.delete("http://localhost:8000/api/data-settings/scorecard");
+            alert("Scorecards deleted successfully.");
+        } catch (error) {
+            console.error("Error deleting scorecards:", error);
+            alert("Failed to delete scorecards.");
+        }
+    };
+
 
     return (
         <div className="esl-dashboard-controls">
@@ -208,7 +272,151 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
         </div>
         </div>
 
+        <div className="relative inline-block group mr-10">
+        <button
+        onClick={handleClick}
+        className="bg-none border-none p-0 cursor-pointer"
+        aria-label="Settings"
+        >
+        <img
+        src={settingsIcon}
+        alt="Settings"
+        className="w-11 h-11"
+        />
+        </button>
+        <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block
+        bg-white text-black text-sm rounded px-2 py-1 z-10 whitespace-nowrap shadow-lg">
+        Delete Settings
+        </span>
+        </div>
+
         {error && <p className="error-message">{error}</p>}
+
+        {showModal && (
+            <div
+            style={{
+                position: "fixed",
+                top: 0, left: 0, right: 0, bottom: 0,
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                       display: "flex",
+                       justifyContent: "center",
+                       alignItems: "center",
+                       zIndex: 1000
+            }}
+            >
+            <div
+            style={{
+                background: "#fff",
+                padding: "10px 25px",
+                borderRadius: "8px",
+                minWidth: "400px",
+                maxWidth: "100%",
+            }}
+            >
+            <h2 style={{ marginTop: "20px" }}>Delete Settings</h2>
+            <form>
+            {/* Delete ClassLists Section */}
+            <div style={{ marginBottom: "20px" }}>
+            <h3>Delete ClassLists</h3>
+            <p>This action will delete the entire ClassList but will not affect student accounts.</p>
+            <button
+            type="button"
+            onClick={handleDeleteClassLists}
+            style={{
+                backgroundColor: "#F87171",  // Light red background
+                color: "#fff",
+                border: "1px solid #F87171",  // Same light red border
+                borderRadius: "6px",
+                padding: "6px 12px",
+                cursor: "pointer",
+            }}
+            >
+            Delete ClassLists
+            </button>
+            </div>
+
+            {/* Nullify Student Scores Columns Section */}
+            <div style={{ marginBottom: "20px" }}>
+            <h3>Nullify Student Scores Columns</h3>
+            <p>This will nullify the following student score columns in the ClassLists: pronunciation, grammar, fluency, epgf_average, and proficiency_level only.</p>
+            <button
+            type="button"
+            onClick={handleTurnNullColumns}
+            style={{
+                backgroundColor: "#F87171",  // Light red background
+                color: "#fff",
+                border: "1px solid #F87171",  // Same light red border
+                borderRadius: "6px",
+                padding: "6px 12px",
+                cursor: "pointer",
+            }}
+            >
+            Nullify Student Scores Columns
+            </button>
+            </div>
+
+            {/* Nullify Implementing Subjects Average Scores Section */}
+            <div style={{ marginBottom: "20px" }}>
+            <h3>Nullify Implementing Subjects Scores</h3>
+            <p>This will nullify the following columns in ImplementingSubjects: epgf_average, proficiency_level, and completion_rate only.</p>
+            <button
+            type="button"
+            onClick={handleNullifySubjectScores}
+            style={{
+                backgroundColor: "#F87171",  // Light red background
+                color: "#fff",
+                border: "1px solid #F87171",  // Same light red border
+                borderRadius: "6px",
+                padding: "6px 12px",
+                cursor: "pointer",
+            }}
+            >
+            Nullify Implementing Subjects Scores
+            </button>
+            </div>
+
+            {/* Delete Scorecard Section */}
+            <div style={{ marginBottom: "20px" }}>
+            <h3>Delete Scorecard</h3>
+            <p>This action will delete the entire scorecard but will not affect the individual scores in ImplementingSubjects.</p>
+            <button
+            type="button"
+            onClick={handleDeleteScorecard}
+            style={{
+                backgroundColor: "#F87171",  // Light red background
+                color: "#fff",
+                border: "1px solid #F87171",  // Same light red border
+                borderRadius: "6px",
+                padding: "6px 12px",
+                cursor: "pointer",
+            }}
+            >
+            Delete Scorecard
+            </button>
+            </div>
+
+            {/* Cancel Button */}
+            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "20px" }}>
+            <button
+            type="button"
+            onClick={handleClose}
+            style={{
+                marginRight: "-10px",
+                backgroundColor: "grey",
+                color: "#fff",
+                border: "1px solid grey",
+                borderRadius: "6px",
+                padding: "6px 12px",
+                cursor: "pointer",
+            }}
+            >
+            Done
+            </button>
+            </div>
+            </form>
+            </div>
+            </div>
+        )}
 
         </div>
     );

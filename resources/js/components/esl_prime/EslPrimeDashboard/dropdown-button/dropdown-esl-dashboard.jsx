@@ -99,7 +99,7 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
 
         try {
             // Call API to refresh data
-            const reportResponse = await apiService.post('/eie-reports/store-or-update');
+            const reportResponse = await apiService.post('/api/eie-reports/store-or-update');
             window.location.reload();  // Refreshes the page
         } catch (reportError) {
             console.error("Failed to update EIE Reports: ", reportError);
@@ -272,23 +272,23 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
         </div>
         </div>
 
+        <div className="relative inline-block group mr-10">
         <button
         onClick={handleClick}
-        style={{
-            background: "none",
-            border: "none",
-            padding: 0,
-            cursor: "pointer",
-            marginRight: "40px",
-        }}
+        className="bg-none border-none p-0 cursor-pointer"
         aria-label="Settings"
         >
         <img
         src={settingsIcon}
         alt="Settings"
-        style={{ width: "44px", height: "44px" }}
+        className="w-11 h-11"
         />
         </button>
+        <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block
+        bg-white text-black text-sm rounded px-2 py-1 z-10 whitespace-nowrap shadow-lg">
+        Delete Settings
+        </span>
+        </div>
 
         {error && <p className="error-message">{error}</p>}
 
