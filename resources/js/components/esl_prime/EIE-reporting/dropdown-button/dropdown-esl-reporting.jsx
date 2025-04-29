@@ -193,13 +193,21 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
         </div>
         </div>
 
+        <div className="relative group">
         <button
         className="esl-dashboard-refresh-btn"
         onClick={handleRefresh}
-        disabled={loading}>
+        disabled={loading}
+        >
         <IoRefresh className="esl-dashboard-refresh-icon" />
         {loading ? 'Refreshing...' : ''}
         </button>
+        {/* Custom Tooltip */}
+        <div className="absolute bottom-full mb-2 hidden group-hover:block bg-white text-black text-sm rounded px-2 py-1 z-10 whitespace-nowrap shadow-lg right-0 mr-4">
+        {loading ? 'Refreshing Reports...' : 'Click to refresh'}
+        </div>
+        </div>
+
 
         {error && <p className="error-message">{error}</p>}
 

@@ -23,6 +23,13 @@ Route::post('/eie-reports/store-or-update', [EieReportController::class, 'storeO
 Route::get('/dashboard-report', [EieReportController::class, 'getDashboardReport']);
 Route::get('/eie-report', [EieReportController::class, 'getEieReporting']);
 
+// Delete Data Settings
+Route::delete('/delete-classlists/{id}', [EieReportController::class, 'destroy']);
+Route::delete('/delete-student-scores/{id}', [EieReportController::class, 'nullifyScores']);
+Route::delete('/delete-subject-scores/{id}', [EieReportController::class, 'nullifyScores']);
+Route::delete('/delete-scorecard/{id}', [EieReportController::class, 'destroy']);
+
+
 Route::get('/performance-summary-rating', [StudentController::class, 'getPerformanceSummaryRatings']);
 Route::get('/current-subjects/{student_id}', [StudentController::class, 'getCurrentSubjects']);
 Route::get('/student-year-level-options', [StudentController::class, 'getYearLevelOptions']);

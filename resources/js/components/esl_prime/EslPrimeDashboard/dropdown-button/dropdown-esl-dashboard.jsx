@@ -4,6 +4,7 @@ import { IoRefresh } from "react-icons/io5";
 import axios from "axios";
 import "./dropdown-esl-dashboard.css";
 import apiService from "@services/apiServices";
+import settingsIcon from "@assets/settings.png";
 
 const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSelectedSemester }) => {
     const [loading, setLoading] = useState(false);
@@ -17,6 +18,8 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
     const [departments, setDepartments] = useState([]);
     const [schoolYears, setSchoolYears] = useState([]);
     const semesters = ["1st Semester", "2nd Semester"];
+    const [showModal, setShowModal] = useState(false);
+
 
     const fetchDepartments = async () => {
         try {
@@ -106,6 +109,42 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
         }
     };
 
+    const handleClick = () => {
+        setShowModal(true);
+    };
+
+    const handleClose = () => {
+        setShowModal(false);
+    };
+
+    // Handle Delete ClassLists
+    const handleDeleteClassLists = () => {
+        // Logic for deleting class lists but not affecting the accounts
+        console.log("Deleting class lists...");
+        // Call API or update state to delete class lists here
+    };
+
+    // Handle Turn Null Columns for Student Scores
+    const handleTurnNullColumns = () => {
+        // Logic to nullify the student score columns
+        console.log("Nullifying columns for student scores...");
+        // Update relevant columns in the database or state
+    };
+
+    // Handle Nullify Implementing Subjects Scores
+    const handleNullifySubjectScores = () => {
+        // Logic to nullify the implementing subject scores columns
+        console.log("Nullifying columns for implementing subjects...");
+        // Update the necessary columns in the database or state
+    };
+
+    // Handle Delete Scorecard
+    const handleDeleteScorecard = () => {
+        // Logic for deleting the scorecard but keeping the subject scores intact
+        console.log("Deleting scorecard...");
+        // Call API or update state to delete the scorecard here
+    };
+
     return (
         <div className="esl-dashboard-controls">
         <div className="esl-dashboard-dropdown-container">
@@ -193,15 +232,166 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
         </div>
         </div>
 
+        <div className="relative group">
         <button
         className="esl-dashboard-refresh-btn"
         onClick={handleRefresh}
-        disabled={loading}>
+        disabled={loading}
+        >
         <IoRefresh className="esl-dashboard-refresh-icon" />
         {loading ? 'Refreshing...' : ''}
         </button>
+        {/* Custom Tooltip */}
+        <div className="absolute bottom-full mb-2 hidden group-hover:block bg-white text-black text-sm rounded px-2 py-1 z-10 whitespace-nowrap shadow-lg right-0 mr-4">
+        {loading ? 'Refreshing dashboard...' : 'Click to refresh'}
+        </div>
+        </div>
+
+        <button
+        onClick={handleClick}
+        style={{
+            background: "none",
+            border: "none",
+            padding: 0,
+            cursor: "pointer",
+            marginRight: "40px",
+        }}
+        aria-label="Settings"
+        >
+        <img
+        src={settingsIcon}
+        alt="Settings"
+        style={{ width: "44px", height: "44px" }}
+        />
+        </button>
 
         {error && <p className="error-message">{error}</p>}
+
+        {showModal && (
+            <div
+            style={{
+                position: "fixed",
+                top: 0, left: 0, right: 0, bottom: 0,
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                       display: "flex",
+                       justifyContent: "center",
+                       alignItems: "center",
+                       zIndex: 1000
+            }}
+            >
+            <div
+            style={{
+                background: "#fff",
+                padding: "10px 25px",
+                borderRadius: "8px",
+                minWidth: "400px",
+                maxWidth: "100%",
+            }}
+            >
+            <h2 style={{ marginTop: "20px" }}>Delete Settings</h2>
+            <form>
+            {/* Delete ClassLists Section */}
+            <div style={{ marginBottom: "20px" }}>
+            <h3>Delete ClassLists</h3>
+            <p>This action will delete the entire class list but will not affect student accounts.</p>
+            <button
+            type="button"
+            onClick={handleDeleteClassLists}
+            style={{
+                backgroundColor: "#F87171",  // Light red background
+                color: "#fff",
+                border: "1px solid #F87171",  // Same light red border
+                borderRadius: "6px",
+                padding: "6px 12px",
+                cursor: "pointer",
+            }}
+            >
+            Delete ClassLists
+            </button>
+            </div>
+
+            {/* Nullify Student Scores Columns Section */}
+            <div style={{ marginBottom: "20px" }}>
+            <h3>Nullify Student Scores Columns</h3>
+            <p>This will nullify the following student score columns: pronunciation, grammar, fluency, epgf_average, and proficiency_level.</p>
+            <button
+            type="button"
+            onClick={handleTurnNullColumns}
+            style={{
+                backgroundColor: "#F87171",  // Light red background
+                color: "#fff",
+                border: "1px solid #F87171",  // Same light red border
+                borderRadius: "6px",
+                padding: "6px 12px",
+                cursor: "pointer",
+            }}
+            >
+            Nullify Student Scores Columns
+            </button>
+            </div>
+
+            {/* Nullify Implementing Subjects Average Scores Section */}
+            <div style={{ marginBottom: "20px" }}>
+            <h3>Nullify Implementing Subjects Scores</h3>
+            <p>This will nullify the following columns in implementing subjects: epgf_average, proficiency_level, and completion_rate.</p>
+            <button
+            type="button"
+            onClick={handleNullifySubjectScores}
+            style={{
+                backgroundColor: "#F87171",  // Light red background
+                color: "#fff",
+                border: "1px solid #F87171",  // Same light red border
+                borderRadius: "6px",
+                padding: "6px 12px",
+                cursor: "pointer",
+            }}
+            >
+            Nullify Implementing Subjects Scores
+            </button>
+            </div>
+
+            {/* Delete Scorecard Section */}
+            <div style={{ marginBottom: "20px" }}>
+            <h3>Delete Scorecard</h3>
+            <p>This action will delete the entire scorecard but will not affect the individual scores in implementing subjects.</p>
+            <button
+            type="button"
+            onClick={handleDeleteScorecard}
+            style={{
+                backgroundColor: "#F87171",  // Light red background
+                color: "#fff",
+                border: "1px solid #F87171",  // Same light red border
+                borderRadius: "6px",
+                padding: "6px 12px",
+                cursor: "pointer",
+            }}
+            >
+            Delete Scorecard
+            </button>
+            </div>
+
+            {/* Cancel Button */}
+            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "20px" }}>
+            <button
+            type="button"
+            onClick={handleClose}
+            style={{
+                marginRight: "-10px",
+                backgroundColor: "#DC2626",  // Darker red for cancel button
+                color: "#fff",
+                border: "1px solid #b91c1c",
+                borderRadius: "6px",
+                padding: "6px 12px",
+                cursor: "pointer",
+            }}
+            >
+            Cancel
+            </button>
+            </div>
+            </form>
+            </div>
+            </div>
+        )}
 
         </div>
     );

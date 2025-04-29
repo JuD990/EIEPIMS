@@ -400,4 +400,33 @@ class EieReportController extends Controller
         ]);
     }
 
+    public function destroy($id)
+    {
+        $classList = ClassLists::findOrFail($id);
+
+        // Only delete the class list, don't delete users
+        $classList->delete();
+
+        return response()->json(['message' => 'Class list deleted.']);
+    }
+
+    public function nullifyScores($id)
+    {
+        $students = Student::where('class_list_id', $id)->get();
+
+        foreach ($students as $student) {
+            $student->update([
+                'pronunciation' => null,
+                'grammar' => null,
+                'fluency' => null,
+                'epgf_average' => null,
+                'proficiency_level' => null,
+            ]);
+        }
+
+        return response()->json(['message' => 'Student scores nullified.']);
+    }
+
+
+
 }

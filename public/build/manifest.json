@@ -1,16 +1,76 @@
 {
+  "public/assets/department_logo/cje.png": {
+    "file": "assets/cje-bfhXnHdY.js",
+    "name": "cje",
+    "src": "public/assets/department_logo/cje.png",
+    "isDynamicEntry": true,
+    "assets": [
+      "assets/cje-BXwgwZjH.png"
+    ]
+  },
+  "public/assets/department_logo/default.png": {
+    "file": "assets/default-vfmC654Z.png",
+    "src": "public/assets/department_logo/default.png"
+  },
+  "public/assets/department_logo/scis.png": {
+    "file": "assets/scis-Cpuiqpmk.js",
+    "name": "scis",
+    "src": "public/assets/department_logo/scis.png",
+    "isDynamicEntry": true,
+    "assets": [
+      "assets/scis-x229NCPl.png"
+    ]
+  },
+  "public/assets/user_profile_pics/202500009.png": {
+    "file": "assets/202500009-0krDYX-i.js",
+    "name": "202500009",
+    "src": "public/assets/user_profile_pics/202500009.png",
+    "isDynamicEntry": true,
+    "assets": [
+      "assets/EMP-001-B0__QSvm.png"
+    ]
+  },
+  "public/assets/user_profile_pics/EIEHEAD002.png": {
+    "file": "assets/EIEHEAD002-9FyxXQi8.js",
+    "name": "EIEHEAD002",
+    "src": "public/assets/user_profile_pics/EIEHEAD002.png",
+    "isDynamicEntry": true,
+    "assets": [
+      "assets/EIEHEAD002-BS3tKvGl.png"
+    ]
+  },
+  "public/assets/user_profile_pics/EMP-001.png": {
+    "file": "assets/EMP-001-0krDYX-i.js",
+    "name": "EMP-001",
+    "src": "public/assets/user_profile_pics/EMP-001.png",
+    "isDynamicEntry": true,
+    "assets": [
+      "assets/EMP-001-B0__QSvm.png"
+    ]
+  },
+  "public/assets/user_profile_pics/default_logo.png": {
+    "file": "assets/default_logo-DRLxWFDg.png",
+    "src": "public/assets/user_profile_pics/default_logo.png"
+  },
   "resources/css/app.css": {
-    "file": "assets/app-naO23KSx.css",
+    "file": "assets/app-Dtlf0IFc.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/app.jsx": {
-    "file": "assets/app-BIjIbJVW.js",
+    "file": "assets/app-Dwtkqy4A.js",
     "name": "app",
     "src": "resources/js/app.jsx",
     "isEntry": true,
+    "dynamicImports": [
+      "public/assets/department_logo/cje.png",
+      "public/assets/department_logo/scis.png",
+      "public/assets/user_profile_pics/202500009.png",
+      "public/assets/user_profile_pics/EIEHEAD002.png",
+      "public/assets/user_profile_pics/EMP-001.png"
+    ],
     "css": [
-      "assets/app-V7uRtMlT.css"
+      "assets/app-BBQUiMpT.css"
     ],
     "assets": [
       "assets/unc-logo-C_mdOA3h.png",
@@ -19,13 +79,77 @@
       "assets/eye-icon-DqRqbKCu.png",
       "assets/eye-off-icon-CGbrSpjY.png",
       "assets/dropdown-logo-login-DF9shRbF.png",
-      "assets/class-icon-CQqsP8p3.png",
+      "assets/login-bg-image-ND0pzsFq.png",
+      "assets/eie-management-icon-BSz3FfCg.png",
       "assets/report-icon-DpSSSZkM.png",
-      "assets/student-management-P0bOj9VA.png",
       "assets/dashboard-icon-Cv6xPyf_.png",
-      "assets/user-user-DRLxWFDg.png",
-      "assets/student-no-D0_Nr_8k.png"
+      "assets/eie-diagnostic-icon-BKFRDpPT.png",
+      "assets/Users-Z5pQGby8.png",
+      "assets/certification-icon-DA57vqQd.png",
+      "assets/Template-DUT8g7aV.png",
+      "assets/epgf-version-icon-yilkqK_G.png",
+      "assets/InterviewScorecard-Dv3fk7UT.png",
+      "assets/EIEDiagnosticReports-BrWB1Ve5.png",
+      "assets/implementing-subject-icon-CtyiAeqk.png",
+      "assets/logout_icon-IpQQxWuo.png",
+      "assets/profile-CjTmI_rh.png",
+      "assets/default_logo-DRLxWFDg.png",
+      "assets/Prev-CpT4AJbx.png",
+      "assets/student-management-P0bOj9VA.png",
+      "assets/master-class-list-icon-Dj1_TaOG.png",
+      "assets/Upload-Clgxb9I2.png",
+      "assets/class-icon-CQqsP8p3.png",
+      "assets/student-no-D0_Nr_8k.png",
+      "assets/champBackCert2-DEbtqh6d.png",
+      "assets/default-vfmC654Z.png",
+      "assets/backCert2-Ykdm-Eu4.png",
+      "assets/eie-monthly-champ-CFPja0aI.png",
+      "assets/sample-diagnostics-1-BprB5M5Z.png",
+      "assets/sample-diagnostics-2-CBTVzSGc.png",
+      "assets/settings-BfA7G64z.png",
+      "assets/Archive-YgsHtFvx.png",
+      "assets/delete-icon-DHlDl9-h.png"
     ]
+  },
+  "resources/js/assets/Archive.png": {
+    "file": "assets/Archive-YgsHtFvx.png",
+    "src": "resources/js/assets/Archive.png"
+  },
+  "resources/js/assets/EIEDiagnosticReports.png": {
+    "file": "assets/EIEDiagnosticReports-BrWB1Ve5.png",
+    "src": "resources/js/assets/EIEDiagnosticReports.png"
+  },
+  "resources/js/assets/InterviewScorecard.png": {
+    "file": "assets/InterviewScorecard-Dv3fk7UT.png",
+    "src": "resources/js/assets/InterviewScorecard.png"
+  },
+  "resources/js/assets/Prev.png": {
+    "file": "assets/Prev-CpT4AJbx.png",
+    "src": "resources/js/assets/Prev.png"
+  },
+  "resources/js/assets/Template.png": {
+    "file": "assets/Template-DUT8g7aV.png",
+    "src": "resources/js/assets/Template.png"
+  },
+  "resources/js/assets/Upload.png": {
+    "file": "assets/Upload-Clgxb9I2.png",
+    "src": "resources/js/assets/Upload.png"
+  },
+  "resources/js/assets/Users.png": {
+    "file": "assets/Users-Z5pQGby8.png",
+    "src": "resources/js/assets/Users.png"
+  },
+  "resources/js/assets/backCert2.png": {
+    "file": "assets/backCert2-Ykdm-Eu4.png",
+    "src": "resources/js/assets/backCert2.png"
+  },
+  "resources/js/assets/certification-icon.png": {
+    "file": "assets/certification-icon-DA57vqQd.png",
+    "src": "resources/js/assets/certification-icon.png"
+  },
+  "resources/js/assets/champBackCert2.png": {
+    "file": "assets/champBackCert2-DEbtqh6d.png",
+    "src": "resources/js/assets/champBackCert2.png"
   },
   "resources/js/assets/class-icon.png": {
     "file": "assets/class-icon-CQqsP8p3.png",
@@ -35,9 +159,29 @@
     "file": "assets/dashboard-icon-Cv6xPyf_.png",
     "src": "resources/js/assets/dashboard-icon.png"
   },
+  "resources/js/assets/delete-icon.png": {
+    "file": "assets/delete-icon-DHlDl9-h.png",
+    "src": "resources/js/assets/delete-icon.png"
+  },
   "resources/js/assets/dropdown-logo-login.png": {
     "file": "assets/dropdown-logo-login-DF9shRbF.png",
     "src": "resources/js/assets/dropdown-logo-login.png"
+  },
+  "resources/js/assets/eie-diagnostic-icon.png": {
+    "file": "assets/eie-diagnostic-icon-BKFRDpPT.png",
+    "src": "resources/js/assets/eie-diagnostic-icon.png"
+  },
+  "resources/js/assets/eie-management-icon.png": {
+    "file": "assets/eie-management-icon-BSz3FfCg.png",
+    "src": "resources/js/assets/eie-management-icon.png"
+  },
+  "resources/js/assets/eie-monthly-champ.png": {
+    "file": "assets/eie-monthly-champ-CFPja0aI.png",
+    "src": "resources/js/assets/eie-monthly-champ.png"
+  },
+  "resources/js/assets/epgf-version-icon.png": {
+    "file": "assets/epgf-version-icon-yilkqK_G.png",
+    "src": "resources/js/assets/epgf-version-icon.png"
   },
   "resources/js/assets/eye-icon.png": {
     "file": "assets/eye-icon-DqRqbKCu.png",
@@ -47,9 +191,45 @@
     "file": "assets/eye-off-icon-CGbrSpjY.png",
     "src": "resources/js/assets/eye-off-icon.png"
   },
+  "resources/js/assets/implementing-subject-icon.png": {
+    "file": "assets/implementing-subject-icon-CtyiAeqk.png",
+    "src": "resources/js/assets/implementing-subject-icon.png"
+  },
+  "resources/js/assets/login-bg-image.png": {
+    "file": "assets/login-bg-image-ND0pzsFq.png",
+    "src": "resources/js/assets/login-bg-image.png"
+  },
+  "resources/js/assets/logout_icon.png": {
+    "file": "assets/logout_icon-IpQQxWuo.png",
+    "src": "resources/js/assets/logout_icon.png"
+  },
+  "resources/js/assets/master-class-list-icon.png": {
+    "file": "assets/master-class-list-icon-Dj1_TaOG.png",
+    "src": "resources/js/assets/master-class-list-icon.png"
+  },
+  "resources/js/assets/profile.png": {
+    "file": "assets/profile-CjTmI_rh.png",
+    "src": "resources/js/assets/profile.png"
+  },
   "resources/js/assets/report-icon.png": {
     "file": "assets/report-icon-DpSSSZkM.png",
     "src": "resources/js/assets/report-icon.png"
+  },
+  "resources/js/assets/sample-diagnostics-1.png": {
+    "file": "assets/sample-diagnostics-1-BprB5M5Z.png",
+    "src": "resources/js/assets/sample-diagnostics-1.png"
+  },
+  "resources/js/assets/sample-diagnostics-2.png": {
+    "file": "assets/sample-diagnostics-2-CBTVzSGc.png",
+    "src": "resources/js/assets/sample-diagnostics-2.png"
+  },
+  "resources/js/assets/settings.png": {
+    "file": "assets/settings-BfA7G64z.png",
+    "src": "resources/js/assets/settings.png"
+  },
+  "resources/js/assets/someLogo.png": {
+    "file": "assets/someLogo-Dia_DIwZ.png",
+    "src": "resources/js/assets/someLogo.png"
   },
   "resources/js/assets/student-management.png": {
     "file": "assets/student-management-P0bOj9VA.png",
@@ -66,10 +246,6 @@
   "resources/js/assets/unc-logo.png": {
     "file": "assets/unc-logo-C_mdOA3h.png",
     "src": "resources/js/assets/unc-logo.png"
-  },
-  "resources/js/assets/user-user.png": {
-    "file": "assets/user-user-DRLxWFDg.png",
-    "src": "resources/js/assets/user-user.png"
   },
   "resources/js/assets/user.png": {
     "file": "assets/user-X3AHuVxY.png",
