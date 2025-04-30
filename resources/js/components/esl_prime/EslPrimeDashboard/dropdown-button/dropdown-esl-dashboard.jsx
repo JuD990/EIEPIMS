@@ -5,6 +5,7 @@ import axios from "axios";
 import "./dropdown-esl-dashboard.css";
 import apiService from "@services/apiServices";
 import settingsIcon from "@assets/settings.png";
+import exportIcon from "@assets/export-icon.png";
 
 const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSelectedSemester }) => {
     const [loading, setLoading] = useState(false);
@@ -169,7 +170,6 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
         }
     };
 
-
     return (
         <div className="esl-dashboard-controls">
         <div className="esl-dashboard-dropdown-container">
@@ -257,37 +257,36 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
         </div>
         </div>
 
+        <div className="flex items-center gap-x-6">
+        {/* Refresh Button */}
         <div className="relative group">
         <button
-        className="esl-dashboard-refresh-btn"
+        className="esl-prime-dashboard-refresh-btn"
         onClick={handleRefresh}
         disabled={loading}
         >
         <IoRefresh className="esl-dashboard-refresh-icon" />
         {loading ? 'Refreshing...' : ''}
         </button>
-        {/* Custom Tooltip */}
-        <div className="absolute bottom-full mb-2 hidden group-hover:block bg-white text-black text-sm rounded px-2 py-1 z-10 whitespace-nowrap shadow-lg right-0 mr-4">
+        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-white text-black text-sm rounded px-2 py-1 z-10 whitespace-nowrap shadow-lg">
         {loading ? 'Refreshing dashboard...' : 'Click to refresh'}
         </div>
         </div>
 
+        {/* Settings Button */}
         <div className="relative inline-block group mr-10">
         <button
         onClick={handleClick}
         className="bg-none border-none p-0 cursor-pointer"
         aria-label="Settings"
         >
-        <img
-        src={settingsIcon}
-        alt="Settings"
-        className="w-11 h-11"
-        />
+        <img src={settingsIcon} alt="Settings" className="w-11 h-11" />
         </button>
         <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block
         bg-white text-black text-sm rounded px-2 py-1 z-10 whitespace-nowrap shadow-lg">
         Delete Settings
         </span>
+        </div>
         </div>
 
         {error && <p className="error-message">{error}</p>}

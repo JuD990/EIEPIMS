@@ -40,7 +40,87 @@ const TableComponent = ({ department, schoolYear, semester }) => {
         return rate === 100 ? "Meets Expectation" : "Below Expectation";
     };
 
+    const exportToCSV = () => {
+        let csv = [];
+        const headerRow1 = ["Year Level", "Program", "Expected Submissions", "Target", "Course Title"];
+        const monthsHeader = months.flatMap(month => [month + " Submitted", month + " Completion Rate", month + " EPGF Avg", month + " SPARK Champion"]);
+        csv.push([...headerRow1, ...monthsHeader].join(","));
+
+        Object.keys(tableData).forEach(yearLevel => {
+            const yearData = tableData[yearLevel];
+            Object.keys(yearData).filter(key => key !== "totals").forEach(courseKey => {
+                const row = yearData[courseKey];
+                const rowArray = [
+                    yearLevel,
+                    row.program,
+                    row.enrolledStudents,
+                    "100%",
+                    row.courseTitle,
+                    ...months.flatMap(month => {
+                        const data = row.monthData[month] || {};
+                        return [
+                            data.submitted || "-",
+                            data.completionRate ? data.completionRate.toFixed(2) + "%" : "-",
+                                      data.epgfAverage ? data.epgfAverage.toFixed(2) + (data.proficiencyLevel ? " (" + data.proficiencyLevel + ")" : "") : "-",
+                                      data.champion || "-"
+                        ];
+                    })
+                ];
+                csv.push(rowArray.join(","));
+            });
+
+            // Add year total row
+            const totals = yearData.totals;
+            const totalRow = [
+                `${yearLevel} Total`,
+                "",
+                totals.expectedSubmissions,
+                "100%",
+                "",
+                ...months.flatMap(month => {
+                    return [
+                        totals.submitted[month] || "-",
+                        totals.completionRate[month] ? totals.completionRate[month].toFixed(2) + "%" : "-",
+                                  totals.epgfAverage[month] ? totals.epgfAverage[month].toFixed(2) + (totals.proficiencyLevel[month] ? " (" + totals.proficiencyLevel[month] + ")" : "") : "-",
+                                  totals.champion[month] || "-"
+                    ];
+                })
+            ];
+            csv.push(totalRow.join(","));
+        });
+
+        if (grandTotals) {
+            const grandRow = [
+                `${department} Total`,
+                "",
+                grandTotals.expectedSubmissions,
+                "100%",
+                "",
+                ...months.flatMap(month => {
+                    return [
+                        grandTotals.submitted[month] || "-",
+                        grandTotals.completionRate[month] ? grandTotals.completionRate[month].toFixed(2) + "%" : "-",
+                                  grandTotals.epgfAverage[month] ? grandTotals.epgfAverage[month].toFixed(2) + (grandTotals.proficiencyLevel[month] ? " (" + grandTotals.proficiencyLevel[month] + ")" : "") : "-",
+                                  grandTotals.champion[month] || "-"
+                    ];
+                })
+            ];
+            csv.push(grandRow.join(","));
+        }
+
+        const blob = new Blob([csv.join("\n")], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `EIE_Dashboard_${department}_${schoolYear}_${semester}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    };
+
+
     return (
+        <div>
         <div className="dashboard-esl-container">
         <table className="dashboard-esl-table unique-bordered-table">
         <thead>
@@ -176,6 +256,11 @@ const TableComponent = ({ department, schoolYear, semester }) => {
         )}
         </tbody>
         </table>
+        </div>
+        <button onClick={exportToCSV} className="export-button">
+        Export CSV
+        </button>
+
         </div>
     );
 };

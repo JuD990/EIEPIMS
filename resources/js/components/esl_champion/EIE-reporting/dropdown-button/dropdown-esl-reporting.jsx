@@ -97,8 +97,6 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
         try {
             // Call API to refresh data
             const reportResponse = await apiService.post('/eie-reports/store-or-update');
-            console.log("EIE Reports Updated: ", reportResponse.data);
-
             window.location.reload();  // Refreshes the page
         } catch (reportError) {
             console.error("Failed to update EIE Reports: ", reportError);
@@ -206,9 +204,10 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
         </button>
         {/* Custom Tooltip */}
         <div className="absolute bottom-full mb-2 hidden group-hover:block bg-white text-black text-sm rounded px-2 py-1 z-10 whitespace-nowrap shadow-lg right-0 mr-4">
-        {loading ? 'Refreshing reports...' : 'Click to refresh'}
+        {loading ? 'Refreshing Reports...' : 'Click to refresh'}
         </div>
         </div>
+
 
         {error && <p className="error-message">{error}</p>}
 
