@@ -11,6 +11,7 @@ use App\Models\LeadPOCs;
 use App\Models\EIEHeads;
 use App\Models\HistoricalImplementingSubjects;
 use App\Models\EieScorecardClassReport;
+use App\Models\MasterClassList;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -376,6 +377,42 @@ class ImplementingSubjectController extends Controller
                 return response()->json([
                     'programs' => $programs,
                     'semesters' => $semesters,
+                    'year_levels' => $yearLevels,
+                ]);
+            } catch (\Exception $e) {
+                \Log::error('Error fetching data: ' . $e->getMessage());
+                return response()->json(['error' => 'Unable to fetch data'], 500);
+            }
+        }
+
+        public function getDropdownSpecificDataMaster(Request $request)
+        {
+            try {
+                $employeeId = $request->query('employee_id');
+
+                // Fetch the department from EIEHeads
+                $department = EIEHeads::where('employee_id', $employeeId)->value('department');
+
+                if (!$department) {
+                    return response()->json(['error' => 'Department not found for employee'], 404);
+                }
+
+                // Fetch programs, semesters, and year levels based on the department
+                $programs = MasterClassList::where('department', $department)->distinct()->pluck('program');
+
+                // Order the year levels manually and convert to array
+                $yearLevels = MasterClassList::where('department', $department)
+                ->distinct()
+                ->pluck('year_level')
+                ->toArray();
+
+                usort($yearLevels, function ($a, $b) {
+                    $order = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
+                    return array_search($a, $order) - array_search($b, $order);
+                });
+
+                return response()->json([
+                    'programs' => $programs,
                     'year_levels' => $yearLevels,
                 ]);
             } catch (\Exception $e) {
