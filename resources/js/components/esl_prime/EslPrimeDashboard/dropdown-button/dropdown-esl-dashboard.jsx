@@ -100,7 +100,7 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
 
         try {
             // Call API to refresh data
-            const reportResponse = await apiService.post('/api/eie-reports/store-or-update');
+            const reportResponse = await apiService.post('/eie-reports/store-or-update');
             window.location.reload();  // Refreshes the page
         } catch (reportError) {
             console.error("Failed to update EIE Reports: ", reportError);
