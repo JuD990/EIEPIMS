@@ -33,11 +33,24 @@ const InterviewScorecardButtons = ({
         return fullName.includes(nameSearch.toLowerCase());
     });
 
-    const handleStudentSelect = (name) => {
-        setFormData((prev) => ({ ...prev, name }));
+    const handleStudentSelect = (fullName) => {
+        const selectedStudent = students.find(student =>
+        `${student.firstname} ${student.middlename || ""} ${student.lastname}`.trim() === fullName
+        );
+
+        if (selectedStudent) {
+            setFormData(prev => ({
+                ...prev,
+                name: fullName,
+                student_id: selectedStudent.student_id,
+                program: selectedStudent.program,
+                year_level: selectedStudent.year_level,
+            }));
+        }
         setIsDropdownOpen(false);
         setNameSearch("");
     };
+
 
     useEffect(() => {
         const fetchStudents = async () => {

@@ -143,20 +143,6 @@ const MasterClassListTable = ({
             row.lastname}`,
       },
       {
-        Header: "Status",
-        accessor: "status",
-        Cell: ({ cell }) => {
-          const status = cell.value;
-          let statusStyle = {};
-
-          if (status === "Dropped") {
-            statusStyle = { color: "#EA0000", fontWeight: "bold" };
-          }
-
-          return <div style={statusStyle}>{status}</div>;
-        },
-      },
-      {
         Header: () => (
           <div style={{ whiteSpace: "nowrap", width: "100%" }}>Student ID</div>
         ),
