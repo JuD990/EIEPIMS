@@ -101,8 +101,7 @@ const CurrentSubjects = () => {
         ) : subjectData ? (
             <div className="student-subject-container">
             <div className="student-subject-details">
-            <h2 className="card-title-2">{subjectData.course_title}</h2>
-            <h3 className="card-title-2-3">Implementing Subject</h3>
+            <h3 className="card-title-2-3">Implementing Subject - {subjectData.course_title}</h3>
             <br /><br />
             <p><strong>Course Code:</strong> {subjectData.course_code}</p>
             <p><strong>EPGF Average:</strong> {subjectData.epgf_average}</p>

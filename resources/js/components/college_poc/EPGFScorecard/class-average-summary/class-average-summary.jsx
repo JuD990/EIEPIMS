@@ -22,19 +22,15 @@ const ClassAverageSummary = ({ course_code, average, studentCount, evaluatedCoun
   ];
 
   const getProficiencyLevel = (epgfAverage) => {
-    for (let i = 0; i < epgfProficiencyLevels.length; i++) {
-      const current = epgfProficiencyLevels[i];
-      const previous = epgfProficiencyLevels[i - 1];
-
-      if (
-        (previous ? epgfAverage > previous.threshold : true) && // Greater than the previous threshold
-        epgfAverage <= current.threshold // Less than or equal to the current threshold
-      ) {
-        return { level: current.level, color: current.color };
+    const sorted = [...epgfProficiencyLevels].sort((a, b) => b.threshold - a.threshold);
+    for (let level of sorted) {
+      if (epgfAverage >= level.threshold) {
+        return { level: level.level, color: level.color };
       }
     }
     return { level: 'Unknown', color: 'black' };
   };
+
 
   const { level, color } = getProficiencyLevel(average);
 

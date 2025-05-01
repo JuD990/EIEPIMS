@@ -278,8 +278,6 @@ class EieReportController extends Controller
         ]);
     }
 
-
-
     private function determineProficiencyLevel($epgfAverage)
     {
         $proficiencyLevels = [

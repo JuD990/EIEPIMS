@@ -27,8 +27,7 @@
     font-weight: bold;
     font-family: "Poppins";
     position: absolute;
-    top: 25px;
-    left: 20px;
+    margin-top: -15px;
     gap: 30px;
 }
 
@@ -36,7 +35,7 @@
     font-family: "Poppins";
     position: absolute;
     font-size: 25px;
-    top: 55px;
+    margin-top: -55px;
     color: grey;
 }
 
