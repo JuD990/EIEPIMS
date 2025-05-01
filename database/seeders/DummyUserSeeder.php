@@ -107,7 +107,7 @@ class DummyUserSeeder extends Seeder
                 'employee_id' => 'ESLCHAMP001',
                 'firstname' => 'Mia',
                 'middlename' => '',
-                'lastname' => 'Tajim',
+                'lastname' => 'Tijam',
                 'password' => Hash::make('password123'),
                 'email' => 'eslchampion@unc.edu.ph',
                 'role' => 'ESL Champion',
