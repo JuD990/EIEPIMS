@@ -76,6 +76,10 @@
     background: white;
 }
 
+.esl-table-dropdown option{
+    font-size: 10px;
+}
+
 .custom-dropdown-menu {
     position: absolute;
     top: 100%;

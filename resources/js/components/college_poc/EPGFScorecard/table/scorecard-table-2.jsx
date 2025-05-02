@@ -713,7 +713,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
             <option
             key={option.id}
             value={option.id}
-            style={{ fontSize: '12px', whiteSpace: 'pre-line' }}
+            style={{ fontSize: '10px', whiteSpace: 'pre-line' }}
             >
             {option.descriptor.split('.').join(' \n')}
             </option>
@@ -758,7 +758,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
             <option
             key={option.id}
             value={option.id}
-            style={{ fontSize: '12px', whiteSpace: 'pre-line' }}
+            style={{ fontSize: '10px', whiteSpace: 'pre-line' }}
             >
             {option.descriptor.split('.').join(' \n')}  {/* Format descriptor for better readability */}
             </option>
@@ -809,7 +809,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
               key={option.id}
               value={option.id}
               style={{
-                fontSize: '12px',
+                fontSize: '10px',
                 whiteSpace: 'pre-line',  // Ensure the formatting with line breaks is respected
               }}
               >
@@ -877,7 +877,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
               key={option.id}
               value={option.id}
               style={{
-                fontSize: '12px',
+                fontSize: '10px',
                 whiteSpace: 'pre-line', // Ensure the formatting with line breaks is respected
               }}
               >
@@ -951,7 +951,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
               key={option.id}
               value={option.id}
               style={{
-                fontSize: '12px',
+                fontSize: '10px',
                 whiteSpace: 'pre-line', // Ensure the formatting with line breaks is respected
               }}
               >
@@ -1017,7 +1017,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
               key={option.id}
               value={option.id}
               style={{
-                fontSize: '12px',
+                fontSize: '10px',
                 whiteSpace: 'pre-line', // Ensure the formatting with line breaks is respected
               }}
               >
@@ -1082,7 +1082,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
               key={option.id}
               value={option.id}
               style={{
-                fontSize: '12px',
+                fontSize: '10px',
                 whiteSpace: 'pre-line', // Ensure the formatting with line breaks is respected
               }}
               >
@@ -1154,7 +1154,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
               key={option.id}
               value={option.id}
               style={{
-                fontSize: '12px',
+                fontSize: '10px',
                 whiteSpace: 'pre-line', // Ensure the formatting with line breaks is respected
               }}
               >
@@ -1219,7 +1219,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
               key={option.id}
               value={option.id}
               style={{
-                fontSize: '12px',
+                fontSize: '10px',
                 whiteSpace: 'pre-line', // Ensure the formatting with line breaks is respected
               }}
               >
