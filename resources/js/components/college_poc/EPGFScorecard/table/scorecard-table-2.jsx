@@ -493,13 +493,14 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
         { threshold: 4.0, level: 'Native/Bilingual', color: '#00008B' },
       ];
 
-      const getProficiencyLevel = (average) => {
-        const matchedLevel = epgfProficiencyLevels.find(
-          (entry) => average <= entry.threshold
-        );
-        return matchedLevel
-        ? { level: matchedLevel.level, color: matchedLevel.color }
-        : { level: 'Unknown', backgroundColor: 'black' };
+      const getProficiencyLevel = (epgfAverage) => {
+        const sorted = [...epgfProficiencyLevels].sort((a, b) => b.threshold - a.threshold);
+        for (let level of sorted) {
+          if (epgfAverage >= level.threshold) {
+            return { level: level.level, color: level.color };
+          }
+        }
+        return { level: 'Unknown', color: 'black' };
       };
 
       const checkStudentSubmission = async (student_id) => {
