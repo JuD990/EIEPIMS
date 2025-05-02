@@ -121,6 +121,8 @@ Route::get('/get-student-count-active', [EpgfScoreCardController::class, 'getStu
 Route::get('/get-class-average', [EpgfScoreCardController::class, 'getClassAverageByCourseCode']);
 Route::get('/get-evaluated-count', [EpgfScoreCardController::class, 'getEvaluatedCount']);
 Route::post('/store-class-data', [EpgfScoreCardController::class, 'storeClassData']);
+Route::get('/submitted-scorecards', [EpgfScoreCardController::class, 'getSubmittedStudentIds']);
+
 
 // ClassList routes
 Route::get('/class-list', [ClassListController::class, 'getClassListByDepartment']);

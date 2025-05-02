@@ -18,6 +18,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
   const [qualityOfResponseOptions, setQualityOfResponseOptions] = useState([]);
   const [detailOfResponseOptions, setDetailOfResponseOptions] = useState([]);
   const [submittedRows, setSubmittedRows] = useState({});
+  const [submittedIds, setSubmittedIds] = useState([]);
 
   useEffect(() => {
     const savedStates = localStorage.getItem('submittedRows');
@@ -312,9 +313,25 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
     fetchVersion();
   }, []); // Run this effect only once when the component mounts
 
+  useEffect(() => {
+    const fetchSubmittedIds = async () => {
+      try {
+        const response = await fetch('/api/submitted-scorecards');
+        const data = await response.json();
+        console.log(data);
+        setSubmittedIds(data); // Array of student IDs who already submitted
+      } catch (error) {
+        console.error('Error fetching submitted student IDs:', error);
+      }
+    };
+
+    fetchSubmittedIds();
+  }, []);
+
   const columns = [
     'No',
     'Full Name',
+    'Student ID',
     'Year Level',
     'PGF Average',
     'Proficiency',
@@ -485,6 +502,17 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
         : { level: 'Unknown', backgroundColor: 'black' };
       };
 
+      const checkStudentSubmission = async (student_id) => {
+        try {
+          const response = await fetch(`/api/check-scorecard-submission/${student_id}`);
+          const data = await response.json();
+          return data.exists;
+        } catch (error) {
+          console.error('Error checking submission:', error);
+          return false; // Default to false if there's an error
+        }
+      };
+
       const handleRowSubmit = async (rowIndex) => {
         const student = students[rowIndex];
 
@@ -510,49 +538,49 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
         const selectedSyntax = syntaxLookup[syntaxId];
 
         // Gather all relevant data for the row
-              const studentData = {
-                  fullName: `${student.firstname} ${student.lastname}`,
-                  epgf_average: epgfAverage.toFixed(2),
-                  proficiency_level: getProficiencyLevel(epgfAverage).level,
-                  type: student.type || 'Reading',
+        const studentData = {
+          fullName: `${student.firstname} ${student.lastname}`,
+          epgf_average: epgfAverage.toFixed(2),
+                            proficiency_level: getProficiencyLevel(epgfAverage).level,
+                            type: student.type || 'Reading',
 
-                  // Pronunciation
-                  consistency_descriptor: selectedConsistency ? selectedConsistency.descriptor : 'N/A',
-                  consistency_rating: selectedConsistency ? selectedConsistency.rating : '0.00',
-                  clarity_descriptor: selectedClarity ? selectedClarity.descriptor : 'N/A',
-                  clarity_rating: selectedClarity ? selectedClarity.rating : '0.00',
-                  articulation_descriptor: selectedArticulation ? selectedArticulation.descriptor : 'N/A',
-                  articulation_rating: selectedArticulation ? selectedArticulation.rating : '0.00',
-                  intonation_and_stress_descriptor: selectedIntonationAndStress ? selectedIntonationAndStress.descriptor : 'N/A',
-                  intonation_and_stress_rating: selectedIntonationAndStress ? selectedIntonationAndStress.rating : '0.00',
-                  pronunciation_average: pronunciationAverage.toFixed(2),
+                            // Pronunciation
+                            consistency_descriptor: selectedConsistency ? selectedConsistency.descriptor : 'N/A',
+                            consistency_rating: selectedConsistency ? selectedConsistency.rating : '0.00',
+                            clarity_descriptor: selectedClarity ? selectedClarity.descriptor : 'N/A',
+                            clarity_rating: selectedClarity ? selectedClarity.rating : '0.00',
+                            articulation_descriptor: selectedArticulation ? selectedArticulation.descriptor : 'N/A',
+                            articulation_rating: selectedArticulation ? selectedArticulation.rating : '0.00',
+                            intonation_and_stress_descriptor: selectedIntonationAndStress ? selectedIntonationAndStress.descriptor : 'N/A',
+                            intonation_and_stress_rating: selectedIntonationAndStress ? selectedIntonationAndStress.rating : '0.00',
+                            pronunciation_average: pronunciationAverage.toFixed(2),
 
-                  // Grammar
-                  accuracy_descriptor: selectedAccuracy ? selectedAccuracy.descriptor : 'N/A',
-                  accuracy_rating: selectedAccuracy ? selectedAccuracy.rating : '0.00',
-                  clarity_of_thought_descriptor: selectedClarityOfThought ? selectedClarityOfThought.descriptor : 'N/A',
-                  clarity_of_thought_rating: selectedClarityOfThought ? selectedClarityOfThought.rating : '0.00',
-                  syntax_descriptor: selectedSyntax ? selectedSyntax.descriptor : 'N/A',
-                  syntax_rating: selectedSyntax ? selectedSyntax.rating : '0.00',
-                  grammar_average: grammarAverage.toFixed(2),
+                            // Grammar
+                            accuracy_descriptor: selectedAccuracy ? selectedAccuracy.descriptor : 'N/A',
+                            accuracy_rating: selectedAccuracy ? selectedAccuracy.rating : '0.00',
+                            clarity_of_thought_descriptor: selectedClarityOfThought ? selectedClarityOfThought.descriptor : 'N/A',
+                            clarity_of_thought_rating: selectedClarityOfThought ? selectedClarityOfThought.rating : '0.00',
+                            syntax_descriptor: selectedSyntax ? selectedSyntax.descriptor : 'N/A',
+                            syntax_rating: selectedSyntax ? selectedSyntax.rating : '0.00',
+                            grammar_average: grammarAverage.toFixed(2),
 
-                  // Fluency
-                  quality_of_response_descriptor: selectedQualityOfResponse ? selectedQualityOfResponse.descriptor : 'N/A',
-                  quality_of_response_rating: selectedQualityOfResponse ? selectedQualityOfResponse.rating : '0.00',
-                  detail_of_response_descriptor: selectedDetailOfResponse ? selectedDetailOfResponse.descriptor : 'N/A',
-                  detail_of_response_rating: selectedDetailOfResponse ? selectedDetailOfResponse.rating : '0.00',
-                  fluency_average: fluencyAverage.toFixed(2),
+                            // Fluency
+                            quality_of_response_descriptor: selectedQualityOfResponse ? selectedQualityOfResponse.descriptor : 'N/A',
+                            quality_of_response_rating: selectedQualityOfResponse ? selectedQualityOfResponse.rating : '0.00',
+                            detail_of_response_descriptor: selectedDetailOfResponse ? selectedDetailOfResponse.descriptor : 'N/A',
+                            detail_of_response_rating: selectedDetailOfResponse ? selectedDetailOfResponse.rating : '0.00',
+                            fluency_average: fluencyAverage.toFixed(2),
 
-                  comment: student.comment,
-                  course_code: course_code,
-                  task_title: taskTitle || "No Title",
-                  epgf_rubric_id: version,
-                  student_id: `${student.student_id}`,
-                  department: `${student.department}`,
-                  program: `${student.program}`,
-                  active_students: active_students,
-                  course_title: course_title,
-                  year_level: `${student.year_level}`,
+                            comment: student.comment,
+                            course_code: course_code,
+                            task_title: taskTitle || "No Title",
+                            epgf_rubric_id: version,
+                            student_id: `${student.student_id}`,  // Corrected with backticks
+                            department: `${student.department}`,  // Corrected with backticks
+                            program: `${student.program}`,        // Corrected with backticks
+                            active_students: active_students,
+                            course_title: course_title,
+                            year_level: `${student.year_level}`,  // Corrected with backticks
         };
 
         // Helper function to check for '0.00' or 'N/A'
@@ -616,6 +644,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
         <tr key={rowIndex}>
         <td>{rowIndex + 1}</td>
         <td><div style={{ textAlign: 'center' }}>{`${student.firstname} ${student.lastname}`}</div></td>
+        <td><div style={{ textAlign: 'center' }}>{student.student_id}</div></td>
         <td><div style={{ textAlign: 'center' }}>{student.year_level}</div></td>
 
         {/* PGF Average */}
@@ -1247,10 +1276,10 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
         <td>
         <div style={{ textAlign: 'center' }}>
         <SubmitButton
-        onClick={() => handleRowSubmit(rowIndex)} // Trigger row submission
-        disabled={submittedRows[rowIndex]}       // Disable if already submitted
+        onClick={() => handleRowSubmit(rowIndex)}
+        disabled={submittedIds.includes(students[rowIndex].student_id)}
         >
-        {submittedRows[rowIndex] ? 'Submitted' : 'Submit'}
+        {submittedIds.includes(students[rowIndex].student_id) ? 'Submitted' : 'Submit'}
         </SubmitButton>
         </div>
         </td>

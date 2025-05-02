@@ -259,28 +259,19 @@ class EpgfScoreCardController extends Controller
             ]
         );
 
-        // Find or create HistoricalImplementingSubjects
-        $historicalSubject = HistoricalImplementingSubjects::updateOrCreate(
-            ['course_code' => $validated['course_code']],
-            [
-                'epgf_average' => $epgfAverage,
-                'completion_rate' => $completionRate,
-                'proficiency_level' => $proficiencyLevel,
-                'enrolled_students' => $validated['enrolled_students'],
-                'active_students' => $validated['active_students'],
-                'recorded_at' => now(), // Ensure timestamping for tracking
-            ]
-        );
-
         // Return a success response
         return response()->json([
             'success' => true,
             'message' => 'Class data successfully saved or updated!',
             'data' => [
                 'implementing_subject' => $subject,
-                'historical_subject' => $historicalSubject,
             ],
         ]);
     }
 
+    public function getSubmittedStudentIds()
+    {
+        $submittedIds = EieScorecardClassReport::pluck('student_id');
+        return response()->json($submittedIds);
+    }
 }
