@@ -189,22 +189,12 @@ const UserManagementDropdown = ({
     )}
     </div>
 
-    {/* Search Bar: available for all user types */}
     <input
     type="text"
+    className="global-search-bar"
     value={searchQuery}
     onChange={(e) => setSearchQuery(e.target.value)}
     placeholder="Search"
-    style={{
-      width: "476px",
-      height: "60px",
-      borderRadius: "8px",
-      borderColor: "#333333",
-      paddingLeft: "10px",
-      fontSize: "16px",
-      marginLeft: "auto",
-      marginRight: "25px",
-    }}
     />
     </div>
   );

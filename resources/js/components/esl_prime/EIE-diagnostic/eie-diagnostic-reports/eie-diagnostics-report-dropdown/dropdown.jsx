@@ -142,7 +142,7 @@ const DiagnosticsDropdown = ({
         {/* Search Input */}
         <div className="diagnostics-search-input-container">
         <input
-        type="text"
+        type=""
         className="diagnostics-search-input"
         placeholder="Search..."
         value={searchQuery}

@@ -1,24 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiService from "@services/apiServices";
 
 const LogoutButton = () => {
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleLogout = async () => {
+        setLoading(true);
         try {
             await apiService.delete("/logout");
 
-            // Clear local storage
+            // Clear all relevant localStorage data
             localStorage.removeItem("authToken");
             localStorage.removeItem("employee_id");
-            localStorage.removeItem("userType");
+            localStorage.removeItem("student_id");
+            localStorage.removeItem("userRole");
 
-            // Redirect to the login page
             navigate("/");
         } catch (error) {
-            console.error("Logout failed: ", error);
+            console.error("Logout failed:", error);
             alert("Failed to log out. Please try again.");
+        } finally {
+            setLoading(false);
         }
     };
 

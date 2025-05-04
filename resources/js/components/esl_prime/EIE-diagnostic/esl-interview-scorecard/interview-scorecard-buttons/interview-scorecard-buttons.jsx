@@ -278,7 +278,7 @@ const InterviewScorecardButtons = ({
         {isDropdownOpen && (
             <div className="custom-dropdown-menu">
             <input
-            type="text"
+            type=""
             className="custom-dropdown-search"
             placeholder="Search name..."
             value={nameSearch}
@@ -311,7 +311,7 @@ const InterviewScorecardButtons = ({
         <div className="esl-interview-scorecard-form-interviewer">
         <label>Interviewer:</label>
         <input
-        type="text"
+        type=""
         placeholder="Enter interviewer's name"
         className="esl-interview-scorecard-input"
         name="interviewer"
@@ -324,7 +324,7 @@ const InterviewScorecardButtons = ({
         <div className="esl-interview-scorecard-form-venue">
         <label>Venue:</label>
         <input
-        type="text"
+        type=""
         placeholder="Enter venue"
         className="esl-interview-scorecard-input"
         name="venue"

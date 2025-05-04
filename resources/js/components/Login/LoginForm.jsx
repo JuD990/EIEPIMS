@@ -18,17 +18,15 @@ const LoginForm = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Function to fetch CSRF Token
   const getCsrfToken = async () => {
     try {
-      await apiService.get('/sanctum/csrf-cookie');
+      await apiService.get("/sanctum/csrf-cookie");
     } catch (err) {
-      console.error("CSRF token fetch error: ", err);
+      console.error("CSRF token fetch error:", err);
       setError("Failed to fetch CSRF token. Please try again.");
     }
   };
 
-  // Handle form submission
   const handleLogin = async (event) => {
     event.preventDefault();
 
@@ -38,22 +36,37 @@ const LoginForm = () => {
     }
 
     const userTypeToTableMap = {
-      'Student': 'students',
-      'College POC': 'college_pocs',
-      'Lead EIE POC': 'lead_pocs',
-      'Head EIE POC': 'eie_heads',
-      'ESL Prime': 'esl_prime',
-      'ESL Champion': 'esl_champion',
+      "Student": "students",
+      "College POC": "college_pocs",
+      "Lead EIE POC": "lead_pocs",
+      "Head EIE POC": "eie_heads",
+      "ESL Prime": "esl_prime",
+      "ESL Champion": "esl_champion",
+    };
+
+    const roleKeyMap = {
+      "Student": "student",
+      "College POC": "college_poc",
+      "Lead EIE POC": "lead_eie_poc",
+      "Head EIE POC": "eie_head_poc",
+      "ESL Prime": "esl_prime",
+      "ESL Champion": "esl_champion",
     };
 
     const table = userTypeToTableMap[userType];
+    const roleKey = roleKeyMap[userType];
+
+    if (!table || !roleKey) {
+      setError("Invalid user type selected.");
+      return;
+    }
 
     try {
       await getCsrfToken();
 
-      const response = await apiService.post(`/login`, {
+      const response = await apiService.post("/login", {
         email: `${email}@unc.edu.ph`,
-        password: password,
+        password,
         user_type: table,
       });
 
@@ -65,44 +78,38 @@ const LoginForm = () => {
           return;
         }
 
-        // Store necessary data in localStorage
         localStorage.setItem("authToken", token);
-        localStorage.setItem("userType", userType);
+        localStorage.setItem("userRole", roleKey);
 
-        if (userType === "Student" && student_id) {
+        if (roleKey === "student" && student_id) {
           localStorage.setItem("student_id", student_id);
         } else if (employee_id) {
           localStorage.setItem("employee_id", employee_id);
-        } else {
-          setError("Employee ID or Student ID not found.");
-          return;
         }
 
-        // ✅ Trigger the storeOrUpdatePrograms function after login
         try {
-          const reportResponse = await apiService.post('/eie-reports/store-or-update');
+          await apiService.post("/eie-reports/store-or-update");
         } catch (reportError) {
-          console.error("Failed to update EIE Reports: ", reportError);
+          console.error("Failed to update EIE Reports:", reportError);
         }
 
-        // Navigate based on user type
-        switch (userType) {
-          case "Student":
+        switch (roleKey) {
+          case "student":
             navigate("/student-dashboard");
             break;
-          case "College POC":
+          case "college_poc":
             navigate("/college-poc-dashboard");
             break;
-          case "Lead EIE POC":
+          case "lead_eie_poc":
             navigate("/lead-eie-poc-dashboard");
             break;
-          case "Head EIE POC":
+          case "eie_head_poc":
             navigate("/eie-head-poc-dashboard");
             break;
-          case "ESL Prime":
+          case "esl_prime":
             navigate("/esl-prime-dashboard");
             break;
-          case "ESL Champion":
+          case "esl_champion":
             navigate("/esl-champion-dashboard");
             break;
           default:
@@ -110,33 +117,32 @@ const LoginForm = () => {
         }
       }
     } catch (error) {
-      console.error("Login failed: ", error);
+      console.error("Login failed:", error);
 
       if (error.response) {
         switch (error.response.status) {
           case 401:
-            setError("Invalid credentials, please try again.");
+            setError("Invalid credentials. Please try again.");
             break;
           case 404:
-            setError("User not found");
+            setError("User not found.");
             break;
           case 405:
-            setError("Method not allowed. Please check your request method.");
+            setError("Invalid request method.");
             break;
           case 500:
-            setError("Internal server error. Please try again later.");
+            setError("Internal server error.");
             break;
           default:
-            setError("An unexpected error occurred. Please try again.");
+            setError("An unexpected error occurred.");
         }
       } else if (error.request) {
-        setError("No response from server. Please try again later.");
+        setError("No response from server.");
       } else {
         setError("Error: " + error.message);
       }
     }
   };
-
 
   return (
     <div
@@ -151,16 +157,16 @@ const LoginForm = () => {
     <img className="login-unc-logo" src={uncLogo} alt="UNC Logo" />
     <img className="login-system-logo" src={systemLogo} alt="System Logo" />
     </div>
+
     <h1 className="login-main-title">
     <span className="login-eie" title="English Immersive Environment">
     EIE
     </span>
-    <span className="login-pims">
-    Program Implementation Management System
-    </span>
+    <span className="login-pims">Program Implementation Management System</span>
     </h1>
 
     <h2 className="login-subtitle">Please enter your credentials</h2>
+
     <form className="login-form" onSubmit={handleLogin}>
     {error && <div className="login-error-message">{error}</div>}
 
@@ -209,7 +215,7 @@ const LoginForm = () => {
     <img
     className="login-toggle-password-icon"
     src={showPassword ? eyeOffIcon : eyeIcon}
-    alt="Toggle Password Visibility"
+    alt="Toggle Password"
     onClick={() => setShowPassword(!showPassword)}
     />
     </div>

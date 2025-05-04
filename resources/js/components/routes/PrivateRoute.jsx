@@ -4,14 +4,28 @@ import { Navigate } from 'react-router-dom';
 // Handle Logout
 const handleLogout = () => {
   localStorage.removeItem('authToken');
-  window.location.href = '/'; // Redirect to login page after logout
+  localStorage.removeItem('userRole');
+  localStorage.removeItem('student_id');
+  localStorage.removeItem('employee_id');
+  window.location.href = '/';
 };
 
-// This component checks if the user is authenticated
-const PrivateRoute = ({ children }) => {
-  const isAuthenticated = !!localStorage.getItem('authToken'); 
+// Role-protected route component
+const PrivateRoute = ({ children, roles = [] }) => {
+  const token = localStorage.getItem('authToken');
+  const rawRole = localStorage.getItem('userRole');
+  const userRole = rawRole?.trim().toLowerCase();
 
-  return isAuthenticated ? children : <Navigate to="/" />;
+  if (!token || !userRole) {
+    return <Navigate to="/" />;
+  }
+
+  if (roles.length > 0 && !roles.includes(userRole)) {
+    console.warn(`Unauthorized access attempt: ${userRole} not in [${roles.join(", ")}]`);
+    return <Navigate to="/unauthorized" />;
+  }
+
+  return children;
 };
 
 export { handleLogout };

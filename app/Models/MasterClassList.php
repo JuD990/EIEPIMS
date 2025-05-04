@@ -27,5 +27,6 @@ class MasterClassList extends Model
         'year_level',
         'gender',
         'classification',
+        'candidate_for_graduating',
     ];
 }

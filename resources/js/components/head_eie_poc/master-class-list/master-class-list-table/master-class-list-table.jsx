@@ -18,7 +18,8 @@ const MasterClassListTable = ({
     yearLevel: '',
     status: '',
     gender: '',
-    reason: ''
+    reason: '',
+    candidate_for_graduating: '',
   });
 
   // Fetch data from the backend
@@ -45,6 +46,14 @@ const MasterClassListTable = ({
     });
   };
 
+  const handleGraduatingStatusChange = (e) => {
+    const { value } = e.target;
+    setFormData({
+      ...formData,
+      candidate_for_graduating: value,
+    });
+  };
+
   const handleUpdateClick = (row) => {
     const rowData = row.original;
     setFormData({
@@ -59,6 +68,7 @@ const MasterClassListTable = ({
       status: rowData.status || '',
       gender: rowData.gender || '',
       reason: rowData.reason_for_shift_or_drop || '',
+      candidate_for_graduating: rowData.candidate_for_graduating || '',
     });
     setShowModal(true);
   };
@@ -83,6 +93,7 @@ const MasterClassListTable = ({
           status: formData.status,
           gender: formData.gender,
           reason_for_shift_or_drop: formData.reason,
+          candidate_for_graduating: formData.candidate_for_graduating,
         }),
       });
 
@@ -124,6 +135,7 @@ const MasterClassListTable = ({
         row.reason_for_shift_or_drop?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         row.classification?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         row.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        row.candidate_for_graduating?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         row.year_level?.toString().toLowerCase().includes(searchQuery.toLowerCase())
       ) &&
       programMatch && yearLevelMatch
@@ -180,8 +192,12 @@ const MasterClassListTable = ({
         ),
         accessor: "reason_for_shift_or_drop",
         Cell: ({ value }) => (
-          <span>{value ? `- ${value}` : ""}</span> // Prepend '-' if there is content
+          <span>{value ? `- ${value}` : ""}</span>
         ),
+      },
+      {
+        Header: "Candidate for Graduating",
+        accessor: "candidate_for_graduating",
       },
       {
         Header: "Actions",
@@ -496,6 +512,25 @@ const MasterClassListTable = ({
                 <option value="Enrolled">Enrolled</option>
                 <option value="Dropped">Dropped</option>
               </select>
+            </div>
+            <div style={{ marginBottom: "20px" }}>
+            <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
+            Candidate for Graduating?:
+            </label>
+            <select
+            name="candidate_for_graduating"
+            value={formData.candidate_for_graduating}
+            onChange={handleGraduatingStatusChange}
+            style={{
+              width: "100%",
+              padding: "10px",
+              borderRadius: "5px",
+              border: "1px solid #333333",
+            }}
+            >
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
+            </select>
             </div>
             <div style={{ marginBottom: "20px" }}>
               <label

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('year_level');
             $table->string('gender');
             $table->string('classification');
+            $table->string('candidate_for_graduating')->default("No");
             $table->string('status')->default("No Show");
 
             $table->timestamps(); // Adds created_at and updated_at columns

@@ -52,13 +52,18 @@ class MasterClassListController extends Controller
             'yearLevel' => 'required|string',
         ]);
 
-        // Fetch students based on the department, year level, and status 'No Show'
-        $students = MasterClassList::where('department', $department)
+        // Base query: filter by department, year level, and status = 'No Show'
+        $query = MasterClassList::where('department', $department)
         ->where('year_level', $yearLevel)
-        ->where('status', 'No Show')
-        ->get();
+        ->where('status', 'No Show');
 
-        // Return the list of students as a JSON response
+        // Additional condition: if year level is 4th Year, also require candidate_for_graduating = 'Yes'
+        if (strtolower($yearLevel) === '4th year') {
+            $query->where('candidate_for_graduating', 'Yes');
+        }
+
+        $students = $query->get();
+
         return response()->json($students);
     }
 
@@ -88,8 +93,10 @@ class MasterClassListController extends Controller
 
     public function updateMasterClassList(Request $request, $id)
     {
+        // Find the record or fail with 404 if not found
         $record = MasterClassList::findOrFail($id);
 
+        // Update the record with the new values
         $record->update([
             'firstname' => $request->firstname,
             'middlename' => $request->middlename,
@@ -101,9 +108,10 @@ class MasterClassListController extends Controller
             'status' => $request->status,
             'gender' => $request->gender,
             'reason_for_shift_or_drop' => $request->reason_for_shift_or_drop,
+            'candidate_for_graduating' => $request->candidate_for_graduating,
         ]);
 
+        // Return the updated record as a JSON response
         return response()->json($record);
     }
-
 }

@@ -285,7 +285,7 @@ const UserInfo = () => {
       <label>
       First Name:
       <input
-      type="text"
+      type=""
       value={user.firstname || ""}
       onChange={(e) => setUser({ ...user, firstname: e.target.value })}
       />
@@ -294,7 +294,7 @@ const UserInfo = () => {
       <label>
       Middle Name:
       <input
-      type="text"
+      type=""
       value={user.middlename || ""}
       onChange={(e) => setUser({ ...user, middlename: e.target.value })}
       />
@@ -303,7 +303,7 @@ const UserInfo = () => {
       <label>
       Last Name:
       <input
-      type="text"
+      type=""
       value={user.lastname || ""}
       onChange={(e) => setUser({ ...user, lastname: e.target.value })}
       />

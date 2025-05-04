@@ -11,7 +11,7 @@ class MasterClassListImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         return MasterClassList::updateOrCreate(
-            ['student_id' => $row['student_id']], // Unique identifier
+            ['student_id' => $row['student_id']],
             [
                 'firstname' => $row['firstname'],
                 'middlename' => $row['middlename'],
@@ -22,6 +22,7 @@ class MasterClassListImport implements ToModel, WithHeadingRow
                 'year_level' => $row['year_level'],
                 'gender' => $row['gender'],
                 'classification' => $row['classification'],
+                'candidate_for_graduating' => !empty($row['candidate_for_graduating']) ? $row['candidate_for_graduating'] : 'No',
             ]
         );
     }
