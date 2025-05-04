@@ -29,6 +29,7 @@ const UploadingButton = ({ onArchiveClick }) => {
         },
       });
       alert("Subject file uploaded successfully!");
+      console.log(response.data);
       window.location.reload(); // Refresh the page
     } catch (error) {
       console.error("Error uploading subject file:", error.response?.data || error.message);

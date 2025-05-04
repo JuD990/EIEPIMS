@@ -239,7 +239,6 @@ const MonthlyChampsDropdown = ({
             </div>
 
 
-
             <input
             type="file"
             accept=".png"

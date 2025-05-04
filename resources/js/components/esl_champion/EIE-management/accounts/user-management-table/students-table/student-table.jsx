@@ -5,7 +5,13 @@ import "./student-table.css";
 import UserManagementButtons from "../../user-management-buttons-students/user-management-button";
 import DeleteIcon from "@assets/delete-icon.png";
 
-const UserManagementTable = ({ searchQuery, selectedDepartment, selectedUserType }) => {
+const UserManagementTable = ({
+  searchQuery,
+  selectedDepartment,
+  selectedUserType,
+  selectedProgram,
+  selectedYearLevel,
+}) => {
   const [students, setStudents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -40,7 +46,6 @@ const UserManagementTable = ({ searchQuery, selectedDepartment, selectedUserType
     const fetchStudents = async () => {
       try {
         const response = await axios.get("/api/students");
-        console.log("Fetched students:", response.data);
         setStudents(response.data.data);
       } catch (error) {
         console.error("Error fetching students:", error.response?.data || error.message);
@@ -121,29 +126,37 @@ const UserManagementTable = ({ searchQuery, selectedDepartment, selectedUserType
     }
   };
 
-
-  // Filter students based on search query
   const filteredStudents = students.filter((student) => {
-    // Create a full name by merging the firstname, middlename, and lastname
+    // Combine first, middle, and last name
     const fullName = `${student.firstname} ${student.middlename ? student.middlename + ' ' : ''}${student.lastname}`;
 
-    // Check if any of the fields, including the full name, match the search query
+    // Convert the search query to lowercase for case-insensitive comparison
+    const searchQueryLower = searchQuery.toLowerCase();
+
+    // Check if any of the fields match the search query
     const matchesSearch = [
-      fullName,   // Use the combined full name
+      fullName,    // Full name
       student.student_id,
       student.email,
       student.department,
       student.year_level,
       student.program,
-    ].some((field) => field?.toLowerCase().includes(searchQuery.toLowerCase()));
+    ].some((field) => field?.toLowerCase().includes(searchQueryLower));
 
+    // Check if student matches selected filters (department, program, year level)
     const matchesDepartment = selectedDepartment
     ? student.department === selectedDepartment
     : true;
+    const matchesProgram = selectedProgram
+    ? student.program === selectedProgram
+    : true;
+    const matchesYearLevel = selectedYearLevel
+    ? student.year_level === selectedYearLevel
+    : true;
 
-    return matchesSearch && matchesDepartment;
+    // Return true if all filters and search conditions match
+    return matchesSearch && matchesDepartment && matchesProgram && matchesYearLevel;
   });
-
 
   const handleDeleteStudent = async (student_id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this student?");

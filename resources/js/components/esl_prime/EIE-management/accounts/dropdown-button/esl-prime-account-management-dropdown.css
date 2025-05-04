@@ -1,72 +1,81 @@
 .student-dropdown-container {
   display: flex;
-  gap: 10px;
-  justify-content: flex-start;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+  box-sizing: border-box;
   margin-left: 350px;
-  margin-top: 10px;
+}
+
+.dropdowns-wrapper {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  flex: 1;
+  margin-top: 12px;
 }
 
 .student-dropdown-wrapper,
-.code-dropdown-wrapper {
+.esl-monthly-champ-dropdown-wrapper {
+  min-width: 200px;
   position: relative;
 }
 
-.student-dropdown-btn {
-  padding: 10px 20px;
-  background-color: #FBF7F7;
-  color: black;
+.student-dropdown-btn,
+.esl-monthly-champ-dropdown-btn {
+  width: 100%;
+  height: 50px;
+  padding: 10px 16px;
   border: 1px solid black;
-  cursor: pointer;
+  background-color: #FBF7F7;
   border-radius: 5px;
   font-size: 16px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
-  width: 100%;
-  height: 50px;
-  margin-top: 10px;
-}
-
-.student-dropdown-btn .dropdown-arrow {
-  margin-left: auto;
+  cursor: pointer;
 }
 
 .student-dropdown-menu,
-.code-dropdown-menu {
-  display: flex;
-  flex-direction: column;
+.esl-monthly-champ-dropdown-menu {
   position: absolute;
-  top: 50px;
+  top: 55px;
   left: 0;
+  width: 100%;
   background-color: white;
   border: 1px solid #ccc;
-  padding: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  width: max-content;
   border-radius: 5px;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 5px 0;
 }
 
 .student-dropdown-item,
-.code-dropdown-item {
-  margin: 0;
-  padding: 8px 12px;
+.esl-monthly-champ-dropdown-item {
+  padding: 10px 15px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease;
 }
 
 .student-dropdown-item:hover,
-.code-dropdown-item:hover {
+.esl-monthly-champ-dropdown-item:hover {
   background-color: #f0f0f0;
 }
 
 .student-dropdown-item.selected,
-.code-dropdown-item.selected {
-  font-weight: bold;
+.esl-monthly-champ-dropdown-item.esl-monthly-champ-selected {
   background-color: #e0e0e0;
+  font-weight: bold;
 }
 
-.student-dropdown-btn:disabled {
-  background-color: #f0f0f0;
-  cursor: not-allowed;
+input[type="text"] {
+  width: 476px;
+  height: 60px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  padding-left: 10px;
+  font-size: 16px;
+  margin-left: 20px;
 }

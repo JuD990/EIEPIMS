@@ -184,7 +184,7 @@ const LoginForm = () => {
     <div className="login-form-group login-email-input-container">
     <label className="login-email-form-label">Email:</label>
     <input
-    type="text"
+    type=""
     className="login-email-input"
     placeholder="Email"
     value={email}
@@ -200,7 +200,7 @@ const LoginForm = () => {
     <label className="login-password-form-label">Password:</label>
     <div className="login-password-input-wrapper">
     <input
-    type={showPassword ? "text" : "password"}
+    type={showPassword ? "" : "password"}
     className="login-password-input"
     placeholder="Password"
     value={password}

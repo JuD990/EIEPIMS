@@ -98,7 +98,6 @@ const ImplementingSubjectsTable = ({ searchQuery, program, yearLevel, semester }
         formData
       );
       if (response.status === 200) {
-        console.log("✅ Successfully updated subject.");
         setShowUpdateModal(false);
         fetchData();
       }

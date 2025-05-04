@@ -1,3 +1,4 @@
+/* Unique Class Names */
 .login-container {
     display: flex;
     flex-direction: column;
@@ -47,7 +48,7 @@
 
 .login-subtitle {
     font-family: 'Poppins';
-    font-size: 15px;
+    font-size: 18px;
     color: #383838;
     margin-top: 20px;
     margin-bottom: 15px;
@@ -66,18 +67,31 @@
     margin-top: 8px;
 }
 
-.login-password-form-label,
+/* Unique Class for Labels */
 .login-email-form-label,
 .login-form-label {
     font-family: 'Poppins';
     font-size: 15px;
     color: #383838;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     font-weight: bolder;
     white-space: nowrap;
 }
 
+.login-password-form-label {
+    font-family: 'Poppins';
+    font-size: 15px;
+    color: #383838;
+    font-weight: bolder;
+    white-space: nowrap;
+    margin-top: -12px;
+    margin-left: -12px;
+    margin-right: 4px;
+    display: inline-block;
+}
+
+/* Unique Class for Dropdown */
 .login-dropdown-container {
     display: flex;
     align-items: center;
@@ -107,6 +121,7 @@
     height: 25px;
 }
 
+/* Unique Class for Email Input */
 .login-email-input-container {
     display: flex;
     align-items: center;
@@ -146,19 +161,22 @@
     margin-left: 18px;
 }
 
+/* Unique Class for Password Input */
 .login-password-input-container {
     display: flex;
     align-items: center;
+    gap: 12px; /* Optional: controls spacing */
 }
+
 
 .login-password-input-wrapper {
     position: relative;
     flex-grow: 1;
-    margin-left: 5px;
+    margin-bottom: 15px;
 }
 
 .login-password-input {
-    width: 374px;
+    width: 378px;
     height: 50px;
     padding: 10px 40px 10px 10px;
     font-family: 'Poppins';
@@ -184,6 +202,7 @@
     height: 20px;
 }
 
+/* Unique Class for Submit Button */
 .login-button {
     width: 110px;
     height: 45px;

@@ -15,6 +15,8 @@ const EslPrimeAccountManagement = () => {
     );
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedDepartment, setSelectedDepartment] = useState("");
+    const [selectedProgram, setSelectedProgram] = useState("");
+    const [selectedYearLevel, setSelectedYearLevel] = useState("");
 
     // Update localStorage whenever selectedUserType changes
     useEffect(() => {
@@ -23,7 +25,13 @@ const EslPrimeAccountManagement = () => {
 
     // Function to render the correct table based on userType
     const renderTable = () => {
-        const tableProps = { searchQuery, selectedUserType, selectedDepartment };
+        const tableProps = {
+            searchQuery,
+            selectedUserType,
+            selectedDepartment,
+            selectedProgram,
+            selectedYearLevel
+        };
 
         switch (selectedUserType) {
             case "Student":
@@ -57,6 +65,10 @@ const EslPrimeAccountManagement = () => {
         setSearchQuery={setSearchQuery}
         selectedDepartment={selectedDepartment}
         setSelectedDepartment={setSelectedDepartment}
+        selectedProgram={selectedProgram}
+        setSelectedProgram={setSelectedProgram}
+        selectedYearLevel={selectedYearLevel}
+        setSelectedYearLevel={setSelectedYearLevel}
         />
 
         {renderTable()} {/* Dynamically render table */}
