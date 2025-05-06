@@ -180,3 +180,39 @@
   color: black;
   font-family: 'Poppins';
 }
+
+/* 🔹 Main Sidebar Buttons */
+.eie-head-pages > button.active {
+  background-color: #DC2626; /* Red */
+  color: white;
+  border-radius: 20px;
+}
+
+.eie-head-pages > button.active p {
+  color: white;
+}
+
+.eie-head-pages > button.active img {
+  filter: brightness(0) invert(1); /* make image white */
+}
+
+/* 🔸 Submenu Buttons */
+
+.eie-head-extra-buttons-container{
+  margin-left: 25px;
+}
+
+.eie-head-extra-buttons-container button.active {
+  background-color: #ffadad; /* Light Pink */
+  color: black;
+  border-radius: 20px;
+}
+
+.eie-head-extra-buttons-container button.active p {
+  color: black;
+}
+
+.eie-head-extra-buttons-container button.active img {
+  filter: brightness(0); /* make image black */
+}
+

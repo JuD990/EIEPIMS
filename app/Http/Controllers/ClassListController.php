@@ -62,7 +62,7 @@ class ClassListController extends Controller
 
             // Get class lists based on department
             $students = ClassLists::where('department', $eieHead->department)
-            ->select('class_lists_id', 'student_id', 'firstname', 'middlename', 'lastname', 'status', 'year_level', 'classification', 'gender', 'reason_for_shift_or_drop', 'course_code', 'epgf_average', 'proficiency_level', 'pronunciation', 'grammar', 'fluency')
+            ->select('class_lists_id', 'student_id', 'firstname', 'middlename', 'lastname', 'status', 'year_level', 'classification', 'gender', 'reason_for_shift_or_drop', 'course_code', 'epgf_average', 'proficiency_level', 'pronunciation', 'grammar', 'fluency', 'program', 'candidate_for_graduating')
             ->get();
 
             return response()->json($students, 200);
@@ -164,6 +164,7 @@ class ClassListController extends Controller
                 'gender' => 'nullable|string',
                 'reason' => 'nullable|string',
                 'courseCode' => 'nullable|string',
+                'candidate_for_graduating' => 'nullable|string',
             ]);
 
             // Find the student by class_lists_id instead of student_id
@@ -183,6 +184,7 @@ class ClassListController extends Controller
             $student->status = $request->input('status');
             $student->reason_for_shift_or_drop = $request->input('reason');
             $student->course_code = $request->input('courseCode');
+            $student->candidate_for_graduating = $request->input('candidate_for_graduating');
 
             // Save the updated student record
             $student->save();
@@ -257,7 +259,6 @@ class ClassListController extends Controller
             return response()->json(['error' => 'Employee ID is required'], 400);
         }
 
-        // Step 1: Find the employee's department
         $employee = EIEHeads::where('employee_id', $employeeId)->first();
 
         if (!$employee) {
@@ -266,18 +267,18 @@ class ClassListController extends Controller
 
         $department = $employee->department;
 
-        // Step 2: Get all distinct course_codes and course_titles filtered by department
+        // Determine current semester based on the current month
+        $currentMonth = now()->month;
+        $semester = ($currentMonth >= 8 && $currentMonth <= 12) ? '1st Semester' : '2nd Semester';
+
+        // Fetch courses filtered by department and semester
         $courses = ImplementingSubjects::select('course_code', 'course_title')
         ->where('department', $department)
+        ->where('semester', $semester)
         ->distinct()
         ->get();
 
-        // Step 3: Group by course_title (optional, for dropdown)
-        $groupedCourses = $courses->groupBy('course_title')->map(function ($group) {
-            return $group->pluck('course_code')->unique()->values();
-        })->toArray();
-
-        return response()->json($groupedCourses);
+        return response()->json($courses);
     }
 
 
@@ -313,4 +314,45 @@ class ClassListController extends Controller
 
         return response()->json($groupedCourses);
     }
+
+    public function getStudentStatistics(Request $request)
+    {
+        $employeeId = $request->query('employee_id');
+        $department = EIEHeads::where('employee_id', $employeeId)->value('department');
+
+        if (!$department) {
+            return response()->json([
+                'error' => 'Department not found for the provided employee ID.'
+            ], 404);
+        }
+
+        $totalStudents = ClassLists::where('department', $department)->count();
+
+        $activeStudents = ClassLists::where('department', $department)
+        ->where('status', 'Active')
+        ->count();
+
+        $graduatingStudents = ClassLists::where('department', $department)
+        ->where('candidate_for_graduating', 'Yes')
+        ->where('status', 'Active')
+        ->where(function ($query) {
+            $query->where(function ($q) {
+                return $q->where('program', 'ACT')
+                ->where('year_level', '2nd Year');
+            })->orWhere('year_level', '4th Year');
+        })
+        ->count();
+
+        $activePercentage = $totalStudents > 0
+        ? round(($activeStudents / $totalStudents) * 100, 2)
+        : 0;
+
+        return response()->json([
+            'total_students' => $totalStudents,
+            'active_students' => $activeStudents,
+            'active_percentage' => $activePercentage,
+            'graduating_students' => $graduatingStudents,
+        ]);
+    }
+
 }

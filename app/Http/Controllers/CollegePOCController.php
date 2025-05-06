@@ -52,4 +52,16 @@ class CollegePOCController extends Controller
 
         return response()->json($pocs);
     }
+    public function getFilteredDepartmentPOCs(Request $request)
+    {
+        $department = $request->query('department');
+
+        if (!$department) {
+            return response()->json(['error' => 'Department is required.'], 400);
+        }
+
+        $pocs = CollegePOCs::where('department', $department)->get();
+
+        return response()->json($pocs);
+    }
 }

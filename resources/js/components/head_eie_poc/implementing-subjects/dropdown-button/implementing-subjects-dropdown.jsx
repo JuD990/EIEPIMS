@@ -21,6 +21,15 @@ const ImplementingSubjectDropdown = ({
   const [semesters, setSemesters] = useState([]);
 
   useEffect(() => {
+    if (!selectedSemester) {
+      const currentMonth = new Date().getMonth() + 1; // getMonth is 0-indexed
+      const defaultSemester = (currentMonth >= 8 && currentMonth <= 12) ? "1st Semester" : "2nd Semester";
+      setSelectedSemester(defaultSemester);
+    }
+  }, [selectedSemester, setSelectedSemester]);
+
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const employeeId = localStorage.getItem('employee_id');

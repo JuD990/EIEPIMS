@@ -6,26 +6,50 @@ use Illuminate\Http\Request;
 use App\Imports\MasterClassListImport;
 use App\Models\MasterClassList;
 use App\Models\EIEHeads;
+use App\Models\ClassLists;
 use App\Models\EieDiagnosticReport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class MasterClassListController extends Controller
 {
-    public function index(Request $request)
+    public function index($employeeId)
     {
-        $employeeId = $request->query('employee_id');
+        // Ensure the employee ID is valid
+        if (!$employeeId) {
+            return response()->json(['error' => 'Employee ID is required'], 400);
+        }
 
-        // Get the department for this employee
+        // Find the department head by employee ID
         $head = EIEHeads::where('employee_id', $employeeId)->first();
 
         if (!$head) {
             return response()->json(['error' => 'Department not found'], 404);
         }
 
+        // Retrieve the department associated with this employee
         $department = $head->department;
 
-        // Filter master class list by department
-        $data = MasterClassList::where('department', $department)->get();
+        // Log for debugging
+        \Log::info("Department for employee $employeeId: $department");
+
+        // Fetch students matching either:
+        // 1. ACT 2nd Year & Graduating
+        // 2. 4th Year & Graduating
+        $data = ClassLists::where('department', $department)
+        ->where('candidate_for_graduating', 'Yes')
+        ->where('status', 'Active')
+        ->where(function ($query) {
+            $query->where(function ($q) {
+                $q->where('program', 'ACT')
+                ->where('year_level', '2nd Year');
+            })->orWhere('year_level', '4th Year');
+        })
+        ->get();
+
+        if ($data->isEmpty()) {
+            \Log::info("No data found for department: $department");
+            return response()->json(['error' => 'No data found for this department'], 404);
+        }
 
         return response()->json($data);
     }
@@ -53,9 +77,9 @@ class MasterClassListController extends Controller
         ]);
 
         // Base query: filter by department, year level, and status = 'No Show'
-        $query = MasterClassList::where('department', $department)
+        $query = ClassLists::where('department', $department)
         ->where('year_level', $yearLevel)
-        ->where('status', 'No Show');
+        ->where('status', 'Active');
 
         // Additional condition: if year level is 4th Year, also require candidate_for_graduating = 'Yes'
         if (strtolower($yearLevel) === '4th year') {
@@ -69,7 +93,7 @@ class MasterClassListController extends Controller
 
     public function getDepartments()
     {
-        $departments = MasterClassList::pluck('department')->unique()->values();
+        $departments = ClassLists::pluck('department')->unique()->values();
 
         // Ensure it's an array before returning
         return response()->json($departments->toArray());
@@ -113,5 +137,22 @@ class MasterClassListController extends Controller
 
         // Return the updated record as a JSON response
         return response()->json($record);
+    }
+
+    public function updateCandidate(Request $request, $id)
+    {
+        // Validate the incoming data
+        $validated = $request->validate([
+            'candidate_for_graduating' => 'required|in:Yes,No',
+        ]);
+
+        // Find the record
+        $record = ClassLists::findOrFail($id);
+
+        // Update only the candidate_for_graduating field
+        $record->candidate_for_graduating = $validated['candidate_for_graduating'];
+        $record->save();
+
+        return response()->json($record, 200);
     }
 }

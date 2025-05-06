@@ -173,12 +173,19 @@ class ImplementingSubjectController extends Controller
 
                 if ($header !== $expectedColumns) {
                     fclose($handle);
+                    Log::warning('CSV upload failed: invalid format.', ['header' => $header]);
                     return response()->json(['message' => 'Invalid CSV format.'], 400);
                 }
 
+                $csvCourseCodes = [];
+                $rowCount = 0;
+
                 while (($row = fgetcsv($handle)) !== false) {
+                    $rowCount++;
+                    $csvCourseCodes[] = $row[0]; // Track course_code for cleanup
+
                     ImplementingSubjects::updateOrCreate(
-                        ['course_code' => $row[0]], // Unique constraint
+                        ['course_code' => $row[0]],
                         [
                             'code'              => $row[1],
                             'course_title'      => $row[2],
@@ -196,15 +203,23 @@ class ImplementingSubjectController extends Controller
 
                 fclose($handle);
 
-                return response()->json(['message' => 'Data stored successfully!', 'path' => $path], 200);
+                if ($rowCount > 0) {
+                    ImplementingSubjects::whereNotIn('course_code', $csvCourseCodes)->delete();
+                    Log::info("CSV sync complete. {$rowCount} rows processed. Old records removed.");
+                } else {
+                    ImplementingSubjects::truncate();
+                    Log::info("CSV was empty. All records truncated.");
+                }
+
+                return response()->json(['message' => 'Data synced successfully!', 'path' => $path], 200);
             }
 
             return response()->json(['message' => 'Failed to read the file.'], 400);
         }
 
-        Log::error('No file uploaded');
         return response()->json(['message' => 'No file uploaded.'], 400);
     }
+
         // Get class data based on employee_id and subjects semester
         public function getClassData($employee_id)
         {

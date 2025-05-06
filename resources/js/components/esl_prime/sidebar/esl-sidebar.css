@@ -197,13 +197,14 @@
   display: flex;
   flex-direction: column; /* Stacks buttons vertically */
 }
-
+.esl-assign-poc-sidebar-button,
 .diagnosticReports-button,
 .interview-button,
 .epgf-rubric-button,
 .monthly-champions-button,
 .esl-imp-subjects-button,
 .certification-button,
+
 .accounts-button {
   align-items: center;
   display: flex;
@@ -211,6 +212,7 @@
   padding: 10px;
 }
 
+.esl-assign-poc-sidebar-button:hover,
 .diagnosticReports-button:hover,
 .interview-button:hover,
 .epgf-rubric-button:hover,
@@ -221,6 +223,8 @@
   background-color: #FFE6E2; /* Highlight color on hover */
   border-radius: 20px; /* Rounded corners */
 }
+
+.esl-assign-poc-sidebar-button:hover p,
 .diagnosticReports-button:hover p,
 .interview-button:hover p,
 .epgf-rubric-button:hover p,
@@ -265,7 +269,13 @@
   width: 70px;
   height: 70px;
 }
+.esl-assign-poc-sidebar-button img{
+  margin-left: 35px;
+  width: 70px;
+  height: 90px;
+}
 
+.esl-assign-poc-sidebar-button p,
 .diagnosticReports-button p,
 .interview-button p,
 .epgf-rubric-button p,
@@ -309,3 +319,26 @@
   margin-top: 15px;
   margin-left: 25px;
 }
+.esl-assign-poc-sidebar-button p{
+  margin-top: 15px;
+  margin-left: 13px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

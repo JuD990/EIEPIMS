@@ -30,7 +30,7 @@ const StudentManagementDropdown = ({ selectedTitle, selectedCode, onTitleChange,
           if (flattenedCourses.length === 0) {
             setError("No courses available for your department.");
           } else {
-            setCourses(flattenedCourses.slice(0, 10)); // Optional: limit to 10
+            setCourses(flattenedCourses.slice(0, 10));
           }
         }
       } catch (err) {

@@ -25,6 +25,7 @@ const StudentManagementTable = ({
     reason: '',
     courseCode: '',
     gender: '',
+    candidate_for_graduating: '',
   });
 
   const toggleDropdown = () => {
@@ -55,7 +56,8 @@ const StudentManagementTable = ({
     reversedFullName.includes(query) ||
     (student.course_code?.toLowerCase() || "").includes(query) ||
     (student.status?.toLowerCase() || "").includes(query) ||
-    (student.year_level?.toString() || "").includes(query);
+    (student.program?.toLowerCase() || "").includes(query) ||
+    (student.year_level?.toLowerCase() || "").includes(query)
 
     // Course code and title filters
     const matchesCode = selectedCode ? student.course_code === selectedCode : true;
@@ -105,7 +107,7 @@ const StudentManagementTable = ({
 
   const handleUpdateClick = (row) => {
     setFormData({
-      classListsId: row.original.class_lists_id,  // Assign class_lists_id
+      classListsId: row.original.class_lists_id,
       studentId: row.original.student_id || '',
       firstName: row.original.firstname || '',
       middleName: row.original.middlename || '',
@@ -116,6 +118,7 @@ const StudentManagementTable = ({
       reason: row.original.reason_for_shift_or_drop || '',
       courseCode: row.original.course_code || '',
       gender: row.original.gender || '',
+      candidate_for_graduating: row.original.candidate_for_graduating || '',
     });
     setShowModal(true);
   };
@@ -155,6 +158,7 @@ const StudentManagementTable = ({
         reason: formData.reason,
         courseCode: formData.courseCode,
         gender: formData.gender,
+        candidate_for_graduating: formData.candidate_for_graduating,
       }),
     })
     .then((response) => {
@@ -186,6 +190,47 @@ const StudentManagementTable = ({
       setError("Failed to update student. Please try again.");
     });
   };
+
+  const handleGraduatingStatusChange = (e) => {
+    const { value } = e.target;
+    setFormData({
+      ...formData,
+      candidate_for_graduating: value,
+    });
+  };
+
+  useEffect(() => {
+    const storedEmployeeId = localStorage.getItem("employee_id");
+
+    if (!storedEmployeeId) {
+      console.error("No employee_id found in localStorage.");
+      return;
+    }
+
+    fetch("http://localhost:8000/api/get-courses-by-department-student", {
+      headers: {
+        'employee_id': storedEmployeeId
+      }
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      setCourses(data);
+    })
+    .catch((error) => {
+      console.error("Error fetching courses:", error.message);
+    });
+  }, []);
+
+  const isGraduatingDisabled = !(
+    (formData.courseCode === "ACT" && formData.yearLevel === "2nd Year") ||
+    formData.yearLevel === "4th Year"
+  );
+
 
   const columns = React.useMemo(
     () => [
@@ -224,6 +269,10 @@ const StudentManagementTable = ({
       {
         Header: "Year Level",
         accessor: "year_level",
+      },
+      {
+        Header: "Program",
+        accessor: "program",
       },
       {
         Header: "Classification",
@@ -267,6 +316,10 @@ const StudentManagementTable = ({
         accessor: "proficiency_level",
       },
       {
+        Header: "Candidate for Graduating",
+        accessor: "candidate_for_graduating",
+      },
+      {
         Header: "Actions",
         accessor: "actions",
         Cell: ({ row }) => (
@@ -275,7 +328,7 @@ const StudentManagementTable = ({
               width: '88px',
               height: '35px',
               borderRadius: '12px',
-              backgroundColor: '#6B6D76',
+              backgroundColor: '#DC2626',
               color: '#FFFFFF',
               fontSize: '15px',
               fontFamily: 'Poppins',
@@ -450,19 +503,17 @@ const StudentManagementTable = ({
               cursor: 'pointer',
             }}
             >
-            {formData.courseCode
-              ? `${courses.find(c => c.code === formData.courseCode)?.title || 'Select Subject'} - ${formData.courseCode}`
-              : 'Select Subject'}
-              <FaChevronDown
-              style={{
-                position: 'absolute',
-                right: '10px',
-                top: '50%',
-                transform: 'translateY(-50%)',
+            {formData.courseCode ? `${formData.courseCode}` : 'Select Subject'}
+            <FaChevronDown
+            style={{
+              position: 'absolute',
+              right: '10px',
+              top: '50%',
+              transform: 'translateY(-50%)',
                      pointerEvents: 'none',
-              }}
-              />
-              </button>
+            }}
+            />
+            </button>
 
               {isDropdownOpen && (
                 <div
@@ -483,13 +534,13 @@ const StudentManagementTable = ({
                 {courses.length === 0 ? (
                   <p style={{ padding: '10px', color: '#999' }}>No courses available</p>
                 ) : (
-                  courses.map((course, index) => (
+                  courses.map((course) => (
                     <p
-                    key={index}
+                    key={course.course_code}
                     onClick={() => {
                       setFormData(prev => ({
                         ...prev,
-                        courseCode: course.code,
+                        courseCode: course.course_code,
                       }));
                       setIsDropdownOpen(false);
                     }}
@@ -497,12 +548,12 @@ const StudentManagementTable = ({
                       padding: '10px',
                       margin: 0,
                       cursor: 'pointer',
-                      backgroundColor: formData.courseCode === course.code ? '#f0f0f0' : '#fff',
-                      fontWeight: formData.courseCode === course.code ? 'bold' : 'normal',
+                      backgroundColor: formData.courseCode === course.course_code ? '#f0f0f0' : '#fff',
+                      fontWeight: formData.courseCode === course.course_code ? 'bold' : 'normal',
                       borderBottom: '1px solid #eee',
                     }}
                     >
-                    {course.title} - {course.code}
+                    {course.course_title} - {course.course_code}
                     </p>
                   ))
                 )}
@@ -562,6 +613,27 @@ const StudentManagementTable = ({
                 <option value="Dropped">Dropped</option>
               </select>
             </div>
+            <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', fontSize: '20px', color: '#383838' }}>
+            Candidate for Graduating:
+            </label>
+            <select
+            name="candidate_for_graduating"
+            value={formData.candidate_for_graduating}
+            onChange={handleGraduatingStatusChange}
+            style={{
+              width: '100%',
+              padding: '10px',
+              borderRadius: '5px',
+              border: '1px solid #333333',
+              backgroundColor: isGraduatingDisabled ? '#f0f0f0' : '#fff'
+            }}
+            disabled={isGraduatingDisabled}
+            >
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+            </select>
+            </div>
             <div style={{ marginBottom: "20px" }}>
             <label style={{ display: "block", fontSize: "20px", color: "#383838" }}>
             Reason for Dropping:
@@ -570,7 +642,7 @@ const StudentManagementTable = ({
             name="reason"
             value={formData.reason}
             onChange={handleInputChange}
-            placeholder="Reason for shift/dropping"
+            placeholder="Reason for dropping"
             disabled={formData.status === "Active"}
             style={{
               width: "100%",
@@ -580,7 +652,6 @@ const StudentManagementTable = ({
               border: "1px solid #333333",
             }}
             />
-            {/* ✅ Show error message if needed */}
             {error && (
               <p style={{ color: "red", marginTop: "5px", fontWeight: "bold" }}>
               {error}

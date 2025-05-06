@@ -19,6 +19,7 @@ class ClassLists extends Model
         'email', 'program', 'department', 'year_level', 'gender', 'status',
         'classification', 'reason_for_shift_or_drop', 'pronunciation',
         'grammar', 'fluency', 'epgf_average',
-        'proficiency_level', 'course_code'
+        'proficiency_level', 'course_code',
+        'candidate_for_graduating',
     ];
 }

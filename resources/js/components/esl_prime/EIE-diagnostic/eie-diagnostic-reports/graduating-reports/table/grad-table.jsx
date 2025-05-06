@@ -129,136 +129,135 @@ const Table = ({ department, attendance, schoolYear, searchQuery }) => {
 
             {/* Displaying Consistency */}
             <td>
-            {/* Display rating at the top with increased font size */}
-            {row.consistency_rating && <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{row.consistency_rating}</div>}
-
+            {row.consistency_rating && (
+                <div style={{ fontWeight: 'bold' }}>{row.consistency_rating}</div>
+            )}
             {row.consistency_descriptor && row.consistency_descriptor.split('-').map((part, index, arr) => (
-                <span key={index}>
+                <span key={index} style={{ fontSize: '12px' }}>
                 {part}
-                {index !== arr.length - 1 && <br />} {/* Add line break between parts */}
+                {index !== arr.length - 1 && <br />}
                 </span>
             ))}
             </td>
 
             {/* Displaying Clarity */}
             <td>
-            {/* Display rating at the top with increased font size */}
-            {row.clarity_rating && <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{row.clarity_rating}</div>}
-
+            {row.clarity_rating && (
+                <div style={{ fontWeight: 'bold' }}>{row.clarity_rating}</div>
+            )}
             {row.clarity_descriptor && row.clarity_descriptor.split('-').map((part, index, arr) => (
-                <span key={index}>
+                <span key={index} style={{ fontSize: '12px' }}>
                 {part}
-                {index !== arr.length - 1 && <br />} {/* Add line break between parts */}
+                {index !== arr.length - 1 && <br />}
                 </span>
             ))}
             </td>
 
             {/* Displaying Articulation */}
             <td>
-            {/* Display rating at the top with increased font size */}
-            {row.articulation_rating && <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{row.articulation_rating}</div>}
-
+            {row.articulation_rating && (
+                <div style={{ fontWeight: 'bold' }}>{row.articulation_rating}</div>
+            )}
             {row.articulation_descriptor && row.articulation_descriptor.split('-').map((part, index, arr) => (
-                <span key={index}>
+                <span key={index} style={{ fontSize: '12px' }}>
                 {part}
-                {index !== arr.length - 1 && <br />} {/* Add line break between parts */}
+                {index !== arr.length - 1 && <br />}
                 </span>
             ))}
             </td>
 
             {/* Displaying Intonation and Stress */}
             <td>
-            {/* Display rating at the top with increased font size */}
-            {row.intonation_and_stress_rating && <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{row.intonation_and_stress_rating}</div>}
-
+            {row.intonation_and_stress_rating && (
+                <div style={{ fontWeight: 'bold' }}>{row.intonation_and_stress_rating}</div>
+            )}
             {row.intonation_and_stress_descriptor && row.intonation_and_stress_descriptor.split('-').map((part, index, arr) => (
-                <span key={index}>
+                <span key={index} style={{ fontSize: '12px' }}>
                 {part}
-                {index !== arr.length - 1 && <br />} {/* Add line break between parts */}
+                {index !== arr.length - 1 && <br />}
                 </span>
             ))}
             </td>
 
             {/* Displaying Pronunciation Average */}
             <td>
-            {row.pronunciation_average || ''} {/* Display the average or empty if null */}
+            {row.pronunciation_average || ''}
             </td>
 
             {/* Displaying Accuracy */}
             <td>
-            {/* Display rating at the top with increased font size */}
-            {row.accuracy_rating && <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{row.accuracy_rating}</div>}
-
+            {row.accuracy_rating && (
+                <div style={{ fontWeight: 'bold' }}>{row.accuracy_rating}</div>
+            )}
             {row.accuracy_descriptor && row.accuracy_descriptor.split('-').map((part, index, arr) => (
-                <span key={index}>
+                <span key={index} style={{ fontSize: '12px' }}>
                 {part}
-                {index !== arr.length - 1 && <br />} {/* Add line break between parts */}
+                {index !== arr.length - 1 && <br />}
                 </span>
             ))}
             </td>
 
             {/* Displaying Clarity of Thought */}
             <td>
-            {/* Display rating at the top with increased font size */}
-            {row.clarity_of_thought_rating && <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{row.clarity_of_thought_rating}</div>}
-
+            {row.clarity_of_thought_rating && (
+                <div style={{ fontWeight: 'bold' }}>{row.clarity_of_thought_rating}</div>
+            )}
             {row.clarity_of_thought_descriptor && row.clarity_of_thought_descriptor.split('-').map((part, index, arr) => (
-                <span key={index}>
+                <span key={index} style={{ fontSize: '12px' }}>
                 {part}
-                {index !== arr.length - 1 && <br />} {/* Add line break between parts */}
+                {index !== arr.length - 1 && <br />}
                 </span>
             ))}
             </td>
 
             {/* Displaying Syntax */}
             <td>
-            {/* Display rating at the top with increased font size */}
-            {row.syntax_rating && <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{row.syntax_rating}</div>}
-
+            {row.syntax_rating && (
+                <div style={{ fontWeight: 'bold' }}>{row.syntax_rating}</div>
+            )}
             {row.syntax_descriptor && row.syntax_descriptor.split('-').map((part, index, arr) => (
-                <span key={index}>
+                <span key={index} style={{ fontSize: '12px' }}>
                 {part}
-                {index !== arr.length - 1 && <br />} {/* Add line break between parts */}
+                {index !== arr.length - 1 && <br />}
                 </span>
             ))}
             </td>
 
             {/* Displaying Grammar Average */}
             <td>
-            {row.grammar_average || ''} {/* Display the average or empty if null */}
+            {row.grammar_average || ''}
             </td>
 
             {/* Displaying Quality of Response */}
             <td>
-            {/* Display rating at the top with increased font size */}
-            {row.quality_of_response_rating && <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{row.quality_of_response_rating}</div>}
-
+            {row.quality_of_response_rating && (
+                <div style={{ fontWeight: 'bold' }}>{row.quality_of_response_rating}</div>
+            )}
             {row.quality_of_response_descriptor && row.quality_of_response_descriptor.split('-').map((part, index, arr) => (
-                <span key={index}>
+                <span key={index} style={{ fontSize: '12px' }}>
                 {part}
-                {index !== arr.length - 1 && <br />} {/* Add line break between parts */}
+                {index !== arr.length - 1 && <br />}
                 </span>
             ))}
             </td>
 
             {/* Displaying Detail of Response */}
             <td>
-            {/* Display rating at the top with increased font size */}
-            {row.detail_of_response_rating && <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{row.detail_of_response_rating}</div>}
-
+            {row.detail_of_response_rating && (
+                <div style={{ fontWeight: 'bold' }}>{row.detail_of_response_rating}</div>
+            )}
             {row.detail_of_response_descriptor && row.detail_of_response_descriptor.split('-').map((part, index, arr) => (
-                <span key={index}>
+                <span key={index} style={{ fontSize: '12px' }}>
                 {part}
-                {index !== arr.length - 1 && <br />} {/* Add line break between parts */}
+                {index !== arr.length - 1 && <br />}
                 </span>
             ))}
             </td>
 
             {/* Displaying Fluency Average */}
             <td>
-            {row.fluency_average || ''} {/* Display the average or empty if null */}
+            {row.fluency_average || ''}
             </td>
-
 
             <td>{row.average_pgf_rating}</td>
             <td>{row.pgf_specific_remarks}</td>

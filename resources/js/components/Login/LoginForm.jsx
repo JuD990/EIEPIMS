@@ -80,6 +80,7 @@ const LoginForm = () => {
 
         localStorage.setItem("authToken", token);
         localStorage.setItem("userRole", roleKey);
+        localStorage.setItem("userType", userType);
 
         if (roleKey === "student" && student_id) {
           localStorage.setItem("student_id", student_id);

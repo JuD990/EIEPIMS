@@ -1,0 +1,9 @@
+course_code,code,course_title,semester,year_level,program,department,employee_id,assigned_poc,email,enrolled_students
+IC101,101,Introduction to Criminology,1st Semester,1st Year,BSCRIM,CJE,EMP-004,David Johnson,davidjohnson@unc.edu.ph,10
+TechEng1,102,Technical Eng 1: Investigative Report Writing and Presentation,1st Semester,2nd Year,BSCRIM,CJE,EMP-004,David Johnson,davidjohnson@unc.edu.ph,11
+CF2,103,"Character Formation 2: Leadership, Decision-Making, Management, and Administration",1st Semester,3rd Year,BSCRIM,CJE,EMP-005,Eve Brown,evebrown@unc.edu.ph,12
+CP1,104,CP 1 Practicum 1/Internship,1st Semester,4th Year,BSCRIM,CJE,EMP-005,Eve Brown,evebrown@unc.edu.ph,13
+LE105,105,Law Enforcement Org and Admin - LEA121K,2nd Semester,1st Year,BSCRIM,CJE,EMP-006,Frank Miller,frankmiller@unc.edu.ph,14
+TechEng2,106,Tech Eng 2 (Legal Forms) - CDI227K,2nd Semester,2nd Year,BSCRIM,CJE,EMP-006,Frank Miller,frankmiller@unc.edu.ph,15
+NIC107,107,Non-Institutional Corrections - CA322K,2nd Semester,3rd Year,BSCRIM,CJE,EMP-004,David Johnson,davidjohnson@unc.edu.ph,16
+PEP108,108,Professional Employment Program - PEPCJ,2nd Semester,4th Year,BSCRIM,CJE,,,,17

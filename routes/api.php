@@ -18,6 +18,8 @@ Route::get('/reports/first-year-diagnostic-report', [EieDiagnosticReportControll
 Route::get('/reports/fourth-year-diagnostic-report', [EieDiagnosticReportController::class, 'getFourthYearReports']);
 
 Route::post('/eie-diagnostic-reports', [EieDiagnosticReportController::class, 'store']);
+Route::get('esl/employee/{employee_id}', [EieDiagnosticReportController::class, 'getFullName']);
+
 
 Route::post('/eie-reports/store-or-update', [EieReportController::class, 'storeOrUpdatePrograms']);
 Route::get('/dashboard-report', [EieReportController::class, 'getDashboardReport']);
@@ -133,7 +135,7 @@ Route::get('/class-lists', [ClassListController::class, 'fetchMonthlyChamps']);
 Route::get('/get-courses-by-department', [ClassListController::class, 'getCoursesByDepartment']);
 Route::get('/get-courses-by-department-poc', [ClassListController::class, 'getCoursesPOC']);
 Route::get('/get-courses-by-department-student', [ClassListController::class, 'getCoursesByDepartmentStudent']);
-
+Route::get('/student-statistics', [ClassListController::class, 'getStudentStatistics']);
 
 // ImplementingSubject routes
 Route::get('/implementing-subject/{employee_id}', [ImplementingSubjectController::class, 'getClassData']);
@@ -170,14 +172,16 @@ Route::get('/filtered-pocs', [CollegePOCController::class, 'getFilteredPocs'])->
 Route::get('/college-pocs', [CollegePOCController::class, 'getPocs']);
 Route::get('/lead-pocs', [CollegePOCController::class, 'getLeadPOCs']);
 Route::get('/eie-head-pocs', [CollegePOCController::class, 'getEIEHeads']);
+Route::get('/filtered-pocs-department', [CollegePOCController::class, 'getFilteredDepartmentPOCs']);
 
 // MasterClassList routes
 Route::post('/import-master-class-list', [MasterClassListController::class, 'import']);
-Route::get('/master-class-list', [MasterClassListController::class, 'index']);
+Route::get('/master-class-list-department/{employee_id}', [MasterClassListController::class, 'index']);
 Route::get('/master-class-list-students', [MasterClassListController::class, 'getStudents']);
 Route::get('/master-class-list-department', [MasterClassListController::class, 'getDepartments']);
 Route::get('/master-class-list-school-year', [MasterClassListController::class, 'getSchoolYears']);
 Route::put('/master-class-list/{id}', [MasterClassListController::class, 'updateMasterClassList']);
+Route::put('/update-grad-candidate/{id}', [MasterClassListController::class, 'updateCandidate']);
 
 // Authentication routes
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');

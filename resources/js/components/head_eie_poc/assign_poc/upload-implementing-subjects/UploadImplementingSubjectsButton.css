@@ -1,0 +1,53 @@
+.upload-buttons-container {
+  display: flex;
+  justify-content: flex-end; /* Aligns elements to the right */
+  align-items: center; /* Vertically aligns elements to the center */
+  gap: 15px; /* Adds space between the elements */
+  margin-right: 55px; /* Optional: Adjusts the margin on the right */
+  white-space: nowrap;
+}
+
+
+.implementing-subjects-upload-button,
+.class-list-upload-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 45px;
+  background-color: #0187F1;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  color: #FFFFFF;
+}
+
+.implementing-subjects-upload-button:hover,
+.class-list-upload-button:hover {
+  background-color: #016AC1;
+}
+
+.upload-icon {
+  width: 38px;
+  height: 34px;
+}
+
+.upload-label {
+  color: #FFFFFF;
+  font-size: 16px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  margin-right: 10px;
+  font-style: normal;
+}
+
+.class-list-upload-button {
+  background-color: #6B6D76; /* Different color for Class List button */
+}
+
+.class-list-upload-button:hover {
+  background-color: #6B6D76; /* Darker hover color for Class List button */
+}
+

@@ -469,7 +469,7 @@ const StudentManagementTable = ({
       name="reason"
       value={formData.reason}
       onChange={handleInputChange}
-      placeholder="Reason for shift/dropping"
+      placeholder="Reason for dropping"
       disabled={formData.status === "Active"}
       style={{
         width: "100%",

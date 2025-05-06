@@ -1,0 +1,64 @@
+.esl-monthly-champ-dropdown-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: 360px;
+  margin-right: auto;
+  white-space: nowrap;
+}
+
+.esl-monthly-champ-dropdown-wrapper {
+  position: relative;
+}
+
+.esl-monthly-champ-dropdown-btn {
+  padding: 10px 20px;
+  background-color: #FBF7F7;
+  color: black;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 200px;
+  height: 50px;
+}
+
+.esl-monthly-champ-dropdown-btn .esl-monthly-champ-dropdown-arrow {
+  margin-left: auto;
+}
+
+.esl-monthly-champ-dropdown-menu {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  border-radius: 5px;
+  width: 100%;
+  max-height: 200px;         /* 👈 Set the height */
+  overflow-y: auto;          /* 👈 Enable scrolling */
+}
+
+.esl-monthly-champ-dropdown-item {
+  margin: 0;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.esl-monthly-champ-dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+.esl-monthly-champ-dropdown-item.esl-monthly-champ-selected {
+  font-weight: bold;
+  background-color: #e0e0e0;
+}

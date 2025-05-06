@@ -6,6 +6,7 @@ use App\Models\EieDiagnosticReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\MasterClassList;
+use App\Models\ESLadmins;
 use Carbon\Carbon;
 
 class EieDiagnosticReportController extends Controller
@@ -141,5 +142,22 @@ class EieDiagnosticReportController extends Controller
             \Log::error('Error fetching reports:', ['message' => $e->getMessage()]);
             return response()->json(['error' => 'Server error.'], 500);
         }
+    }
+
+    public function getFullName($employee_id)
+    {
+        // Look for the employee based on employee_id, not the primary key
+        $employee = ESLadmins::where('employee_id', $employee_id)->first();
+
+        if (!$employee) {
+            return response()->json(['error' => 'Employee not found'], 404);
+        }
+
+        // Concatenate first name, middle name (if any), and last name
+        $full_name = $employee->firstname . ' ' . ($employee->middlename ? $employee->middlename . ' ' : '') . $employee->lastname;
+
+        return response()->json([
+            'full_name' => $full_name
+        ]);
     }
 }

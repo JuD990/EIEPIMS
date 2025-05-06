@@ -3,6 +3,7 @@ import axios from "axios";
 import "./UploadImplementingSubjectsButton.css";
 import uploadLogo from "@assets/Upload.png";
 import archiveLogo from "@assets/Archive.png";
+import questionMark from "@assets/question-mark.png";
 
 const UploadingButton = ({ onArchiveClick }) => {
   const subjectFileInputRef = useRef(null);
@@ -47,7 +48,7 @@ const UploadingButton = ({ onArchiveClick }) => {
 
   return (
     <div className="esl-upload-buttons-container">
-    {/* Upload Button (unchanged) */}
+
     <button onClick={handleSubjectButtonClick} className="esl-implementing-subjects-upload-button">
     {subjectLoading ? (
       <span>Uploading...</span>
@@ -58,6 +59,24 @@ const UploadingButton = ({ onArchiveClick }) => {
       </>
     )}
     </button>
+
+    <div className="tooltip-container">
+    <img
+    style={{ width: '30px', height: '30px', marginRight: '60px' }}
+    src={questionMark}
+    alt="questionMark Icon"
+    className="questionMark-icon"
+    />
+    <span className="tooltip-text">
+    <ul className="tooltip-list">
+    <li className="tooltip-title">Upload Batch Subjects when:</li>
+    <li className="tooltip-sub-title">• Adding a batch of subjects.</li>
+    <li className="tooltip-sub-title">• Updating a batch of subjects.</li>
+    <li className="tooltip-sub-title">• Removing a batch of subjects.</li>
+    </ul>
+    </span>
+    </div>
+
     <input
     type="file"
     accept=".csv, .xlsx, .xls"

@@ -15,6 +15,8 @@ import EIEHeadReporting from "../js/components/head_eie_poc/eie-head-eie-reporti
 import MasterClassList from "../js/components/head_eie_poc/master-class-list/master-class-list";
 import ImplementingSubjects from "../js/components/head_eie_poc/implementing-subjects/implementing-subjects";
 import EIEHeadStudentManagement from "../js/components/head_eie_poc/eie-head-student-management/eie-head-student-management";
+import EIEHeadGraduatingList from "../js/components/head_eie_poc/graduating-list/graduating-list";
+import EIEHeadAssignPOC from "../js/components/head_eie_poc/assign_poc/assign_poc";
 
 // Lead POC
 import LeadEiePocDashboard from "../js/components/lead_eie_poc/LeadEiePocDashboard";
@@ -37,9 +39,12 @@ import EslInterviewScorecard from "../js/components/esl_prime/EIE-diagnostic/esl
 import EslDiagnosticReports from "../js/components/esl_prime/EIE-diagnostic/eie-diagnostic-reports/eie-diagnostic-reports";
 import EslImplementingSubjects from "../js/components/esl_prime/EIE-management/implementing-subjects/implementing-subjects";
 import EslPrimeAccountManagement from "../js/components/esl_prime/EIE-management/accounts/esl-prime-account-management";
+import EslAssignPOC from "../js/components/esl_prime/EIE-management/assign_poc/assign_poc";
 
 // Unauthorized Page
 const Unauthorized = () => <h1>403 - Unauthorized Access</h1>;
+
+const eslPrimeAccessRoles = ['esl_prime', 'esl_champion'];
 
 // PrivateRoute
 import PrivateRoute from "../js/components/routes/PrivateRoute";
@@ -63,18 +68,20 @@ const App = () => {
     <Route path="/college-poc-student-management" element={<PrivateRoute roles={['college_poc']}><CollegePocStudentManagement /></PrivateRoute>} />
 
     {/* ESL Champion */}
-    <Route path="/esl-champion-dashboard" element={<PrivateRoute roles={['esl_champion']}><EslChampionDashboard /></PrivateRoute>} />
+    <Route path="/esl-champion-dashboard" element={<PrivateRoute roles={eslPrimeAccessRoles}><EslChampionDashboard /></PrivateRoute>} />
 
     {/* ESL Prime */}
-    <Route path="/esl-prime-dashboard" element={<PrivateRoute roles={['esl_prime']}><EslPrimeDashboard /></PrivateRoute>} />
-    <Route path="/esl-eie-reporting" element={<PrivateRoute roles={['esl_prime']}><EslPrimeEieReporting /></PrivateRoute>} />
-    <Route path="/esl-diagnostic-reports" element={<PrivateRoute roles={['esl_prime']}><EslDiagnosticReports /></PrivateRoute>} />
-    <Route path="/esl-interview-scorecard" element={<PrivateRoute roles={['esl_prime']}><EslInterviewScorecard /></PrivateRoute>} />
-    <Route path="/esl-epgf-versioning" element={<PrivateRoute roles={['esl_prime']}><ElPrimeEPGFRubricVersion /></PrivateRoute>} />
-    <Route path="/esl-certification" element={<PrivateRoute roles={['esl_prime']}><EslCertification /></PrivateRoute>} />
-    <Route path="/esl-template" element={<PrivateRoute roles={['esl_prime']}><EslTemplate /></PrivateRoute>} />
-    <Route path="/esl-account-management" element={<PrivateRoute roles={['esl_prime']}><EslPrimeAccountManagement /></PrivateRoute>} />
-    <Route path="/esl-implementing-subjects" element={<PrivateRoute roles={['esl_prime']}><EslImplementingSubjects /></PrivateRoute>} />
+    <Route path="/esl-prime-dashboard" element={<PrivateRoute roles={eslPrimeAccessRoles}><EslPrimeDashboard /></PrivateRoute>} />
+    <Route path="/esl-eie-reporting" element={<PrivateRoute roles={eslPrimeAccessRoles}><EslPrimeEieReporting /></PrivateRoute>} />
+    <Route path="/esl-diagnostic-reports" element={<PrivateRoute roles={eslPrimeAccessRoles}><EslDiagnosticReports /></PrivateRoute>} />
+    <Route path="/esl-interview-scorecard" element={<PrivateRoute roles={eslPrimeAccessRoles}><EslInterviewScorecard /></PrivateRoute>} />
+    <Route path="/esl-epgf-versioning" element={<PrivateRoute roles={eslPrimeAccessRoles}><ElPrimeEPGFRubricVersion /></PrivateRoute>} />
+    <Route path="/esl-certification" element={<PrivateRoute roles={eslPrimeAccessRoles}><EslCertification /></PrivateRoute>} />
+    <Route path="/esl-template" element={<PrivateRoute roles={eslPrimeAccessRoles}><EslTemplate /></PrivateRoute>} />
+    <Route path="/esl-account-management" element={<PrivateRoute roles={eslPrimeAccessRoles}><EslPrimeAccountManagement /></PrivateRoute>} />
+    <Route path="/esl-implementing-subjects" element={<PrivateRoute roles={eslPrimeAccessRoles}><EslImplementingSubjects /></PrivateRoute>} />
+    <Route path="/esl-assign-poc" element={<PrivateRoute roles={eslPrimeAccessRoles}><EslAssignPOC /></PrivateRoute>} />
+
 
     {/* EIE Head POC */}
     <Route path="/eie-head-poc-dashboard" element={<PrivateRoute roles={['eie_head_poc']}><HeadEiePocDashboard /></PrivateRoute>} />
@@ -82,6 +89,8 @@ const App = () => {
     <Route path="/eie-head-student-management" element={<PrivateRoute roles={['eie_head_poc']}><EIEHeadStudentManagement /></PrivateRoute>} />
     <Route path="/eie-head-master-class-list" element={<PrivateRoute roles={['eie_head_poc']}><MasterClassList /></PrivateRoute>} />
     <Route path="/implementing-subjects" element={<PrivateRoute roles={['eie_head_poc']}><ImplementingSubjects /></PrivateRoute>} />
+    <Route path="/eie-head-graduating-list" element={<PrivateRoute roles={['eie_head_poc']}><EIEHeadGraduatingList /></PrivateRoute>} />
+    <Route path="/eie-head-assign-poc" element={<PrivateRoute roles={['eie_head_poc']}><EIEHeadAssignPOC /></PrivateRoute>} />
 
     {/* Lead POC */}
     <Route path="/lead-eie-poc-dashboard" element={<PrivateRoute roles={['lead_eie_poc']}><LeadEiePocDashboard /></PrivateRoute>} />

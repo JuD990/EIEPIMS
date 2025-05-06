@@ -31,6 +31,7 @@ return new class extends Migration
             $table->decimal('epgf_average', 5, 2)->nullable();
             $table->string('proficiency_level', 50)->nullable();
             $table->string('course_code')->nullable();
+            $table->string('candidate_for_graduating')->default("No");
             $table->timestamps();
         });
     }    

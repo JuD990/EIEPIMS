@@ -20,10 +20,11 @@ IP203,118,Intermediate Programming 2,2nd Semester,1st Year,BSIT,SCIS,,,,9
 DBM301,119,Database Management (Info Mgt) / ACT PEP,2nd Semester,2nd Year,ACT,SCIS,,,,5
 IRS102,120,Information Resources and Services II,2nd Semester,2nd Year,BLIS,SCIS,,,,4
 DBM302,121,Database Management (Info Mgt) 1,2nd Semester,2nd Year,BSCS,SCIS,,,,6
-DBM303,122,Database Management (Info Mgt) 2,2nd Semester,2nd Year,BSIT,SCIS,,,,9
-IA102,123,Indexing and Abstracting II,2nd Semester,3rd Year,BLIS,SCIS,,,,6
-PNCSIT101,124,"Presentation, Negotiation, and Consulting Skills in IT 1",2nd Semester,3rd Year,BSCS,SCIS,,,,9
-PNCSIT102,125,"Presentation, Negotiation, and Consulting Skills in IT 2",2nd Semester,3rd Year,BSIT,SCIS,,,,3
-TECH101,126,TECHPEP 1,2nd Semester,4th Year,BLIS,SCIS,,,,6
-TECH102,127,TECHPEP 2,2nd Semester,4th Year,BSCS,SCIS,,,,8
-TECH103,128,TECHPEP 3,2nd Semester,4th Year,BSIT,SCIS,,,,7
+IC101,101,Introduction to Criminology,1st Semester,1st Year,BSCRIM,CJE,EMP-004,David Johnson,davidjohnson@unc.edu.ph,10
+TechEng1,102,Technical Eng 1: Investigative Report Writing and Presentation,1st Semester,2nd Year,BSCRIM,CJE,EMP-004,David Johnson,davidjohnson@unc.edu.ph,11
+CF2,103,"Character Formation 2: Leadership, Decision-Making, Management, and Administration",1st Semester,3rd Year,BSCRIM,CJE,EMP-005,Eve Brown,evebrown@unc.edu.ph,12
+CP1,104,CP 1 Practicum 1/Internship,1st Semester,4th Year,BSCRIM,CJE,EMP-005,Eve Brown,evebrown@unc.edu.ph,13
+LE105,105,Law Enforcement Org and Admin - LEA121K,2nd Semester,1st Year,BSCRIM,CJE,EMP-006,Frank Miller,frankmiller@unc.edu.ph,14
+TechEng2,106,Tech Eng 2 (Legal Forms) - CDI227K,2nd Semester,2nd Year,BSCRIM,CJE,EMP-006,Frank Miller,frankmiller@unc.edu.ph,15
+NIC107,107,Non-Institutional Corrections - CA322K,2nd Semester,3rd Year,BSCRIM,CJE,EMP-004,David Johnson,davidjohnson@unc.edu.ph,16
+PEP108,108,Professional Employment Program - PEPCJ,2nd Semester,4th Year,BSCRIM,CJE,,,,17

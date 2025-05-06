@@ -1,67 +1,88 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import EIEHeadSidebar from '../sidebar/eie-head-sidebar';
 import UserInfo from '@user-info/User-info';
-import StudentManagementDropdown from './dropdown-button/student-management-dropdown';
-import StudentManagementTable from './student-management-table/student-management-table';
+import "./student-management.css";
 
 const EIEHeadStudentManagement = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTitle, setSelectedTitle] = useState(null);
-  const [selectedCode, setSelectedCode] = useState(null);
+  const [stats, setStats] = useState({
+    total_students: 0,
+    active_students: 0,
+    active_percentage: 0,
+    graduating_students: 0
+  });
 
-  // Handle title and code selection change
-  const handleTitleChange = (title) => {
-    setSelectedTitle(title);
-  };
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const employeeId = localStorage.getItem("employee_id");
+        const response = await axios.get(`http://127.0.0.1:8000/api/student-statistics?employee_id=${employeeId}`);
+        setStats(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Failed to fetch student statistics:", error);
+      }
+    };
 
-  const handleCodeChange = (code) => {
-    setSelectedCode(code);
-  };
+    fetchStats();
+  }, []);
+
+  const summaryItems = [
+    {
+      label: "Total Number of Enrolled Students",
+      value: stats.total_students,
+      description: "Currently enrolled this semester",
+    },
+    {
+      label: "Total Number of Active Students",
+      value: stats.active_students,
+      description: "Actively attending classes",
+    },
+    {
+      label: (
+        <>
+        Overall
+        <br /><br />
+        </>
+      ),
+      value: (
+        <>
+        {stats.active_percentage}%
+        <br />
+        </>
+      ),
+      description: (
+        <>
+        Active & Enrolled Students %
+        <br />
+        </>
+      ),
+    },
+    {
+      label: "Number of Graduating Students",
+      value: stats.graduating_students,
+      description: "Eligible for graduation",
+    },
+  ];
 
   return (
     <div>
     <EIEHeadSidebar />
     <UserInfo />
     <br /><br /><br /><br />
-    <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '350px', color: '#383838' }}>
-    Student Management
-    </h1>
+    <h1 className="student-management-title">Student Management</h1>
+    <br /><br /><br />
+    <h1 className="student-summary-title">Summary of Students</h1>
 
-    <div style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      margin: '20px 35px',
-      width: '100%',
-    }}>
-    <StudentManagementDropdown
-    selectedTitle={selectedTitle}
-    onTitleChange={handleTitleChange}
-    selectedCode={selectedCode}
-    onCodeChange={handleCodeChange}
-    />
-    <input
-    type="text"
-    value={searchQuery}
-    onChange={(e) => setSearchQuery(e.target.value)}
-    placeholder="Search"
-    style={{
-      width: '476px',
-      height: '60px',
-      borderRadius: '8px',
-      borderColor: '#333333',
-      fontSize: '16px',
-      marginRight: '70px'
-    }}
-    />
+    <div className="student-summary-boxes">
+    {summaryItems.map((item, index) => (
+      <div key={index} className="student-summary-box">
+      <span className="student-summary-label">{item.label}</span>
+      <span className="student-summary-value">{item.value}</span>
+      <span className="student-summary-description">{item.description}</span>
+      </div>
+    ))}
     </div>
-
-    <StudentManagementTable
-    searchQuery={searchQuery}
-    selectedTitle={selectedTitle}
-    selectedCode={selectedCode}
-    />
-    <br />
     </div>
   );
 };

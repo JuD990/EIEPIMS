@@ -1,0 +1,22 @@
+course_code,code,course_title,semester,year_level,program,department,employee_id,assigned_poc,email,enrolled_students
+PC101,101,Purposive Communication 1,1st Semester,1st Year,ACT,SCIS,,,,4
+LIS101,102,Introduction to LIS,1st Semester,1st Year,BLIS,SCIS,,,,3
+PC102,103,Purposive Communication 2,1st Semester,1st Year,BSCS,SCIS,,,,6
+PC103,104,Purposive Communication 3,1st Semester,1st Year,BSIT,SCIS,,,,8
+SIP101,105,Social Issues and Professional Practice 1,1st Semester,2nd Year,ACT,SCIS,,,,5
+IRS101,106,Information Resources and Services 1,1st Semester,2nd Year,BLIS,SCIS,,,,2
+SIP102,107,Social Issues and Professional Practice 2,1st Semester,2nd Year,BSCS,SCIS,,,,11
+SIP103,108,Social Issues and Professional Practice 3,1st Semester,2nd Year,BSIT,SCIS,,,,9
+IA101,109,Indexing and Abstracting,1st Semester,3rd Year,BLIS,SCIS,,,,3
+QM201,110,Quantitative Methods incl. Sim & Mod,1st Semester,3rd Year,BSCS,SCIS,,,,5
+QM202,111,Quantitative Methods,1st Semester,3rd Year,BSIT,SCIS,,,,5
+RMLIS301,112,Research Methods in LIS,1st Semester,4th Year,BLIS,SCIS,,,,5
+SP401,113,Senior Project,1st Semester,4th Year,BSCS,SCIS,,,,4
+CAP402,114,Capstone,1st Semester,4th Year,BSIT,SCIS,,,,10
+IP201,115,Intermediate Programming,2nd Semester,1st Year,ACT,SCIS,,,,10
+CMIR202,116,Collection Management of Information Resources,2nd Semester,1st Year,BLIS,SCIS,,,,8
+IP202,117,Intermediate Programming 1,2nd Semester,1st Year,BSCS,SCIS,,,,4
+IP203,118,Intermediate Programming 2,2nd Semester,1st Year,BSIT,SCIS,,,,9
+DBM301,119,Database Management (Info Mgt) / ACT PEP,2nd Semester,2nd Year,ACT,SCIS,,,,5
+IRS102,120,Information Resources and Services II,2nd Semester,2nd Year,BLIS,SCIS,,,,4
+DBM302,121,Database Management (Info Mgt) 1,2nd Semester,2nd Year,BSCS,SCIS,,,,6

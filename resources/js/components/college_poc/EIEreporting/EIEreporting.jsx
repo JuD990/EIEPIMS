@@ -21,7 +21,9 @@ const EIEreporting = () => {
     <CollegePOCsidebar />
     <UserInfo />
     <br /><br /><br /><br /><br />
-    <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#383838' }}>EIE Reporting - {selectedSemester}/{selectedDepartment}-{selectedSchoolYear}</h1>
+    <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#383838' }}>
+    EIE Report - {selectedSemester}, {selectedDepartment} {selectedSchoolYear.replace('/', '-')}
+    </h1>
     <ReportingDropdown
     setSelectedDepartment={setSelectedDepartment}
     setSelectedSchoolYear={setSelectedSchoolYear}
