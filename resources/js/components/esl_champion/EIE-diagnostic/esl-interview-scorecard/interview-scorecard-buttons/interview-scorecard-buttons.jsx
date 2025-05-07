@@ -28,16 +28,48 @@ const InterviewScorecardButtons = ({
         time: currentTime,
     });
 
+    useEffect(() => {
+        const employeeId = localStorage.getItem("employee_id");
+
+        if (employeeId) {
+            axios.get(`/api/esl/employee/${employeeId}`)
+            .then((response) => {
+                if (response.data.full_name) {
+                    setFormData((prev) => ({
+                        ...prev,
+                        interviewer: response.data.full_name
+                    }));
+                }
+            })
+            .catch((error) => {
+                console.error("Failed to fetch interviewer:", error);
+            });
+        }
+    }, []);
+
     const filteredStudents = students.filter((student) => {
         const fullName = `${student.firstname} ${student.middlename || ""} ${student.lastname}`.toLowerCase();
         return fullName.includes(nameSearch.toLowerCase());
     });
 
-    const handleStudentSelect = (name) => {
-        setFormData((prev) => ({ ...prev, name }));
+    const handleStudentSelect = (fullName) => {
+        const selectedStudent = students.find(student =>
+        `${student.firstname} ${student.middlename || ""} ${student.lastname}`.trim() === fullName
+        );
+
+        if (selectedStudent) {
+            setFormData(prev => ({
+                ...prev,
+                name: fullName,
+                student_id: selectedStudent.student_id,
+                program: selectedStudent.program,
+                year_level: selectedStudent.year_level,
+            }));
+        }
         setIsDropdownOpen(false);
         setNameSearch("");
     };
+
 
     useEffect(() => {
         const fetchStudents = async () => {
@@ -50,6 +82,7 @@ const InterviewScorecardButtons = ({
                         }
                     });
                     const studentsList = response.data;  // Array of students returned from backend
+                    console.log(studentsList);
                     setStudents(studentsList);  // Update the students state
                 } catch (error) {
                     console.error("Error fetching students:", error);
@@ -100,6 +133,8 @@ const InterviewScorecardButtons = ({
         );
 
         if (selectedStudent) {
+            console.log("Selected Student Object:", selectedStudent);  // Log the selected student object
+
             setFormData((prev) => {
                 const updatedFormData = {
                     ...prev,
@@ -108,8 +143,11 @@ const InterviewScorecardButtons = ({
                     program: selectedStudent.program,
                     year_level: selectedStudent.year_level,
                 };
+                console.log("Updated Form Data:", updatedFormData);  // Log the updated form data
                 return updatedFormData;
             });
+        } else {
+            console.log("No student found with the selected name.");
         }
     };
 
@@ -191,8 +229,11 @@ const InterviewScorecardButtons = ({
                     show_status: 'Showed Up', // Default value for show_status
                 };
 
+                console.log('Data to be sent to backend:', collectedData);
+
                 try {
                     const response = await axios.post('/api/eie-diagnostic-reports', collectedData);
+                    console.log('Saved:', response.data);
                     alert("Data has been successfully saved!");  // Success alert
                 } catch (error) {
                     console.error('Error saving:', error.response?.data || error);
@@ -230,6 +271,7 @@ const InterviewScorecardButtons = ({
 
         try {
             const response = await axios.post('/api/eie-diagnostic-reports', collectedData);
+            console.log('No Show tagged:', response.data);
             alert("No Show has been successfully tagged!");  // Add success alert here
         } catch (error) {
             console.error('Error tagging No Show:', error.response?.data || error);
@@ -237,6 +279,27 @@ const InterviewScorecardButtons = ({
         }
     };
 
+    const getCEFRLevel = (overallAverage) => {
+        if (overallAverage >= 1.00 && overallAverage < 1.50) {
+            return { level: "A1", category: "BEGINNER" };
+        } else if (overallAverage >= 1.50 && overallAverage < 2.00) {
+            return { level: "A2", category: "ELEMENTARY" };
+        } else if (overallAverage >= 2.00 && overallAverage < 2.50) {
+            return { level: "B1", category: "INTERMEDIATE" };
+        } else if (overallAverage >= 2.50 && overallAverage < 3.00) {
+            return { level: "B2", category: "UPPER INTERMEDIATE" };
+        } else if (overallAverage >= 3.00 && overallAverage < 4.00) {
+            return { level: "C1", category: "PROFICIENT" };
+        } else if (overallAverage >= 4.00) {
+            return { level: "C2", category: "ADVANCED / Native" };
+        } else {
+            return { level: "A1", category: "BEGINNER" };
+        }
+    };
+
+
+
+    const cefr = getCEFRLevel(overallAverage);
 
     return (
         <div>
@@ -255,7 +318,7 @@ const InterviewScorecardButtons = ({
         {isDropdownOpen && (
             <div className="custom-dropdown-menu">
             <input
-            type="text"
+            type=""
             className="custom-dropdown-search"
             placeholder="Search name..."
             value={nameSearch}
@@ -284,31 +347,39 @@ const InterviewScorecardButtons = ({
         </div>
         </div>
 
-        {/* Interviewer Input */}
-        <div className="esl-interview-scorecard-form-interviewer">
-        <label>Interviewer:</label>
-        <input
-        type="text"
-        placeholder="Enter interviewer's name"
-        className="esl-interview-scorecard-input"
-        name="interviewer"
-        value={formData.interviewer}
-        onChange={handleInputChange}
-        />
-        </div>
-
-        {/* Venue Input */}
+        {/* Venue Dropdown */}
         <div className="esl-interview-scorecard-form-venue">
         <label>Venue:</label>
-        <input
-        type="text"
-        placeholder="Enter venue"
+        <select
         className="esl-interview-scorecard-input"
         name="venue"
         value={formData.venue}
         onChange={handleInputChange}
+        >
+        <option value="Online">Online</option>
+        <option value="Mobile">Mobile</option>
+        <option value="F2F">F2F</option>
+        </select>
+        </div>
+
+
+        {/* Time */}
+        <div className="esl-interview-scorecard-form-time">
+        <label>Time:</label>
+        <div className="esl-interview-scorecard-input-icon-time">
+        <input
+        type="time"
+        className="esl-interview-scorecard-input"
+        value={formData.time}
+        readOnly
+        />
+        <FontAwesomeIcon
+        icon={faClock}
+        className="esl-interview-scorecard-icon"
         />
         </div>
+        </div>
+
         </div>
 
         {/* Second Column */}
@@ -361,23 +432,6 @@ const InterviewScorecardButtons = ({
         />
         </div>
         </div>
-
-        {/* Time */}
-        <div className="esl-interview-scorecard-form-time">
-        <label>Time:</label>
-        <div className="esl-interview-scorecard-input-icon">
-        <input
-        type="time"
-        className="esl-interview-scorecard-input"
-        value={formData.time}
-        readOnly
-        />
-        <FontAwesomeIcon
-        icon={faClock}
-        className="esl-interview-scorecard-icon"
-        />
-        </div>
-        </div>
         </div>
 
         {/* Buttons Row */}
@@ -395,6 +449,10 @@ const InterviewScorecardButtons = ({
         {/* Average Rating */}
         <div className="esl-average-rating-box">
         <label>Average Rating: {overallAverage}</label>
+        </div>
+        {/* CEFR Level */}
+        <div className="esl-cefr-rating-box">
+        <label>CEFR: {cefr.level} - {cefr.category}</label>
         </div>
         </div>
         </div>

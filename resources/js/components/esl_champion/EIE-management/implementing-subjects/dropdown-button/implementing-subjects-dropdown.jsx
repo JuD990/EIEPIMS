@@ -19,6 +19,15 @@ const ImplementingSubjectDropdown = ({
   const [yearLevels, setYearLevels] = useState([]);
   const [semesters, setSemesters] = useState([]);
 
+  useEffect(() => {
+    if (!selectedSemester) {
+      const currentMonth = new Date().getMonth() + 1; // getMonth is 0-indexed
+      const defaultSemester = (currentMonth >= 8 && currentMonth <= 12) ? "1st Semester" : "2nd Semester";
+      setSelectedSemester(defaultSemester);
+    }
+  }, [selectedSemester, setSelectedSemester]);
+
+
   // Fetch data from the backend when the component mounts
   useEffect(() => {
     const fetchData = async () => {

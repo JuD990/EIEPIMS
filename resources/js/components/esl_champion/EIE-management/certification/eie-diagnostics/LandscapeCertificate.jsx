@@ -203,6 +203,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#E64046',
         color: 'white',
     },
+    removeBorderBottom: {
+        borderBottomWidth: 0
+    },
+    addBorderTop:{
+        borderTopWidth: 1
+    },
 });
 
 
@@ -380,10 +386,8 @@ const LandscapeCertificate = ({
 
         {/* Data Rows */}
         <View style={styles.assessmentTableRow}>
-        <View style={[styles.assessmentTableCol, styles.colCriteriaAspect]}>
-        <Text style={styles.assessmentTableCell}>
-            <Text style={styles.boldText}>Pronunciation</Text>
-        </Text>
+        <View style={[styles.assessmentTableCol, styles.removeBorderBottom, styles.colCriteriaAspect]}>
+        <Text style={styles.assessmentTableCell}></Text>
         </View>
         <View style={[styles.assessmentTableCol, styles.colCriteriaDetails]}>
         <Text style={styles.assessmentTableCell}>Consistency</Text>
@@ -394,23 +398,17 @@ const LandscapeCertificate = ({
         <View style={[styles.assessmentTableCol, styles.colDescriptor]}>
         <Text style={styles.assessmentTableCell}>{pronunciationData.consistency_descriptor}</Text>
         </View>
-        <View style={[styles.assessmentTableCol, styles.colAverageRating]}>
+        <View style={[styles.assessmentTableCol, styles.removeBorderBottom, styles.colAverageRating]}>
         <Text style={styles.assessmentTableCell}>
-        {typeof pronunciation_average === 'number' ? pronunciation_average.toFixed(2) : pronunciation_average}
         </Text>
         </View>
-        <View style={[styles.assessmentTableCol, styles.colProficiency]}>
-        <Text style={styles.assessmentTableCell}>
-        {pronunciationLevel
-            .split(' ') // Split by spaces
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-            .join(' ')}
-            </Text>
+        <View style={[styles.assessmentTableCol, styles.removeBorderBottom, styles.colProficiency]}>
+        <Text style={styles.assessmentTableCell}></Text>
         </View>
         </View>
 
         <View style={styles.assessmentTableRow}>
-        <View style={[styles.assessmentTableCol, styles.colCriteriaAspect]}>
+        <View style={[styles.assessmentTableCol, styles.removeBorderBottom, styles.colCriteriaAspect]}>
         <Text style={styles.assessmentTableCell}></Text>
         </View>
         <View style={[styles.assessmentTableCol, styles.colCriteriaDetails]}>
@@ -422,17 +420,20 @@ const LandscapeCertificate = ({
         <View style={[styles.assessmentTableCol, styles.colDescriptor]}>
         <Text style={styles.assessmentTableCell}>{pronunciationData.clarity_descriptor}</Text>
         </View>
-        <View style={[styles.assessmentTableCol, styles.colAverageRating]}>
-        <Text style={styles.assessmentTableCell}></Text>
+        <View style={[styles.assessmentTableCol, styles.removeBorderBottom, styles.colAverageRating]}>
+        <Text style={styles.assessmentTableCell}>
+        </Text>
         </View>
-        <View style={[styles.assessmentTableCol, styles.colProficiency]}>
+        <View style={[styles.assessmentTableCol, styles.removeBorderBottom, styles.colProficiency]}>
         <Text style={styles.assessmentTableCell}></Text>
         </View>
         </View>
 
         <View style={styles.assessmentTableRow}>
-        <View style={[styles.assessmentTableCol, styles.colCriteriaAspect]}>
-        <Text style={styles.assessmentTableCell}></Text>
+        <View style={[styles.assessmentTableCol, styles.removeBorderBottom, styles.colCriteriaAspect]}>
+        <Text style={styles.assessmentTableCell}>
+            <Text style={styles.boldText}>Pronunciation</Text>
+        </Text>
         </View>
         <View style={[styles.assessmentTableCol, styles.colCriteriaDetails]}>
         <Text style={styles.assessmentTableCell}>Articulation</Text>
@@ -443,16 +444,23 @@ const LandscapeCertificate = ({
         <View style={[styles.assessmentTableCol, styles.colDescriptor]}>
         <Text style={styles.assessmentTableCell}>{pronunciationData.articulation_descriptor}</Text>
         </View>
-        <View style={[styles.assessmentTableCol, styles.colAverageRating]}>
-        <Text style={styles.assessmentTableCell}></Text>
+        <View style={[styles.assessmentTableCol, styles.removeBorderBottom, styles.colAverageRating]}>
+        <Text style={styles.assessmentTableCell}>
+            {typeof pronunciation_average === 'number' ? pronunciation_average.toFixed(2) : pronunciation_average}
+        </Text>
         </View>
-        <View style={[styles.assessmentTableCol, styles.colProficiency]}>
-        <Text style={styles.assessmentTableCell}></Text>
+        <View style={[styles.assessmentTableCol, styles.removeBorderBottom, styles.colProficiency]}>
+        <Text style={styles.assessmentTableCell}>
+        {pronunciationLevel
+            .split(' ') // Split by spaces
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .join(' ')}
+        </Text>
         </View>
         </View>
 
         <View style={styles.assessmentTableRow}>
-        <View style={[styles.assessmentTableCol, styles.colCriteriaAspect]}>
+        <View style={[styles.assessmentTableCol, styles.removeBorderBottom, styles.colCriteriaAspect]}>
         <Text style={styles.assessmentTableCell}></Text>
         </View>
         <View style={[styles.assessmentTableCol, styles.colCriteriaDetails]}>
@@ -474,9 +482,8 @@ const LandscapeCertificate = ({
 
         {/* Data Rows */}
         <View style={styles.assessmentTableRow}>
-        <View style={[styles.assessmentTableCol, styles.colCriteriaAspect]}>
+        <View style={[styles.assessmentTableCol, styles.colCriteriaAspect, styles.addBorderTop, styles.removeBorderBottom,]}>
         <Text style={styles.assessmentTableCell}>
-        <Text style={styles.boldText}>Grammar</Text>
         </Text>
         </View>
         <View style={[styles.assessmentTableCol, styles.colCriteriaDetails]}>
@@ -488,24 +495,20 @@ const LandscapeCertificate = ({
         <View style={[styles.assessmentTableCol, styles.colDescriptor]}>
         <Text style={styles.assessmentTableCell}>{grammarData.accuracy_descriptor}</Text>
         </View>
-        <View style={[styles.assessmentTableCol, styles.colAverageRating]}>
+        <View style={[styles.assessmentTableCol, styles.removeBorderBottom, styles.colAverageRating]}>
         <Text style={styles.assessmentTableCell}>
-        {typeof grammar_average === 'number' ? grammar_average.toFixed(2) : grammar_average}
         </Text>
         </View>
-        <View style={[styles.assessmentTableCol, styles.colProficiency]}>
+        <View style={[styles.assessmentTableCol, styles.removeBorderBottom, styles.colProficiency]}>
         <Text style={styles.assessmentTableCell}>
-        {grammarLevel
-            .split(' ') // Split by spaces
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-            .join(' ')}
         </Text>
         </View>
         </View>
 
         <View style={styles.assessmentTableRow}>
-        <View style={[styles.assessmentTableCol, styles.colCriteriaAspect]}>
-        <Text style={styles.assessmentTableCell}></Text>
+        <View style={[styles.assessmentTableCol, styles.colCriteriaAspect, styles.removeBorderBottom,]}>
+        <Text style={styles.assessmentTableCell}>
+                <Text style={styles.boldText}>Grammar</Text></Text>
         </View>
         <View style={[styles.assessmentTableCol, styles.colCriteriaDetails]}>
         <Text style={styles.assessmentTableCell}>Clarity of Thought</Text>
@@ -516,11 +519,18 @@ const LandscapeCertificate = ({
         <View style={[styles.assessmentTableCol, styles.colDescriptor]}>
         <Text style={styles.assessmentTableCell}>{grammarData.clarity_of_thought_descriptor}</Text>
         </View>
-        <View style={[styles.assessmentTableCol, styles.colAverageRating]}>
-        <Text style={styles.assessmentTableCell}></Text>
+        <View style={[styles.assessmentTableCol, styles.removeBorderBottom, styles.colAverageRating]}>
+        <Text style={styles.assessmentTableCell}>
+                {typeof grammar_average === 'number' ? grammar_average.toFixed(2) : grammar_average}
+        </Text>
         </View>
-        <View style={[styles.assessmentTableCol, styles.colProficiency]}>
-        <Text style={styles.assessmentTableCell}></Text>
+        <View style={[styles.assessmentTableCol, styles.removeBorderBottom, styles.colProficiency]}>
+        <Text style={styles.assessmentTableCell}>
+        {grammarLevel
+            .split(' ') // Split by spaces
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .join(' ')}
+        </Text>
         </View>
         </View>
 
@@ -546,7 +556,7 @@ const LandscapeCertificate = ({
         </View>
 
         <View style={styles.assessmentTableRow}>
-        <View style={[styles.assessmentTableCol, styles.colCriteriaAspect]}>
+        <View style={[styles.assessmentTableCol, styles.colCriteriaAspect, styles.removeBorderBottom,]}>
         <Text style={styles.assessmentTableCell}>
         <Text style={styles.boldText}>Fluency</Text>
         </Text>
@@ -560,12 +570,12 @@ const LandscapeCertificate = ({
         <View style={[styles.assessmentTableCol, styles.colDescriptor]}>
         <Text style={styles.assessmentTableCell}>{fluencyData.quality_of_response_descriptor}</Text>
         </View>
-        <View style={[styles.assessmentTableCol, styles.colAverageRating]}>
+        <View style={[styles.assessmentTableCol, styles.colAverageRating, styles.removeBorderBottom]}>
         <Text style={styles.assessmentTableCell}>
         {typeof fluency_average === 'number' ? fluency_average.toFixed(2) : fluency_average}
         </Text>
         </View>
-        <View style={[styles.assessmentTableCol, styles.colProficiency]}>
+        <View style={[styles.assessmentTableCol, styles.removeBorderBottom, styles.colProficiency]}>
         <Text style={styles.assessmentTableCell}>
         {fluencyLevel
             .split(' ') // Split by spaces

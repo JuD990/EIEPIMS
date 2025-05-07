@@ -46,64 +46,6 @@ const TableComponent = ({ department, schoolYear, semester }) => {
         { yearLevel: "4th Year", rows: Array(4).fill({ program: "", expected: "", target: `${target}%`, implementingSubject: "", faculty: "" }) }
     ];
 
-    const exportToCSV = () => {
-        if (!tableData || Object.keys(tableData).length === 0) return;
-
-        const header = [
-            "Year Level", "Program", "Expected", "Target", "Implementing Subject", "Faculty",
-            ...months.flatMap(month => [
-                `${month} Submitted/Participated`,
-                `${month} % Rate`,
-                `${month} PGF Average`,
-                `${month} Highest PGF`,
-                `${month} Winner's PGF`
-            ])
-        ];
-
-        const rows = [];
-
-        Object.entries(tableData).forEach(([yearLevel, programs]) => {
-            Object.values(programs).forEach(program => {
-                const baseData = [
-                    yearLevel,
-                    program.program || "-",
-                    program.enrolledStudents || "-",
-                    `${target}%`,
-                    program.courseTitle || "-",
-                    program.assignedPOC || "-"
-                ];
-
-                const monthData = months.flatMap(month => {
-                    const monthInfo = program.monthData?.[month] || {};
-                    const completionRate = monthInfo.completionRate;
-                    const expectation = completionRate === 100 ? "Meets Expectation" : (completionRate ? "Below Expectation" : "-");
-                    const championEpgfAverage = monthInfo.champion_epgf_average;
-                    const championProficiencyLevel = monthInfo.champion_proficiency_level;
-
-                    return [
-                        monthInfo.submitted || "-",
-                        completionRate ? `${completionRate}% (${expectation})` : "-",
-                                                 `${monthInfo.epgfAverage || "-"} (${monthInfo.proficiencyLevel || "-"})`,
-                                                 monthInfo.champion || "-",
-                                                 championEpgfAverage ? `${championEpgfAverage} (${championProficiencyLevel || "-"})` : "-"
-                    ];
-                });
-
-                rows.push([...baseData, ...monthData]);
-            });
-        });
-
-        const csvContent = [header, ...rows]
-        .map(row => row.map(cell => `"${cell}"`).join(","))
-        .join("\n");
-
-        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = `EIE_Reporting_${department}_${schoolYear}_${semester}.csv`;
-        link.click();
-    };
-
     return (
         <div className="eie-reporting-esl-table-container">
         <table className="eie-reporting-esl-table-poc-table">
@@ -121,7 +63,7 @@ const TableComponent = ({ department, schoolYear, semester }) => {
         <th>Program</th>
         <th>Expected</th>
         <th>Target</th>
-        <th>Implementing Subject</th>
+        <th>Implementing Subjects</th>
         <th>Faculty</th>
         {months.flatMap((month, index) => [
             <th key={`submitted-${month}-${index}`} className="eie-reporting-esl-table-header-header-cell">Submitted/Participated</th>,
@@ -144,7 +86,7 @@ const TableComponent = ({ department, schoolYear, semester }) => {
                 <td style={{ textAlign: 'center' }}>{programData.program || "-"}</td>
                 <td style={{ textAlign: 'center' }}>{programData.enrolledStudents || "-"}</td>
                 <td style={{ textAlign: 'center' }}>{`${target}%`}</td>
-                <td style={{ textAlign: 'center' }}>{programData.courseTitle || "-"}</td>
+                <td style={{ textAlign: 'left' }}>{programData.courseTitle || "-"}</td>
                 <td style={{ textAlign: 'center' }}>{programData.assignedPOC || "-"}</td>
 
                 {months.flatMap((month, monthIndex) => {
@@ -190,9 +132,6 @@ const TableComponent = ({ department, schoolYear, semester }) => {
         </tbody>
 
         </table>
-        <button onClick={exportToCSV} className="export-button">
-        Export CSV
-        </button>
         </div>
     );
 };

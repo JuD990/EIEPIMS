@@ -172,7 +172,6 @@ const Certificate = (props) => {
 
         {/* Logos in the background */}
         <Image src={departmentLogo} style={styles.imageBackground} />
-        <Image src={profilePicture} style={styles.imageBackground2} />
 
         <Text style={styles.specificText1}>This</Text>
         <Text style={styles.secondTitle}>Certificate of Recognition</Text>
@@ -194,7 +193,7 @@ const Certificate = (props) => {
         {fullDepartment}
         </Text>
         <Text style={styles.text}>
-        for {month} in School Year {currentYear}/{nextYear}
+        for {month} in School Year {currentYear}-{nextYear}
         </Text>
 
         {/* Row for MIA TIJAM and Dean */}

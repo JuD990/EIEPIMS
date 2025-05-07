@@ -13,7 +13,9 @@ import epgfVersionIcon from "@assets/epgf-version-icon.png";
 import interviewIcon from "@assets/InterviewScorecard.png";
 import diagnosticReportsIcon from "@assets/EIEDiagnosticReports.png";
 import uncLogo from "@assets/unc-logo.png";
-import implementingSubjectIcon from "@assets/implementing-subject-icon.png"
+import implementingSubjectIcon from "@assets/implementing-subject-icon.png";
+import assignPOC from "@assets/assign-poc.png";
+import graduating from "@assets/graduating.png";
 
 const ESLSidebar = () => {
   const navigate = useNavigate();
@@ -28,7 +30,7 @@ const ESLSidebar = () => {
 
   useEffect(() => {
     setShowManagementButtons(
-      ["/esl-epgf-versioning", "/esl-certification", "/esl-template", "/esl-account-management", "/esl-implementing-subjects"].includes(activePage)
+      ["/esl-epgf-versioning", "/esl-certification", "/esl-template", "/esl-account-management", "/esl-implementing-subjects", "/esl-assign-poc"].includes(activePage)
     );
     setShowDiagnosticsButtons(
       ["/esl-interview-scorecard", "/esl-diagnostic-reports"].includes(activePage)
@@ -121,6 +123,14 @@ const ESLSidebar = () => {
       <img src={implementingSubjectIcon} alt="Implementing Subjects Icon" />
       <p>Implementing Subjects</p>
       </button>
+      {/* Assign POC Button */}
+      <button
+      className={`esl-assign-poc-sidebar-button ${activePage === "/esl-assign-poc" ? "active" : ""}`}
+      onClick={() => handleNavigation("/esl-assign-poc")}
+      >
+      <img src={assignPOC} alt="Assign POC icon" className="class-icon" />
+      <p>Assign POC</p>
+      </button>
       <button
       className={`epgf-rubric-button ${activePage === "/esl-epgf-versioning" ? "active" : ""}`}
       onClick={() => handleNavigation("/esl-epgf-versioning")}
@@ -143,7 +153,7 @@ const ESLSidebar = () => {
       <p>Template</p>
       </button>
       <button
-      className={`accounts-button ${activePage === "/user-students" ? "active" : ""}`}
+      className={`accounts-button ${activePage === "/esl-account-management" ? "active" : ""}`}
       onClick={() => handleNavigation("/esl-account-management")}
       >
       <img src={accountIcon} alt="Accounts Icon" />
