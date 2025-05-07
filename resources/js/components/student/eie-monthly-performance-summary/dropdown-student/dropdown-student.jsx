@@ -14,25 +14,37 @@ const DropdownStudent = ({ onYearLevelChange, onSemesterChange }) => {
         const detectedSemester = (month >= 7 && month <= 11) ? "1st Semester" : "2nd Semester";
         setCurrentSemester(detectedSemester);
         onSemesterChange(detectedSemester);
-    }, []); // <== EMPTY dependency array so it runs only once!
+    }, []); // Run once on mount
 
-
-    // Fetch year levels and set default
+    // Fetch year levels for the specific student and set default
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/api/student-year-level-options')
+        const studentId = localStorage.getItem("student_id");
+
+        if (!studentId) {
+            console.error("student_id not found in localStorage.");
+            setLoading(false);
+            return;
+        }
+
+        axios.get('http://127.0.0.1:8000/api/student-year-level-options', {
+            params: { student_id: studentId }
+        })
         .then((response) => {
-            setYearLevels(response.data);
+            const yearLevelsData = Array.isArray(response.data) ? response.data : [];
+            setYearLevels(yearLevelsData);
             setLoading(false);
 
-            const firstYearLevel = response.data[0] || "";
+            const firstYearLevel = yearLevelsData[0] || "";
             setCurrentYearLevel(firstYearLevel);
             onYearLevelChange(firstYearLevel);
         })
         .catch((error) => {
             console.error("Error fetching Year Levels:", error);
+            setYearLevels([]);
             setLoading(false);
         });
-    }, [onYearLevelChange]);
+    }, []);
+
 
     return (
         <div className="student-dropdown-container">
@@ -44,12 +56,15 @@ const DropdownStudent = ({ onYearLevelChange, onSemesterChange }) => {
             setCurrentYearLevel(value);
             onYearLevelChange(value);
         }}
+        disabled={loading}
         >
         {loading ? (
-            <option>Loading...</option>
+            <option disabled>Loading...</option>
+        ) : yearLevels.length === 0 ? (
+            <option disabled>No year levels found</option>
         ) : (
-            yearLevels.map((yearLevel, index) => (
-                <option key={index} value={yearLevel}>
+            yearLevels.map((yearLevel) => (
+                <option key={yearLevel} value={yearLevel}>
                 {yearLevel}
                 </option>
             ))

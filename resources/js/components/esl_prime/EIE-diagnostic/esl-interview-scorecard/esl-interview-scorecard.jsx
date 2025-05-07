@@ -5,6 +5,7 @@ import UserInfo from '@user-info/User-info';
 import "./esl-interview-scorecard.css";
 import Table from "./table/interview-scorecard-table";
 import InterviewScorecardButtons from "./interview-scorecard-buttons/interview-scorecard-buttons";
+import RemarksDropdown from './remarks-templates/dropdown-remarks';
 
 const eslPrimeDiagnostics = () => {
     const [version, setVersion] = useState(null);
@@ -43,8 +44,8 @@ const eslPrimeDiagnostics = () => {
         "SPARK Highlight": "",
         "SPARK Lowlight": "",
         "Usage in School/Online (When in School)": "",
-                                           "Usage Offline (Home or Outside)": "",
-                                           "Support Needed": ""
+        "Usage Offline (Home or Outside)": "",
+        "Support Needed": ""
     });
 
     const handleClear = () => {
@@ -100,7 +101,7 @@ const eslPrimeDiagnostics = () => {
         const fetchOptions = async (version) => {
             const categories = [
                 'consistency', 'clarity', 'articulation', 'intonationStress', 'accuracy',
-                'clarityOfThought', 'syntax', 'qualityOfResponse', 'detailOfResponse'
+              'clarityOfThought', 'syntax', 'qualityOfResponse', 'detailOfResponse'
             ];
 
             const newOptions = {};
@@ -143,6 +144,126 @@ const eslPrimeDiagnostics = () => {
         setCategoryAverages(averages);
     };
 
+    const [formData, setFormData] = useState({
+        name: "",
+        student_id: "",
+        yearLevel: "",
+        interviewer: "",
+        venue: "",
+        program: "",
+        department: "",
+        date: "",
+        time: "",
+    });
+
+    // Define currentDate and currentTime
+    const [currentDate, setCurrentDate] = useState("");
+    const [currentTime, setCurrentTime] = useState("");
+
+    useEffect(() => {
+        const today = new Date();
+        const formattedDate = today.toISOString().split("T")[0];
+        const formattedTime = today.toTimeString().slice(0, 5);
+
+        setCurrentDate(formattedDate);
+        setCurrentTime(formattedTime);
+
+        setFormData((prev) => ({
+            ...prev,
+            date: formattedDate,
+            time: formattedTime,
+        }));
+    }, []);
+
+    const [students, setStudents] = useState([]);
+    const [departments, setDepartments] = useState([]);
+    const [nameSearch, setNameSearch] = useState("");
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    useEffect(() => {
+        const employeeId = localStorage.getItem("employee_id");
+
+        if (employeeId) {
+            axios.get(`/api/esl/employee/${employeeId}`)
+            .then((response) => {
+                if (response.data.full_name) {
+                    setFormData((prev) => ({
+                        ...prev,
+                        interviewer: response.data.full_name
+                    }));
+                }
+            })
+            .catch((error) => {
+                console.error("Failed to fetch interviewer:", error);
+            });
+        }
+    }, []);
+
+    const filteredStudents = students.filter((student) => {
+        const fullName = `${student.firstname} ${student.middlename || ""} ${student.lastname}`.toLowerCase();
+        return fullName.includes(nameSearch.toLowerCase());
+    });
+
+    const handleStudentSelect = (fullName) => {
+        const selectedStudent = students.find(student =>
+        `${student.firstname} ${student.middlename || ""} ${student.lastname}`.trim() === fullName
+        );
+
+        if (selectedStudent) {
+            setFormData(prev => ({
+                ...prev,
+                name: fullName,
+                student_id: selectedStudent.student_id,
+                program: selectedStudent.program,
+                year_level: selectedStudent.year_level,
+            }));
+        }
+        setIsDropdownOpen(false);
+        setNameSearch("");
+    };
+
+    useEffect(() => {
+        const fetchStudents = async () => {
+            if (formData.department && formData.yearLevel) {
+                try {
+                    const response = await axios.get("http://localhost:8000/api/master-class-list-students", {
+                        params: {
+                            department: formData.department,
+                            yearLevel: formData.yearLevel,
+                        }
+                    });
+                    setStudents(response.data);
+                } catch (error) {
+                    console.error("Error fetching students:", error);
+                }
+            }
+        };
+
+        fetchStudents();
+    }, [formData.department, formData.yearLevel]);
+
+    useEffect(() => {
+        const fetchDepartments = async () => {
+            try {
+                const response = await axios.get("http://localhost:8000/api/master-class-list-department");
+                setDepartments(response.data);
+            } catch (error) {
+                console.error("Error fetching departments:", error);
+            }
+        };
+
+        fetchDepartments();
+    }, []);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: value
+        }));
+    };
+
+
     return (
         <div>
         <Sidebar />
@@ -165,7 +286,23 @@ const eslPrimeDiagnostics = () => {
         ratings={ratings}
         remarks={remarks}
         categoryAverages={categoryAverages}
+        formData={formData}
+        setFormData={setFormData}
+        currentDate={currentDate}
+        currentTime={currentTime}
+        students={students}
+        filteredStudents={filteredStudents}
+        departments={departments}
+        isDropdownOpen={isDropdownOpen}
+        setIsDropdownOpen={setIsDropdownOpen}
+        handleInputChange={handleInputChange}
+        nameSearch={nameSearch}
+        setNameSearch={setNameSearch}
+        handleStudentSelect={handleStudentSelect}
         />
+
+
+
 
         <Table
         options={options}
@@ -176,9 +313,9 @@ const eslPrimeDiagnostics = () => {
         dropdownValues={dropdownValues}
         setDropdownValues={setDropdownValues}
         onCategoryAveragesChange={handleCategoryAveragesChange}
-        remarks={remarks}
-        setRemarks={setRemarks}
         />
+        <RemarksDropdown remarks={remarks} setRemarks={setRemarks} yearLevel={formData.yearLevel} />
+
         </div>
         </div>
     );

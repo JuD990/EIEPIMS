@@ -74,10 +74,19 @@ class StudentController extends Controller
         }
     }
 
-    public function getYearLevelOptions()
+    public function getYearLevelOptions(Request $request)
     {
-        // Get unique Year Level values
-        $yearLevels = HistoricalScorecard::pluck('year_level')->unique();
+        $studentId = $request->query('student_id');
+
+        if (!$studentId) {
+            return response()->json(['error' => 'student_id is required'], 400);
+        }
+
+        $yearLevels = HistoricalScorecard::where('student_id', $studentId)
+        ->pluck('year_level')
+        ->unique()
+        ->values(); // Ensures numeric keys
+
         return response()->json($yearLevels);
     }
 

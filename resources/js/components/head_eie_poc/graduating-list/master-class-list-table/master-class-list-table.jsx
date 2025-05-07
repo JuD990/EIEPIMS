@@ -90,27 +90,6 @@ const MasterClassListTable = ({ searchQuery, selectedProgram, selectedYearLevel 
     { Header: "Program", accessor: "program" },
     { Header: "Classification", accessor: "classification" },
     { Header: "Gender", accessor: "gender" },
-    {   Header: () => (
-      <div style={{ whiteSpace: "nowrap"}}>
-      Reason for Shift/Drop
-      </div>
-    ), accessor: "reason_for_shift_or_drop",
-      Cell: ({ value }) => value ? `- ${value}` : ""
-
-    },
-    {
-      Header: "Candidate for Graduating", accessor: "candidate_for_graduating",
-      Cell: ({ row, value }) => (
-      <select
-      value={value}
-      onChange={(e) => handleGraduatingStatusChange(row.index, e)}
-      style={{ border: "none", backgroundColor: "transparent", outline: "none", padding: "5px", fontFamily: "Poppins", fontSize: "14px" }}
-      >
-        <option value="Yes">Yes</option>
-        <option value="No">No</option>
-        </select>
-      )
-    },
   ], [data]);
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data });

@@ -52,7 +52,7 @@ const CollegePOCSidebar = () => {
     onClick={() => navigate("/college-poc-eie-reporting")}
     >
     <img src={reporticon} alt="EIE reporting icon" className="report-icon" />
-    <p>EIE Reporting</p>
+    <p>EIE Reports</p>
     </button>
 
     <button

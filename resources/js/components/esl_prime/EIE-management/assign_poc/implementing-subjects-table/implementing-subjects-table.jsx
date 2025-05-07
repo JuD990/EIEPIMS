@@ -179,6 +179,20 @@ const ImplementingSubjectsTable = ({
   const columns = React.useMemo(
     () => [
       {
+        Header: "Actions",
+        accessor: "actions",
+        Cell: ({ row }) => (
+          <div style={{ display: "flex", gap: "10px" }}>
+          <button
+          className="action-button"
+          onClick={() => handleUpdate(row.values)}
+          >
+          Assign
+          </button>
+          </div>
+        ),
+      },
+      {
         Header: "POC Name",
         accessor: "assigned_poc",
         Cell: ({ value }) => value ? value : "Unassigned"
@@ -197,20 +211,6 @@ const ImplementingSubjectsTable = ({
       { Header: "Semester", accessor: "semester" },
       { Header: "Department", accessor: "department" },
       { Header: "Program", accessor: "program" },
-      {
-        Header: "Actions",
-        accessor: "actions",
-        Cell: ({ row }) => (
-          <div style={{ display: "flex", gap: "10px" }}>
-            <button
-              className="action-button"
-              onClick={() => handleUpdate(row.values)}
-            >
-              Assign
-            </button>
-          </div>
-        ),
-      },
     ],
     []
   );

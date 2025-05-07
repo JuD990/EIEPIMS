@@ -108,8 +108,8 @@ const Table = ({
             "SPARK Highlight": "",
             "SPARK Lowlight": "",
             "Usage in School/Online (When in School)": "",
-                   "Usage Offline (Home or Outside)": "",
-                   "Support Needed": ""
+            "Usage Offline (Home or Outside)": "",
+            "Support Needed": ""
         });
 
         // Call the parent's onClear function if it exists
@@ -202,31 +202,6 @@ const Table = ({
                 </React.Fragment>
             );
         })}
-        </tbody>
-        <tbody>
-        {Object.keys(remarks).map((label, index) => (
-            <tr key={`remarks-${index}`}>
-            <td colSpan={2}>{label}</td>
-            <td>
-            <textarea
-            rows={4}
-            style={{
-                width: "120%",
-                border: "1px solid #ccc",
-                borderRadius: "4px",
-                padding: "8px",
-                resize: "vertical",
-                whiteSpace: "nowrap",
-                fontFamily: 'Poppins'
-            }}
-            placeholder={`Enter ${label.toLowerCase()}...`}
-            aria-label={label}
-            value={remarks[label]}
-            onChange={(e) => handleRemarksChange(label, e.target.value)}
-            />
-            </td>
-            </tr>
-        ))}
         </tbody>
         </table>
         </div>

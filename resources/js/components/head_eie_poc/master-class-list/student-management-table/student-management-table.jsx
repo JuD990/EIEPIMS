@@ -288,7 +288,7 @@ const StudentManagementTable = ({
       },
       {
         Header: () => (
-          <div style={{ whiteSpace: "nowrap" }}>Reason for Shift/Drop</div>
+          <div style={{ whiteSpace: "nowrap" }}>Reason for Drop</div>
         ),
         accessor: "reason_for_shift_or_drop",
         Cell: ({ value }) => (

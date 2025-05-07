@@ -405,3 +405,10 @@ select {
 .esl-scorecard-table-container{
     width: 100%;
 }
+
+.esl-scorecard-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2; /* Make sure it stays above the rest */
+    overflow: auto;
+}

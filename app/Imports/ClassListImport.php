@@ -13,7 +13,16 @@ class ClassListImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         DB::transaction(function () use ($row) {
-            // ✅ Allow duplicate entries in ClassLists
+            // Check if email already exists before inserting
+            $emailExists = Students::where('email', $row['email'])->exists();
+
+            if ($emailExists) {
+                // Skip insertion of ClassLists and Students if email already exists
+                // Optional: log or notify the user about skipped entry
+                return;
+            }
+
+            // ✅ Insert into ClassLists (as no email duplication found)
             ClassLists::create([
                 'student_id'            => $row['student_id'],
                 'firstname'             => $row['firstname'],
@@ -36,11 +45,11 @@ class ClassListImport implements ToModel, WithHeadingRow
                 'course_code'           => $row['course_code'],
             ]);
 
-            // ✅ Check for student_id
+            // Check for student_id
             $existingStudent = Students::where('student_id', $row['student_id'])->first();
 
             if ($existingStudent) {
-                // ✅ Prevent email duplication errors
+                // Update student data if student_id exists
                 $updateData = [
                     'firstname'  => $row['firstname'],
                     'middlename' => $row['middlename'] ?? null,
@@ -50,7 +59,7 @@ class ClassListImport implements ToModel, WithHeadingRow
                     'program'    => $row['program'],
                 ];
 
-                // Only update email if it's unique (avoiding duplicate constraint violation)
+                // Only update email if it's unique
                 $emailExists = Students::where('email', $row['email'])
                 ->where('student_id', '!=', $row['student_id'])
                 ->exists();
@@ -59,19 +68,18 @@ class ClassListImport implements ToModel, WithHeadingRow
                     $updateData['email'] = $row['email'];
                 }
 
-                // Update the student record
                 $existingStudent->update($updateData);
             } else {
-                // ✅ Insert new student if student_id does not exist
+                // Insert new student only if email is unique
                 Students::create([
-                    'student_id'  => $row['student_id'],
-                    'firstname'   => $row['firstname'],
-                    'middlename'  => $row['middlename'] ?? null,
-                    'lastname'    => $row['lastname'],
-                    'email'       => $row['email'], // Insert email if it's unique
-                    'department'  => $row['department'],
-                    'year_level'  => $row['year_level'],
-                    'program'     => $row['program'],
+                    'student_id' => $row['student_id'],
+                    'firstname'  => $row['firstname'],
+                    'middlename' => $row['middlename'] ?? null,
+                    'lastname'   => $row['lastname'],
+                    'email'      => $row['email'],
+                    'department' => $row['department'],
+                    'year_level' => $row['year_level'],
+                    'program'    => $row['program'],
                 ]);
             }
         });

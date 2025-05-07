@@ -153,7 +153,6 @@ class ClassListController extends Controller
     public function updateStudent(Request $request, $class_lists_id)
     {
         try {
-            // Validate incoming data
             $request->validate([
                 'firstName' => 'required|string|max:255',
                 'middleName' => 'nullable|string|max:255',
@@ -162,19 +161,17 @@ class ClassListController extends Controller
                 'yearLevel' => 'required|string',
                 'status' => 'required|string',
                 'gender' => 'nullable|string',
-                'reason' => 'nullable|string',
+                'reason' => 'nullable|string', // This is fine
                 'courseCode' => 'nullable|string',
                 'candidate_for_graduating' => 'nullable|string',
             ]);
 
-            // Find the student by class_lists_id instead of student_id
             $student = ClassLists::where('class_lists_id', $class_lists_id)->first();
 
             if (!$student) {
                 return response()->json(['message' => 'Student not found.'], 404);
             }
 
-            // Update student details
             $student->firstname = $request->input('firstName');
             $student->middlename = $request->input('middleName');
             $student->lastname = $request->input('lastName');
@@ -186,15 +183,11 @@ class ClassListController extends Controller
             $student->course_code = $request->input('courseCode');
             $student->candidate_for_graduating = $request->input('candidate_for_graduating');
 
-            // Save the updated student record
             $student->save();
 
-            return response()->json(['message' => 'Student information updated successfully.'], 200);
-
-        } catch (\Illuminate\Database\QueryException $e) {
-            return response()->json(['message' => 'Database error: ' . $e->getMessage()], 500);
+            return response()->json(['message' => 'Student updated successfully.']);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to update student information.', 'error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Update failed.', 'error' => $e->getMessage()], 500);
         }
     }
 
@@ -343,6 +336,58 @@ class ClassListController extends Controller
         })
         ->count();
 
+        // Freshmen
+        $freshmenTotal = ClassLists::where('department', $department)
+        ->where('year_level', '1st Year')
+        ->count();
+        $freshmenActive = ClassLists::where('department', $department)
+        ->where('year_level', '1st Year')
+        ->where('status', 'Active')
+        ->count();
+        $freshmenPercentage = $freshmenTotal > 0 ? round(($freshmenActive / $freshmenTotal) * 100, 2) : 0;
+
+        // Sophomores
+        $sophomoreTotal = ClassLists::where('department', $department)
+        ->where('year_level', '2nd Year')
+        ->count();
+        $sophomoreActive = ClassLists::where('department', $department)
+        ->where('year_level', '2nd Year')
+        ->where('status', 'Active')
+        ->count();
+        $sophomorePercentage = $sophomoreTotal > 0 ? round(($sophomoreActive / $sophomoreTotal) * 100, 2) : 0;
+
+        // Juniors
+        $juniorTotal = ClassLists::where('department', $department)
+        ->where('year_level', '3rd Year')
+        ->count();
+        $juniorActive = ClassLists::where('department', $department)
+        ->where('year_level', '3rd Year')
+        ->where('status', 'Active')
+        ->count();
+        $juniorPercentage = $juniorTotal > 0 ? round(($juniorActive / $juniorTotal) * 100, 2) : 0;
+
+        // Seniors
+        $seniorTotal = ClassLists::where('department', $department)
+        ->where('year_level', '4th Year')
+        ->count();
+        $seniorActive = ClassLists::where('department', $department)
+        ->where('year_level', '4th Year')
+        ->where('status', 'Active')
+        ->count();
+        $seniorPercentage = $seniorTotal > 0 ? round(($seniorActive / $seniorTotal) * 100, 2) : 0;
+
+        // 🔸 Determine current semester based on current month
+        $currentMonth = now()->month;
+        $currentSemester = ($currentMonth >= 8 && $currentMonth <= 12) ? '1st Semester' : '2nd Semester';
+
+        // Get subjects or course titles by year level from ImplementingSubjects
+        $subjectsByYearLevel = ImplementingSubjects::whereIn('year_level', ['1st Year', '2nd Year', '3rd Year', '4th Year'])
+        ->where('department', $department)
+        ->where('semester', $currentSemester)
+        ->get(['year_level', 'course_title']);
+
+        $subjectsByYearLevelGrouped = $subjectsByYearLevel->groupBy('year_level');
+
         $activePercentage = $totalStudents > 0
         ? round(($activeStudents / $totalStudents) * 100, 2)
         : 0;
@@ -352,7 +397,33 @@ class ClassListController extends Controller
             'active_students' => $activeStudents,
             'active_percentage' => $activePercentage,
             'graduating_students' => $graduatingStudents,
+
+            'freshmen' => [
+                'total' => $freshmenTotal,
+                'active' => $freshmenActive,
+                'active_percentage' => $freshmenPercentage,
+                'subjects' => $subjectsByYearLevelGrouped['1st Year'] ?? [],
+            ],
+            'sophomores' => [
+                'total' => $sophomoreTotal,
+                'active' => $sophomoreActive,
+                'active_percentage' => $sophomorePercentage,
+                'subjects' => $subjectsByYearLevelGrouped['2nd Year'] ?? [],
+            ],
+            'juniors' => [
+                'total' => $juniorTotal,
+                'active' => $juniorActive,
+                'active_percentage' => $juniorPercentage,
+                'subjects' => $subjectsByYearLevelGrouped['3rd Year'] ?? [],
+            ],
+            'seniors' => [
+                'total' => $seniorTotal,
+                'active' => $seniorActive,
+                'active_percentage' => $seniorPercentage,
+                'subjects' => $subjectsByYearLevelGrouped['4th Year'] ?? [],
+            ],
         ]);
     }
+
 
 }

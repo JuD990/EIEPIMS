@@ -69,7 +69,7 @@ class HistoricalScorecardController extends Controller
             'detail_of_response_descriptor',
             'detail_of_response_rating',
             'fluency_average',
-            'created_at' // Add created_at to format
+            'created_at',
         )
         ->first();
 

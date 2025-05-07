@@ -39,6 +39,15 @@
     font-weight: 500;
     background-color: #fff;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.student-summary-label-container {
+    display: flex;
+    justify-content: space-between; /* Place the label and image on opposite sides */
+    width: 100%; /* Make the container take full width */
+    align-items: center; /* Align vertically */
+    padding: 0 10px; /* Add padding to the sides */
 }
 
 .student-summary-label {
@@ -46,11 +55,17 @@
     color: #555;
     margin-bottom: 10px;
     font-family: 'Poppins', sans-serif;
-    font-weight: 500;
+    text-align: center; /* Default alignment */
+}
+
+.student-summary-image {
+    width: 40px; /* Set image size */
+    height: 40px;
+    margin-left: 10px; /* Space between the label and the image */
 }
 
 .student-summary-value {
-    font-size: 60px;
+    font-size: 65px;
     font-weight: 700;
     font-family: 'Poppins', sans-serif;
 }
@@ -61,4 +76,54 @@
     margin-top: 5px;
     text-align: center;
     font-family: 'Poppins', sans-serif;
+}
+
+.description-flex {
+    display: flex;
+    gap: 120px;
+    width: 100%;
+    align-items: center;
+    padding: 0 5px;
+    font-size: 25px;
+}
+
+.left-align-value {
+    font-size: 75px;
+    margin-right: 220px;
+    padding-left: 12px;
+    display: block;
+}
+
+.subject-list {
+    position: absolute;
+    bottom: -100px; /* Adjust based on tooltip height */
+    left: 0;
+    width: 100%;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.student-summary-box:hover .subject-list {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    bottom: -200px; /* Ensures tooltip stays below */
+}
+
+.subject-list ul {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 14px;
+}
+
+.subject-list p {
+    margin: 0;
+    font-style: italic;
 }

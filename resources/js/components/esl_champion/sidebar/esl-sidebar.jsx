@@ -72,7 +72,7 @@ const ESLSidebar = () => {
     onClick={() => handleNavigation("/esl-eie-reporting")}
     >
     <img src={reporticon} alt="EIE Reporting icon" className="class-icon" />
-    <p>EIE Reporting</p>
+    <p>EIE Reports</p>
     </button>
 
     {/* EIE Diagnostics */}
