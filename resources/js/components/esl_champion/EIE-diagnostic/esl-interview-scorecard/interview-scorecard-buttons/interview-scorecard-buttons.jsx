@@ -2,162 +2,35 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt, faClock } from "@fortawesome/free-solid-svg-icons";
+import RemarksDropdown from '../remarks-templates/dropdown-remarks';
 
 const InterviewScorecardButtons = ({
-    overallAverage,
     onClear,
+    overallAverage,
     ratings,
     remarks,
-    categoryAverages
+    categoryAverages,
+    formData,
+    setFormData,
+    currentDate,
+    currentTime,
+    students,
+    departments,
+    isDropdownOpen,
+    setIsDropdownOpen,
+    handleInputChange,
+    filteredStudents,
+    nameSearch,
+    setNameSearch,
+    handleStudentSelect
 }) => {
-    const [currentDate, setCurrentDate] = useState("");
-    const [currentTime, setCurrentTime] = useState("");
-    const [departments, setDepartments] = useState([]);
-    const [nameSearch, setNameSearch] = useState("");
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [students, setStudents] = useState([]);
-    const [formData, setFormData] = useState({
-        name: "",
-        student_id: "",
-        yearLevel: "",
-        interviewer: "",
-        venue: "",
-        program: "",
-        department: "",
-        date: currentDate,
-        time: currentTime,
-    });
-
-    useEffect(() => {
-        const employeeId = localStorage.getItem("employee_id");
-
-        if (employeeId) {
-            axios.get(`/api/esl/employee/${employeeId}`)
-            .then((response) => {
-                if (response.data.full_name) {
-                    setFormData((prev) => ({
-                        ...prev,
-                        interviewer: response.data.full_name
-                    }));
-                }
-            })
-            .catch((error) => {
-                console.error("Failed to fetch interviewer:", error);
-            });
-        }
-    }, []);
-
-    const filteredStudents = students.filter((student) => {
-        const fullName = `${student.firstname} ${student.middlename || ""} ${student.lastname}`.toLowerCase();
-        return fullName.includes(nameSearch.toLowerCase());
-    });
-
-    const handleStudentSelect = (fullName) => {
-        const selectedStudent = students.find(student =>
-        `${student.firstname} ${student.middlename || ""} ${student.lastname}`.trim() === fullName
-        );
-
-        if (selectedStudent) {
-            setFormData(prev => ({
-                ...prev,
-                name: fullName,
-                student_id: selectedStudent.student_id,
-                program: selectedStudent.program,
-                year_level: selectedStudent.year_level,
-            }));
-        }
-        setIsDropdownOpen(false);
-        setNameSearch("");
-    };
-
-
-    useEffect(() => {
-        const fetchStudents = async () => {
-            if (formData.department && formData.yearLevel) {
-                try {
-                    const response = await axios.get("http://localhost:8000/api/master-class-list-students", {
-                        params: {
-                            department: formData.department,
-                            yearLevel: formData.yearLevel,
-                        }
-                    });
-                    const studentsList = response.data;  // Array of students returned from backend
-                    console.log(studentsList);
-                    setStudents(studentsList);  // Update the students state
-                } catch (error) {
-                    console.error("Error fetching students:", error);
-                }
-            }
-        };
-
-        fetchStudents();
-    }, [formData.department, formData.yearLevel]);
-
-    useEffect(() => {
-        const today = new Date();
-        const formattedDate = today.toISOString().split("T")[0];
-        setCurrentDate(formattedDate);
-        setFormData(prev => ({ ...prev, date: formattedDate }));
-
-        const formattedTime = today.toTimeString().slice(0, 5);
-        setCurrentTime(formattedTime);
-        setFormData(prev => ({ ...prev, time: formattedTime }));
-    }, []);
-
-    useEffect(() => {
-        const fetchDepartments = async () => {
-            try {
-                const response = await axios.get("http://localhost:8000/api/master-class-list-department");
-                const departmentList = Array.isArray(response.data) ? response.data : [];
-                setDepartments(departmentList);
-            } catch (error) {
-                console.error("Error fetching departments:", error);
-            }
-        };
-
-        fetchDepartments();
-    }, []);
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
-
-    const handleStudentChange = (e) => {
-        const selectedName = e.target.value;
-        const selectedStudent = students.find(
-            (student) => `${student.firstname} ${student.middlename ? student.middlename : ""} ${student.lastname}`.trim() === selectedName
-        );
-
-        if (selectedStudent) {
-            console.log("Selected Student Object:", selectedStudent);  // Log the selected student object
-
-            setFormData((prev) => {
-                const updatedFormData = {
-                    ...prev,
-                    name: selectedName,
-                    student_id: selectedStudent.student_id,
-                    program: selectedStudent.program,
-                    year_level: selectedStudent.year_level,
-                };
-                console.log("Updated Form Data:", updatedFormData);  // Log the updated form data
-                return updatedFormData;
-            });
-        } else {
-            console.log("No student found with the selected name.");
-        }
-    };
-
 
     const collectAllInputs = () => {
         return {
-            ...formData,  // Spread in all form fields
-            date_of_interview: currentDate, // Current date from frontend
-            time_of_interview: currentTime, // Current time from frontend
-            year_level: formData.yearLevel,  // Corrected reference
+            ...formData,
+            date_of_interview: currentDate,
+            time_of_interview: currentTime,
+            year_level: formData.yearLevel,
         };
     };
 
@@ -272,10 +145,10 @@ const InterviewScorecardButtons = ({
         try {
             const response = await axios.post('/api/eie-diagnostic-reports', collectedData);
             console.log('No Show tagged:', response.data);
-            alert("No Show has been successfully tagged!");  // Add success alert here
+            alert("No Show has been successfully tagged!");
         } catch (error) {
             console.error('Error tagging No Show:', error.response?.data || error);
-            alert("There was an error tagging as 'No Show'.");  // Add error alert here
+            alert("There was an error tagging as 'No Show'.");
         }
     };
 
@@ -296,8 +169,6 @@ const InterviewScorecardButtons = ({
             return { level: "A1", category: "BEGINNER" };
         }
     };
-
-
 
     const cefr = getCEFRLevel(overallAverage);
 
@@ -379,7 +250,6 @@ const InterviewScorecardButtons = ({
         />
         </div>
         </div>
-
         </div>
 
         {/* Second Column */}
@@ -412,6 +282,8 @@ const InterviewScorecardButtons = ({
         >
         <option value="">Select Year Level</option>
         <option value="1st Year">Freshmen</option>
+        <option value="2nd Year">Sophomore</option>
+        <option value="3rd Year">Junior</option>
         <option value="4th Year">Graduating</option>
         </select>
         </div>
@@ -452,7 +324,7 @@ const InterviewScorecardButtons = ({
         </div>
         {/* CEFR Level */}
         <div className="esl-cefr-rating-box">
-        <label>CEFR: {cefr.level} - {cefr.category}</label>
+        <label>{cefr.level} - {cefr.category}</label>
         </div>
         </div>
         </div>

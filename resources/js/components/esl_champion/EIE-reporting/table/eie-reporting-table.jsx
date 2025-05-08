@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./TableComponent.css"; // Import the CSS file
 import axios from "axios";
+import Papa from "papaparse";
 
 const TableComponent = ({ department, schoolYear, semester }) => {
     const [target, setTarget] = useState(100);
@@ -45,6 +46,62 @@ const TableComponent = ({ department, schoolYear, semester }) => {
         { yearLevel: "3rd Year", rows: Array(4).fill({ program: "", expected: "", target: `${target}%`, implementingSubject: "", faculty: "" }) },
         { yearLevel: "4th Year", rows: Array(4).fill({ program: "", expected: "", target: `${target}%`, implementingSubject: "", faculty: "" }) }
     ];
+
+    const handleExportCSV = () => {
+        const csvData = [];
+
+        // Header
+        const baseHeaders = [
+            "Year Level", "Program", "Expected", "Target", "Implementing Subjects", "Faculty"
+        ];
+        const monthHeaders = months.flatMap(month => [
+            `${month} - Submitted/Participated`,
+            `${month} - % Rate`,
+            `${month} - PGF Average`,
+            `${month} - Highest PGF`,
+            `${month} - Winner’s PGF`
+        ]);
+        csvData.push([...baseHeaders, ...monthHeaders]);
+
+        // Data Rows
+        Object.keys(tableData).forEach(yearLevel => {
+            Object.values(tableData[yearLevel]).forEach(programData => {
+                const row = [
+                    yearLevel,
+                    programData.program || "-",
+                    programData.enrolledStudents || "-",
+                    `${target}%`,
+                    programData.courseTitle || "-",
+                    programData.assignedPOC || "-"
+                ];
+
+                months.forEach(month => {
+                    const monthInfo = programData.monthData[month] || {};
+                    const completionRate = monthInfo.completionRate;
+                    const expectation = completionRate === 100 ? "Meets Expectation" : "Below Expectation";
+
+                    row.push(
+                        monthInfo.submitted || "-",
+                        completionRate ? `${completionRate}% (${expectation})` : "-",
+                             `${monthInfo.epgfAverage || "-"} (${monthInfo.proficiencyLevel || "-"})`,
+                             monthInfo.champion || "-",
+                             `${monthInfo.champion_epgf_average || "-"} (${monthInfo.champion_proficiency_level || "-"})`
+                    );
+                });
+
+                csvData.push(row);
+            });
+        });
+
+        // Convert to CSV and trigger download
+        const csv = Papa.unparse(csvData);
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `EIE_Report_${department}_${schoolYear}_${semester}.csv`);
+        link.click();
+    };
 
     return (
         <div className="eie-reporting-esl-table-container">
@@ -130,8 +187,10 @@ const TableComponent = ({ department, schoolYear, semester }) => {
             </React.Fragment>
         ))}
         </tbody>
-
         </table>
+        <button onClick={handleExportCSV} className="export-csv-floating-button">
+        Export CSV
+        </button>
         </div>
     );
 };
