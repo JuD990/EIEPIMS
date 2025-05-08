@@ -166,6 +166,7 @@ Route::get('/programs-with-enrollment-second-semester/{department}', [Implementi
 Route::get('/implementing-subjects/dropdown', [ImplementingSubjectController::class, 'getDropdownData']);
 Route::get('/implementing-subjects/specific-dropdown', [ImplementingSubjectController::class, 'getDropdownSpecificData']);
 Route::get('/implementing-subjects/master-specific-dropdown', [ImplementingSubjectController::class, 'getDropdownSpecificDataMaster']);
+Route::get('/classlists/departments', [ImplementingSubjectController::class, 'getDepartmentForStudents']);
 
 // CollegePOC routes
 Route::get('/pocs', [CollegePOCController::class, 'getPocs'])->name('college.pocs');

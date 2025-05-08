@@ -29,8 +29,6 @@ const EIEHeadImplementingSubjects = () => {
       gap: '10px',
       width: '100%',
     }}>
-    {/* Uploading Button */}
-    <UploadingButton onFileUpload={handleFileUpload} />
 
     <div style={{
       display: 'flex',

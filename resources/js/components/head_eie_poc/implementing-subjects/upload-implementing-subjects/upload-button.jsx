@@ -41,13 +41,13 @@ const UploadingButton = () => {
   return (
     <div className="upload-buttons-container">
     {/* Upload Class List Button */}
-    <button onClick={handleClassListButtonClick} className="class-list-upload-button">
+    <button onClick={handleClassListButtonClick} className="class-list-subjects-upload-button">
     {classListLoading ? (
       <span>Uploading...</span>
     ) : (
       <>
-      <img src={classListLogo} alt="Class List Icon" className="upload-icon" />
-      <span className="upload-label">Upload Class List</span>
+      <img src={classListLogo} alt="Class List Icon" className="upload-subjects-icon" />
+      <span className="upload-subjects-label">Class List</span>
       </>
     )}
     </button>

@@ -439,10 +439,15 @@ class ImplementingSubjectController extends Controller
 
         public function getDepartmentForStudents()
         {
-            $departments = Students::pluck('department')->unique()->values();
+            $departments = ClassLists::pluck('department')->unique()->values();
+            $programs = ClassLists::pluck('program')->unique()->values();
+            $yearLevels = ClassLists::pluck('year_level')->unique()->sort()->values();  // Sort yearLevels in ascending order
 
-            // Ensure it's an array before returning
-            return response()->json($departments->toArray());
+            return response()->json([
+                'departments' => $departments,
+                'programs' => $programs,
+                'yearLevels' => $yearLevels,
+            ]);
         }
 
 

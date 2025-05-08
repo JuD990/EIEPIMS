@@ -132,6 +132,9 @@ const Table = ({
         }
     }, [ratings]);
 
+    let globalRowIndex = 0; // outside the map
+
+
     return (
         <div className="esl-scorecard-table-container">
         <table className="esl-scorecard-table">
@@ -148,24 +151,37 @@ const Table = ({
         </tr>
         </thead>
         <tbody>
+
         {categories.map((category, index) => {
             const categoryAverage = calculateCategoryAverage(category);
+
             return (
                 <React.Fragment key={index}>
-                <tr style={{ borderBottom: "1px solid #ddd" }}>
+                <tr style={{ borderBottom: "none" }}>
                 <td
                 className="vertical-text"
                 rowSpan={category.descriptors.length + 1}
-                style={{ border: "1px solid #ddd", padding: "8px" }}
+                style={{ borderTop: "none", borderBottom: "none", padding: "8px" }}
                 >
                 {category.category}
                 </td>
                 </tr>
+
                 {category.descriptors.map((descriptor, i) => {
                     const selectedDescriptor = ratings[descriptor]?.descriptor;
                     const optionKey = descriptorToOptionKey[descriptor];
+                    globalRowIndex++; // Increment the row index
+
                     return (
-                        <tr key={i} style={{ borderBottom: "1px solid #ddd" }}>
+                        <tr
+                        key={i}
+                        style={{
+                            borderBottom:
+                            globalRowIndex === 9 || globalRowIndex === 7 || globalRowIndex === 4
+                            ? "1px solid #ddd" // Thick border for specific rows
+                            : "none",
+                        }}
+                        >
                         <td style={{ border: "1px solid #ddd", padding: "8px" }}>
                         {descriptor}
                         </td>
@@ -185,23 +201,32 @@ const Table = ({
                         </select>
                         </div>
                         </td>
-                        <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                        <td style={{ borderTop: "none", borderBottom: "1px solid #ddd", borderRight: "1px solid #ddd", padding: "8px" }}>
                         {ratings[descriptor]?.rating || "N/A"}
                         </td>
-                        <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                        <td style={{ borderTop: "none", borderBottom: "none", borderRight: "1px solid #ddd", padding: "8px" }}>
                         {categoryAverage}
                         </td>
-                        <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                        <td style={{ borderTop: "none", borderBottom: "none", borderRight: "1px solid #ddd", padding: "8px" }}>
                         {calculateOverallAverage()}
                         </td>
-                        <td style={{ border: "1px solid #ddd", padding: "8px" }}> - </td>
-                        <td style={{ border: "1px solid #ddd", padding: "8px" }}> - </td>
+                        {/* Column 6 (Remove bottom border) */}
+                        <td style={{ borderTop: "none", borderBottom: "none", borderRight: "1px solid #ddd", padding: "8px" }}>
+                        -
+                        </td>
+                        {/* Column 8 (Remove bottom border) */}
+                        <td style={{ borderTop: "none", borderBottom: "none", borderRight: "1px solid #ddd", padding: "8px" }}>
+                        -
+                        </td>
                         </tr>
                     );
                 })}
                 </React.Fragment>
             );
         })}
+
+
+
         </tbody>
         </table>
         </div>

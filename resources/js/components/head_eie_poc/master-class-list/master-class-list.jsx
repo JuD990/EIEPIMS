@@ -9,6 +9,7 @@ const MasterClassList = () => {
   const [selectedProgram, setSelectedProgram] = useState("");
   const [selectedTitle, setSelectedTitle] = useState(null);
   const [selectedCode, setSelectedCode] = useState(null);
+  const [selectedYearLevel, setSelectedYearLevel] = useState(null); // <-- added selectedYearLevel state
 
   // Handle title and code selection change
   const handleTitleChange = (title) => {
@@ -40,6 +41,7 @@ const MasterClassList = () => {
     onTitleChange={handleTitleChange}
     selectedCode={selectedCode}
     onCodeChange={handleCodeChange}
+    onYearLevelChange={setSelectedYearLevel} // <-- passing the state handler
     />
     <input
     type="text"
@@ -61,6 +63,7 @@ const MasterClassList = () => {
     searchQuery={searchQuery}
     selectedTitle={selectedTitle}
     selectedCode={selectedCode}
+    selectedYearLevel={selectedYearLevel}  // <-- passing selectedYearLevel
     />
     <br />
     </div>

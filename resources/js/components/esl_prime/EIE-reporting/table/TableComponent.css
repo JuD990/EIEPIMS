@@ -2,7 +2,7 @@
 .eie-reporting-esl-table-container {
     overflow-x: auto;
     overflow-y: auto;
-    height: 640px;
+    height: 630px;
     margin-left: 340px;
     margin-right: 35px;
     border: 1px solid #ddd;
@@ -64,4 +64,25 @@
     border-bottom: 1px solid #ddd;
     padding: 8px;
     border-width: 1px;
+}
+
+.export-csv-floating-button {
+    position: fixed;
+    margin-right: 15px;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    padding: 12px 20px;
+    background-color: #DC2626;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+.export-csv-floating-button:hover {
+    background-color: #ad1d1d;
 }

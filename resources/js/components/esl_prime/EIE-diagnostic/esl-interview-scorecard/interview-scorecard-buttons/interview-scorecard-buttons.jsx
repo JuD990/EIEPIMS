@@ -324,7 +324,7 @@ const InterviewScorecardButtons = ({
         </div>
         {/* CEFR Level */}
         <div className="esl-cefr-rating-box">
-        <label>CEFR: {cefr.level} - {cefr.category}</label>
+        <label>{cefr.level} - {cefr.category}</label>
         </div>
         </div>
         </div>

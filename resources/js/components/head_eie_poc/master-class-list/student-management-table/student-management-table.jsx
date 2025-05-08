@@ -6,6 +6,7 @@ import { FaChevronDown } from "react-icons/fa";
 const StudentManagementTable = ({
   searchQuery ,
   selectedCode,
+  selectedYearLevel
 }) => {
   const [students, setStudents] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -57,12 +58,15 @@ const StudentManagementTable = ({
     (student.course_code?.toLowerCase() || "").includes(query) ||
     (student.status?.toLowerCase() || "").includes(query) ||
     (student.program?.toLowerCase() || "").includes(query) ||
-    (student.year_level?.toLowerCase() || "").includes(query)
+    (student.year_level?.toLowerCase() || "").includes(query);
 
     // Course code and title filters
     const matchesCode = selectedCode ? student.course_code === selectedCode : true;
 
-    return matchesSearch && matchesCode;
+    // Year level filter
+    const matchesYearLevel = selectedYearLevel ? student.year_level === selectedYearLevel : true;
+
+    return matchesSearch && matchesCode && matchesYearLevel; // Now also checks year level
   });
 
   useEffect(() => {

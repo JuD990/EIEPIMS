@@ -11,6 +11,7 @@ import masterClassListIcon from "@assets/master-class-list-icon.png";
 import uncLogo from "@assets/unc-logo.png";
 import assignPOC from "@assets/assign-poc.png";
 import graduating from "@assets/graduating.png";
+import diagnosticReportsIcon from "@assets/EIEDiagnosticReports.png";
 
 const CollegePOCSidebar = () => {
   const navigate = useNavigate();
@@ -125,6 +126,14 @@ const CollegePOCSidebar = () => {
     <p>EIE Reports</p>
     </button>
     </div>
+
+    <button
+    className={`eie-head-diagnosticReports-button ${activePage === "/eie-head-diagnostic-report" ? "active" : ""}`}
+    onClick={() => handleNavigation("/eie-head-diagnostic-report")}
+    >
+    <img src={diagnosticReportsIcon} alt="Diagnostics Reports Icon" />
+    <p>Diagnostics Reports</p>
+    </button>
 
     {/* Footer Branding */}
     <div className="unc-branding">

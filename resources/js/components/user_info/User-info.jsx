@@ -285,27 +285,30 @@ const UserInfo = () => {
       <label>
       First Name:
       <input
-      type=""
+      type="text"
       value={user.firstname || ""}
       onChange={(e) => setUser({ ...user, firstname: e.target.value })}
+      disabled
       />
       </label>
 
       <label>
       Middle Name:
       <input
-      type=""
+      type="text"
       value={user.middlename || ""}
       onChange={(e) => setUser({ ...user, middlename: e.target.value })}
+      disabled
       />
       </label>
 
       <label>
       Last Name:
       <input
-      type=""
+      type="text"
       value={user.lastname || ""}
       onChange={(e) => setUser({ ...user, lastname: e.target.value })}
+      disabled
       />
       </label>
 
@@ -315,6 +318,7 @@ const UserInfo = () => {
       type="email"
       value={user.email || ""}
       onChange={(e) => setUser({ ...user, email: e.target.value })}
+      disabled
       />
       </label>
       <label>

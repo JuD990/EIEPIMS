@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import EIEHeadSidebar from '../sidebar/eie-head-sidebar';
 import UserInfo from '@user-info/User-info';
-import nonSeniorIcon from "@assets/lowLevel.png";  // 1st to 3rd Year
-import seniorIcon from "@assets/4thYear.png";  // 4th Year
+import nonSeniorIcon from "@assets/lowLevel.png"; // 1st to 3rd Year
+import seniorIcon from "@assets/4thYear.png"; // 4th Year
 import "./student-management.css";
 
 const EIEHeadStudentManagement = () => {
@@ -12,27 +12,26 @@ const EIEHeadStudentManagement = () => {
     active_students: 0,
     active_percentage: 0,
     graduating_students: 0,
-    freshmen: { total: 0, active: 0, active_percentage: 0 },
-    sophomores: { total: 0, active: 0, active_percentage: 0 },
-    juniors: { total: 0, active: 0, active_percentage: 0 },
-    seniors: { total: 0, active: 0, active_percentage: 0 },
+    freshmen: { total: 0, active: 0, active_percentage: 0, subjects: [] },
+    sophomores: { total: 0, active: 0, active_percentage: 0, subjects: [] },
+    juniors: { total: 0, active: 0, active_percentage: 0, subjects: [] },
+    seniors: { total: 0, active: 0, active_percentage: 0, subjects: [] },
   });
 
-  // Fetch student statistics from the API
   useEffect(() => {
     const fetchStats = async () => {
       try {
         const employeeId = localStorage.getItem("employee_id");
         const response = await axios.get(`http://127.0.0.1:8000/api/student-statistics?employee_id=${employeeId}`);
-        console.log(response.data);  // Log the API response to check student statistics
-        setStats(response.data); // Update the state with API data
+        console.log(response.data);
+        setStats(response.data);
       } catch (error) {
         console.error("Failed to fetch student statistics:", error);
       }
     };
 
     fetchStats();
-  }, []);  // Empty dependency array ensures this runs once on component mount
+  }, []);
 
   const summaryItems = [
     {
@@ -41,12 +40,12 @@ const EIEHeadStudentManagement = () => {
       description: (
         <div className="description-flex">
         <span>Students</span>
-        <span>{stats.freshmen.active_percentage}%</span>
+        <span>{stats.active_percentage}%</span>
         </div>
       ),
       color: "#1B9F24",
       icon: nonSeniorIcon,
-      subjects: stats.freshmen.subjects?.map(s => s.course_title) || [],
+      subjects: stats.freshmen.subjects || [],
     },
     {
       label: "Sophomore",
@@ -54,12 +53,12 @@ const EIEHeadStudentManagement = () => {
       description: (
         <div className="description-flex">
         <span>Students</span>
-        <span>{stats.sophomores.active_percentage}%</span>
+        <span>{stats.active_percentage}%</span>
         </div>
       ),
       color: "#C7B213",
       icon: nonSeniorIcon,
-      subjects: stats.sophomores.subjects?.map(s => s.course_title) || [],
+      subjects: stats.sophomores.subjects || [],
     },
     {
       label: "Junior",
@@ -67,12 +66,12 @@ const EIEHeadStudentManagement = () => {
       description: (
         <div className="description-flex">
         <span>Students</span>
-        <span>{stats.juniors.active_percentage}%</span>
+        <span>{stats.active_percentage}%</span>
         </div>
       ),
       color: "#2294F2",
       icon: nonSeniorIcon,
-      subjects: stats.juniors.subjects?.map(s => s.course_title) || [],
+      subjects: stats.juniors.subjects || [],
     },
     {
       label: "Senior",
@@ -80,15 +79,14 @@ const EIEHeadStudentManagement = () => {
       description: (
         <div className="description-flex">
         <span>Students</span>
-        <span>{stats.seniors.active_percentage}%</span>
+        <span>{stats.active_percentage}%</span>
         </div>
       ),
       color: "#D93F3F",
       icon: seniorIcon,
-      subjects: stats.seniors.subjects?.map(s => s.course_title) || [],
+      subjects: stats.seniors.subjects || [],
     },
   ];
-
 
   return (
     <div>
@@ -139,7 +137,9 @@ const EIEHeadStudentManagement = () => {
           {item.subjects.length > 0 ? (
             <ul>
             {item.subjects.map((subject, idx) => (
-              <li key={idx}>{subject}</li>
+              <li key={idx}>
+              {subject.program} — <em>{subject.course_title}</em>
+              </li>
             ))}
             </ul>
           ) : (

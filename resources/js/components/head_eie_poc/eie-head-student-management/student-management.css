@@ -80,7 +80,7 @@
 
 .description-flex {
     display: flex;
-    gap: 135px;
+    gap: 120px;
     width: 100%;
     align-items: center;
     padding: 0 5px;
@@ -110,6 +110,7 @@
     display: inline-block;
     width: max-content;
     white-space: nowrap;
+    text-align: left;
 }
 
 .student-summary-box:hover .subject-list {

@@ -423,7 +423,7 @@ class ClassListController extends Controller
         $subjectsByYearLevel = ImplementingSubjects::whereIn('year_level', ['1st Year', '2nd Year', '3rd Year', '4th Year'])
         ->where('department', $department)
         ->where('semester', $currentSemester)
-        ->get(['year_level', 'course_title']);
+        ->get(['year_level', 'course_title', 'program']);
 
         $subjectsByYearLevelGrouped = $subjectsByYearLevel->groupBy('year_level');
 

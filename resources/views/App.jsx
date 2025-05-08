@@ -17,6 +17,7 @@ import ImplementingSubjects from "../js/components/head_eie_poc/implementing-sub
 import EIEHeadStudentManagement from "../js/components/head_eie_poc/eie-head-student-management/eie-head-student-management";
 import EIEHeadGraduatingList from "../js/components/head_eie_poc/graduating-list/graduating-list";
 import EIEHeadAssignPOC from "../js/components/head_eie_poc/assign_poc/assign_poc";
+import EIEHeadDiagnosticReport from "../js/components/head_eie_poc/eie-diagnostic-reports/eie-diagnostic-reports";
 
 // Lead POC
 import LeadEiePocDashboard from "../js/components/lead_eie_poc/LeadEiePocDashboard";
@@ -91,6 +92,7 @@ const App = () => {
     <Route path="/implementing-subjects" element={<PrivateRoute roles={['eie_head_poc']}><ImplementingSubjects /></PrivateRoute>} />
     <Route path="/eie-head-graduating-list" element={<PrivateRoute roles={['eie_head_poc']}><EIEHeadGraduatingList /></PrivateRoute>} />
     <Route path="/eie-head-assign-poc" element={<PrivateRoute roles={['eie_head_poc']}><EIEHeadAssignPOC /></PrivateRoute>} />
+    <Route path="/eie-head-diagnostic-report" element={<PrivateRoute roles={['eie_head_poc']}><EIEHeadDiagnosticReport /></PrivateRoute>} />
 
     {/* Lead POC */}
     <Route path="/lead-eie-poc-dashboard" element={<PrivateRoute roles={['lead_eie_poc']}><LeadEiePocDashboard /></PrivateRoute>} />

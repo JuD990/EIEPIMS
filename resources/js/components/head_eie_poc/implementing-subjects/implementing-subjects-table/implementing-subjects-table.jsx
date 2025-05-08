@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useTable } from "react-table";
 import axios from "axios";
 import "./implementing-subjects-table.css";
+import UploadButton from '../upload-implementing-subjects/upload-button';
 
 const ImplementingSubjectsTable = ({
   searchQuery,
@@ -176,19 +177,14 @@ const ImplementingSubjectsTable = ({
       { Header: "Active Students", accessor: "active_students" },
       { Header: "Enrolled Students", accessor: "enrolled_students" },
       {
-        Header: "Actions",
+        Header: "Upload",
         accessor: "actions",
         Cell: ({ row }) => (
-          <div style={{ display: "flex", gap: "10px" }}>
-            <button
-              className="action-button"
-              onClick={() => handleUpdate(row.values)}
-            >
-              Assign
-            </button>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <UploadButton data={row.original} />
           </div>
         ),
-      },
+      }
     ],
     []
   );

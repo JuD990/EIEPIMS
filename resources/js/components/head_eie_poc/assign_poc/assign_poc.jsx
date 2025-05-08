@@ -3,7 +3,6 @@ import "./assign_poc.css";
 import EIEHeadSidebar from '../sidebar/eie-head-sidebar';
 import UserInfo from '@user-info/User-info';
 import ImplementingSubjectsTable from "./implementing-subjects-table/implementing-subjects-table";
-import UploadingButton from "./upload-implementing-subjects/upload-button";
 import Dropdown from "./dropdown-button/implementing-subjects-dropdown";
 
 const GraduatingList = () => {
@@ -31,8 +30,6 @@ const GraduatingList = () => {
             gap: '10px',
             width: '100%',
         }}>
-        {/* Uploading Button */}
-        <UploadingButton onFileUpload={handleFileUpload} />
 
         <div style={{
             display: 'flex',

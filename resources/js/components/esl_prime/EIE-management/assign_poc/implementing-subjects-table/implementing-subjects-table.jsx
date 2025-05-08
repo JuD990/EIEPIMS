@@ -193,7 +193,7 @@ const ImplementingSubjectsTable = ({
         ),
       },
       {
-        Header: "POC Name",
+        Header: "Implementing Faculty",
         accessor: "assigned_poc",
         Cell: ({ value }) => value ? value : "Unassigned"
       },

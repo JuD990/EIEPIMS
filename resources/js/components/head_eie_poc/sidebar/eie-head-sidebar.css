@@ -72,6 +72,7 @@
 }
 
 /* Active State */
+.eie-head-diagnosticReports-button.active,
 .eie-head-dashboard-sidebar-button.active,
 .eie-head-implementing-subject-sidebar-button.active,
 .eie-head-master-class-list-sidebar-button.active,
@@ -81,6 +82,7 @@
   border-radius: 20px;
 }
 
+.eie-head-diagnosticReports-button.active p,
 .eie-head-dashboard-sidebar-button.active p,
 .eie-head-implementing-subject-sidebar-button.active p,
 .eie-head-master-class-list-sidebar-button.active p,
@@ -89,6 +91,7 @@
   color: white;
 }
 
+.eie-head-diagnosticReports-button.active img,
 .eie-head-dashboard-sidebar-button.active img,
 .eie-head-implementing-subject-sidebar-button.active img,
 .eie-head-master-class-list-sidebar-button.active img,
@@ -97,7 +100,7 @@
   filter: brightness(0) invert(1);
 }
 
-
+.eie-head-diagnosticReports-button,
 .eie-head-student-management-sidebar-button, 
 .eie-head-eie-reporting-sidebar-button, 
 .eie-head-implementing-subject-sidebar-button,
@@ -115,6 +118,8 @@
   width: 100%;
   margin-bottom: 15px;
 }
+
+.eie-head-diagnosticReports-button:hover,
 .eie-head-student-management-sidebar-button:hover, 
 .eie-head-eie-reporting-sidebar-button:hover, 
 .eie-head-implementing-subject-sidebar-button:hover,
@@ -123,6 +128,7 @@
   background-color: #DC2626;
   border-radius: 20px;
 }
+.eie-head-diagnosticReports-button:hover p,
 .eie-head-student-management-sidebar-button:hover p, 
 .eie-head-eie-reporting-sidebar-button:hover p, 
 .eie-head-implementing-subject-sidebar-button:hover p,
@@ -131,6 +137,7 @@
   color: white;
 }
 
+.eie-head-diagnosticReports-button:hover img,
 .eie-head-student-management-sidebar-button:hover img,
 .eie-head-eie-reporting-sidebar-button:hover img,
 .eie-head-implementing-subject-sidebar-button:hover img,
@@ -169,6 +176,16 @@
   margin-right: 15px;
   margin-left: 28px;
 }
+
+.eie-head-diagnosticReports-button{
+  gap: 15px;
+}
+
+.eie-head-diagnosticReports-button img{
+  margin-left: 15px;
+}
+
+.eie-head-diagnosticReports-button p,
 .eie-head-student-management-sidebar-button p, 
 .eie-head-eie-reporting-sidebar-button p, 
 .eie-head-implementing-subject-sidebar-button p,
