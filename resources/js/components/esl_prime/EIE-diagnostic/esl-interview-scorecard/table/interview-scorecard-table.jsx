@@ -137,31 +137,30 @@ const Table = ({
 
     return (
         <div className="esl-scorecard-table-container">
-        <table className="esl-scorecard-table">
+        <table className="esl-scorecard-table" style={{ borderCollapse: 'collapse', width: '100%' }}>
         <thead style={{ textAlign: 'center' }}>
         <tr>
-        <th className="vertical-header"></th>
-        <th className="horizontal-values">PGF</th>
-        <th>Descriptor</th>
-        <th>Rating</th>
-        <th>Average Rating per PGF</th>
-        <th>Average Rating</th>
-        <th>Previous Average Rating per PGF</th>
-        <th>Previous Average Rating</th>
+        <th className="vertical-header" style={{ padding: '8px' }}></th>
+        <th className="horizontal-values" style={{ padding: '8px' }}>PGF</th>
+        <th style={{ padding: '8px' }}>Descriptor</th>
+        <th style={{ padding: '8px' }}>Rating</th>
+        <th style={{ padding: '8px' }}>Average Rating per PGF</th>
+        <th className="no-border-bottom" style={{ padding: '8px' }}>Average Rating</th>
+        <th style={{ padding: '8px', borderBottom: '1px solid #ddd' }}>Previous Average Rating per PGF</th>
+        <th className="no-border-bottom" style={{ padding: '8px' }}>Previous Average Rating</th>
         </tr>
         </thead>
         <tbody>
-
         {categories.map((category, index) => {
             const categoryAverage = calculateCategoryAverage(category);
 
             return (
                 <React.Fragment key={index}>
-                <tr style={{ borderBottom: "none" }}>
+                <tr>
                 <td
                 className="vertical-text"
                 rowSpan={category.descriptors.length + 1}
-                style={{ borderTop: "none", borderBottom: "none", padding: "8px" }}
+                style={{ border: '1px solid #ddd', padding: '8px' }}
                 >
                 {category.category}
                 </td>
@@ -172,20 +171,24 @@ const Table = ({
                     const optionKey = descriptorToOptionKey[descriptor];
                     globalRowIndex++; // Increment the row index
 
+                    // Check if it's the 4th or 7th row
+                    const isFourthRow = globalRowIndex === 4;
+                    const isSeventhRow = globalRowIndex === 7;
+
                     return (
                         <tr
                         key={i}
                         style={{
                             borderBottom:
-                            globalRowIndex === 9 || globalRowIndex === 7 || globalRowIndex === 4
+                            globalRowIndex === 9
                             ? "1px solid #ddd" // Thick border for specific rows
                             : "none",
                         }}
                         >
-                        <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                        <td style={{ border: '1px solid #ddd', padding: '8px' }}>
                         {descriptor}
                         </td>
-                        <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                        <td style={{ border: '1px solid #ddd', padding: '8px' }}>
                         <div className="esl-table-dropdown-wrapper">
                         <select
                         className="esl-table-dropdown"
@@ -201,21 +204,50 @@ const Table = ({
                         </select>
                         </div>
                         </td>
-                        <td style={{ borderTop: "none", borderBottom: "1px solid #ddd", borderRight: "1px solid #ddd", padding: "8px" }}>
+                        <td style={{ border: '1px solid #ddd', padding: '8px' }}>
                         {ratings[descriptor]?.rating || "N/A"}
                         </td>
-                        <td style={{ borderTop: "none", borderBottom: "none", borderRight: "1px solid #ddd", padding: "8px" }}>
+                        <td
+                        style={{
+                            borderTop: "none", // Keeps top border none
+                            borderBottom: isFourthRow || isSeventhRow ? "1px solid #ddd" : "none", // Bottom border only for 4th and 7th row
+                            borderRight: "1px solid #ddd", // Keeps right border
+                            padding: "8px",
+                        }}
+                        >
                         {categoryAverage}
                         </td>
-                        <td style={{ borderTop: "none", borderBottom: "none", borderRight: "1px solid #ddd", padding: "8px" }}>
+                        {/* Do not apply bottom border for Average Rating column */}
+                        <td
+                        style={{
+                            borderTop: "none", // Keeps top border none
+                            borderBottom: "none", // Removes bottom border
+                            borderRight: "1px solid #ddd", // Keeps right border
+                            padding: "8px",
+                        }}
+                        >
                         {calculateOverallAverage()}
                         </td>
                         {/* Column 6 (Remove bottom border) */}
-                        <td style={{ borderTop: "none", borderBottom: "none", borderRight: "1px solid #ddd", padding: "8px" }}>
+                        <td
+                        style={{
+                            borderTop: "none", // Keeps top border none
+                            borderBottom: "none", // Removes bottom border
+                            borderRight: "1px solid #ddd",
+                            padding: "8px",
+                        }}
+                        >
                         -
                         </td>
                         {/* Column 8 (Remove bottom border) */}
-                        <td style={{ borderTop: "none", borderBottom: "none", borderRight: "1px solid #ddd", padding: "8px" }}>
+                        <td
+                        style={{
+                            borderTop: "none", // Keeps top border none
+                            borderBottom: isFourthRow || isSeventhRow ? "1px solid #ddd" : "none", // Bottom border only for 4th and 7th row
+                            borderRight: "1px solid #ddd",
+                            padding: "8px",
+                        }}
+                        >
                         -
                         </td>
                         </tr>
@@ -224,13 +256,11 @@ const Table = ({
                 </React.Fragment>
             );
         })}
-
-
-
         </tbody>
         </table>
         </div>
     );
+
 };
 
 export default Table;
