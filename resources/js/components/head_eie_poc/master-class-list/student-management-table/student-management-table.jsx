@@ -292,7 +292,7 @@ const StudentManagementTable = ({
         ),
         accessor: "reason_for_shift_or_drop",
         Cell: ({ value }) => (
-          <span>{value ? `- ${value}` : ""}</span> // Prepend '-' if there is content
+          <span>{value ? `- ${value}` : ""}</span>
         ),
       },
       {

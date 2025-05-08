@@ -80,7 +80,7 @@
 
 .description-flex {
     display: flex;
-    gap: 120px;
+    gap: 135px;
     width: 100%;
     align-items: center;
     padding: 0 5px;
@@ -89,16 +89,15 @@
 
 .left-align-value {
     font-size: 75px;
-    margin-right: 220px;
+    margin-right: 200px;
     padding-left: 12px;
     display: block;
 }
 
 .subject-list {
     position: absolute;
-    bottom: -100px; /* Adjust based on tooltip height */
+    bottom: -150px;
     left: 0;
-    width: 100%;
     background-color: #f9f9f9;
     border-radius: 8px;
     padding: 10px;
@@ -108,13 +107,16 @@
     transform: translateY(10px);
     transition: all 0.3s ease;
     z-index: 10;
+    display: inline-block;
+    width: max-content;
+    white-space: nowrap;
 }
 
 .student-summary-box:hover .subject-list {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
-    bottom: -200px; /* Ensures tooltip stays below */
+    bottom: -150px; /* Ensures tooltip stays below */
 }
 
 .subject-list ul {
@@ -126,4 +128,10 @@
 .subject-list p {
     margin: 0;
     font-style: italic;
+}
+
+.subject-list strong {
+    font-style: italic;
+    text-align: left;
+    font-size: 18px;
 }

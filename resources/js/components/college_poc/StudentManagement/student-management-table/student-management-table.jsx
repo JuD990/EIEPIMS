@@ -19,6 +19,8 @@ const StudentManagementTable = ({
     status: '',
     reason: '',
     courseCode: '',
+    gender: '',
+    candidate_for_graduating: '',
   });
 
   useEffect(() => {
@@ -82,7 +84,7 @@ const StudentManagementTable = ({
 
     const studentId = formData.studentId;
 
-    fetch(`http://localhost:8000/api/update-student/${formData.classListsId}`, {
+    fetch(`http://localhost:8000/api/update-student-college-poc/${formData.classListsId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -96,7 +98,9 @@ const StudentManagementTable = ({
         yearLevel: formData.yearLevel,
         status: formData.status,
         reason: formData.reason,
+        gender: formData.gender,
         courseCode: formData.courseCode,
+        candidate_for_graduating: formData.candidate_for_graduating,
       }),
     })
     .then((response) => {
@@ -132,6 +136,8 @@ const StudentManagementTable = ({
       status: row.original.status || '',
       reason: row.original.reason_for_shift_or_drop || '',
       courseCode: row.original.course_code || '',
+      gender: row.original.gender || '',
+      candidate_for_graduating: row.original.candidate_for_graduating || '',
     });
     setShowModal(true);
   };
@@ -362,16 +368,16 @@ const StudentManagementTable = ({
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-                   width: '600px',
-                   height: '880px',
-                   backgroundColor: '#FFFFFF',
-                   borderRadius: '5px',
-                   border: '1px solid #333333',
-                   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                   zIndex: 1000,
-                   padding: '20px',
-                   overflowY: 'auto',
-                   fontFamily: 'Poppins',
+        width: '600px',
+        height: '880px',
+        backgroundColor: '#FFFFFF',
+        borderRadius: '5px',
+        border: '1px solid #333333',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+        zIndex: 1000,
+        padding: '20px',
+        overflowY: 'auto',
+        fontFamily: 'Poppins',
       }}>
       <h2 style={{
         fontSize: '32px',
@@ -414,15 +420,20 @@ const StudentManagementTable = ({
       />
       </div>
       <div style={{ marginBottom: '20px' }}>
-      <label style={{ display: 'block', fontSize: '20px', color: '#383838' }}>Subject:</label>
-      <input
-      type="text"
-      name="courseCode"
-      value={formData.courseCode}
+      <label style={{ display: 'block', fontSize: '20px', color: '#383838' }}>Gender:</label>
+      <select
+      name="gender"
+      value={formData.gender}
       onChange={handleInputChange}
       style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #333333' }}
-      />
+      >
+      <option value="">Select Gender</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+      <option value="Other">Other</option>
+      </select>
       </div>
+
       <div style={{ marginBottom: '20px' }}>
       <label style={{ display: 'block', fontSize: '20px', color: '#383838' }}>Classification:</label>
       <select

@@ -161,7 +161,7 @@ class ClassListController extends Controller
                 'yearLevel' => 'required|string',
                 'status' => 'required|string',
                 'gender' => 'nullable|string',
-                'reason' => 'nullable|string', // This is fine
+                'reason' => 'nullable|string',
                 'courseCode' => 'nullable|string',
                 'candidate_for_graduating' => 'nullable|string',
             ]);
@@ -182,6 +182,45 @@ class ClassListController extends Controller
             $student->reason_for_shift_or_drop = $request->input('reason');
             $student->course_code = $request->input('courseCode');
             $student->candidate_for_graduating = $request->input('candidate_for_graduating');
+
+            $student->save();
+
+            return response()->json(['message' => 'Student updated successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Update failed.', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function updateStudentCollegePoc(Request $request, $class_lists_id)
+    {
+        try {
+            $request->validate([
+                'firstName' => 'required|string|max:255',
+                'middleName' => 'nullable|string|max:255',
+                'lastName' => 'required|string|max:255',
+                'classification' => 'nullable|string',
+                'yearLevel' => 'required|string',
+                'status' => 'required|string',
+                'gender' => 'nullable|string',
+                'reason' => 'nullable|string',
+                'courseCode' => 'nullable|string',
+            ]);
+
+            $student = ClassLists::where('class_lists_id', $class_lists_id)->first();
+
+            if (!$student) {
+                return response()->json(['message' => 'Student not found.'], 404);
+            }
+
+            $student->firstname = $request->input('firstName');
+            $student->middlename = $request->input('middleName');
+            $student->lastname = $request->input('lastName');
+            $student->classification = $request->input('classification');
+            $student->year_level = $request->input('yearLevel');
+            $student->gender = $request->input('gender');
+            $student->status = $request->input('status');
+            $student->reason_for_shift_or_drop = $request->input('reason');
+            $student->course_code = $request->input('courseCode');
 
             $student->save();
 

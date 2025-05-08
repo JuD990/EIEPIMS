@@ -131,6 +131,7 @@ Route::get('/class-list', [ClassListController::class, 'getClassListByDepartment
 Route::post('/upload-class-list', [ClassListController::class, 'uploadClassList']);
 Route::get('/manage-class-list', [ClassListController::class, 'ManageClassList']);
 Route::put('/update-student/{class_lists_id}', [ClassListController::class, 'updateStudent']);
+Route::put('/update-student-college-poc/{class_lists_id}', [ClassListController::class, 'updateStudentCollegePoc']);
 Route::get('/class-lists', [ClassListController::class, 'fetchMonthlyChamps']);
 Route::get('/get-courses-by-department', [ClassListController::class, 'getCoursesByDepartment']);
 Route::get('/get-courses-by-department-poc', [ClassListController::class, 'getCoursesPOC']);

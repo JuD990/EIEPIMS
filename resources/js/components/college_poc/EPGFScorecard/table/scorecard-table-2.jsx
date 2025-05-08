@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './TableComponent.css';
 import SubmitButton from '../buttons/submit-button';
+import checkIcon from "@assets/check.png";
 
 const TableComponent = ({ course_code, taskTitle, department, course_title, searchQuery }) => {
   const [courseTitle, setCourseTitle] = useState(null);
@@ -318,7 +319,6 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
       try {
         const response = await fetch('/api/submitted-scorecards');
         const data = await response.json();
-        console.log(data);
         setSubmittedIds(data); // Array of student IDs who already submitted
       } catch (error) {
         console.error('Error fetching submitted student IDs:', error);
@@ -542,46 +542,46 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
         const studentData = {
           fullName: `${student.firstname} ${student.lastname}`,
           epgf_average: epgfAverage.toFixed(2),
-                            proficiency_level: getProficiencyLevel(epgfAverage).level,
-                            type: student.type || 'Reading',
+          proficiency_level: getProficiencyLevel(epgfAverage).level,
+          type: student.type || 'Reading',
 
-                            // Pronunciation
-                            consistency_descriptor: selectedConsistency ? selectedConsistency.descriptor : 'N/A',
-                            consistency_rating: selectedConsistency ? selectedConsistency.rating : '0.00',
-                            clarity_descriptor: selectedClarity ? selectedClarity.descriptor : 'N/A',
-                            clarity_rating: selectedClarity ? selectedClarity.rating : '0.00',
-                            articulation_descriptor: selectedArticulation ? selectedArticulation.descriptor : 'N/A',
-                            articulation_rating: selectedArticulation ? selectedArticulation.rating : '0.00',
-                            intonation_and_stress_descriptor: selectedIntonationAndStress ? selectedIntonationAndStress.descriptor : 'N/A',
-                            intonation_and_stress_rating: selectedIntonationAndStress ? selectedIntonationAndStress.rating : '0.00',
-                            pronunciation_average: pronunciationAverage.toFixed(2),
+          // Pronunciation
+          consistency_descriptor: selectedConsistency ? selectedConsistency.descriptor : 'N/A',
+          consistency_rating: selectedConsistency ? selectedConsistency.rating : '0.00',
+          clarity_descriptor: selectedClarity ? selectedClarity.descriptor : 'N/A',
+          clarity_rating: selectedClarity ? selectedClarity.rating : '0.00',
+          articulation_descriptor: selectedArticulation ? selectedArticulation.descriptor : 'N/A',
+          articulation_rating: selectedArticulation ? selectedArticulation.rating : '0.00',
+          intonation_and_stress_descriptor: selectedIntonationAndStress ? selectedIntonationAndStress.descriptor : 'N/A',
+          intonation_and_stress_rating: selectedIntonationAndStress ? selectedIntonationAndStress.rating : '0.00',
+          pronunciation_average: pronunciationAverage.toFixed(2),
 
-                            // Grammar
-                            accuracy_descriptor: selectedAccuracy ? selectedAccuracy.descriptor : 'N/A',
-                            accuracy_rating: selectedAccuracy ? selectedAccuracy.rating : '0.00',
-                            clarity_of_thought_descriptor: selectedClarityOfThought ? selectedClarityOfThought.descriptor : 'N/A',
-                            clarity_of_thought_rating: selectedClarityOfThought ? selectedClarityOfThought.rating : '0.00',
-                            syntax_descriptor: selectedSyntax ? selectedSyntax.descriptor : 'N/A',
-                            syntax_rating: selectedSyntax ? selectedSyntax.rating : '0.00',
-                            grammar_average: grammarAverage.toFixed(2),
+          // Grammar
+          accuracy_descriptor: selectedAccuracy ? selectedAccuracy.descriptor : 'N/A',
+          accuracy_rating: selectedAccuracy ? selectedAccuracy.rating : '0.00',
+          clarity_of_thought_descriptor: selectedClarityOfThought ? selectedClarityOfThought.descriptor : 'N/A',
+          clarity_of_thought_rating: selectedClarityOfThought ? selectedClarityOfThought.rating : '0.00',
+          syntax_descriptor: selectedSyntax ? selectedSyntax.descriptor : 'N/A',
+          syntax_rating: selectedSyntax ? selectedSyntax.rating : '0.00',
+          grammar_average: grammarAverage.toFixed(2),
 
-                            // Fluency
-                            quality_of_response_descriptor: selectedQualityOfResponse ? selectedQualityOfResponse.descriptor : 'N/A',
-                            quality_of_response_rating: selectedQualityOfResponse ? selectedQualityOfResponse.rating : '0.00',
-                            detail_of_response_descriptor: selectedDetailOfResponse ? selectedDetailOfResponse.descriptor : 'N/A',
-                            detail_of_response_rating: selectedDetailOfResponse ? selectedDetailOfResponse.rating : '0.00',
-                            fluency_average: fluencyAverage.toFixed(2),
+          // Fluency
+          quality_of_response_descriptor: selectedQualityOfResponse ? selectedQualityOfResponse.descriptor : 'N/A',
+          quality_of_response_rating: selectedQualityOfResponse ? selectedQualityOfResponse.rating : '0.00',
+          detail_of_response_descriptor: selectedDetailOfResponse ? selectedDetailOfResponse.descriptor : 'N/A',
+          detail_of_response_rating: selectedDetailOfResponse ? selectedDetailOfResponse.rating : '0.00',
+          fluency_average: fluencyAverage.toFixed(2),
 
-                            comment: student.comment,
-                            course_code: course_code,
-                            task_title: taskTitle || "No Title",
-                            epgf_rubric_id: version,
-                            student_id: `${student.student_id}`,  // Corrected with backticks
-                            department: `${student.department}`,  // Corrected with backticks
-                            program: `${student.program}`,        // Corrected with backticks
-                            active_students: active_students,
-                            course_title: course_title,
-                            year_level: `${student.year_level}`,  // Corrected with backticks
+          comment: student.comment,
+          course_code: course_code,
+          task_title: taskTitle || "No Title",
+          epgf_rubric_id: version,
+          student_id: `${student.student_id}`,  // Corrected with backticks
+          department: `${student.department}`,  // Corrected with backticks
+          program: `${student.program}`,        // Corrected with backticks
+          active_students: active_students,
+          course_title: course_title,
+          year_level: `${student.year_level}`,  // Corrected with backticks
         };
 
         // Helper function to check for '0.00' or 'N/A'
@@ -643,7 +643,31 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
 
       return (
         <tr key={rowIndex}>
-        <td>{rowIndex + 1}</td>
+        <td>
+        <div
+        title="Evaluated"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+        }}
+        >
+        {rowIndex + 1}
+        {submittedIds.includes(students[rowIndex].student_id) && (
+          <img
+          src={checkIcon}
+          alt="Evaluated"
+          style={{
+            width: "16px",
+            height: "16px",
+            marginLeft: "5px",
+            verticalAlign: "middle",
+            pointerEvents: "auto",
+          }}
+          />
+        )}
+        </div>
+        </td>
         <td><div style={{ textAlign: 'center' }}>{`${student.firstname} ${student.lastname}`}</div></td>
         <td><div style={{ textAlign: 'center' }}>{student.student_id}</div></td>
         <td><div style={{ textAlign: 'center' }}>{student.year_level}</div></td>
