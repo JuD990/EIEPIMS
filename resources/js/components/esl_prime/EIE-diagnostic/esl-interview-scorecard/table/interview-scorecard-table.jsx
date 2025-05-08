@@ -146,7 +146,7 @@ const Table = ({
         <th style={{ padding: '8px' }}>Rating</th>
         <th style={{ padding: '8px' }}>Average Rating per PGF</th>
         <th className="no-border-bottom" style={{ padding: '8px' }}>Average Rating</th>
-        <th style={{ padding: '8px', borderBottom: '1px solid #ddd' }}>Previous Average Rating per PGF</th>
+        <th style={{ padding: '8px' }}>Previous Average Rating per PGF</th>
         <th className="no-border-bottom" style={{ padding: '8px' }}>Previous Average Rating</th>
         </tr>
         </thead>
@@ -171,7 +171,7 @@ const Table = ({
                     const optionKey = descriptorToOptionKey[descriptor];
                     globalRowIndex++; // Increment the row index
 
-                    // Check if it's the 4th or 7th row
+                    // Check if it's the 4th or 7th row for the Previous Average Rating per PGF column
                     const isFourthRow = globalRowIndex === 4;
                     const isSeventhRow = globalRowIndex === 7;
 
@@ -217,34 +217,33 @@ const Table = ({
                         >
                         {categoryAverage}
                         </td>
-                        {/* Do not apply bottom border for Average Rating column */}
                         <td
                         style={{
                             borderTop: "none", // Keeps top border none
-                            borderBottom: "none", // Removes bottom border
+                            borderBottom: "none", // Removes bottom border for Average Rating column
                             borderRight: "1px solid #ddd", // Keeps right border
                             padding: "8px",
                         }}
                         >
                         {calculateOverallAverage()}
                         </td>
-                        {/* Column 6 (Remove bottom border) */}
+                        {/* Column 6 (Previous Average Rating per PGF) */}
                         <td
                         style={{
                             borderTop: "none", // Keeps top border none
-                            borderBottom: "none", // Removes bottom border
-                            borderRight: "1px solid #ddd",
+                            borderBottom: isFourthRow || isSeventhRow ? "1px solid #ddd" : "none", // Bottom border only for 4th and 7th row
+                            borderRight: "1px solid #ddd", // Keeps right border
                             padding: "8px",
                         }}
                         >
                         -
                         </td>
-                        {/* Column 8 (Remove bottom border) */}
+                        {/* Column 8 (Previous Average Rating) */}
                         <td
                         style={{
                             borderTop: "none", // Keeps top border none
-                            borderBottom: isFourthRow || isSeventhRow ? "1px solid #ddd" : "none", // Bottom border only for 4th and 7th row
-                            borderRight: "1px solid #ddd",
+                            borderBottom: "none", // Removes bottom border
+                            borderRight: "1px solid #ddd", // Keeps right border
                             padding: "8px",
                         }}
                         >
