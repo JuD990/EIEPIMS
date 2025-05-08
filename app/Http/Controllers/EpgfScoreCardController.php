@@ -274,4 +274,10 @@ class EpgfScoreCardController extends Controller
         $submittedIds = EieScorecardClassReport::pluck('student_id');
         return response()->json($submittedIds);
     }
+
+    public function getByStudentId($student_id)
+    {
+        $reports = EieScorecardClassReport::where('student_id', $student_id)->get();
+        return response()->json($reports);
+    }
 }

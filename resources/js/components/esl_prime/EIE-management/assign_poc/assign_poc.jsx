@@ -13,7 +13,7 @@ const GraduatingList = () => {
     const [selectedSemester, setSelectedSemester] = useState("");
 
     return (
-        <div>
+        <div style={{ overflow: "hidden" }}>
         <Sidebar />
         <UserInfo/>
         <br /><br /><br /><br /><br />

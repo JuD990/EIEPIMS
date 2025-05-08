@@ -19,7 +19,7 @@ const EPGFScorecard = () => {
     };
 
   return (
-    <div>
+    <div style={{ overflow: "hidden" }}>
       <UserInfo />
       <Sidebar />
       <br /><br /><br /><br />

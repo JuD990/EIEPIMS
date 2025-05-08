@@ -28,7 +28,7 @@ const RemarksDropdown = ({ setRemarks, yearLevel }) => {
 
     return (
         <div style={{ textAlign: 'left', marginTop: '-40px' }}>
-        <select onChange={handleChange} value={selectedOption} style={{ width: '200px' }}>
+        <select onChange={handleChange} value={selectedOption} style={{ width: '200px', backgroundColor: "#FBF7F7" }}>
         <option value="graduating">Graduating</option>
         <option value="nonGraduating">Non-Graduating</option>
         </select>

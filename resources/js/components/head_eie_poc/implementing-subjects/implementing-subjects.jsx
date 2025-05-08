@@ -16,7 +16,7 @@ const EIEHeadImplementingSubjects = () => {
   };
 
   return (
-    <div>
+    <div style={{ overflow: "hidden" }}>
     <EIEHeadSidebar />
     <UserInfo />
     <br /><br /><br /><br />
