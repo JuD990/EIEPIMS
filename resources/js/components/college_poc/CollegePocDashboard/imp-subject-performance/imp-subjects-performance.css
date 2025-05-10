@@ -1,0 +1,47 @@
+/* ImpSubjectsPerformance.css */
+
+.chart-container {
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 16px;
+    width: 1550px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    margin-left: 350px;
+}
+
+.dashboard-table-container {
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 16px;
+    width: 1550px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    margin-left: 350px;
+}
+
+
+
+.title-dropdown {
+    width: auto;
+    padding: 4px 24px 4px 8px; /* right padding for icon space */
+    border: none;
+    background-color: transparent;
+    font-size: 24px;
+    font-weight: bold;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg%20fill='black'%20height='14'%20viewBox='0%200%2024%2024'%20width='14'%20xmlns='http://www.w3.org/2000/svg'%3E%3Cpath%20d='M7%2010l5%205%205-5z'%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: 24px; /* Adjusted size for better fit */
+
+    /* Dropdown menu specific styles */
+    max-height: 200px; /* Adjusted height limit for the dropdown */
+    overflow-y: auto;
+    font-weight: 700;
+}
+

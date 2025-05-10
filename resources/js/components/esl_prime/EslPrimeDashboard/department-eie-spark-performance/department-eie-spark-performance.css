@@ -1,0 +1,41 @@
+.esl-spark-chart-container {
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 16px;
+    width: 1550px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    margin-left: 350px;
+    font-family: 'Poppins';
+}
+
+.esl-spark-chart-title p {
+    font-family: 'Poppins';
+    text-align: left;
+    margin-left: 10px;
+    margin-top: -12px;
+    font-family: 'Poppins';
+    font-size: 0.95rem;
+    font-style: italic;
+    color: #666666;
+}
+
+.esl-spark-chart-title h2 {
+    font-family: 'Poppins';
+    text-align: left;
+    font-weight: 700;
+}
+
+.department-dropdown {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    display: inline-block;
+    width: auto; /* Let width adjust to content */
+    min-width: 200px; /* Optional: set a minimum width for consistency */
+    padding-right: 24px; /* Optional: spacing for dropdown arrow */
+}
+

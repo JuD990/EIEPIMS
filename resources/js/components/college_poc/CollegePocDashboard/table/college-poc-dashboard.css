@@ -1,9 +1,7 @@
-.dashboard-esl-container {
+.dashboard-college-poc-container {
     overflow-x: auto;
     overflow-y: auto;
     height: 700px;
-    margin-left: 340px;
-    margin-right: 35px;
     border: 1px solid #ddd;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     text-align: center;
@@ -11,7 +9,7 @@
     white-space: nowrap;
 }
 
-.dashboard-esl-table {
+.dashboard-college-poc-table {
     width: 100%;
     border-collapse: collapse;
     background-color: #fff;
@@ -25,7 +23,7 @@
     text-align: center;
 }
 
-.dashboard-esl-table th {
+.dashboard-college-poc-table th {
     background-color: #F4F7FC;
     font-weight: bold;
     position: sticky;
@@ -33,11 +31,11 @@
     z-index: 1;
 }
 
-.dashboard-esl-table thead tr:first-child th {
+.dashboard-college-poc-table thead tr:first-child th {
     top: 0;
 }
 
-.dashboard-esl-table thead tr:nth-child(2) th {
+.dashboard-college-poc-table thead tr:nth-child(2) th {
     top: 40px;
 }
 
@@ -84,4 +82,10 @@
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* Align Course Title column to the left */
+.dashboard-college-poc-table th:nth-child(5), /* Header for Course Title */
+.dashboard-college-poc-table td:nth-child(5) { /* Data for Course Title */
+    text-align: left;
 }

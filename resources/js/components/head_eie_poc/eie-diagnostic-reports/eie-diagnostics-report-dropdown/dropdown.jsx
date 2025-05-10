@@ -21,17 +21,27 @@ const DiagnosticsDropdown = ({
     const [schoolYearList, setSchoolYearList] = useState([]);
 
     useEffect(() => {
-        const fetchDepartments = async () => {
+        const fetchDepartmentsAndUserDept = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/api/master-class-list-department");
-                const departmentList = Array.isArray(response.data) ? response.data : [];
+                const employeeId = localStorage.getItem("employee_id");
+                const userType = localStorage.getItem("userType");
+
+                const [deptRes, userDeptRes] = await Promise.all([
+                    axios.get("http://localhost:8000/api/master-class-list-department"),
+                                                                 axios.get(`http://localhost:8000/api/employee-department/${userType}/${employeeId}`)
+                ]);
+
+                const departmentList = Array.isArray(deptRes.data) ? deptRes.data : [];
+                const userDepartment = userDeptRes.data?.department || null; // Adjust based on your API response
+
                 setDepartments(departmentList);
 
-                if (departmentList.length > 0 && !department) {
-                    setDepartment(departmentList[0]);
+                if (!department) {
+                    const matchedDepartment = departmentList.find(dept => dept === userDepartment);
+                    setDepartment(matchedDepartment || departmentList[0] || "");
                 }
             } catch (error) {
-                console.error("Error fetching departments:", error);
+                console.error("Error fetching departments or user department:", error);
             }
         };
 
@@ -49,9 +59,10 @@ const DiagnosticsDropdown = ({
             }
         };
 
-        fetchDepartments();
+        fetchDepartmentsAndUserDept();
         fetchSchoolYears();
     }, [department, schoolYear, setDepartment, setSchoolYear]);
+
 
     const filteredDepartments = departments.filter(dept => dept.toLowerCase().includes(searchQuery.toLowerCase()));
     const filteredSchoolYears = schoolYearList.filter(year => year.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -59,33 +70,6 @@ const DiagnosticsDropdown = ({
     return (
         <div className="diagnostics-dropdown-controls">
         <div className="diagnostics-dropdown-container">
-        {/* Department Dropdown */}
-        <div className="diagnostics-dropdown-wrapper">
-        <button className="diagnostics-dropdown-btn" onClick={() => setIsDepartmentOpen(prev => !prev)}>
-        {department || "No Department Found"}
-        <FaChevronDown className={`diagnostics-dropdown-arrow ${isDepartmentOpen ? "open" : ""}`} />
-        </button>
-        {isDepartmentOpen && (
-            <div className="diagnostics-dropdown-menu">
-            {filteredDepartments.length > 0 ? (
-                filteredDepartments.map((dept, index) => (
-                    <p
-                    key={index}
-                    className={`diagnostics-dropdown-item ${department === dept ? "diagnostics-dropdown-selected" : ""}`}
-                    onClick={() => {
-                        setDepartment(dept);
-                        setIsDepartmentOpen(false);
-                    }}
-                    >
-                    {dept}
-                    </p>
-                ))
-            ) : (
-                <p className="diagnostics-dropdown-item">No Departments</p>
-            )}
-            </div>
-        )}
-        </div>
 
         {/* Attendance Dropdown */}
         <div className="diagnostics-dropdown-wrapper">

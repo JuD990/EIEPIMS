@@ -1,19 +1,18 @@
-.esl-dashboard-dropdown-container {
+.college-poc-dashboard-dropdown-container {
     display: flex;
     gap: 20px;
     align-items: center;
     justify-content: flex-start;
-    margin-left: 340px;
     margin-right: auto;
     white-space: nowrap;
     padding: 8px;
 }
 
-.esl-dashboard-dropdown-wrapper {
+.college-poc-dashboard-dropdown-wrapper {
     position: relative;
 }
 
-.esl-dashboard-dropdown-btn {
+.college-poc-dashboard-dropdown-btn {
     padding: 10px 20px;
     background-color: #FBF7F7;
     color: black;
@@ -28,11 +27,11 @@
     height: 50px;
 }
 
-.esl-dashboard-dropdown-btn .esl-dashboard-dropdown-arrow {
+.college-poc-dashboard-dropdown-btn .college-poc-dashboard-dropdown-arrow {
     margin-left: auto;
 }
 
-.esl-dashboard-dropdown-menu {
+.college-poc-dashboard-dropdown-menu {
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -51,28 +50,28 @@
     overflow-y: auto;          /* 👈 Enable scrolling */
 }
 
-.esl-dashboard-dropdown-item {
+.college-poc-dashboard-dropdown-item {
     padding: 8px 12px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-.esl-dashboard-dropdown-item:hover {
+.college-poc-dashboard-dropdown-item:hover {
     background-color: #f0f0f0;
 }
 
-.esl-dashboard-dropdown-item.esl-dashboard-selected {
+.college-poc-dashboard-dropdown-item.college-poc-dashboard-selected {
     font-weight: bold;
     background-color: #e0e0e0;
 }
 
-.esl-dashboard-controls {
+.college-poc-dashboard-controls {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.esl-dashboard-refresh-btn {
+.college-poc-dashboard-refresh-btn {
     display: flex;
     align-items: center;
     padding: 8px 12px;
@@ -82,15 +81,9 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
-    margin-right: 35px;
+    margin-right: 55px;
 }
 
-.esl-dashboard-refresh-btn:hover {
+.college-poc-dashboard-refresh-btn:hover {
     background-color: #FF474A;
 }
-
-.esl-dashboard-refresh-icon {
-    margin-left: 15px;
-    font-size: 16px;
-}
-

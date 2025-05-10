@@ -83,7 +83,9 @@ const TableComponent = ({ department, schoolYear, semester }) => {
                     <td style={{ textAlign: 'center' }}>{programData.program || "-"}</td>
                     <td style={{ textAlign: 'center' }}>{programData.enrolledStudents || "-"}</td>
                     <td style={{ textAlign: 'center' }}>{`${target}%`}</td>
-                    <td style={{ textAlign: 'center' }}>{programData.courseTitle || "-"}</td>
+                    <td style={{ textAlign: 'left' }}>
+                    {programData.courseTitle || "-"}
+                    </td>
                     <td style={{ textAlign: 'center' }}>{programData.assignedPOC || "-"}</td>
 
                     {months.flatMap((month, monthIndex) => {

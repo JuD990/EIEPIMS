@@ -41,8 +41,8 @@ const TableComponent = ({ department, schoolYear, semester }) => {
     };
 
     return (
-        <div className="dashboard-esl-container">
-        <table className="dashboard-esl-table unique-bordered-table">
+        <div className="dashboard-college-poc-container">
+        <table className="dashboard-college-poc-table unique-bordered-table">
         <thead>
         <tr>
         <th rowSpan="2">Academic Level</th>

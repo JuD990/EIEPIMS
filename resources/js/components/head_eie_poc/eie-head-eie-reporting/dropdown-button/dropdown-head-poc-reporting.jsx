@@ -139,29 +139,30 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
         </div>
 
         {/* School Year Dropdown */}
-        <div className="esl-dashboard-dropdown-wrapper">
-        <button className="esl-dashboard-dropdown-btn" onClick={() => setIsSchoolYearOpen((prev) => !prev)}>
-        {schoolYear || "Select School Year"}
+        <div className="eie-head-dashboard-dropdown-wrapper">
+        <button
+        className="eie-head-dashboard-dropdown-btn"
+        onClick={() => setIsSchoolYearOpen((prev) => !prev)}
+        >
+        {schoolYear ? schoolYear.replace("/", "-") : "Select School Year"}
         <FaChevronDown className={`esl-dashboard-dropdown-arrow ${isSchoolYearOpen ? "open" : ""}`} />
         </button>
         {isSchoolYearOpen && (
-            <div className="esl-dashboard-dropdown-menu">
+            <div className="eie-head-graph-dropdown-menu">
             {schoolYears.length > 0 ? (
                 schoolYears.map((year, index) => (
                     <p
                     key={index}
-                    className={`esl-dashboard-dropdown-item ${schoolYear === year ? "esl-dashboard-selected" : ""}`}
-                    onClick={() => {
-                        setSchoolYear(year);
-                        setSelectedSchoolYear(year);
-                        setIsSchoolYearOpen(false);
-                    }}
+                    className={`eie-head-graph-dropdown-item ${
+                        schoolYear === year ? "eie-head-graph-selected" : ""
+                    }`}
+                    onClick={() => handleSchoolYearSelect(year)}
                     >
-                    {year}
+                    {year.replace("/", "-")} {/* Convert the slash to a dash */}
                     </p>
                 ))
             ) : (
-                <p className="esl-dashboard-dropdown-item">No School Years</p>
+                <p className="eie-head-graph-dropdown-item">No School Years</p>
             )}
             </div>
         )}

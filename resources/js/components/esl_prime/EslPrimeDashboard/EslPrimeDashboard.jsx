@@ -3,6 +3,8 @@ import ESLSidebar from '../sidebar/esl-sidebar';
 import UserInfo from '@user-info/User-info';
 import TableComponent from "./table/esl-table-dashboard";
 import DashboardDropdown from "./dropdown-button/dropdown-esl-dashboard";
+import CollegeProficiencyChart from "./college-proficiency-distribution /college-proficiency-distribution";
+import DepartmentEieSparkPerformance from "./department-eie-spark-performance/department-eie-spark-performance";
 
 const EslPrimeDashboard = () => {
   const currentMonth = new Date().getMonth(); // 0 for January, 11 for December
@@ -25,10 +27,17 @@ const EslPrimeDashboard = () => {
     <UserInfo />
     <br /><br /><br />
     <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#383838' }}>
-    Dashboard - {selectedSemester}/{selectedDepartment}-{selectedSchoolYear}
+    Dashboard
     </h1>
 
+    <CollegeProficiencyChart />
+    <br />
+    <DepartmentEieSparkPerformance/>
+    <br />
+    <div className="dashboard-table-container">
+    <div style={{ marginBottom: "10px" }}>
     {/* Pass state setters to Dropdown */}
+    <h2 style={{ textAlign: "left", fontFamily: "Poppins", fontWeight: "700" }}>Table Form - {selectedSemester}, {selectedDepartment} {selectedSchoolYear.replace('/', '-')}</h2>
     <DashboardDropdown
     setSelectedDepartment={setSelectedDepartment}
     setSelectedSchoolYear={setSelectedSchoolYear}
@@ -41,6 +50,8 @@ const EslPrimeDashboard = () => {
     schoolYear={selectedSchoolYear}
     semester={selectedSemester}
     />
+    </div>
+    </div>
     </div>
   );
 };

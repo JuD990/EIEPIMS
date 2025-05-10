@@ -1,0 +1,32 @@
+.cpd-chart-container {
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 16px;
+    width: 1550px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    margin-left: 350px;
+    font-family: 'Poppins';
+}
+
+.cpd-chart-header {
+    font-family: 'Poppins';
+    text-align: left;
+    margin-bottom: 1rem;
+}
+
+.cpd-chart-title {
+    font-family: 'Poppins';
+    text-align: left;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.cpd-chart-subtitle {
+    font-family: 'Poppins';
+    font-size: 0.95rem;
+    font-style: italic;
+    color: #666666;
+    margin: 0;
+}

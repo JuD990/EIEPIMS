@@ -83,11 +83,11 @@
     font-size: 14px;
 }
 
-.esl-prime-dashboard-refresh-btn:hover {
+.esl-dashboard-refresh-btn:hover {
     background-color: #FF474A;
 }
 
-.esl-prime-dashboard-refresh-icon {
+.esl-dashboard-refresh-icon {
     margin-left: 15px;
     font-size: 16px;
 }

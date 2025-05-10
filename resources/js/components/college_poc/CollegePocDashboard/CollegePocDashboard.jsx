@@ -3,6 +3,7 @@ import CollegePOCsidebar from "../sidebar/college-poc-sidebar";
 import UserInfo from "@user-info/User-info";
 import TableComponent from "./table/college-poc-dashboard";
 import DashboardDropdown from "./dropdown-button/dropdown-college-poc-dashboard";
+import ImpSubjectsPerformance from "./imp-subject-performance/imp-subjects-performance";
 
 const CollegePocDashboard = () => {
   const currentMonth = new Date().getMonth(); // 0 for January, 11 for December
@@ -24,11 +25,16 @@ const CollegePocDashboard = () => {
     <CollegePOCsidebar />
     <UserInfo />
     <br /><br /><br />
-    <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#383838' }}>
-    Dashboard - {selectedSemester}/{selectedDepartment}-{selectedSchoolYear}
+    <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '350px', color: '#383838' }}>
+    Dashboard - {selectedSemester}, {selectedDepartment} {selectedSchoolYear.replace('/', '-')}
     </h1>
+    <ImpSubjectsPerformance/>
+    <br />
 
+    <div className="dashboard-table-container">
+    <div style={{ marginBottom: "10px" }}>
     {/* Pass state setters to Dropdown */}
+    <h2 style={{ textAlign: "left", fontFamily: "Poppins", fontWeight: "700" }}>Table Form - {selectedSemester}, {selectedDepartment} {selectedSchoolYear.replace('/', '-')}</h2>
     <DashboardDropdown
     setSelectedDepartment={setSelectedDepartment}
     setSelectedSchoolYear={setSelectedSchoolYear}
@@ -41,6 +47,9 @@ const CollegePocDashboard = () => {
     schoolYear={selectedSchoolYear}
     semester={selectedSemester}
     />
+    </div>
+    </div>
+    <br />
     </div>
   );
 };
