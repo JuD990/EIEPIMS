@@ -1,1 +1,4 @@
 *Zone.Identifier*
+node_modules/
+storage/logs/
+storage/app/uploads

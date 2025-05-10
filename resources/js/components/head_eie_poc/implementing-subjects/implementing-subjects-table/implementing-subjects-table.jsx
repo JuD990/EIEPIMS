@@ -179,9 +179,9 @@ const ImplementingSubjectsTable = ({
       {
         Header: "Upload",
         accessor: "actions",
-        Cell: ({ row }) => (
+        Cell: ({}) => (
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <UploadButton data={row.original} />
+          <UploadButton />
           </div>
         ),
       }
