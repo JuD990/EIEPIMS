@@ -33,24 +33,24 @@ const generateEmptyChartData = (labels) => ({
             type: "line",
             label: "PGF Average",
             data: Array(labels.length).fill(0),
-                                            borderColor: "#FF474A",
-                                            backgroundColor: "#FF474A",
-                                            fill: false,
-                                            tension: 0.4,
-                                            pointRadius: 5,
-                                            pointHoverRadius: 7,
-                                            pointBackgroundColor: "#FF474A",
-                                            pointBorderColor: "#FF474A",
-                                            order: 1,
-                                            yAxisID: "y1",
+            borderColor: "#FF474A",
+            backgroundColor: "#FF474A",
+            fill: false,
+            tension: 0.4,
+            pointRadius: 5,
+            pointHoverRadius: 7,
+            pointBackgroundColor: "#FF474A",
+            pointBorderColor: "#FF474A",
+            order: 1,
+            yAxisID: "y1",
         },
         {
             type: "bar",
             label: "Completion Rate",
             data: Array(labels.length).fill(0),
-                                            backgroundColor: "#42a5f5",
-                                            order: 2,
-                                            yAxisID: "y2",
+            backgroundColor: "#42a5f5",
+            order: 2,
+            yAxisID: "y2",
         },
     ],
 });
@@ -72,8 +72,8 @@ const ImpSubjectsPerformance = () => {
     const [classData, setClassData] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(true);
-    const [pgfMin, setPgfMin] = useState(undefined);
-    const [pgfMax, setPgfMax] = useState(undefined);
+    const [pgfMin, setPgfMin] = useState(0.0);
+    const [pgfMax, setPgfMax] = useState(4.0);
 
 
     useEffect(() => {

@@ -7,6 +7,8 @@ use App\Models\ImplementingSubjects;
 use App\Models\EieReport;
 use App\Models\ClassLists;
 use App\Models\EieScorecardClassReport;
+use App\Models\HistoricalClassLists;
+use App\Models\HistoricalScorecard;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -564,6 +566,188 @@ class EieReportController extends Controller
                 'message' => 'Server error: ' . $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function getDashboardReportGrandTotals(Request $request)
+    {
+        $department = $request->input('department');
+        $semester = $request->input('semester');
+        $schoolYear = $request->input('schoolYear');
+
+        if (!$department || !$semester || !$schoolYear) {
+            return response()->json(['success' => false, 'message' => 'Invalid parameters'], 400);
+        }
+
+        // Validate school year format
+        $years = explode('/', $schoolYear);
+        if (count($years) != 2 || !is_numeric($years[0]) || !is_numeric($years[1])) {
+            return response()->json(['success' => false, 'message' => 'Invalid school year format'], 400);
+        }
+        list($startYear, $endYear) = $years;
+
+        $reports = EieReport::where('department', $department)
+        ->where('semester', $semester)
+        ->whereYear('created_at', '>=', (int)$startYear)
+        ->whereYear('created_at', '<=', (int)$endYear)
+        ->get();
+
+        if ($reports->isEmpty()) {
+            return response()->json(['success' => false, 'message' => 'No data found for the specified parameters'], 404);
+        }
+
+        $firstSem = ["August", "September", "October", "November", "December"];
+        $secondSem = ["January", "February", "March", "April", "May"];
+        $months = $semester === '1st Semester' ? $firstSem : $secondSem;
+
+        // Initialize grandTotals with arrays instead of null
+        $grandTotals = [
+            'completionRate' => array_fill_keys($months, []),
+            'epgfAverage' => array_fill_keys($months, []),
+        ];
+
+        $groupedData = $reports->groupBy('year_level')->map(function ($yearLevelReports) use ($months, &$grandTotals) {
+            $yearLevelData = [
+                'completionRate' => array_fill_keys($months, []),
+                'epgfAverage' => array_fill_keys($months, []),
+            ];
+
+            foreach ($yearLevelReports as $report) {
+                $monthName = \Carbon\Carbon::parse($report->created_at)->format('F');
+                if (in_array($monthName, $months)) {
+                    $reportCompletionRate = (!is_null($report->completion_rate)) ? $report->completion_rate : null;
+                    $reportEpgfAverage = (!is_null($report->epgf_average)) ? $report->epgf_average : null;
+
+                    if (!is_null($reportCompletionRate)) {
+                        $yearLevelData['completionRate'][$monthName][] = $reportCompletionRate;
+                        $grandTotals['completionRate'][$monthName][] = $reportCompletionRate;
+                    }
+
+                    if (!is_null($reportEpgfAverage)) {
+                        $yearLevelData['epgfAverage'][$monthName][] = $reportEpgfAverage;
+                        $grandTotals['epgfAverage'][$monthName][] = $reportEpgfAverage;
+                    }
+                }
+            }
+
+            // Calculate monthly averages
+            foreach ($months as $month) {
+                $yearLevelData['completionRate'][$month] = !empty($yearLevelData['completionRate'][$month])
+                ? round(array_sum($yearLevelData['completionRate'][$month]) / count($yearLevelData['completionRate'][$month]), 2)
+                : null;
+
+                $yearLevelData['epgfAverage'][$month] = !empty($yearLevelData['epgfAverage'][$month])
+                ? round(array_sum($yearLevelData['epgfAverage'][$month]) / count($yearLevelData['epgfAverage'][$month]), 2)
+                : null;
+            }
+
+            return $yearLevelData;
+        });
+
+        // Calculate grand monthly averages
+        foreach ($months as $month) {
+            $grandTotals['completionRate'][$month] = !empty($grandTotals['completionRate'][$month])
+            ? round(array_sum($grandTotals['completionRate'][$month]) / count($grandTotals['completionRate'][$month]), 2)
+            : null;
+
+            $grandTotals['epgfAverage'][$month] = !empty($grandTotals['epgfAverage'][$month])
+            ? round(array_sum($grandTotals['epgfAverage'][$month]) / count($grandTotals['epgfAverage'][$month]), 2)
+            : null;
+        }
+
+        return response()->json([
+            'success' => true,
+            'grandTotals' => $grandTotals,
+        ]);
+    }
+
+    public function getDashboardReportYearTotals(Request $request)
+    {
+        $department = $request->input('department');       // e.g., "CIT"
+        $semester = $request->input('semester');           // "1st Semester" or "2nd Semester"
+        $schoolYear = $request->input('school_year');      // format: "2025/2026"
+
+        // Parse school year string into integers
+        [$startYear, $endYear] = explode('/', $schoolYear);
+
+        // Determine semester date range based on input
+        if ($semester == '1st Semester') {
+            $startDate = Carbon::create($startYear, 8, 1);   // August
+            $endDate   = Carbon::create($startYear, 12, 31); // December
+        } else {
+            $startDate = Carbon::create($endYear, 1, 1);     // January
+            $endDate   = Carbon::create($endYear, 5, 31);    // May
+        }
+
+        // Fetch total population grouped by program and year level
+        $population = HistoricalClassLists::where('department', $department)
+        ->whereBetween('created_at', [$startDate, $endDate])
+        ->select('program', 'year_level', DB::raw('count(*) as total_students'))
+        ->groupBy('program', 'year_level')
+        ->get();
+
+        // Fetch scorecard completion counts
+        $completed = HistoricalScorecard::where('department', $department)
+        ->whereBetween('created_at', [$startDate, $endDate])
+        ->select('program', 'year_level', DB::raw('count(*) as completed'))
+        ->groupBy('program', 'year_level')
+        ->get();
+
+        // Fetch EPGF average for each program and year level
+        $epgfAvg = HistoricalClassLists::where('department', $department)
+        ->whereBetween('created_at', [$startDate, $endDate])
+        ->select('program', 'year_level', DB::raw('avg(epgf) as epgf_average'))
+        ->groupBy('program', 'year_level')
+        ->get();
+
+        // Index completed and EPGF averages for easy access
+        $completedMap = $completed->keyBy(function ($item) {
+            return $item->program . '-' . $item->year_level;
+        });
+
+        $epgfAvgMap = $epgfAvg->keyBy(function ($item) {
+            return $item->program . '-' . $item->year_level;
+        });
+
+        // Combine data and calculate completion rates, including EPGF average
+        $report = $population->map(function ($item) use ($completedMap, $epgfAvgMap) {
+            $key = $item->program . '-' . $item->year_level;
+            $completed = $completedMap[$key]->completed ?? 0;
+            $epgfAverage = $epgfAvgMap[$key]->epgf_average ?? 0;
+
+            // Calculate the completion rate
+            $rate = $item->total_students > 0
+            ? round(($completed / $item->total_students) * 100, 2)
+            : 0;
+
+            return [
+                'program' => $item->program,
+                'year_level' => $item->year_level,
+                'completion_rate' => $rate,
+                'epgf_average' => round($epgfAverage, 2), // Round to 2 decimal places
+            ];
+        });
+
+        // Group by program first, then by year_level within each program
+        $groupedReport = $report->groupBy('program')->map(function ($programGroup) {
+            return $programGroup->groupBy('year_level')->map(function ($yearGroup) {
+                // Average completion rate and EPGF average for each year level within a program
+                $totalCompletionRate = $yearGroup->sum('completion_rate');
+                $totalEpgfAverage = $yearGroup->sum('epgf_average');
+                $count = $yearGroup->count();
+
+                return [
+                    'completion_rate' => round($totalCompletionRate / $count, 2), // Average completion rate for the year level
+                                                             'epgf_average' => round($totalEpgfAverage / $count, 2), // Average EPGF for the year level
+                ];
+            });
+        });
+
+        // Reindex to provide a clean list with grouped programs and year levels
+        $groupedReport = $groupedReport->values();
+
+        return response()->json([
+            'data' => $groupedReport,
+        ]);
     }
 
 }

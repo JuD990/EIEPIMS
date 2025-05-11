@@ -1,4 +1,5 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import EIEHeadSidebar from '../sidebar/eie-head-sidebar';
 import UserInfo from '@user-info/User-info';
 import TableComponent from "./table/eie-head-dashboard";
@@ -7,9 +8,7 @@ import ImpSubjectsPerformance from "./imp-subject-performance/imp-subjects-perfo
 import EieSparkPerformance from "./eie-spark-performance/eie-spark-performance.jsx";
 
 const HeadEiePocDashboard = () => {
-  const currentMonth = new Date().getMonth(); // 0 for January, 11 for December
-
-  // Default values based on logic in DashboardDropdown
+  const currentMonth = new Date().getMonth(); // 0 = Jan, 11 = Dec
   const defaultSemester = currentMonth >= 8 && currentMonth <= 12 ? "1st Semester" : "2nd Semester";
   const defaultSchoolYear = `${new Date().getFullYear()}-${new Date().getFullYear() + 1}`;
 
@@ -17,36 +16,65 @@ const HeadEiePocDashboard = () => {
   const [selectedSchoolYear, setSelectedSchoolYear] = useState(defaultSchoolYear);
   const [selectedSemester, setSelectedSemester] = useState(defaultSemester);
 
+  const [userDepartment, setUserDepartment] = useState("");
+  const [userFullDepartment, setUserFullDepartment] = useState("");
+
   useEffect(() => {
-    // You can also manage side-effects here if necessary
-  }, [selectedDepartment, selectedSchoolYear, selectedSemester]);
+    const fetchUserDepartment = async () => {
+      const employeeId = localStorage.getItem("employee_id");
+      const userType = localStorage.getItem("userType");
+
+      if (employeeId && userType) {
+        try {
+          const res = await axios.get(`http://localhost:8000/api/employee-department/${userType}/${employeeId}`);
+          const dept = res.data?.department;
+          const fullDept = res.data?.full_department;
+
+          if (res.data.success) {
+            setUserDepartment(dept);
+            setUserFullDepartment(fullDept);
+          }
+        } catch (err) {
+          console.error("Error fetching user department:", err);
+        }
+      }
+    };
+
+    fetchUserDepartment();
+  }, []);
 
   return (
     <div>
     <EIEHeadSidebar />
     <UserInfo />
     <br /><br /><br />
+
     <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '350px', color: '#383838' }}>
     Dashboard
     </h1>
 
-    <ImpSubjectsPerformance />
+    <ImpSubjectsPerformance
+    userFullDepartment={userFullDepartment}
+    userDepartment={userDepartment}
+    />
     <br />
 
-    <EieSparkPerformance/>
-
+    <EieSparkPerformance userDepartment={userDepartment} />
     <br />
+
     <div className="dashboard-table-container">
     <div style={{ marginBottom: "10px" }}>
-    {/* Pass state setters to Dropdown */}
-    <h2 style={{ textAlign: "left", fontFamily: "Poppins", fontWeight: "700" }}>Table Form - {selectedSemester}, {selectedDepartment} {selectedSchoolYear.replace('/', '-')}</h2>
+    <h2 style={{ textAlign: "left", fontFamily: "Poppins", fontWeight: "700" }}>
+    Table Form - {selectedSemester}, {selectedDepartment} {selectedSchoolYear.replace('/', '-')}
+    </h2>
+
     <DashboardDropdown
     setSelectedDepartment={setSelectedDepartment}
     setSelectedSchoolYear={setSelectedSchoolYear}
     setSelectedSemester={setSelectedSemester}
+    userDepartment={userDepartment}
     />
 
-    {/* Pass selected values to TableComponent */}
     <TableComponent
     department={selectedDepartment}
     schoolYear={selectedSchoolYear}
@@ -54,6 +82,7 @@ const HeadEiePocDashboard = () => {
     />
     </div>
     </div>
+
     <br />
     </div>
   );

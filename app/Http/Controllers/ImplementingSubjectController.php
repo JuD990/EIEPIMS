@@ -310,33 +310,31 @@ class ImplementingSubjectController extends Controller
 
         public function getEmployeeDepartment($userType, $employeeId)
         {
-            // Define user type mappings to corresponding models
             $userTypeModelMap = [
                 'College POC' => CollegePOCs::class,
                 'Lead EIE POC' => LeadPOCs::class,
                 'Head EIE POC' => EIEHeads::class,
             ];
 
-            // If userType is not in the mapping, return success false (but no error)
             if (!isset($userTypeModelMap[$userType])) {
                 return response()->json(['success' => false, 'message' => 'User type not recognized. Skipping...'], 200);
             }
 
-            // Get the appropriate model
             $model = $userTypeModelMap[$userType];
-
-            // Find employee by ID
             $employee = $model::where('employee_id', $employeeId)->first();
 
-            // If employee not found, log error and return response
             if (!$employee) {
                 \Log::error("Employee not found: ID = $employeeId, Type = $userType");
                 return response()->json(['success' => false, 'message' => 'Employee not found.'], 404);
             }
 
-            // Return department if found
-            return response()->json(['success' => true, 'department' => $employee->department]);
+            return response()->json([
+                'success' => true,
+                'department' => $employee->department,
+                'full_department' => $employee->full_department ?? null,
+            ]);
         }
+
 
         public function updateImplementingSubject(Request $request, $courseCode)
         {
@@ -485,7 +483,7 @@ class ImplementingSubjectController extends Controller
         {
             $departments = ClassLists::pluck('department')->unique()->values();
             $programs = ClassLists::pluck('program')->unique()->values();
-            $yearLevels = ClassLists::pluck('year_level')->unique()->sort()->values();  // Sort yearLevels in ascending order
+            $yearLevels = ClassLists::pluck('year_level')->unique()->sort()->values();
 
             return response()->json([
                 'departments' => $departments,

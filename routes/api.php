@@ -24,6 +24,8 @@ Route::get('esl/employee/{employee_id}', [EieDiagnosticReportController::class, 
 Route::post('/eie-reports/store-or-update', [EieReportController::class, 'storeOrUpdatePrograms']);
 Route::get('/dashboard-report', [EieReportController::class, 'getDashboardReport']);
 Route::get('/eie-report', [EieReportController::class, 'getEieReporting']);
+Route::get('/dashboard-report-grand-totals', [EieReportController::class, 'getDashboardReportGrandTotals']);
+Route::get('/dashboard-report-year-totals', [EieReportController::class, 'getDashboardReportYearTotals']);
 
 // Delete Data Settings
 Route::delete('/data-settings/class-lists', [EieReportController::class, 'deleteClassLists']);

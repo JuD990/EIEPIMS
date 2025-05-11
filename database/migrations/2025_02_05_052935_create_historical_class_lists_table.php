@@ -20,20 +20,19 @@ return new class extends Migration
             $table->string('email');
             $table->string('program');
             $table->string('department');
-            $table->string('year_level');
-            $table->string('gender');
+            $table->string('year_level')->nullable();
+            $table->string('gender')->nullable();
             $table->string('status')->default('Active');
-            $table->string('classification');
+            $table->string('classification')->nullable();
             $table->string('reason_for_shift_or_drop', 255)->nullable();
             $table->decimal('pronunciation', 5, 2)->nullable();
             $table->decimal('grammar', 5, 2)->nullable();
             $table->decimal('fluency', 5, 2)->nullable();
             $table->decimal('epgf_average', 5, 2)->nullable();
             $table->string('proficiency_level', 50)->nullable();
-            $table->string('course_code');
+            $table->string('course_code')->nullable();
+            $table->string('candidate_for_graduating')->default("No");
             $table->timestamps();
-
-            $table->unique(['student_id', 'course_code']);
         });
     }
 
