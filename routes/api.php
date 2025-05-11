@@ -30,7 +30,7 @@ Route::delete('/data-settings/class-lists', [EieReportController::class, 'delete
 Route::put('/data-settings/class-lists/nullify-scores', [EieReportController::class, 'nullifyClassListScores']);
 Route::put('/data-settings/implementing-subjects/nullify-scores', [EieReportController::class, 'nullifyImplementingSubjectScores']);
 Route::delete('/data-settings/scorecard', [EieReportController::class, 'deleteScorecard']);
-
+Route::get('/fetch-filtered-eie-reports', [EieReportController::class, 'fetchFilteredReports']);
 
 Route::get('/performance-summary-rating', [StudentController::class, 'getPerformanceSummaryRatings']);
 Route::get('/current-subjects/{student_id}', [StudentController::class, 'getCurrentSubjects']);
@@ -140,6 +140,7 @@ Route::get('/student-statistics', [ClassListController::class, 'getStudentStatis
 
 // ImplementingSubject routes
 Route::get('/implementing-subject/{employee_id}', [ImplementingSubjectController::class, 'getClassData']);
+Route::get('/implementing-subject-graph/{employee_id}', [ImplementingSubjectController::class, 'getClassDataGraph']);
 Route::post('/upload-subjects', [ImplementingSubjectController::class, 'upload'])->name('subjects.upload');
 Route::get('/esl-implementing-subjects', [ImplementingSubjectController::class, 'index']);
 Route::get('/esl-archived-implementing-subjects', [ImplementingSubjectController::class, 'archived']);

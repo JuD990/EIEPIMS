@@ -9,6 +9,7 @@ use App\Models\ClassLists;
 use App\Models\EieScorecardClassReport;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class EieReportController extends Controller
 {
@@ -487,4 +488,82 @@ class EieReportController extends Controller
             return response()->json(['error' => 'Failed to delete scorecards.'], 500);
         }
     }
+
+    public function fetchFilteredReports(Request $request)
+    {
+        // Validate the request parameters
+        $request->validate([
+            'course_code' => 'required|string',
+            'semester' => 'required|string',
+            'school_year' => 'required|string',
+        ]);
+
+        // Split the school year into start and end years
+        [$startYear, $endYear] = explode('/', $request->school_year);
+
+        // Define months for each semester
+        $semesterMonths = [
+            '1st Semester' => ['August', 'September', 'October', 'November', 'December'],
+            '2nd Semester' => ['January', 'February', 'March', 'April', 'May'],
+        ];
+
+        // Get the months based on the semester
+        $months = $semesterMonths[$request->semester];
+
+        try {
+            // Array to hold data for each month
+            $monthlyReports = [];
+
+            // Loop over each month and get the data
+            foreach ($months as $month) {
+                // Get the first and last day of the month
+                $startDate = "$startYear-" . array_search($month, $months) + 1 . "-01";
+                $endDate = "$startYear-" . array_search($month, $months) + 1 . "-31"; // Example for the end of the month
+
+                // If the month is in January to May, change to next year for the second semester
+                if ($month == 'January') {
+                    $startDate = "$endYear-01-01";  // Adjust for the 2nd Semester
+                    $endDate = "$endYear-01-31";
+                }
+
+                // Fetch data for the month
+                $reports = EieReport::where('course_code', $request->course_code)
+                ->where('semester', $request->semester)
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->get([
+                    'eie_report_id',
+                    'course_code',
+                    'course_title',
+                    'program',
+                    'year_level',
+                    'department',
+                    'assigned_poc',
+                    'completion_rate',
+                    'epgf_average',
+                    'created_at',
+                    'updated_at',
+                ]);
+
+                // Store the data for each month
+                $monthlyReports[] = [
+                    'month' => $month,
+                    'data' => $reports,
+                ];
+            }
+
+            // Return the results
+            return response()->json([
+                'success' => true,
+                'data' => $monthlyReports,
+            ]);
+        } catch (\Exception $e) {
+            // Catch any exceptions and log the error message
+            \Log::error("Error fetching reports: " . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Server error: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
 }

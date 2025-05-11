@@ -224,7 +224,6 @@ class ImplementingSubjectController extends Controller
         public function getClassData($employee_id)
         {
             try {
-                Log::info('Employee ID: ' . $employee_id);
 
                 // Determine the current semester based on the current month
                 $currentMonth = now()->month;
@@ -257,6 +256,51 @@ class ImplementingSubjectController extends Controller
                     'message' => 'No Classes Available'
                 ]);
             } catch (\Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Server error: ' . $e->getMessage()
+                ], 500);
+            }
+        }
+
+        public function getClassDataGraph($employee_id)
+        {
+            try {
+                // Determine the current semester based on current month
+                $currentMonth = now()->month;
+                $currentSemester = null;
+
+                if ($currentMonth >= 1 && $currentMonth <= 5) {
+                    $currentSemester = '2nd Semester'; // Jan–May
+                } elseif ($currentMonth >= 8 && $currentMonth <= 12) {
+                    $currentSemester = '1st Semester'; // Aug–Dec
+                }
+
+                if (!$currentSemester) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No valid semester for the current month.'
+                    ]);
+                }
+
+                // Get all subjects for the employee filtered by semester
+                $classData = ImplementingSubjects::where('employee_id', $employee_id)
+                ->where('semester', $currentSemester)
+                ->get(['course_code', 'course_title']);
+
+                if ($classData->isNotEmpty()) {
+                    return response()->json([
+                        'success' => true,
+                        'classData' => $classData
+                    ]);
+                } else {
+                    return response()->json([
+                        'success' => true,  // Set success to true even when no classes are available
+                        'classData' => []   // Return an empty array
+                    ]);
+                }
+            } catch (\Exception $e) {
+                Log::error("Error fetching class data for employee {$employee_id}: " . $e->getMessage());
                 return response()->json([
                     'success' => false,
                     'message' => 'Server error: ' . $e->getMessage()

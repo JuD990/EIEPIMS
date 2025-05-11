@@ -26,7 +26,7 @@ const CollegePocDashboard = () => {
     <UserInfo />
     <br /><br /><br />
     <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '350px', color: '#383838' }}>
-    Dashboard - {selectedSemester}, {selectedDepartment} {selectedSchoolYear.replace('/', '-')}
+    Dashboard
     </h1>
     <ImpSubjectsPerformance/>
     <br />

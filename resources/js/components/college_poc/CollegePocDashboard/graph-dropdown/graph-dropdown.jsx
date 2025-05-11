@@ -4,73 +4,50 @@ import axios from "axios";
 import "./graph-dropdown.css";
 import apiService from "@services/apiServices";
 
-const GraphDropdown = ({ setSelectedSchoolYear, setSelectedSemester }) => {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+const GraphDropdown = ({ selectedSchoolYear, setSelectedSchoolYear, selectedSemester, setSelectedSemester }) => {
     const [isSchoolYearOpen, setIsSchoolYearOpen] = useState(false);
-    const [schoolYear, setSchoolYear] = useState("");
     const [isSemesterOpen, setIsSemesterOpen] = useState(false);
-    const [semester, setSemester] = useState(""); // Default or selected semester
     const [schoolYears, setSchoolYears] = useState([]);
     const semesters = ["1st Semester", "2nd Semester"];
 
-    const fetchSchoolYears = async (currentMonth) => {
-        try {
-            const response = await axios.get("http://localhost:8000/api/getSchoolYears");
-            const schoolYearList = response.data;
-            setSchoolYears(schoolYearList);
-
-            if (schoolYearList.length > 0) {
-                const selectedYear = schoolYearList[0];
-                setSchoolYear(selectedYear);
-                setSelectedSchoolYear(selectedYear);
-
-                const startYear = parseInt(selectedYear.split('/')[0], 10);
-                if (currentMonth >= 8 && currentMonth <= 12) {
-                    setSemester("1st Semester");
-                    setSelectedSemester("1st Semester");
-                } else {
-                    setSemester("2nd Semester");
-                    setSelectedSemester("2nd Semester");
-                }
-            }
-        } catch (error) {
-            console.error("Error fetching school years:", error);
-        }
-    };
-
     useEffect(() => {
+        const fetchSchoolYears = async (currentMonth) => {
+            try {
+                const response = await axios.get("http://localhost:8000/api/getSchoolYears");
+                const schoolYearList = response.data;
+                setSchoolYears(schoolYearList);
+
+                if (schoolYearList.length > 0) {
+                    const selectedYear = schoolYearList[0];
+                    setSelectedSchoolYear(selectedYear);
+
+                    // Set default semester only if it hasn't been selected by the user yet
+                    if (!selectedSemester) {
+                        const startYear = parseInt(selectedYear.split('/')[0], 10);
+                        if (currentMonth >= 8 && currentMonth <= 12) {
+                            setSelectedSemester("1st Semester");
+                        } else {
+                            setSelectedSemester("2nd Semester");
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching school years:", error);
+            }
+        };
+
         const currentMonth = new Date().getMonth() + 1;
-        fetchSchoolYears(currentMonth); // Then fetch school years
-    }, []);
+        fetchSchoolYears(currentMonth);
+    }, [setSelectedSchoolYear, setSelectedSemester, selectedSemester]);
 
     const handleSchoolYearSelect = (year) => {
-        setSchoolYear(year);
         setSelectedSchoolYear(year);
         setIsSchoolYearOpen(false);
     };
 
     const handleSemesterSelect = (sem) => {
-        setSemester(sem);
         setSelectedSemester(sem);
         setIsSemesterOpen(false);
-    };
-
-    const handleRefresh = async () => {
-        setLoading(true); // Start the loading state
-        setError(null); // Reset any previous error
-
-        try {
-            // Call API to refresh data
-            const reportResponse = await apiService.post('/eie-reports/store-or-update');
-
-            window.location.reload();  // Refreshes the page
-        } catch (reportError) {
-            console.error("Failed to update EIE Reports: ", reportError);
-            setError('Failed to update reports');
-        } finally {
-            setLoading(false); // Ensure loading state is reset after the process completes
-        }
     };
 
     return (
@@ -82,7 +59,7 @@ const GraphDropdown = ({ setSelectedSchoolYear, setSelectedSemester }) => {
         className="college-poc-graph-dropdown-btn"
         onClick={() => setIsSchoolYearOpen((prev) => !prev)}
         >
-        {schoolYear.replace("/", "-")}
+        {selectedSchoolYear.replace("/", "-")}
         <FaChevronDown
         className={`college-poc-graph-dropdown-arrow ${isSchoolYearOpen ? "open" : ""}`}
         />
@@ -94,7 +71,7 @@ const GraphDropdown = ({ setSelectedSchoolYear, setSelectedSemester }) => {
                     <p
                     key={index}
                     className={`college-poc-graph-dropdown-item ${
-                        schoolYear === year ? "college-poc-graph-selected" : ""
+                        selectedSchoolYear === year ? "college-poc-graph-selected" : ""
                     }`}
                     onClick={() => handleSchoolYearSelect(year)}
                     >
@@ -114,7 +91,7 @@ const GraphDropdown = ({ setSelectedSchoolYear, setSelectedSemester }) => {
         className="college-poc-graph-dropdown-btn"
         onClick={() => setIsSemesterOpen((prev) => !prev)}
         >
-        {semester}
+        {selectedSemester}
         <FaChevronDown
         className={`college-poc-graph-dropdown-arrow ${isSemesterOpen ? "open" : ""}`}
         />
@@ -125,9 +102,9 @@ const GraphDropdown = ({ setSelectedSchoolYear, setSelectedSemester }) => {
                 <p
                 key={index}
                 className={`college-poc-graph-dropdown-item ${
-                    semester === sem ? "college-poc-graph-selected" : ""
+                    selectedSemester === sem ? "college-poc-graph-selected" : ""
                 }`}
-                onClick={() => handleSemesterSelect(sem)} // Close dropdown after selecting
+                onClick={() => handleSemesterSelect(sem)}
                 >
                 {sem}
                 </p>
@@ -136,8 +113,6 @@ const GraphDropdown = ({ setSelectedSchoolYear, setSelectedSemester }) => {
         )}
         </div>
         </div>
-
-        {error && <p className="error-message">{error}</p>}
         </div>
     );
 };
