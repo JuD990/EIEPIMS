@@ -10,6 +10,7 @@ use App\Models\CollegePOCs;
 use App\Models\LeadPOCs;
 use App\Models\EIEHeads;
 use App\Models\HistoricalImplementingSubjects;
+use App\Models\ArchivedImplementingSubject;
 use App\Models\EieScorecardClassReport;
 use App\Models\MasterClassList;
 use Illuminate\Support\Facades\Log;
@@ -27,7 +28,7 @@ class ImplementingSubjectController extends Controller
 
     public function archived()
     {
-        $subjects = HistoricalImplementingSubjects::all();
+        $subjects = ArchivedImplementingSubject::all();
         return response()->json($subjects);
     }
 
@@ -185,6 +186,22 @@ class ImplementingSubjectController extends Controller
                     $csvCourseCodes[] = $row[0]; // Track course_code for cleanup
 
                     ImplementingSubjects::updateOrCreate(
+                        ['course_code' => $row[0]],
+                        [
+                            'code'              => $row[1],
+                            'course_title'      => $row[2],
+                            'semester'          => $row[3],
+                            'year_level'        => $row[4],
+                            'program'           => $row[5],
+                            'department'        => $row[6],
+                            'employee_id'       => $row[7],
+                            'assigned_poc'      => $row[8],
+                            'email'             => $row[9],
+                            'enrolled_students' => $row[10],
+                        ]
+                    );
+
+                    HistoricalImplementingSubjects::updateOrCreate(
                         ['course_code' => $row[0]],
                         [
                             'code'              => $row[1],
@@ -525,7 +542,7 @@ class ImplementingSubjectController extends Controller
             // Loop through each subject and archive it
             foreach ($subjects as $subject) {
                 // Archive the subject
-                $archivedSubject = new HistoricalImplementingSubjects();
+                $archivedSubject = new ArchivedImplementingSubject();
                 $archivedSubject->course_title = $subject['course_title'];
                 $archivedSubject->code = $subject['code'];
                 $archivedSubject->course_code = $subject['course_code'];
@@ -581,7 +598,7 @@ class ImplementingSubjectController extends Controller
                 $restoredSubject->save();
 
                 // After restoring, delete from the archive table
-                HistoricalImplementingSubjects::where('course_code', $subject['course_code'])->delete();
+                ArchivedImplementingSubject::where('course_code', $subject['course_code'])->delete();
             }
 
             return response()->json(['message' => 'Subjects restored successfully']);
@@ -594,7 +611,7 @@ class ImplementingSubjectController extends Controller
 
             // Loop through each subject and permanently delete it
             foreach ($subjects as $subject) {
-                HistoricalImplementingSubjects::where('course_code', $subject['course_code'])->delete();
+                ArchivedImplementingSubject::where('course_code', $subject['course_code'])->delete();
             }
 
             return response()->json(['message' => 'Subjects permanently deleted']);

@@ -111,7 +111,9 @@ const CollegeProficiencyChart = () => {
         <p className="cpd-chart-subtitle">Target Completion Rate: 100%</p>
         </div>
         <GraphDropdown
+        selectedSchoolYear={selectedSchoolYear}
         setSelectedSchoolYear={setSelectedSchoolYear}
+        selectedSemester={selectedSemester}
         setSelectedSemester={setSelectedSemester}
         />
         <Bar data={data} options={options} />

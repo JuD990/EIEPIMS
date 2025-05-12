@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+// (Same imports as before)
+import React, { useState, useEffect, useRef } from 'react';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import {
     Chart as ChartJS,
@@ -38,123 +39,102 @@ const EieSparkPerformance = ({ userDepartment }) => {
     const [chartData, setChartData] = useState({ labels: [], datasets: [] });
     const [loading, setLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState("");
-    const [pgfMin, setPgfMin] = useState();
-    const [pgfMax, setPgfMax] = useState();
-    const [programLabels, setProgramLabels] = useState([]);
+    const [pgfMin, setPgfMin] = useState(0);
+    const [pgfMax, setPgfMax] = useState(4.0);
+    const chartRef = useRef(null);
 
-    // Fetch PGF Averages
+    const yearColorMap = {
+        "1st Year": "#66bb6a",
+        "2nd Year": "#e6e253",
+        "3rd Year": "#42a5f5",
+        "4th Year": "#ef5350"
+    };
+
     useEffect(() => {
         const fetchPGFAverages = async () => {
             try {
-                setLoading(true);
                 const response = await axios.get("http://127.0.0.1:8000/api/performance-summary-rating");
-                const ratingsData = response.data.ratings;
-                const pgfValues = ratingsData.map(r => parseFloat(r)).filter(val => !isNaN(val));
-
-                if (pgfValues.length > 0) {
+                const pgfValues = response.data.ratings.map(r => parseFloat(r)).filter(val => !isNaN(val));
+                if (pgfValues.length) {
                     setPgfMin(Math.floor(Math.min(...pgfValues) * 10) / 10);
                     setPgfMax(Math.ceil(Math.max(...pgfValues) * 10) / 10);
-                } else {
-                    setPgfMin(0.0);
-                    setPgfMax(4.0);
                 }
             } catch (error) {
-                console.error("Error fetching PGF Averages:", error);
-                setErrorMessage("Failed to fetch PGF Averages");
-            } finally {
-                setLoading(false);
+                console.warn("PGF average fetch failed. Using default axis range.");
             }
         };
-
         fetchPGFAverages();
     }, []);
 
-    // Fetch Year Totals
     useEffect(() => {
-        if (!userDepartment || userDepartment.trim() === "") {
-            console.log("Waiting for valid userDepartment...");
-            return;
-        }
+        if (!userDepartment?.trim()) return;
 
         const fetchYearTotals = async () => {
             setLoading(true);
             try {
-                const baseUrl = "http://127.0.0.1:8000";
-
-                const response = await axios.get(`${baseUrl}/dashboard-report-year-totals`, {
+                const { data } = await axios.get("http://127.0.0.1:8000/api/dashboard-report-year-totals", {
                     params: {
                         department: userDepartment,
                         semester: selectedSemester,
                         schoolYear: selectedSchoolYear,
                     },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
                 });
-                console.log('API Response:', response.data);
-                const { programs, yearProgramTotals } = response.data;
 
-                // Validate the response data structure
-                if (!Array.isArray(programs) || !yearProgramTotals) {
-                    setErrorMessage("Invalid data structure from the server.");
-                    return;
-                }
-
-                if (!programs || programs.length === 0 || !yearProgramTotals) {
+                const { programs, yearProgramTotals } = data;
+                if (!programs || !yearProgramTotals) {
                     setErrorMessage("No data found.");
                     return;
                 }
 
-                setProgramLabels(programs);
-
+                const programKeys = Object.values(programs);
                 const yearLevels = Object.keys(yearProgramTotals);
-                const colorPalette = [
-                    "#42a5f5", "#66bb6a", "#ffa726", "#ab47bc", "#ef5350",
-                    "#26c6da", "#8d6e63", "#7e57c2", "#d4e157", "#5c6bc0"
-                ];
 
-                // Bar datasets for each year level's completion rate
-                const barDatasets = yearLevels.map((yearLevel, idx) => ({
-                    type: "bar",
-                    label: `${yearLevel} Completion Rate`,
-                    data: programs.map(program => {
-                        const programData = yearProgramTotals[yearLevel]?.[program] || {};
-                        const completionRate = programData?.completion_rate ?? 0;
-                        return completionRate;
+                const barDatasets = yearLevels.map((year) => ({
+                    type: 'bar',
+                    label: `${year} Completion Rate`,
+                    data: programKeys.map(program => {
+                        const completionRate = yearProgramTotals[year]?.[program]?.completion_rate;
+                        return completionRate && completionRate > 0 ? completionRate : 0;
                     }),
-                    backgroundColor: colorPalette[idx % colorPalette.length],
+                    backgroundColor: yearColorMap[year] || "#999",
                     yAxisID: "y1",
                     order: 2,
-                    datalabels: { display: false },
+                    datalabels: { display: false }
                 }));
 
-                // Calculate PGF averages across year levels per program
-                const pgfAverages = programs.map(program => {
-                    const pgfs = yearLevels.map(yearLevel => {
-                        const programData = yearProgramTotals[yearLevel]?.[program] || {};
-                        const pgf = programData?.epgf_average ?? 0; // Default to 0 if undefined
-                        return pgf;
-                    }).filter(val => val > 0); // Filter out invalid PGF values
-                    return pgfs.length ? parseFloat((pgfs.reduce((a, b) => a + b, 0) / pgfs.length).toFixed(2)) : 0;
+                const pgfAverages = programKeys.map(program => {
+                    const pgfValues = yearLevels
+                    .map(year => parseFloat(yearProgramTotals[year]?.[program]?.epgf_average))
+                    .filter(val => !isNaN(val) && val > 0);
+
+                    return pgfValues.length
+                    ? parseFloat((pgfValues.reduce((sum, val) => sum + val, 0) / pgfValues.length).toFixed(2))
+                    : 0;
                 });
 
                 const lineDataset = {
-                    type: "line",
-              label: "PGF Average",
+                    type: 'line',
+              label: 'PGF Average',
               data: pgfAverages,
-              borderColor: "#FF474A",
-              backgroundColor: "#FF474A",
+              borderColor: "#ab47bc",
+              backgroundColor: "#ab47bc",
               fill: false,
               tension: 0.4,
               pointRadius: 5,
               pointHoverRadius: 7,
-              pointBackgroundColor: "#FF474A",
-              pointBorderColor: "#FF474A",
+              pointBackgroundColor: "#ab47bc",
+              pointBorderColor: "#ab47bc",
               yAxisID: "y",
               order: 1,
-              datalabels: { display: false },
+              datalabels: { display: false }
                 };
 
-                // Set chart data
                 setChartData({
-                    labels: programs,
+                    labels: programKeys,
                     datasets: [lineDataset, ...barDatasets],
                 });
 
@@ -169,26 +149,31 @@ const EieSparkPerformance = ({ userDepartment }) => {
         fetchYearTotals();
     }, [userDepartment, selectedSemester, selectedSchoolYear]);
 
+    useEffect(() => {
+        if (chartRef.current && chartRef.current.chartInstance) {
+            chartRef.current.chartInstance.destroy();
+        }
+    }, [chartData]);
+
     const options = {
         responsive: true,
         plugins: {
             legend: { position: 'top' },
             tooltip: {
                 callbacks: {
-                    label: (context) => {
-                        if (context.dataset.type === 'line') {
-                            return `${context.dataset.label}: ${context.raw.toFixed(2)}`;
-                        }
-                        return `${context.dataset.label}: ${context.parsed.y}%`;
-                    }
+                    label: (context) =>
+                    context.dataset.type === 'line'
+                    ? `${context.dataset.label}: ${context.raw.toFixed(2)}`
+                    : `${context.dataset.label}: ${context.parsed.y}%`
                 }
             },
             datalabels: {
                 anchor: 'end',
-                align: (context) => context.dataset.data[context.dataIndex] === 100 ? 'bottom' : 'top',
-                formatter: (value, context) => context.dataset.type === 'line' ? value.toFixed(2) : `${value}%`,
+                align: (ctx) => ctx.dataset.data[ctx.dataIndex] === 100 ? 'bottom' : 'top',
+                formatter: (val, ctx) =>
+                    ctx.dataset.type === 'line' ? val.toFixed(2) : `${val}%`,
                     font: { weight: 'bold' },
-                    padding: { top: 10, bottom: 10 },
+                    padding: { top: 10, bottom: 10 }
             }
         },
         scales: {
@@ -196,32 +181,26 @@ const EieSparkPerformance = ({ userDepartment }) => {
                 beginAtZero: true,
                 min: pgfMin,
                 max: pgfMax,
+                title: { display: true, text: 'PGF Average' },
                 ticks: {
                     stepSize: 0.5,
-                    callback: (value) => value.toFixed(2),
-                },
-                title: {
-                    display: true,
-                    text: 'PGF Average',
+                    callback: (val) => val.toFixed(2)
                 }
             },
             y1: {
                 beginAtZero: true,
                 max: 100,
+                title: { display: true, text: 'Completion Rate (%)' },
                 ticks: {
-                    callback: (value) => `${value}%`,
-                    stepSize: 10
-                },
-                title: {
-                    display: true,
-                    text: 'Completion Rate (%)',
+                    stepSize: 10,
+                    callback: (val) => `${val}%`
                 },
                 position: 'right',
                 grid: { drawOnChartArea: false }
             },
             x: {
                 title: { display: true, text: 'Programs' },
-                stacked: false,
+                stacked: false
             }
         }
     };
@@ -243,7 +222,7 @@ const EieSparkPerformance = ({ userDepartment }) => {
             setSelectedSemester={setSelectedSemester}
             />
             {errorMessage && <p>{errorMessage}</p>}
-            <Bar data={chartData} options={options} />
+            <Bar ref={chartRef} data={chartData} options={options} />
             </>
         )}
         </div>

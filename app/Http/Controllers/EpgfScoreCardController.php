@@ -152,18 +152,41 @@ class EpgfScoreCardController extends Controller
                 ]);
             }
 
+            // HistoricalClassLists: update or create
+            $historicalClassList = HistoricalClassLists::where('student_id', $validatedData['student_id'])
+            ->where('course_code', $validatedData['course_code'])
+            ->first();
+
+            if ($historicalClassList) {
+                $historicalClassList->update([
+                    'pronunciation' => $validatedData['pronunciation_average'] ?? null,
+                    'grammar' => $validatedData['grammar_average'] ?? null,
+                    'fluency' => $validatedData['fluency_average'] ?? null,
+                    'epgf_average' => $validatedData['epgf_average'],
+                    'proficiency_level' => $validatedData['proficiency_level'],
+                ]);
+            } else {
+                $historicalClassList = HistoricalClassLists::create([
+                    'student_id' => $validatedData['student_id'],
+                    'course_code' => $validatedData['course_code'],
+                    'pronunciation' => $validatedData['pronunciation_average'] ?? null,
+                    'grammar' => $validatedData['grammar_average'] ?? null,
+                    'fluency' => $validatedData['fluency_average'] ?? null,
+                    'epgf_average' => $validatedData['epgf_average'],
+                    'proficiency_level' => $validatedData['proficiency_level'],
+                ]);
+            }
+
             return response()->json([
-                'message' => 'Scorecard and Class data successfully stored or updated',
+                'message' => 'Scorecard, Historical Scorecard, Class data, and Historical Class data successfully stored or updated',
                 'historicalScorecard' => $historicalScorecard,
                 'scorecard' => $scorecard,
-                'classList' => $classList
+                'classList' => $classList,
+                'historicalClassList' => $historicalClassList
             ], 201);
-
         } catch (\Exception $e) {
-            \Log::error('Error storing or updating scorecard and class data', ['error' => $e->getMessage()]);
-
             return response()->json([
-                'message' => 'Failed to store or update scorecard and class data',
+                'message' => 'Error occurred',
                 'error' => $e->getMessage()
             ], 500);
         }

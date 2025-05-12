@@ -12,7 +12,7 @@
 .esl-spark-chart-title p {
     font-family: 'Poppins';
     text-align: left;
-    margin-left: 10px;
+    margin-left: 5px;
     margin-top: -12px;
     font-family: 'Poppins';
     font-size: 0.95rem;
@@ -30,12 +30,19 @@
     font-size: 24px;
     font-weight: bold;
     background-color: transparent;
-    border: none;
+    border: none;  /* Remove border */
     cursor: pointer;
     text-align: left;
     display: inline-block;
-    width: auto; /* Let width adjust to content */
-    min-width: 200px; /* Optional: set a minimum width for consistency */
-    padding-right: 24px; /* Optional: spacing for dropdown arrow */
+    width: auto; /* Adjusts width based on content */
+    min-width: 200px; /* Optional: ensures consistent minimum width */
+    padding-right: 24px; /* Optional: provides space for dropdown arrow */
+    padding: 6px; /* Provides internal padding */
+    margin-bottom: 0.5rem; /* Adds some space below the dropdown */
 }
 
+.department-dropdown {
+    padding: 6px;
+    font-size: 24px;
+    margin-bottom: 0.5rem;
+}

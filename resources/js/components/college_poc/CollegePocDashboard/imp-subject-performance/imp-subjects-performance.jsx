@@ -235,7 +235,7 @@ const ImpSubjectsPerformance = () => {
     return (
         <div className="chart-container">
         {loading ? (
-            <p>Loading...</p>
+            <p>No Assigned Implementing Subject</p>
         ) : (
             <>
             <div className="title-dropdown-container">

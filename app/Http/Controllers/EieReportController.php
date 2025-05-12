@@ -12,6 +12,7 @@ use App\Models\HistoricalScorecard;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\JsonResponse;
 
 class EieReportController extends Controller
 {
@@ -660,94 +661,125 @@ class EieReportController extends Controller
         ]);
     }
 
-    public function getDashboardReportYearTotals(Request $request)
-    {
-        $department = $request->input('department');       // e.g., "CIT"
-        $semester = $request->input('semester');           // "1st Semester" or "2nd Semester"
-        $schoolYear = $request->input('school_year');      // format: "2025/2026"
+    public function getDashboardReportYearTotals(Request $request) {
+        // Extract the parameters from the request
+        $department = $request->input('department');
+        $semester = $request->input('semester');  // Trim any extra spaces
+        $school_year = $request->input('schoolYear'); // Example: "2025/2026"
 
-        // Parse school year string into integers
-        [$startYear, $endYear] = explode('/', $schoolYear);
+        \Log::info('Received Parameters', [
+            'department' => $request->input('department'),
+                   'semester' => $request->input('semester'),
+                   'school_year' => $request->input('schoolYear'),
+        ]);
 
-        // Determine semester date range based on input
-        if ($semester == '1st Semester') {
-            $startDate = Carbon::create($startYear, 8, 1);   // August
-            $endDate   = Carbon::create($startYear, 12, 31); // December
-        } else {
-            $startDate = Carbon::create($endYear, 1, 1);     // January
-            $endDate   = Carbon::create($endYear, 5, 31);    // May
+        // Validate the semester parameter
+        $validSemesters = ['1st Semester', '2nd Semester']; // Define valid semesters
+        if (!in_array($semester, $validSemesters)) {
+            return response()->json([
+                'error' => 'Invalid semester value. Please use a valid semester like 1st Semester, 2nd Semester, etc.'
+            ], 400);
         }
 
-        // Fetch total population grouped by program and year level
-        $population = HistoricalClassLists::where('department', $department)
+        // Check if school_year is in the expected format (YYYY/YYYY)
+        if (!$school_year || strpos($school_year, '/') === false) {
+            return response()->json([
+                'error' => 'Invalid school year format. Please use YYYY/YYYY format.'
+            ], 400);
+        }
+
+        // Extract start year and end year from the school_year string
+        list($startYear, $endYear) = explode('/', $school_year);
+
+        // Check if the explode function successfully split the year values
+        if (!isset($startYear) || !isset($endYear)) {
+            return response()->json([
+                'error' => 'Unable to parse school year. Please check the format.'
+            ], 400);
+        }
+
+        // Prepare the start and end dates based on the semester
+        if ($semester === '1st Semester') {
+            $startDate = "{$startYear}-08-01"; // Start of 1st Semester (August)
+            $endDate = "{$startYear}-12-31"; // End of 1st Semester (December)
+        } elseif ($semester === '2nd Semester') {
+            $startDate = "{$startYear}-01-01"; // Start of 2nd Semester (January)
+            $endDate = "{$startYear}-05-31"; // End of 2nd Semester (May)
+        }
+
+        // Fetch programs based on the department and school_year, no semester filter
+        $programs = HistoricalClassLists::where('department', $department)
         ->whereBetween('created_at', [$startDate, $endDate])
-        ->select('program', 'year_level', DB::raw('count(*) as total_students'))
-        ->groupBy('program', 'year_level')
-        ->get();
+        ->pluck('program')
+        ->unique()
+        ->toArray();
 
-        // Fetch scorecard completion counts
-        $completed = HistoricalScorecard::where('department', $department)
-        ->whereBetween('created_at', [$startDate, $endDate])
-        ->select('program', 'year_level', DB::raw('count(*) as completed'))
-        ->groupBy('program', 'year_level')
-        ->get();
+        // Prepare an array to store the year-wise data
+        $yearProgramTotals = [];
 
-        // Fetch EPGF average for each program and year level
-        $epgfAvg = HistoricalClassLists::where('department', $department)
-        ->whereBetween('created_at', [$startDate, $endDate])
-        ->select('program', 'year_level', DB::raw('avg(epgf) as epgf_average'))
-        ->groupBy('program', 'year_level')
-        ->get();
+        // Iterate through each year level (1st Year, 2nd Year, etc.)
+        for ($i = 1; $i <= 4; $i++) {
+            // Convert the year level to a readable format
+            $yearLevel = $i . ($i == 1 ? 'st' : ($i == 2 ? 'nd' : ($i == 3 ? 'rd' : 'th'))) . ' Year';
 
-        // Index completed and EPGF averages for easy access
-        $completedMap = $completed->keyBy(function ($item) {
-            return $item->program . '-' . $item->year_level;
-        });
+            // Initialize the program data for this year level
+            $yearProgramTotals[$yearLevel] = [];
 
-        $epgfAvgMap = $epgfAvg->keyBy(function ($item) {
-            return $item->program . '-' . $item->year_level;
-        });
+            // Iterate over the programs
+            foreach ($programs as $program) {
+                // Fetch the average completion rate for the program and year level
+                $completionRate = EieReport::where('year_level', $yearLevel)
+                ->where('program', $program)
+                ->where('department', $department)
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->where(function ($query) use ($semester) {
+                    if ($semester === '1st Semester') {
+                        // 1st Semester: August to December
+                        $query->whereMonth('created_at', '>=', 8)
+                        ->whereMonth('created_at', '<=', 12);
+                    } elseif ($semester === '2nd Semester') {
+                        // 2nd Semester: January to May
+                        $query->whereMonth('created_at', '>=', 1)
+                        ->whereMonth('created_at', '<=', 5);
+                    }
+                })
+                ->avg('completion_rate'); // Fetch the average completion rate for the program
 
-        // Combine data and calculate completion rates, including EPGF average
-        $report = $population->map(function ($item) use ($completedMap, $epgfAvgMap) {
-            $key = $item->program . '-' . $item->year_level;
-            $completed = $completedMap[$key]->completed ?? 0;
-            $epgfAverage = $epgfAvgMap[$key]->epgf_average ?? 0;
+                // Fetch the average epgf_average for the program
+                $epgfAverage = HistoricalClassLists::where('year_level', $yearLevel)
+                ->where('program', $program)
+                ->where('department', $department)
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->where(function ($query) use ($semester) {
+                    if ($semester === '1st Semester') {
+                        $query->whereMonth('created_at', '>=', 8)
+                        ->whereMonth('created_at', '<=', 12);
+                    } elseif ($semester === '2nd Semester') {
+                        $query->whereMonth('created_at', '>=', 1)
+                        ->whereMonth('created_at', '<=', 5);
+                    }
+                })
+                ->avg('epgf_average'); // Fetch the average epgf_average for the program
 
-            // Calculate the completion rate
-            $rate = $item->total_students > 0
-            ? round(($completed / $item->total_students) * 100, 2)
-            : 0;
-
-            return [
-                'program' => $item->program,
-                'year_level' => $item->year_level,
-                'completion_rate' => $rate,
-                'epgf_average' => round($epgfAverage, 2), // Round to 2 decimal places
-            ];
-        });
-
-        // Group by program first, then by year_level within each program
-        $groupedReport = $report->groupBy('program')->map(function ($programGroup) {
-            return $programGroup->groupBy('year_level')->map(function ($yearGroup) {
-                // Average completion rate and EPGF average for each year level within a program
-                $totalCompletionRate = $yearGroup->sum('completion_rate');
-                $totalEpgfAverage = $yearGroup->sum('epgf_average');
-                $count = $yearGroup->count();
-
-                return [
-                    'completion_rate' => round($totalCompletionRate / $count, 2), // Average completion rate for the year level
-                                                             'epgf_average' => round($totalEpgfAverage / $count, 2), // Average EPGF for the year level
+                // Store the results in the yearProgramTotals array
+                $yearProgramTotals[$yearLevel][$program] = [
+                    'completion_rate' => $completionRate ?? 0, // Set default value if completionRate is null
+                    'epgf_average' => $epgfAverage ?? 0, // Set default value if epgfAverage is null
                 ];
-            });
-        });
+            }
+        }
 
-        // Reindex to provide a clean list with grouped programs and year levels
-        $groupedReport = $groupedReport->values();
-
+        // Return the final year program totals array
         return response()->json([
-            'data' => $groupedReport,
+            'programs' => $programs,
+            'yearProgramTotals' => $yearProgramTotals,
         ]);
+    }
+
+    public function getUniqueDepartments(): JsonResponse
+    {
+        $departments = EieReport::pluck('department')->unique()->values();
+        return response()->json($departments);
     }
 
 }

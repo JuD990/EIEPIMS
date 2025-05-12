@@ -26,13 +26,16 @@ Route::get('/dashboard-report', [EieReportController::class, 'getDashboardReport
 Route::get('/eie-report', [EieReportController::class, 'getEieReporting']);
 Route::get('/dashboard-report-grand-totals', [EieReportController::class, 'getDashboardReportGrandTotals']);
 Route::get('/dashboard-report-year-totals', [EieReportController::class, 'getDashboardReportYearTotals']);
+Route::get('/fetch-filtered-eie-reports', [EieReportController::class, 'fetchFilteredReports']);
+Route::get('/department-eie-reports', [EieReportController::class, 'getDepartmentReport']);
+Route::get('/get-departments', [EieReportController::class, 'getUniqueDepartments']);
 
 // Delete Data Settings
 Route::delete('/data-settings/class-lists', [EieReportController::class, 'deleteClassLists']);
 Route::put('/data-settings/class-lists/nullify-scores', [EieReportController::class, 'nullifyClassListScores']);
 Route::put('/data-settings/implementing-subjects/nullify-scores', [EieReportController::class, 'nullifyImplementingSubjectScores']);
 Route::delete('/data-settings/scorecard', [EieReportController::class, 'deleteScorecard']);
-Route::get('/fetch-filtered-eie-reports', [EieReportController::class, 'fetchFilteredReports']);
+
 
 Route::get('/performance-summary-rating', [StudentController::class, 'getPerformanceSummaryRatings']);
 Route::get('/current-subjects/{student_id}', [StudentController::class, 'getCurrentSubjects']);
