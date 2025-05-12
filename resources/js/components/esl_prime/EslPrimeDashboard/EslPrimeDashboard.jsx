@@ -5,6 +5,8 @@ import TableComponent from "./table/esl-table-dashboard";
 import DashboardDropdown from "./dropdown-button/dropdown-esl-dashboard";
 import CollegeProficiencyChart from "./college-proficiency-distribution /college-proficiency-distribution";
 import DepartmentEieSparkPerformance from "./department-eie-spark-performance/department-eie-spark-performance";
+import DepartmentPerformance from "./imp-subject-performance/imp-subjects-performance";
+
 
 const EslPrimeDashboard = () => {
   const currentMonth = new Date().getMonth(); // 0 for January, 11 for December
@@ -30,7 +32,7 @@ const EslPrimeDashboard = () => {
     Dashboard
     </h1>
 
-    <CollegeProficiencyChart />
+    <DepartmentPerformance />
     <br />
     <DepartmentEieSparkPerformance/>
     <br />

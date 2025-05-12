@@ -54,27 +54,43 @@ const GraphDropdown = ({ selectedSchoolYear, setSelectedSchoolYear, selectedSeme
     const formattedSchoolYear = selectedSchoolYear ? selectedSchoolYear.replace("/", "-") : "Select School Year";
 
     return (
-        <div className="college-poc-graph-controls">
-        <div className="college-poc-graph-dropdown-container">
+        <div className="eie-head-graph-controls">
+        <div className="eie-head-graph-dropdown-container">
+
+        {/* Reset Filters */}
+        <div className="eie-head-reset-link-container">
+        <a
+        href="#"
+        className="eie-head-reset-link"
+        onClick={(e) => {
+            e.preventDefault();
+            setSelectedSchoolYear(null);
+            setSelectedSemester(null);
+        }}
+        >
+        Reset Filters
+        </a>
+        </div>
+
         {/* School Year Dropdown */}
-        <div className="college-poc-graph-dropdown-wrapper">
+        <div className="eie-head-graph-dropdown-wrapper">
         <button
-        className="college-poc-graph-dropdown-btn"
+        className="eie-head-graph-dropdown-btn"
         onClick={() => setIsSchoolYearOpen((prev) => !prev)}
         >
         {formattedSchoolYear}
         <FaChevronDown
-        className={`college-poc-graph-dropdown-arrow ${isSchoolYearOpen ? "open" : ""}`}
+        className={`eie-head-graph-dropdown-arrow ${isSchoolYearOpen ? "open" : ""}`}
         />
         </button>
         {isSchoolYearOpen && (
-            <div className="college-poc-graph-dropdown-menu">
+            <div className="eie-head-graph-dropdown-menu">
             {schoolYears.length > 0 ? (
                 schoolYears.map((year, index) => (
                     <p
                     key={index}
-                    className={`college-poc-graph-dropdown-item ${
-                        selectedSchoolYear === year ? "college-poc-graph-selected" : ""
+                    className={`eie-head-graph-dropdown-item ${
+                        selectedSchoolYear === year ? "eie-head-graph-selected" : ""
                     }`}
                     onClick={() => handleSchoolYearSelect(year)}
                     >
@@ -82,30 +98,30 @@ const GraphDropdown = ({ selectedSchoolYear, setSelectedSchoolYear, selectedSeme
                     </p>
                 ))
             ) : (
-                <p className="college-poc-graph-dropdown-item">No School Years</p>
+                <p className="eie-head-graph-dropdown-item">No School Years</p>
             )}
             </div>
         )}
         </div>
 
         {/* Semester Dropdown */}
-        <div className="college-poc-graph-dropdown-wrapper">
+        <div className="eie-head-graph-dropdown-wrapper">
         <button
-        className="college-poc-graph-dropdown-btn"
+        className="eie-head-graph-dropdown-btn"
         onClick={() => setIsSemesterOpen((prev) => !prev)}
         >
         {selectedSemester}
         <FaChevronDown
-        className={`college-poc-graph-dropdown-arrow ${isSemesterOpen ? "open" : ""}`}
+        className={`eie-head-graph-dropdown-arrow ${isSemesterOpen ? "open" : ""}`}
         />
         </button>
         {isSemesterOpen && (
-            <div className="college-poc-graph-dropdown-menu">
+            <div className="eie-head-graph-dropdown-menu">
             {semesters.map((sem, index) => (
                 <p
                 key={index}
-                className={`college-poc-graph-dropdown-item ${
-                    selectedSemester === sem ? "college-poc-graph-selected" : ""
+                className={`eie-head-graph-dropdown-item ${
+                    selectedSemester === sem ? "eie-head-graph-selected" : ""
                 }`}
                 onClick={() => handleSemesterSelect(sem)}
                 >

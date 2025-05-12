@@ -29,6 +29,8 @@ Route::get('/dashboard-report-year-totals', [EieReportController::class, 'getDas
 Route::get('/fetch-filtered-eie-reports', [EieReportController::class, 'fetchFilteredReports']);
 Route::get('/department-eie-reports', [EieReportController::class, 'getDepartmentReport']);
 Route::get('/get-departments', [EieReportController::class, 'getUniqueDepartments']);
+Route::get('/get-full-departments', [EieReportController::class, 'getFullUniqueDepartments']);
+
 
 // Delete Data Settings
 Route::delete('/data-settings/class-lists', [EieReportController::class, 'deleteClassLists']);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ClassLists;
 use App\Models\ImplementingSubjects;
 use App\Models\HistoricalImplementingSubjects;
+use App\Models\HistoricalClassLists;
 use Illuminate\Http\Request;
 use App\Models\EieScorecardClassReport;
 use App\Models\HistoricalScorecard;

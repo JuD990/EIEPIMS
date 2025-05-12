@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ImplementingSubjects;
+use App\Models\EIEHeads;
 use App\Models\EieReport;
 use App\Models\ClassLists;
 use App\Models\EieScorecardClassReport;
@@ -13,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Collection;
 
 class EieReportController extends Controller
 {
@@ -782,4 +784,13 @@ class EieReportController extends Controller
         return response()->json($departments);
     }
 
+    public function getFullUniqueDepartments(): JsonResponse
+    {
+        // Fetch unique combinations of department and full_department
+        $uniqueDepartments = EIEHeads::select('department', 'full_department')
+        ->distinct()
+        ->get();
+
+        return response()->json($uniqueDepartments);
+    }
 }
