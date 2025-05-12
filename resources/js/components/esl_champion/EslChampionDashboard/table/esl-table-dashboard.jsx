@@ -121,7 +121,7 @@ const TableComponent = ({ department, schoolYear, semester }) => {
 
     return (
         <div>
-        <div className="dashboard-esl-container">
+        <div className="dashboard-esl-champion-container">
         <table className="dashboard-esl-table unique-bordered-table">
         <thead>
         <tr>

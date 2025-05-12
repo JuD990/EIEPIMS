@@ -1,9 +1,7 @@
-.dashboard-esl-container {
+.dashboard-esl-champion-container {
     overflow-x: auto;
     overflow-y: auto;
     height: 680px;
-    margin-left: 340px;
-    margin-right: 35px;
     border: 1px solid #ddd;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     text-align: center;

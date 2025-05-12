@@ -1,9 +1,8 @@
-.esl-dashboard-dropdown-container {
+.esl-champion-dashboard-dropdown-container {
     display: flex;
     gap: 20px;
     align-items: center;
     justify-content: flex-start;
-    margin-left: 340px;
     margin-right: auto;
     white-space: nowrap;
     padding: 8px;

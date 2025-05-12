@@ -31,7 +31,8 @@ const EslPrimeDashboard = () => {
     <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '340px', color: '#383838' }}>
     Dashboard
     </h1>
-
+    <CollegeProficiencyChart />
+    <br />
     <DepartmentPerformance />
     <br />
     <DepartmentEieSparkPerformance/>

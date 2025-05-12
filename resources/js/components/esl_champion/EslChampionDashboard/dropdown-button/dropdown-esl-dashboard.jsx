@@ -172,7 +172,7 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
 
     return (
         <div className="esl-dashboard-controls">
-        <div className="esl-dashboard-dropdown-container">
+        <div className="esl-champion-dashboard-dropdown-container">
         {/* Department Dropdown */}
         <div className="esl-dashboard-dropdown-wrapper">
         <button className="esl-dashboard-dropdown-btn" onClick={() => setIsDepartmentOpen((prev) => !prev)}>
