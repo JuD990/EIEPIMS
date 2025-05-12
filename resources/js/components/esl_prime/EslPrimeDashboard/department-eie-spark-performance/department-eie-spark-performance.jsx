@@ -29,12 +29,10 @@ ChartJS.register(
 );
 
 const EieSparkPerformance = () => {
-    const currentMonth = new Date().getMonth();
-    const defaultSemester = currentMonth >= 8 && currentMonth <= 12 ? "1st Semester" : "2nd Semester";
-    const defaultSchoolYear = `${new Date().getFullYear()}/${new Date().getFullYear() + 1}`;
+    const defaultSchoolYear = `${new Date().getFullYear()}-${new Date().getFullYear() + 1}`;
 
     const [selectedSchoolYear, setSelectedSchoolYear] = useState(defaultSchoolYear);
-    const [selectedSemester, setSelectedSemester] = useState(defaultSemester);
+    const [selectedSemester, setSelectedSemester] = useState("");
     const [chartData, setChartData] = useState({ labels: [], datasets: [] });
     const [loading, setLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState("");

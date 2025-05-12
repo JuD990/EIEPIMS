@@ -4,41 +4,55 @@ import axios from "axios";
 import "./graph-dropdown.css";
 import apiService from "@services/apiServices";
 
-const GraphDropdown = ({ selectedSchoolYear, setSelectedSchoolYear, selectedSemester, setSelectedSemester }) => {
+const GraphDropdown = ({
+    selectedSchoolYear,
+    setSelectedSchoolYear,
+    selectedSemester,
+    setSelectedSemester
+}) => {
     const [isSchoolYearOpen, setIsSchoolYearOpen] = useState(false);
     const [isSemesterOpen, setIsSemesterOpen] = useState(false);
     const [schoolYears, setSchoolYears] = useState([]);
     const semesters = ["1st Semester", "2nd Semester"];
 
-    useEffect(() => {
-        const fetchSchoolYears = async (currentMonth) => {
-            try {
-                const response = await axios.get("http://localhost:8000/api/getSchoolYears");
-                const schoolYearList = response.data;
-                setSchoolYears(schoolYearList);
+    const initializeDefaults = async () => {
+        try {
+            const response = await axios.get("http://localhost:8000/api/getSchoolYears");
+            const schoolYearList = response.data;
+            setSchoolYears(schoolYearList);
 
-                if (schoolYearList.length > 0) {
-                    const selectedYear = schoolYearList[0];
-                    setSelectedSchoolYear(selectedYear);
+            if (schoolYearList.length > 0) {
+                const selectedYear = schoolYearList[0];
+                setSelectedSchoolYear(selectedYear);
 
-                    // Set default semester only if it hasn't been selected by the user yet
-                    if (!selectedSemester) {
-                        const startYear = parseInt(selectedYear.split('/')[0], 10);
-                        if (currentMonth >= 8 && currentMonth <= 12) {
-                            setSelectedSemester("1st Semester");
-                        } else {
-                            setSelectedSemester("2nd Semester");
-                        }
-                    }
+                if (!selectedSemester || !semesters.includes(selectedSemester)) {
+                    const currentMonth = new Date().getMonth() + 1;
+                    const defaultSemester = currentMonth >= 8 && currentMonth <= 12
+                    ? "1st Semester"
+                    : "2nd Semester";
+                    setSelectedSemester(defaultSemester);
                 }
-            } catch (error) {
-                console.error("Error fetching school years:", error);
             }
-        };
+        } catch (error) {
+            console.error("Error fetching school years:", error);
+        }
+    };
 
-        const currentMonth = new Date().getMonth() + 1;
-        fetchSchoolYears(currentMonth);
-    }, [setSelectedSchoolYear, setSelectedSemester, selectedSemester]);
+    useEffect(() => {
+        initializeDefaults();
+    }, []);
+
+    const resetFilters = () => {
+        if (schoolYears.length > 0) {
+            setSelectedSchoolYear(schoolYears[0]);
+
+            const currentMonth = new Date().getMonth() + 1;
+            const defaultSemester = currentMonth >= 8 && currentMonth <= 12
+            ? "1st Semester"
+            : "2nd Semester";
+            setSelectedSemester(defaultSemester);
+        }
+    };
 
     const handleSchoolYearSelect = (year) => {
         setSelectedSchoolYear(year);
@@ -50,8 +64,9 @@ const GraphDropdown = ({ selectedSchoolYear, setSelectedSchoolYear, selectedSeme
         setIsSemesterOpen(false);
     };
 
-    // Safe check for selectedSchoolYear
-    const formattedSchoolYear = selectedSchoolYear ? selectedSchoolYear.replace("/", "-") : "Select School Year";
+    const formattedSchoolYear = selectedSchoolYear
+    ? selectedSchoolYear.replace("/", "-")
+    : "Select School Year";
 
     return (
         <div className="eie-head-graph-controls">
@@ -64,8 +79,7 @@ const GraphDropdown = ({ selectedSchoolYear, setSelectedSchoolYear, selectedSeme
         className="eie-head-reset-link"
         onClick={(e) => {
             e.preventDefault();
-            setSelectedSchoolYear(null);
-            setSelectedSemester(null);
+            resetFilters();
         }}
         >
         Reset Filters
@@ -110,7 +124,7 @@ const GraphDropdown = ({ selectedSchoolYear, setSelectedSchoolYear, selectedSeme
         className="eie-head-graph-dropdown-btn"
         onClick={() => setIsSemesterOpen((prev) => !prev)}
         >
-        {selectedSemester}
+        {selectedSemester || "Select Semester"}
         <FaChevronDown
         className={`eie-head-graph-dropdown-arrow ${isSemesterOpen ? "open" : ""}`}
         />
