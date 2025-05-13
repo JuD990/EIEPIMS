@@ -3,7 +3,7 @@ import ESLSidebar from '../sidebar/esl-sidebar';
 import UserInfo from '@user-info/User-info';
 import TableComponent from "./table/esl-table-dashboard";
 import DashboardDropdown from "./dropdown-button/dropdown-esl-dashboard";
-import CollegeProficiencyChart from "./college-proficiency-distribution /college-proficiency-distribution";
+import CollegeProficiencyChart from "./college-proficiency-distribution/college-proficiency-distribution";
 import DepartmentEieSparkPerformance from "./department-eie-spark-performance/department-eie-spark-performance";
 import DepartmentPerformance from "./imp-subject-performance/imp-subjects-performance";
 

@@ -148,18 +148,30 @@ const MonthlyPerformanceSummary = () => {
     // Define columns for the table
     const columns = React.useMemo(
         () => [
-            { Header: 'Month', accessor: 'month' },
             {
-                Header: 'EPGF Average',
-                accessor: 'epgf_average',
-                Cell: ({ value }) => {
-                    const num = parseFloat(value);
-                    return isNaN(num) ? '' : num.toFixed(2);
-                }
+                Header: <span title="Month of the performance data">Month</span>,
+                accessor: 'month',
             },
-            { Header: 'Proficiency Level', accessor: 'proficiencyLevel' },
-            { Header: 'CEFR Rating', accessor: 'cefrRating' },
-            { Header: 'CEFR Category', accessor: 'cefrCategory' },
+            {
+                Header: <span title="EPGF (Extended Pronunciation Grammar Fluency) average score">EPGF Average</span>,
+                                  accessor: 'epgf_average',
+                                  Cell: ({ value }) => {
+                                      const num = parseFloat(value);
+                                      return isNaN(num) ? '' : num.toFixed(2);
+                                  }
+            },
+            {
+                Header: <span title="Student's assessed proficiency level">Proficiency Level</span>,
+                accessor: 'proficiencyLevel',
+            },
+            {
+                Header: <span title="CEFR (Common European Framework of Reference) rating">CEFR Rating</span>,
+                                  accessor: 'cefrRating',
+            },
+            {
+                Header: <span title="CEFR (Common European Framework of Reference) category based on score">CEFR Category</span>,
+                accessor: 'cefrCategory',
+            },
         ],
         []
     );
