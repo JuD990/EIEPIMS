@@ -165,11 +165,11 @@ const MonthlyPerformanceSummary = () => {
                 accessor: 'proficiencyLevel',
             },
             {
-                Header: <span title="CEFR (Common European Framework of Reference) rating">CEFR Rating</span>,
+                Header: <span title="CEFR (Common European Framework of Reference for Languages) rating">CEFR Rating</span>,
                                   accessor: 'cefrRating',
             },
             {
-                Header: <span title="CEFR (Common European Framework of Reference) category based on score">CEFR Category</span>,
+                Header: <span title="CEFR (Common European Framework of Reference for Languages) category based on score">CEFR Category</span>,
                 accessor: 'cefrCategory',
             },
         ],
