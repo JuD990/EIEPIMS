@@ -20,7 +20,7 @@ import EIEHeadAssignPOC from "../js/components/head_eie_poc/assign_poc/assign_po
 import EIEHeadDiagnosticReport from "../js/components/head_eie_poc/eie-diagnostic-reports/eie-diagnostic-reports";
 
 // Lead POC
-import LeadEiePocDashboard from "../js/components/lead_eie_poc/LeadEiePocDashboard";
+import LeadEiePocDashboard from "../js/components/lead_eie_poc/lead-poc-dashboard/LeadEiePocDashboard";
 import LeadPocReporting from "../js/components/lead_eie_poc/lead-poc-eie-reporting/lead-poc-eie-reporting";
 
 // College POC

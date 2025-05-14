@@ -1,0 +1,35 @@
+.chart-container {
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 16px;
+    width: 1550px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    margin-left: 350px;
+    font-family: 'Poppins';
+}
+
+.chart-title h2{
+    text-align: left;
+    font-weight: 700;
+}
+
+.chart-title p {
+    font-family: 'Poppins';
+    text-align: left;
+    margin-top: -10px;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: #666666;
+}
+
+.dashboard-table-container {
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 16px;
+    width: 1550px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    margin-left: 350px;
+}
+

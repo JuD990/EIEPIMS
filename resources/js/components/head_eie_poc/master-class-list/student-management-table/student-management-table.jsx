@@ -56,6 +56,7 @@ const StudentManagementTable = ({
     fullName.includes(query) ||
     reversedFullName.includes(query) ||
     (student.course_code?.toLowerCase() || "").includes(query) ||
+    (student.student_id?.toLowerCase() || "").includes(query) ||
     (student.status?.toLowerCase() || "").includes(query) ||
     (student.program?.toLowerCase() || "").includes(query) ||
     (student.year_level?.toLowerCase() || "").includes(query);

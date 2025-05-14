@@ -169,7 +169,7 @@ class ImplementingSubjectController extends Controller
                     'course_code', 'code', 'course_title',
                     'semester', 'year_level', 'program',
                     'department', 'employee_id', 'assigned_poc',
-                    'email', 'enrolled_students',
+                    'email',
                 ];
 
                 if ($header !== $expectedColumns) {
@@ -197,7 +197,6 @@ class ImplementingSubjectController extends Controller
                             'employee_id'       => $row[7],
                             'assigned_poc'      => $row[8],
                             'email'             => $row[9],
-                            'enrolled_students' => $row[10],
                         ]
                     );
 
@@ -213,7 +212,6 @@ class ImplementingSubjectController extends Controller
                             'employee_id'       => $row[7],
                             'assigned_poc'      => $row[8],
                             'email'             => $row[9],
-                            'enrolled_students' => $row[10],
                         ]
                     );
                 }
@@ -334,7 +332,10 @@ class ImplementingSubjectController extends Controller
             ];
 
             if (!isset($userTypeModelMap[$userType])) {
-                return response()->json(['success' => false, 'message' => 'User type not recognized. Skipping...'], 200);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User type not recognized. Skipping...',
+                ], 200);
             }
 
             $model = $userTypeModelMap[$userType];
@@ -342,16 +343,31 @@ class ImplementingSubjectController extends Controller
 
             if (!$employee) {
                 \Log::error("Employee not found: ID = $employeeId, Type = $userType");
-                return response()->json(['success' => false, 'message' => 'Employee not found.'], 404);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Employee not found.',
+                ], 404);
+            }
+
+            $department = $employee->department;
+            $fullDepartment = null;
+
+            // If not EIEHead, look up full_department in EIEHeads by department
+            if ($userType !== 'Head EIE POC') {
+                $head = EIEHeads::where('department', $department)->first();
+                if ($head) {
+                    $fullDepartment = $head->full_department;
+                }
+            } else {
+                $fullDepartment = $employee->full_department;
             }
 
             return response()->json([
                 'success' => true,
-                'department' => $employee->department,
-                'full_department' => $employee->full_department ?? null,
+                'department' => $department,
+                'full_department' => $fullDepartment,
             ]);
         }
-
 
         public function updateImplementingSubject(Request $request, $courseCode)
         {

@@ -191,7 +191,7 @@ const ImpSubjectsPerformance = ({ userFullDepartment }) => {
 
             } catch (error) {
                 console.error("Error fetching grand totals:", error);
-                setErrorMessage("Failed to fetch grand totals.");
+                setErrorMessage("No Data Available.");
             } finally {
                 setLoading(false);
             }

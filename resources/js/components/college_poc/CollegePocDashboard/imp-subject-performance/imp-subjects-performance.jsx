@@ -234,44 +234,48 @@ const ImpSubjectsPerformance = () => {
 
     return (
         <div className="chart-container">
-        {loading ? (
-            <p>No Assigned Implementing Subject</p>
-        ) : (
-            <>
+            {loading && <p>Loading data...</p>}
+
             <div className="title-dropdown-container">
-            <select
-            id="chart-title"
-            value={chartTitle}
-            onChange={handleTitleChange}
-            className="title-dropdown"
-            disabled={classData.length === 0}
-            >
-            {classData.length === 0 ? (
-                <option value="">No Assigned Subject</option>
-            ) : (
-                classData.map((course, index) => (
-                    <option key={index} value={course.course_code}>
-                    {course.course_title} ({course.course_code})
-                    </option>
-                ))
-            )}
-            </select>
+                <select
+                    id="chart-title"
+                    value={chartTitle}
+                    onChange={handleTitleChange}
+                    className="title-dropdown"
+                    disabled={classData.length === 0}
+                >
+                    {classData.length === 0 ? (
+                        <option value="">No Assigned Subject</option>
+                    ) : (
+                        classData.map((course, index) => (
+                            <option key={index} value={course.course_code}>
+                                {course.course_title} ({course.course_code})
+                            </option>
+                        ))
+                    )}
+                </select>
             </div>
 
             <div className="dropdown-wrapper">
-            <GraphDropdown
-            selectedSchoolYear={selectedSchoolYear}
-            setSelectedSchoolYear={setSelectedSchoolYear}
-            selectedSemester={selectedSemester}
-            setSelectedSemester={setSelectedSemester}
-            />
+                <GraphDropdown
+                    selectedSchoolYear={selectedSchoolYear}
+                    setSelectedSchoolYear={setSelectedSchoolYear}
+                    selectedSemester={selectedSemester}
+                    setSelectedSemester={setSelectedSemester}
+                />
             </div>
 
-            {errorMessage && <p>{errorMessage}</p>}
+            {errorMessage && (
+                <p style={{ color: "red", textAlign: "center" }}>{errorMessage}</p>
+            )}
 
             <Chart type="bar" data={chartData} options={options} />
-            </>
-        )}
+
+            {chartData.datasets.every(ds => ds.data.every(val => val === 0)) && !loading && (
+                <p style={{ textAlign: "center", marginTop: "1rem" }}>
+                    No data available for the selected subject and semester.
+                </p>
+            )}
         </div>
     );
 };

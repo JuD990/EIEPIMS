@@ -28,7 +28,7 @@ return new class extends Migration
             $table->decimal('pronunciation', 5, 2)->nullable();
             $table->decimal('grammar', 5, 2)->nullable();
             $table->decimal('fluency', 5, 2)->nullable();
-            $table->decimal('epgf_average', 5, 2)->nullable();
+            $table->decimal('epgf_average', 5, 2)->nullable()->default(0);
             $table->string('proficiency_level', 50)->nullable();
             $table->string('course_code')->nullable();
             $table->string('candidate_for_graduating')->default("No");

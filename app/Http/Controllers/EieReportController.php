@@ -54,7 +54,7 @@ class EieReportController extends Controller
             $championFullName = $champion ? "{$champion->firstname} {$champion->middlename} {$champion->lastname}" : null;
             $championId = $champion->class_lists_id ?? null;
             $championStudentId = $champion->student_id ?? null;
-            $championEpgfAverage = $champion->epgf_average ?? null;
+            $championEpgfAverage = $champion->epgf_average ?? 0;
             $championProficiencyLevel = $champion->proficiency_level ?? null;
 
             // **Count the number of submitted reports for this course_code**
@@ -80,18 +80,18 @@ class EieReportController extends Controller
                 'assigned_poc' => $program->assigned_poc,
                 'course_title' => $program->course_title,
                 'course_code' => $program->course_code,
-                'enrolled_students' => $program->enrolled_students,
-                'active_students' => $program->active_students,
-                'completion_rate' => $program->completion_rate ?? null,
+                'enrolled_students' => $program->enrolled_students ?? 0,
+                'active_students' => $program->active_students ?? 0,
+                'completion_rate' => $program->completion_rate ?? 0,
                 'completion_rate_expectation' => $completionRateExpectation ?? null,
-                'epgf_average' => $program->epgf_average,
+                'epgf_average' => $program->epgf_average ?? 0,
                 'proficiency_level' => $program->proficiency_level,
                 'champion' => $championFullName,
                 'champion_id' => $championId,
                 'champion_student_id' => $championStudentId,
-                'champion_epgf_average' => $championEpgfAverage ?: null,
+                'champion_epgf_average' => $championEpgfAverage ?? 0,
                 'champion_proficiency_level' => $championProficiencyLevel,
-                'submitted' => $submittedCount ?: null,
+                'submitted' => $submittedCount ?? 0,
             ];
 
             if ($existingRecord) {
