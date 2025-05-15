@@ -42,7 +42,7 @@ const CollegePOCSidebar = () => {
     onClick={() => navigate("/class-management")}
     >
     <img src={classicon} alt="Class icon" className="class-icon" />
-    <p>Class Management</p>
+    <p>Class Record</p>
     </button>
 
     <button

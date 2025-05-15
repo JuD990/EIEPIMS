@@ -18,98 +18,101 @@ use Illuminate\Support\Collection;
 
 class EieReportController extends Controller
 {
-    public function storeOrUpdatePrograms()
-    {
-        $currentMonth = Carbon::now()->month;
-        $currentYear = Carbon::now()->year;
-        $programs = ImplementingSubjects::all();
+public function storeOrUpdatePrograms()
+{
+    $currentMonth = Carbon::now()->month;
+    $currentYear = Carbon::now()->year;
+    $programs = ImplementingSubjects::all();
 
-        if ($programs->isEmpty()) {
-            return response()->json(['error' => 'No programs found in ImplementingSubjects'], 404);
+    if ($programs->isEmpty()) {
+        return response()->json(['error' => 'No programs found in ImplementingSubjects'], 404);
+    }
+
+    $updatedEntries = [];
+    $newEntries = [];
+
+    foreach ($programs as $program) {
+        if (empty($program->course_code)) {
+            return response()->json([
+                'error' => "Course code is required for program: {$program->program}, year level: {$program->year_level}"
+            ], 422);
         }
 
-        $updatedEntries = [];
-        $newEntries = [];
+        // Count submitted reports
+        $submittedCount = EieScorecardClassReport::where('course_code', $program->course_code)->count();
+        $activeStudents = $program->active_students ?? 0;
 
-        foreach ($programs as $program) {
-            // Ensure course_code is not null
-            if (empty($program->course_code)) {
-                return response()->json([
-                    'error' => "Course code is required for program: {$program->program}, year level: {$program->year_level}"
-                ], 422);
-            }
+        // Calculate completion rate
+        $completionRate = $activeStudents > 0 ? round(($submittedCount / $activeStudents) * 100, 2) : 0;
+        $completionRateExpectation = ($completionRate == 100) ? "Meets Expectation" : "Below Expectation";
 
-            $completionRate = $program->completion_rate ?? 0;
-            // Add the completion_rate_expectation logic
-            $completionRateExpectation = ($completionRate == 100) ? "Meets Expectation" : "Below Expectation";
+        // Calculate average epgf_average for the course
+        $epgfAverage = ClassLists::where('course_code', $program->course_code)
+            ->avg('epgf_average') ?? 0;
 
-            // Fetch Champion Student
-            $champion = ClassLists::where([
-                ['course_code', $program->course_code]
-            ])
+        // Determine proficiency level from the average
+        $proficiencyLevel = $this->determineProficiencyLevel($epgfAverage);
+
+        // Fetch Champion Student
+        $champion = ClassLists::where('course_code', $program->course_code)
             ->where('epgf_average', '>', 0)
             ->orderByDesc('epgf_average')
             ->first();
 
-            $championFullName = $champion ? "{$champion->firstname} {$champion->middlename} {$champion->lastname}" : null;
-            $championId = $champion->class_lists_id ?? null;
-            $championStudentId = $champion->student_id ?? null;
-            $championEpgfAverage = $champion->epgf_average ?? 0;
-            $championProficiencyLevel = $champion->proficiency_level ?? null;
+        $championFullName = $champion ? "{$champion->firstname} {$champion->middlename} {$champion->lastname}" : null;
+        $championId = $champion->class_lists_id ?? null;
+        $championStudentId = $champion->student_id ?? null;
+        $championEpgfAverage = $champion->epgf_average ?? 0;
+        $championProficiencyLevel = $champion ? $this->determineProficiencyLevel($champion->epgf_average) : null;
 
-            // **Count the number of submitted reports for this course_code**
-            $submittedCount = EieScorecardClassReport::where('course_code', $program->course_code)->count();
+        // Check if record exists for current month/year
+        $existingRecord = EieReport::where([
+            ['program', $program->program],
+            ['year_level', $program->year_level],
+            ['semester', $program->semester],
+            ['course_code', $program->course_code],
+        ])
+        ->whereYear('created_at', $currentYear)
+        ->whereMonth('created_at', $currentMonth)
+        ->first();
 
-            // Check if record exists for the current month and year
-            $existingRecord = EieReport::where([
-                ['program', $program->program],
-                ['year_level', $program->year_level],
-                ['semester', $program->semester],
-                ['course_code', $program->course_code],
-            ])
-            ->whereYear('created_at', $currentYear)
-            ->whereMonth('created_at', $currentMonth)
-            ->first();
+        $reportData = [
+            'program' => $program->program,
+            'semester' => $program->semester,
+            'year_level' => $program->year_level,
+            'department' => $program->department,
+            'assigned_poc' => $program->assigned_poc,
+            'course_title' => $program->course_title,
+            'course_code' => $program->course_code,
+            'enrolled_students' => $program->enrolled_students ?? 0,
+            'active_students' => $activeStudents,
+            'completion_rate' => $completionRate,
+            'completion_rate_expectation' => $completionRateExpectation,
+            'epgf_average' => $epgfAverage,
+            'proficiency_level' => $proficiencyLevel,
+            'champion' => $championFullName,
+            'champion_id' => $championId,
+            'champion_student_id' => $championStudentId,
+            'champion_epgf_average' => $championEpgfAverage,
+            'champion_proficiency_level' => $championProficiencyLevel,
+            'submitted' => $submittedCount,
+        ];
 
-            // Prepare Data for Update or Insert
-            $reportData = [
-                'program' => $program->program,
-                'semester' => $program->semester,
-                'year_level' => $program->year_level,
-                'department' => $program->department,
-                'assigned_poc' => $program->assigned_poc,
-                'course_title' => $program->course_title,
-                'course_code' => $program->course_code,
-                'enrolled_students' => $program->enrolled_students ?? 0,
-                'active_students' => $program->active_students ?? 0,
-                'completion_rate' => $program->completion_rate ?? 0,
-                'completion_rate_expectation' => $completionRateExpectation ?? null,
-                'epgf_average' => $program->epgf_average ?? 0,
-                'proficiency_level' => $program->proficiency_level,
-                'champion' => $championFullName,
-                'champion_id' => $championId,
-                'champion_student_id' => $championStudentId,
-                'champion_epgf_average' => $championEpgfAverage ?? 0,
-                'champion_proficiency_level' => $championProficiencyLevel,
-                'submitted' => $submittedCount ?? 0,
-            ];
-
-            if ($existingRecord) {
-                // Update existing record
-                $existingRecord->update($reportData);
-                $updatedEntries[] = $existingRecord->fresh();
-            } else {
-                // Create new record
-                $newEntries[] = EieReport::create($reportData);
-            }
+        if ($existingRecord) {
+            $existingRecord->update($reportData);
+            $updatedEntries[] = $existingRecord->fresh();
+        } else {
+            $newEntries[] = EieReport::create($reportData);
         }
-
-        return response()->json([
-            'message' => 'EIE Reports processed successfully',
-            'updated_entries' => $updatedEntries,
-            'new_entries' => $newEntries
-        ]);
     }
+
+    return response()->json([
+        'message' => 'EIE Reports processed successfully',
+        'updated_entries' => $updatedEntries,
+        'new_entries' => $newEntries
+    ]);
+}
+
 
 
     public function getDashboardReport(Request $request)
@@ -298,7 +301,7 @@ class EieReportController extends Controller
             ["threshold" => 1.00, "level" => "Emerging"],
             ["threshold" => 0.75, "level" => "High Acquisition"],
             ["threshold" => 0.50, "level" => "Low Acquisition"],
-            ["threshold" => 0.00, "level" => "-"]
+            ["threshold" => 0.00, "level" => "Beginning"]
         ];
 
         foreach ($proficiencyLevels as $current) {

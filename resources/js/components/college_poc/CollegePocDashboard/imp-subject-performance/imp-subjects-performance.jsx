@@ -12,7 +12,6 @@ import {
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import "./imp-subjects-performance.css";
-import GraphDropdown from '../graph-dropdown/graph-dropdown';
 import axios from "axios";
 
 ChartJS.register(
@@ -60,13 +59,7 @@ const semesterMonths = {
     "2nd Semester": ["January", "February", "March", "April", "May"],
 };
 
-const ImpSubjectsPerformance = () => {
-    const currentMonth = new Date().getMonth();
-    const defaultSemester = currentMonth >= 8 && currentMonth <= 12 ? "1st Semester" : "2nd Semester";
-    const defaultSchoolYear = `${new Date().getFullYear()}-${new Date().getFullYear() + 1}`;
-
-    const [selectedSchoolYear, setSelectedSchoolYear] = useState(defaultSchoolYear);
-    const [selectedSemester, setSelectedSemester] = useState(defaultSemester);
+const ImpSubjectsPerformance = ({ schoolYear, semester }) => {
     const [chartTitle, setChartTitle] = useState('');
     const [chartData, setChartData] = useState(generateEmptyChartData([]));
     const [classData, setClassData] = useState([]);
@@ -74,7 +67,6 @@ const ImpSubjectsPerformance = () => {
     const [loading, setLoading] = useState(true);
     const [pgfMin, setPgfMin] = useState(0.0);
     const [pgfMax, setPgfMax] = useState(4.0);
-
 
     useEffect(() => {
         const fetchInitialClassData = async () => {
@@ -99,7 +91,7 @@ const ImpSubjectsPerformance = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (!chartTitle || !selectedSemester || !selectedSchoolYear) return;
+            if (!chartTitle || !semester || !schoolYear) return;
 
             setLoading(true);
             try {
@@ -111,18 +103,18 @@ const ImpSubjectsPerformance = () => {
                     setPgfMin(Math.floor(Math.min(...pgfValues) * 10) / 10);
                     setPgfMax(Math.ceil(Math.max(...pgfValues) * 10) / 10);
                 }
-
+                
                 const reportResponse = await axios.get(`/api/fetch-filtered-eie-reports`, {
                     params: {
                         course_code: chartTitle,
-                        semester: selectedSemester,
-                        school_year: selectedSchoolYear,
+                        semester: semester,
+                        school_year: schoolYear,
                     },
                 });
 
                 if (!reportResponse.data.success || reportResponse.data.data.length === 0) {
                     setErrorMessage(reportResponse.data.message || "No data found.");
-                    setChartData(generateEmptyChartData(semesterMonths[selectedSemester]));
+                    setChartData(generateEmptyChartData(semesterMonths[semester]));
                     return;
                 }
 
@@ -175,14 +167,14 @@ const ImpSubjectsPerformance = () => {
                     ],
                 });
             } catch (error) {
-                setChartData(generateEmptyChartData(semesterMonths[selectedSemester]));
+                setChartData(generateEmptyChartData(semesterMonths[semester]));
             } finally {
                 setLoading(false);
             }
         };
 
         fetchData();
-    }, [chartTitle, selectedSemester, selectedSchoolYear]);
+    }, [chartTitle, semester, schoolYear]);
 
     const handleTitleChange = (e) => {
         setChartTitle(e.target.value);
@@ -254,15 +246,6 @@ const ImpSubjectsPerformance = () => {
                         ))
                     )}
                 </select>
-            </div>
-
-            <div className="dropdown-wrapper">
-                <GraphDropdown
-                    selectedSchoolYear={selectedSchoolYear}
-                    setSelectedSchoolYear={setSelectedSchoolYear}
-                    selectedSemester={selectedSemester}
-                    setSelectedSemester={setSelectedSemester}
-                />
             </div>
 
             {errorMessage && (

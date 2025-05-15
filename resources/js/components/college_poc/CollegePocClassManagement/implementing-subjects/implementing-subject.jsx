@@ -3,6 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import studentnoicon from "@assets/student-no.png";
 import axios from "axios";
 import "./implementing-subject.css";
+import SemestralMonths from "../months-semesters/month-semeseters";
 
 const ImplementingSubjects = () => {
   const [employeeId, setEmployeeId] = useState(null);
@@ -32,8 +33,6 @@ const ImplementingSubjects = () => {
       try {
         console.log("Fetching class data for Employee ID:", storedEmployeeId);
         const response = await axios.get(`/api/implementing-subject/${storedEmployeeId}`);
-
-        console.log("API Response:", response.data);
 
         if (response.data.success) {
           setUserClasses(response.data.classData); // Set multiple classes
@@ -162,6 +161,7 @@ const ImplementingSubjects = () => {
     ) : (
       <div className="no-class-available">{errorMessage || "No Classes Available"}</div>
     )}
+    <SemestralMonths/>
     </div>
   );
 };

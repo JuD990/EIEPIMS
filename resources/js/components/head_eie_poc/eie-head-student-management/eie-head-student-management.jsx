@@ -33,60 +33,99 @@ const EIEHeadStudentManagement = () => {
     fetchStats();
   }, []);
 
-  const summaryItems = [
-    {
-      label: "Freshmen",
-      value: `${stats.freshmen.total}`,
-      description: (
-        <div className="description-flex">
+const summaryItems = [
+  // 🟦 1. OVERALL STATISTICS
+  {
+    label: "Total Students",
+    value: `${stats.total_students}`,
+    description: (
+      <div className="description-flex">
+        <span>Enrolled this semester</span>
+      </div>
+    ),
+  },
+  {
+    label: "Active Students",
+    value: `${stats.active_students}`,
+    description: (
+      <div className="description-flex">
+        <span>Currently Enrolled</span>
+      </div>
+    ),
+  },
+  {
+    label: "Active Percentage",
+    value: `${stats.active_percentage}%`,
+    description: (
+      <div className="description-flex">
+        <span>Overall %</span>
+      </div>
+    ),
+  },
+  {
+    label: "Graduating Students",
+    value: `${stats.graduating_students}`,
+    description: (
+      <div className="description-flex">
+        <span>Eligible for graduation</span>
+      </div>
+    ),
+  },
+
+  // 🟩 2. PER YEAR LEVEL STATISTICS
+  {
+    label: "Freshmen",
+    value: `${stats.freshmen.total}`,
+    description: (
+      <div className="description-flex">
         <span>Students</span>
-        <span>{stats.active_percentage}%</span>
-        </div>
-      ),
-      color: "#1B9F24",
-      icon: nonSeniorIcon,
-      subjects: stats.freshmen.subjects || [],
-    },
-    {
-      label: "Sophomore",
-      value: `${stats.sophomores.total}`,
-      description: (
-        <div className="description-flex">
+        <span>{stats.freshmen.active_percentage}%</span>
+      </div>
+    ),
+    color: "#1B9F24",
+    icon: nonSeniorIcon,
+    subjects: stats.freshmen.subjects || [],
+  },
+  {
+    label: "Sophomore",
+    value: `${stats.sophomores.total}`,
+    description: (
+      <div className="description-flex">
         <span>Students</span>
-        <span>{stats.active_percentage}%</span>
-        </div>
-      ),
-      color: "#C7B213",
-      icon: nonSeniorIcon,
-      subjects: stats.sophomores.subjects || [],
-    },
-    {
-      label: "Junior",
-      value: `${stats.juniors.total}`,
-      description: (
-        <div className="description-flex">
+        <span>{stats.sophomores.active_percentage}%</span>
+      </div>
+    ),
+    color: "#C7B213",
+    icon: nonSeniorIcon,
+    subjects: stats.sophomores.subjects || [],
+  },
+  {
+    label: "Junior",
+    value: `${stats.juniors.total}`,
+    description: (
+      <div className="description-flex">
         <span>Students</span>
-        <span>{stats.active_percentage}%</span>
-        </div>
-      ),
-      color: "#2294F2",
-      icon: nonSeniorIcon,
-      subjects: stats.juniors.subjects || [],
-    },
-    {
-      label: "Senior",
-      value: `${stats.seniors.total}`,
-      description: (
-        <div className="description-flex">
+        <span>{stats.juniors.active_percentage}%</span>
+      </div>
+    ),
+    color: "#2294F2",
+    icon: nonSeniorIcon,
+    subjects: stats.juniors.subjects || [],
+  },
+  {
+    label: "Senior",
+    value: `${stats.seniors.total}`,
+    description: (
+      <div className="description-flex">
         <span>Students</span>
-        <span>{stats.active_percentage}%</span>
-        </div>
-      ),
-      color: "#D93F3F",
-      icon: seniorIcon,
-      subjects: stats.seniors.subjects || [],
-    },
-  ];
+        <span>{stats.seniors.active_percentage}%</span>
+      </div>
+    ),
+    color: "#D93F3F",
+    icon: seniorIcon,
+    subjects: stats.seniors.subjects || [],
+  },
+];
 
   return (
     <div>

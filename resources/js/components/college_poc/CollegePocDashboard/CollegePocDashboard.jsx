@@ -1,9 +1,10 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import CollegePOCsidebar from "../sidebar/college-poc-sidebar";
 import UserInfo from "@user-info/User-info";
 import TableComponent from "./table/college-poc-dashboard";
 import DashboardDropdown from "./dropdown-button/dropdown-college-poc-dashboard";
 import ImpSubjectsPerformance from "./imp-subject-performance/imp-subjects-performance";
+import './college-poc-dashboard.css'; // Assuming you add the styles in a separate CSS file
 
 const CollegePocDashboard = () => {
   const currentMonth = new Date().getMonth(); // 0 for January, 11 for December
@@ -16,40 +17,50 @@ const CollegePocDashboard = () => {
   const [selectedSchoolYear, setSelectedSchoolYear] = useState(defaultSchoolYear);
   const [selectedSemester, setSelectedSemester] = useState(defaultSemester);
 
+  // Optional: useEffect for handling side-effects like data fetching, etc.
   useEffect(() => {
-    // You can also manage side-effects here if necessary
+    // If you need any side effects based on selected values, you can handle it here.
   }, [selectedDepartment, selectedSchoolYear, selectedSemester]);
 
   return (
-    <div>
-    <CollegePOCsidebar />
-    <UserInfo />
-    <br /><br /><br />
-    <h1 style={{ fontFamily: 'Epilogue', fontWeight: 800, marginLeft: '350px', color: '#383838' }}>
-    Dashboard
-    </h1>
-    <ImpSubjectsPerformance/>
-    <br />
+    <div className="college-poc-dashboard-container">
+      <CollegePOCsidebar />
+      <UserInfo />
+      <br /><br /><br /><br /><br />
 
-    <div className="dashboard-table-container">
-    <div style={{ marginBottom: "10px" }}>
-    {/* Pass state setters to Dropdown */}
-    <h2 style={{ textAlign: "left", fontFamily: "Poppins", fontWeight: "700" }}>Table Form - {selectedSemester}, {selectedDepartment} {selectedSchoolYear.replace('/', '-')}</h2>
-    <DashboardDropdown
-    setSelectedDepartment={setSelectedDepartment}
-    setSelectedSchoolYear={setSelectedSchoolYear}
-    setSelectedSemester={setSelectedSemester}
-    />
+      {/* Dashboard Header Section */}
+      <div className="dashboard-header">
+        <h1>Dashboard</h1>
+        <DashboardDropdown
+          setSelectedDepartment={setSelectedDepartment}
+          setSelectedSchoolYear={setSelectedSchoolYear}
+          setSelectedSemester={setSelectedSemester}
+        />
+      </div>
 
-    {/* Pass selected values to TableComponent */}
-    <TableComponent
-    department={selectedDepartment}
-    schoolYear={selectedSchoolYear}
-    semester={selectedSemester}
-    />
-    </div>
-    </div>
-    <br />
+      {/* Important Subjects Performance */}
+      <ImpSubjectsPerformance
+          department={selectedDepartment}
+          schoolYear={selectedSchoolYear}
+          semester={selectedSemester}
+      />
+      
+      <br />
+
+      {/* Tabular Data Display */}
+      <div className="dashboard-table-container">
+        <h2 className="table-title">
+          Tabular Form - {selectedSemester}, {selectedDepartment} {selectedSchoolYear.replace('/', '-')}
+        </h2>
+
+        <TableComponent
+          department={selectedDepartment}
+          schoolYear={selectedSchoolYear}
+          semester={selectedSemester}
+        />
+      </div>
+      
+      <br />
     </div>
   );
 };

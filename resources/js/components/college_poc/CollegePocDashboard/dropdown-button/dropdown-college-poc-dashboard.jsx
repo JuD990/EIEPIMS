@@ -65,7 +65,7 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
             setSchoolYears(schoolYearList);
 
             if (schoolYearList.length > 0) {
-                const selectedYear = schoolYearList[0];
+                const selectedYear = schoolYearList[0]; // Use the first fetched school year
                 setSchoolYear(selectedYear);
                 setSelectedSchoolYear(selectedYear);
 
@@ -97,7 +97,6 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
         try {
             // Call API to refresh data
             const reportResponse = await apiService.post('/eie-reports/store-or-update');
-
             window.location.reload();  // Refreshes the page
         } catch (reportError) {
             console.error("Failed to update EIE Reports: ", reportError);
@@ -107,79 +106,82 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
         }
     };
 
+    const handleResetFilters = () => {
+        // Reset Department to its default value (first department in the list)
+        if (departments.length > 0) {
+            const defaultDepartment = departments[0];
+            setDepartment(defaultDepartment);
+            setSelectedDepartment(defaultDepartment);
+        }
+
+        // Reset School Year to the first one in the list
+        if (schoolYears.length > 0) {
+            const defaultYear = schoolYears[0];
+            setSchoolYear(defaultYear);
+            setSelectedSchoolYear(defaultYear);
+
+            const currentMonth = new Date().getMonth() + 1;
+            const defaultSemester = (currentMonth >= 8 && currentMonth <= 12) ? "1st Semester" : "2nd Semester";
+            setSemester(defaultSemester);
+            setSelectedSemester(defaultSemester);
+        }
+    };
+
     return (
-        <div className="college-poc-dashboard-controls">
-        <div className="college-poc-dashboard-dropdown-container">
-        {/* Department Dropdown */}
-        <div className="college-poc-dashboard-dropdown-wrapper">
-        <button className="college-poc-dashboard-dropdown-btn" onClick={() => setIsDepartmentOpen((prev) => !prev)}>
-        {department || "Select Department"}
-        <FaChevronDown className={`college-poc-dashboard-dropdown-arrow ${isDepartmentOpen ? "open" : ""}`} />
-        </button>
-        {isDepartmentOpen && (
-            <div className="college-poc-dashboard-dropdown-menu">
-            {departments.length > 0 ? (
-                departments.map((dept, index) => (
-                    <p
-                    key={index}
-                    className={`college-poc-dashboard-dropdown-item ${department === dept ? "college-poc-dashboard-selected" : ""}`}
-                    onClick={() => {
-                        setDepartment(dept);
-                        setSelectedDepartment(dept);
-                        setIsDepartmentOpen(false);
-                    }}
-                    >
-                    {dept}
-                    </p>
-                ))
-            ) : (
-                <p className="college-poc-dashboard-dropdown-item">No Departments</p>
-            )}
-            </div>
-        )}
+        <div className="eie-head-dashboard-controls">
+        <div className="eie-head-dashboard-dropdown-container">
+
+        <div className="eie-head2-reset-link-container">
+        <a href="#" className="eie-head2-reset-link" onClick={(e) => {
+            e.preventDefault();
+            handleResetFilters();
+        }}>
+        Reset Filters
+        </a>
         </div>
 
         {/* School Year Dropdown */}
-        <div className="college-poc-dashboard-dropdown-wrapper">
-        <button className="college-poc-dashboard-dropdown-btn" onClick={() => setIsSchoolYearOpen((prev) => !prev)}>
-        {schoolYear || "Select School Year"}
-        <FaChevronDown className={`college-poc-dashboard-dropdown-arrow ${isSchoolYearOpen ? "open" : ""}`} />
+        <div className="eie-head-dashboard-dropdown-wrapper">
+        <button
+        className="eie-head-dashboard-dropdown-btn"
+        onClick={() => setIsSchoolYearOpen((prev) => !prev)}
+        >
+        {schoolYear ? schoolYear.replace("/", "-") : "Select School Year"}
+        <FaChevronDown className={`esl-dashboard-dropdown-arrow ${isSchoolYearOpen ? "open" : ""}`} />
         </button>
         {isSchoolYearOpen && (
-            <div className="college-poc-dashboard-dropdown-menu">
+            <div className="eie-head-graph-dropdown-menu">
             {schoolYears.length > 0 ? (
                 schoolYears.map((year, index) => (
                     <p
                     key={index}
-                    className={`college-poc-dashboard-dropdown-item ${schoolYear === year ? "college-poc-dashboard-selected" : ""}`}
-                    onClick={() => {
-                        setSchoolYear(year);
-                        setSelectedSchoolYear(year);
-                        setIsSchoolYearOpen(false);
-                    }}
+                    className={`eie-head-graph-dropdown-item ${
+                        schoolYear === year ? "eie-head-graph-selected" : ""
+                    }`}
+                    onClick={() => handleSchoolYearSelect(year)}
                     >
-                    {year}
+                    {year.replace("/", "-")} {/* Convert the slash to a dash */}
                     </p>
                 ))
             ) : (
-                <p className="college-poc-dashboard-dropdown-item">No School Years</p>
+                <p className="eie-head-graph-dropdown-item">No School Years</p>
             )}
             </div>
         )}
         </div>
 
         {/* Semester Dropdown */}
-        <div className="college-poc-dashboard-dropdown-wrapper">
-        <button className="college-poc-dashboard-dropdown-btn" onClick={() => setIsSemesterOpen((prev) => !prev)}>
+        <div className="eie-head-dashboard-dropdown-wrapper">
+        <button className="eie-head-dashboard-dropdown-btn" onClick={() => setIsSemesterOpen((prev) => !prev)}>
         {semester || "Select Semester"}
-        <FaChevronDown className={`college-poc-dashboard-dropdown-arrow ${isSemesterOpen ? "open" : ""}`} />
+        <FaChevronDown className={`eie-head-dashboard-dropdown-arrow ${isSemesterOpen ? "open" : ""}`} />
         </button>
         {isSemesterOpen && (
-            <div className="college-poc-dashboard-dropdown-menu">
+            <div className="eie-head-dashboard-dropdown-menu">
             {semesters.map((sem, index) => (
                 <p
                 key={index}
-                className={`college-poc-dashboard-dropdown-item ${semester === sem ? "college-poc-dashboard-selected" : ""}`}
+                className={`eie-head-dashboard-dropdown-item ${semester === sem ? "eie-head-dashboard-selected" : ""}`}
                 onClick={() => {
                     setSemester(sem);
                     setSelectedSemester(sem);
@@ -192,15 +194,16 @@ const DashboardDropdown = ({ setSelectedDepartment, setSelectedSchoolYear, setSe
             </div>
         )}
         </div>
+
         </div>
 
         <div className="relative group">
         <button
-        className="college-poc-dashboard-refresh-btn"
+        className="eie-head-dashboard-refresh-btn"
         onClick={handleRefresh}
         disabled={loading}
         >
-        <IoRefresh className="college-poc-dashboard-refresh-icon" />
+        <IoRefresh className="eie-head-dashboard-refresh-icon" />
         {loading ? 'Refreshing...' : ''}
         </button>
         {/* Custom Tooltip */}

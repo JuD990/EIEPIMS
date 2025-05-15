@@ -257,19 +257,24 @@ class EpgfScoreCardController extends Controller
         // Validate the incoming request data
         $validated = $request->validate([
             'course_code' => 'required|string',
-            'average' => 'required|numeric',
             'completionRate' => 'required|numeric',
             'proficiencyLevel' => 'required|string',
             'enrolled_students' => 'required|integer',
             'active_students' => 'required|integer',
         ]);
 
-        // Check if epgf_average or completion_rate is 0 and set them to null
-        $epgfAverage = ($validated['average'] == 0) ? null : $validated['average'];
-        $completionRate = ($validated['completionRate'] == 0) ? null : $validated['completionRate'];
+        // Fetch the average epgf_average for the given course_code
+        $epgfAverage = ClassLists::where('course_code', $validated['course_code'])
+            ->avg('epgf_average') ?? 0;
 
-        // Check if proficiencyLevel is "beginning" and set it to null
+        // Check if epgf_average is 0 and set it to null
+        $epgfAverage = ($epgfAverage == 0) ? null : $epgfAverage;
+
+        // Check if proficiencyLevel is "Beginning" and set it to null
         $proficiencyLevel = ($validated['proficiencyLevel'] == 'Beginning') ? null : $validated['proficiencyLevel'];
+
+        // Fetch the completion rate and set it to null if it's 0
+        $completionRate = ($validated['completionRate'] == 0) ? null : $validated['completionRate'];
 
         // Find or create ImplementingSubjects
         $subject = ImplementingSubjects::updateOrCreate(
@@ -283,12 +288,13 @@ class EpgfScoreCardController extends Controller
             ]
         );
 
-        // Return a success response
+        // Return a success response with the computed epgf_average
         return response()->json([
             'success' => true,
             'message' => 'Class data successfully saved or updated!',
             'data' => [
                 'implementing_subject' => $subject,
+                'epgf_average' => $epgfAverage, // Include the computed epgf_average in the response
             ],
         ]);
     }

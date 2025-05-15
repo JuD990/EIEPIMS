@@ -3,8 +3,7 @@ import axios from "axios";
 import './class-average-summary.css';
 
 const ClassAverageSummary = ({ course_code, average, studentCount, evaluatedCount, studentCountActive }) => {
-  // studentCount value will be stored in the enrolled_students
-  // studentCountActive will be stored in the active_students
+  const [epgfAverage, setEpgfAverage] = useState(0); // Default to 0
 
   const epgfProficiencyLevels = [
     { threshold: 0.00, level: 'Beginning', color: 'red' },
@@ -31,8 +30,7 @@ const ClassAverageSummary = ({ course_code, average, studentCount, evaluatedCoun
     return { level: 'Unknown', color: 'black' };
   };
 
-
-  const { level, color } = getProficiencyLevel(average);
+  const { level, color } = getProficiencyLevel(epgfAverage);
 
   // Calculate Completion Rate based on studentCount and evaluatedCount
   const completionRate = studentCount > 0 ? ((evaluatedCount / studentCount) * 100).toFixed(0) : 0;
@@ -43,34 +41,47 @@ const ClassAverageSummary = ({ course_code, average, studentCount, evaluatedCoun
       try {
         const response = await axios.post('/api/store-class-data', {
           course_code,
-          average,
           completionRate,
           proficiencyLevel: level,
           enrolled_students: studentCount,
           active_students: studentCountActive,
         });
+
+        // Capture epgf_average from response and update state
+        if (response.data.success) {
+          const fetchedEpgfAverage = response.data.data.epgf_average;
+          console.log("Fetched EPGF Average:", fetchedEpgfAverage); // Debugging line
+          // Ensure epgfAverage is a valid number
+          setEpgfAverage(isNaN(fetchedEpgfAverage) ? 0 : fetchedEpgfAverage);
+        }
       } catch (error) {
         console.error("Error sending data to backend:", error.response ? error.response.data : error.message);
       }
     };
 
     sendDataToBackend();
-  }, [course_code, average, completionRate, level, studentCount, studentCountActive]);
+  }, [course_code, completionRate, level, studentCount, studentCountActive]);
+
+  // Ensure epgfAverage is a valid number
+const epgfAverageValue = isNaN(Number(epgfAverage)) ? 0 : Number(epgfAverage);
+
+  // Safely format epgfAverage value with default if it's not valid
+  const formattedEpgfAverage = epgfAverageValue.toFixed(2);
 
   return (
     <div style={{ fontWeight: '600' }} className="class-average-summary-card">
-    <div className="class-pgf-average-column">
-    <div><strong>{average.toFixed(2)}</strong></div>
-    <div>PGF Average</div>
-    </div>
-    <div className="class-completion-rate-column">
-    <div><strong>{completionRate}%</strong></div>
-    <div>Completion Rate</div>
-    </div>
-    <div className="class-proficiency-level-column">
-    <div style={{ color: color }}><strong>{level}</strong></div>
-    <div>Proficiency Level</div>
-    </div>
+      <div className="class-pgf-average-column">
+        <div><strong>{formattedEpgfAverage}</strong></div>
+        <div>PGF Average</div>
+      </div>
+      <div className="class-completion-rate-column">
+        <div><strong>{completionRate}%</strong></div>
+        <div>Completion Rate</div>
+      </div>
+      <div className="class-proficiency-level-column">
+        <div style={{ color: color }}><strong>{level}</strong></div>
+        <div>Proficiency Level</div>
+      </div>
     </div>
   );
 };

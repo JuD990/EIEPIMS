@@ -20,6 +20,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
   const [detailOfResponseOptions, setDetailOfResponseOptions] = useState([]);
   const [submittedRows, setSubmittedRows] = useState({});
   const [submittedIds, setSubmittedIds] = useState([]);
+  const [rowData, setRowData] = useState({});
 
   useEffect(() => {
     const savedStates = localStorage.getItem('submittedRows');
@@ -361,11 +362,18 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
     'Actions',
   ];
 
-  const updateData = (rowIndex, columnId, newValue) => {
-    const updatedStudents = [...students];
-    updatedStudents[rowIndex][columnId] = newValue;
-    setStudents(updatedStudents);
-  };
+const updateData = (rowIndex, field, value) => {
+  const studentId = students[rowIndex].student_id;
+
+  setRowData(prev => ({
+    ...prev,
+    [studentId]: {
+      ...prev[studentId],
+      [field]: value
+    }
+  }));
+};
+
   const active_students = students.length;
 
 
@@ -698,58 +706,59 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
         })()}
         </td>
 
-        <td>
+      <td>
         <select
-        value={student.type || ''}
-        onChange={(e) => updateData(rowIndex, 'type', e.target.value)}
-        style={{ width: '100px', padding: '4px', backgroundColor: 'transparent' }}
+          value={rowData[student.student_id]?.type || student.type || ''}
+          onChange={(e) => updateData(rowIndex, 'type', e.target.value)}
+          style={{ width: '100px', padding: '4px', backgroundColor: 'transparent' }}
         >
-        <option value="Reading">Reading</option>
-        <option value="Writing">Writing</option>
-        <option value="Listening">Listening</option>
+          <option value="Reading">Reading</option>
+          <option value="Writing">Writing</option>
+          <option value="Listening">Listening</option>
         </select>
-        </td>
+      </td>
 
-        <td>
+      <td>
         <select
-        value={student.consistency || ''}
-        onChange={(e) => {
-          const selectedId = Number(e.target.value);
-          const selectedOption = consistencyLookup[selectedId];
+          value={rowData[student.student_id]?.consistency ?? student.consistency ?? ''}
+          onChange={(e) => {
+            const selectedId = Number(e.target.value);
+            const selectedOption = consistencyLookup[selectedId];
 
-          if (selectedOption) {
-            // Update consistency state
-            updateData(rowIndex, 'consistency', selectedId); // Store the ID, not the descriptor string
-            // Now update the displayed rating directly below the select
-            updateData(rowIndex, 'consistencyRating', selectedOption.rating); // Assuming you want to update the rating as well
-          }
-        }}
-        style={{
-          padding: '4px',
-          backgroundColor: 'transparent',
-          width: '350px',
-        }}
+            if (selectedOption) {
+              updateData(rowIndex, 'consistency', selectedId);
+              updateData(rowIndex, 'consistencyRating', selectedOption.rating); // Optional
+            }
+          }}
+          style={{
+            padding: '4px',
+            backgroundColor: 'transparent',
+            width: '350px',
+          }}
         >
-        {consistencyOptions.length === 0 ? (
-          <option disabled>EPGF Rubric Version Not Set</option> // Loading state if options are not yet available
-        ) : (
-          consistencyOptions.map(option => (
-            <option
-            key={option.id}
-            value={option.id}
-            style={{ fontSize: '10px', whiteSpace: 'pre-line' }}
-            >
-            {option.descriptor.split('.').join(' \n')}
-            </option>
-          ))
-        )}
+          {consistencyOptions.length === 0 ? (
+            <option disabled>EPGF Rubric Version Not Set</option>
+          ) : (
+            consistencyOptions.map(option => (
+              <option
+                key={option.id}
+                value={option.id}
+                style={{ fontSize: '10px', whiteSpace: 'pre-line' }}
+              >
+                {option.descriptor.split('.').join(' \n')}
+              </option>
+            ))
+          )}
         </select>
 
-        {/* Display only the rating without consistency descriptor */}
         <span style={{ fontSize: '12px', marginTop: '4px', display: 'block', textAlign: 'left' }}>
-        Rating: {student.consistency ? consistencyLookup[student.consistency]?.rating || '0.00' : '0.00'}
+          Rating: {
+            (rowData[student.student_id]?.consistency
+              ? consistencyLookup[rowData[student.student_id].consistency]?.rating
+              : consistencyLookup[student.consistency]?.rating) || '0.00'
+          }
         </span>
-        </td>
+      </td>
 
         <td> <div style={{ textAlign: 'center', fontWeight: '600' }}> {consistencyRating} </div></td>
 
@@ -1314,7 +1323,7 @@ const TableComponent = ({ course_code, taskTitle, department, course_title, sear
     })}
     </tbody>
 
-    </table>
+    </table>    
     </div>
   );
 };
